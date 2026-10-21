@@ -311,11 +311,12 @@ footer{text-align:center;font-size:13px;color:var(--gris);padding:6px 16px 26px}
 .col{position:relative;width:420px}
 .pill{height:60px;border-radius:30px;color:#fff;font-weight:800;font-size:30px;display:flex;align-items:center;justify-content:center;letter-spacing:1px}
 .gr{text-align:center;font-weight:700;font-size:26px;margin:6px 0 12px}
-.nd{border-radius:28px;border:3px solid var(--c);background:#fff;font-weight:800;font-size:28px;height:52px;display:flex;align-items:center;justify-content:center;opacity:.42}
+.nd{border-radius:28px;border:3px solid var(--c);background:#fff;font-weight:800;font-size:28px;height:52px;display:flex;align-items:center;justify-content:center;opacity:.42;transition:opacity .35s cubic-bezier(.2,.8,.2,1)}
 .nd.end{background:var(--c);color:#fff}
 .nd.cr{background:#E8822A;border-color:#E8822A;color:#fff;flex-direction:column;height:78px;border-radius:14px;line-height:1.05}
 .nd.cr small{font-size:21px;font-weight:500}
-.nd.on{opacity:1}
+.nd.on{opacity:1;animation:ndon .5s cubic-bezier(.3,1.5,.5,1)}
+@keyframes ndon{0%{transform:scale(.9)}100%{transform:none}}
 .ar{height:14px;width:3px;margin:0 auto;background:#9AA19D}
 .bar{position:absolute;top:0;width:18px;border-radius:9px;background:#DADFDC}
 .bar i{position:absolute;left:0;top:0;width:18px;border-radius:9px;background:var(--c)}
@@ -355,7 +356,7 @@ function cl(v){return Math.max(0,Math.min(1,v));} function ease(v){v=cl(v);retur
 // segundo responsable en el cruce 3 (secundaria)
 var p3=q(&#x27;persona_1792535411401&#x27;), p3b=p3.cloneNode(true); p3b.setAttribute(&#x27;data-id&#x27;,&#x27;p3sec&#x27;);
 var o3=tr(p3); setTr(p3b,{x:21.8,y:32.5,r:0,s:o3.s}); p3.parentNode.insertBefore(p3b,p3);
-var NG={prim:12,sec:10}, GAP=8.5*1.7*1.15, WAIT=1.4, VEL={prim:28,sec:37}, VC=95, GL=9.2*1.7-1.4, GW=9.2;
+var NG={prim:12,sec:10}, GAP=8.5*1.7*1.15, WAIT=1.4, VEL={prim:28,sec:37}, VC=95, BRAKE=26, ACC=0.75, ACORD=0.28, D2=72, GL=9.2*1.7-1.4, GW=9.2;
 // cruces: [zona, persona, anillo, texto, circulo numero, nombre]
 var CR={prim:[[&#x27;z1&#x27;,&#x27;p1&#x27;,&#x27;p1&#x27;,&#x27;Cruce 1 · Fdez. de Enciso y Navarro&#x27;,&#x27;n1&#x27;,&#x27;Mariana Lorge&#x27;],[&#x27;z2&#x27;,&#x27;persona_1792535414851&#x27;,&#x27;p2&#x27;,&#x27;Cruce 2 · Sanabria y Fdez. de Enciso&#x27;,&#x27;n2&#x27;,&#x27;Tomás Coxe&#x27;],[&#x27;z5&#x27;,&#x27;persona_1792535411401&#x27;,&#x27;x3&#x27;,&#x27;Cruce 3 · J. L. Cantilo y Gualeguaychú&#x27;,&#x27;n3&#x27;,&#x27;Natalia Monti&#x27;]],
         sec:[[&#x27;z3&#x27;,&#x27;persona_1792535414164&#x27;,&#x27;s1&#x27;,&#x27;Cruce 1 · Sanabria y Navarro&#x27;,&#x27;n4&#x27;,&#x27;Julián Hurtado Ferrante&#x27;],[&#x27;z4&#x27;,&#x27;persona_1792535413389&#x27;,&#x27;s2&#x27;,&#x27;Cruce 2 · Navarro y Gualeguaychú&#x27;,&#x27;n5&#x27;,&#x27;Lara García&#x27;],[&#x27;z5&#x27;,&#x27;p3sec&#x27;,&#x27;x3&#x27;,&#x27;Cruce 3 · J. L. Cantilo y Gualeguaychú&#x27;,&#x27;n3&#x27;,&#x27;Guido M. Coda&#x27;]]};
@@ -369,7 +370,7 @@ ks.forEach(function(k){
   var L=R[k].getTotalLength(), dots=[];
   for(var i=0;i&lt;NG[k];i++){var c=document.createElementNS(NS,&#x27;rect&#x27;);c.setAttribute(&#x27;x&#x27;,-GL/2);c.setAttribute(&#x27;y&#x27;,-GW/2);c.setAttribute(&#x27;width&#x27;,GL);c.setAttribute(&#x27;height&#x27;,GW);c.setAttribute(&#x27;rx&#x27;,GW/2);c.setAttribute(&#x27;class&#x27;,&#x27;grp&#x27;);c.setAttribute(&#x27;fill&#x27;,k===&#x27;prim&#x27;?&#x27;#3C9A68&#x27;:&#x27;#1F5FA8&#x27;);c.style.opacity=0;capa.appendChild(c);dots.push(c);}
   var cr=CR[k].map(function(c,j){var z=tr(q(c[0]));ORIG[c[1]]=tr(q(c[1]));return {s:arcDe(R[k],z.x,z.y),p:c[1],ring:c[2],txt:c[3],n:c[4],nom:c[5],row:k+(j+1),t0:j*0.35+(k===&#x27;sec&#x27;?0.15:0)};});
-  E[k]={L:L,dots:dots,cr:cr,head:0,esp:0,idx:0};
+  E[k]={L:L,dots:dots,cr:cr,head:0,esp:0,idx:0,v:0,comp:0,comp0:0,rest:0};
 });
 // pasos del esquema (como la lámina 13) con su posición sobre el recorrido
 function vert(k,i){var pts=R[k].getAttribute(&#x27;points&#x27;).trim().split(/\s+/).map(function(p){return p.split(&#x27;,&#x27;).map(Number);});return arcDe(R[k],pts[i][0],pts[i][1]);}
@@ -389,8 +390,10 @@ function scr(el){var r=rel(el.getBoundingClientRect());return {x:r.left+r.width/
 function posPersona(k,s,o,sc){var p=R[k].getPointAtLength(s);return {x:p.x-3,y:p.y-14*o.s/1.948,r:0,s:o.s*(sc||0.8)};}
 // estado
 var t=0, ult=null, jugando=false, fase=0, tG=null, seg={}, T_CORTES=0;
-function cap(h,c){var e=document.getElementById(&#x27;cap&#x27;); e.innerHTML=h; e.className=&#x27;cap&#x27;+(c?&#x27; &#x27;+c:&#x27;&#x27;);}
-function cola(k){return E[k].head-(NG[k]-1)*GAP;}
+var CAPW=null; function cap(h,c){CAPW=[h,c];}
+function capFlush(){var e=document.getElementById(&#x27;cap&#x27;); if(!CAPW||e.__h===CAPW[0]) return; var h=CAPW[0],c=CAPW[1]; e.__h=h; e.innerHTML=h; e.className=&#x27;cap&#x27;+(c?&#x27; &#x27;+c:&#x27;&#x27;);
+  e.animate([{opacity:0,transform:&#x27;translateY(14px)&#x27;},{opacity:1,transform:&#x27;none&#x27;}],{duration:420,easing:&#x27;cubic-bezier(.2,.8,.2,1)&#x27;,fill:&#x27;both&#x27;});}
+function gapK(k){return GAP*(1-ACORD*E[k].comp);} function cola(k){return E[k].head-(NG[k]-1)*gapK(k);}
 function anillo(c){var r=svg.querySelector(&#x27;.ring[data-c=&quot;&#x27;+c+&#x27;&quot;]&#x27;); if(!r) return; r.classList.remove(&#x27;on&#x27;); void r.getBBox(); r.classList.add(&#x27;on&#x27;);}
 // posición inicial: responsables en el portón, ocultos
 ks.forEach(function(k){E[k].cr.forEach(function(c){var el=q(c.p); setTr(el,posPersona(k,0,ORIG[c.p])); el.style.opacity=0;});});
@@ -422,15 +425,20 @@ function evac(dt){
   var fin=true;
   ks.forEach(function(k){var e=E[k];
     if(e.esp&gt;0){ e.esp-=dt; var c=e.cr[e.idx-1], f=1-Math.max(0,e.esp)/WAIT, el=q(c.p), o=ORIG[c.p];
+      e.v=0; e.comp=Math.max(e.comp,ease(f*1.4)); if(e.esp&lt;=0){e.comp0=e.comp; e.rest=0;}
       if(!seg[c.p]) setTr(el,{x:o.x,y:o.y,r:o.r,s:o.s*(1+0.5*Math.sin(Math.PI*f))});
       cap(&#x27;&lt;b&gt;&#x27;+c.txt+&#x27;&lt;/b&gt;&lt;br&gt;El grupo espera en la vereda mientras se corta el tránsito.&#x27;,&#x27;cr&#x27;); }
-    else { e.head+=VEL[k]*dt;
+    else { var vmax=VEL[k]; e.v=Math.min(vmax,e.v+vmax/ACC*dt); var vv=e.v;
+      if(e.idx&lt;e.cr.length){var dist=e.cr[e.idx].s-e.head; if(dist&lt;BRAKE) vv=Math.min(vv,vmax*Math.max(0.2,Math.sqrt(Math.max(0,dist)/BRAKE)));}
+      e.head+=vv*dt; e.rest+=vv*dt; e.comp=e.comp0*Math.max(0,1-e.rest/D2);
       if(e.idx&lt;e.cr.length &amp;&amp; e.head&gt;=e.cr[e.idx].s){ e.head=e.cr[e.idx].s; e.esp=WAIT; anillo(e.cr[e.idx].ring); e.idx++; } }
     var lleg=0;
-    e.dots.forEach(function(d,i){var s=e.head-i*GAP;
+    var gk=gapK(k);
+    e.dots.forEach(function(d,i){var s=e.head-i*gk;
       if(s&lt;0){d.style.opacity=0;return;} if(s&gt;=e.L){d.style.opacity=0;lleg++;return;}
+      var fa=Math.min(1,s/10,(e.L-s)/14), sc=0.55+0.45*fa;
       var p=R[k].getPointAtLength(s), p2=R[k].getPointAtLength(Math.min(e.L,s+1)), p1=R[k].getPointAtLength(Math.max(0,s-1));
-      var ang=Math.atan2(p2.y-p1.y,p2.x-p1.x)*180/Math.PI; d.setAttribute(&#x27;transform&#x27;,&#x27;translate(&#x27;+p.x+&#x27; &#x27;+p.y+&#x27;) rotate(&#x27;+ang+&#x27;)&#x27;); d.style.opacity=1;});
+      var ang=Math.atan2(p2.y-p1.y,p2.x-p1.x)*180/Math.PI; d.setAttribute(&#x27;transform&#x27;,&#x27;translate(&#x27;+p.x+&#x27; &#x27;+p.y+&#x27;) rotate(&#x27;+ang+&#x27;) scale(&#x27;+sc+&#x27;)&#x27;); d.style.opacity=fa;});
     e.cr.forEach(function(c){ if(seg[c.p]) return; var ok=ks.every(function(kk){var cc=E[kk].cr.filter(function(x){return x.p===c.p;})[0]; return !cc||cola(kk)&gt;cc.s+4;}); if(ok){ seg[c.p]={k:k,s:c.s};
       cap(&#x27;&lt;b&gt;Pasó el último grupo.&lt;/b&gt;&lt;br&gt;Quien cortó el tránsito lo sigue hasta el punto de reunión.&#x27;,&#x27;cr&#x27;); } });
     barFill(k,Math.min(e.head,e.L));
@@ -445,8 +453,8 @@ function paso(ts){
   var dt=ult?Math.min(.05,(ts-ult)/1000):0; ult=ts; t+=dt;
   if(fase===0){ if(cortes()){fase=1; tG=t;} }
   else if(fase===1){ cap(&#x27;&lt;b&gt;Con los cortes en su lugar,&lt;/b&gt;&lt;br&gt;todos salen formados por el portón principal.&#x27;,&#x27;&#x27;); if(t-tG&gt;1.6){fase=2;} }
-  else if(fase===2){ if(evac(dt)){ fase=3; cap(&#x27;&lt;b&gt;Todo el colegio llegó al Jardín Cuentacuentos.&lt;/b&gt;&lt;br&gt;Cada docente cuenta a su grupo y reporta el recuento.&#x27;,&#x27;ok&#x27;); ks.forEach(function(k){barFill(k,E[k].L);}); document.getElementById(&#x27;again&#x27;).hidden=false; return; } }
-  requestAnimationFrame(paso);
+  else if(fase===2){ if(evac(dt)){ fase=3; cap(&#x27;&lt;b&gt;Todo el colegio llegó al Jardín Cuentacuentos.&lt;/b&gt;&lt;br&gt;Cada docente cuenta a su grupo y reporta el recuento.&#x27;,&#x27;ok&#x27;); ks.forEach(function(k){barFill(k,E[k].L);}); document.getElementById(&#x27;again&#x27;).hidden=false; capFlush(); return; } }
+  capFlush(); requestAnimationFrame(paso);
 }
 window.__start=function(){requestAnimationFrame(paso);};
 })();
@@ -528,7 +536,7 @@ document.getElementById(&#x27;again&#x27;).onclick=function(){location.reload();
   </div>
 
   <div class="lvl ro">
-    <div class="lvl-h"><b>Alerta roja</b><em>Seguir a las autoridades</em></div>
+    <div class="lvl-h"><b>Alerta roja</b><em>Seguir instrucciones oficiales</em></div>
     <div class="lvl-b">
       <p class="que"><strong>Qué es:</strong> fenómenos excepcionales.</p>
       <ul class="acc">
