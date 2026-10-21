@@ -1,11 +1,64 @@
 BEGIN:VCARD
 VERSION:3.0
-N:Mirador;Emergencias;;;
-FN:Emergencias Escuela del Mirador
-ORG:Escuela del Mirador
-TEL;TYPE=VOICE;TYPE=pref:911
-TEL;TYPE=VOICE:100
-TEL;TYPE=VOICE:107
-TEL;TYPE=VOICE:103
-NOTE:911 Emergencias y Policía · 100 Bomberos · 107 SAME · 103 Defensa Civil
+N:;Emergencias 911;;;
+FN:Emergencias 911
+ORG:Emergencias Escuela del Mirador
+TEL;TYPE=WORK,VOICE:911
+NOTE:Emergencias y Policía. Escuela del Mirador - Fernández de Enciso 3575\, Villa Devoto
+CATEGORIES:Emergencias
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+N:;Bomberos 100;;;
+FN:Bomberos 100
+ORG:Emergencias Escuela del Mirador
+TEL;TYPE=WORK,VOICE:100
+NOTE:Bomberos. Escuela del Mirador - Fernández de Enciso 3575\, Villa Devoto
+CATEGORIES:Emergencias
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+N:;SAME 107;;;
+FN:SAME 107
+ORG:Emergencias Escuela del Mirador
+TEL;TYPE=WORK,VOICE:107
+NOTE:Emergencias médicas. Escuela del Mirador - Fernández de Enciso 3575\, Villa Devoto
+CATEGORIES:Emergencias
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+N:;Defensa Civil 103;;;
+FN:Defensa Civil 103
+ORG:Emergencias Escuela del Mirador
+TEL;TYPE=WORK,VOICE:103
+NOTE:Defensa Civil CABA. Escuela del Mirador - Fernández de Enciso 3575\, Villa Devoto
+CATEGORIES:Emergencias
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+N:;Metrogas Emergencias;;;
+FN:Metrogas Emergencias
+ORG:Emergencias Escuela del Mirador
+TEL;TYPE=WORK,VOICE:+541143091050
+TEL;TYPE=WORK,VOICE:08003336427
+NOTE:Escape de gas · 24 h. También 0800-333-6427. Escuela del Mirador - Fernández de Enciso 3575\, Villa Devoto
+CATEGORIES:Emergencias
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+N:;AySA;;;
+FN:AySA
+ORG:Emergencias Escuela del Mirador
+TEL;TYPE=WORK,VOICE:08003212482
+NOTE:Agua y cloacas · 0800-321-AGUA. Escuela del Mirador - Fernández de Enciso 3575\, Villa Devoto
+CATEGORIES:Emergencias
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+N:;Edesur;;;
+FN:Edesur
+ORG:Emergencias Escuela del Mirador
+TEL;TYPE=WORK,VOICE:08003333787
+NOTE:Electricidad · cortes y emergencias. Escuela del Mirador - Fernández de Enciso 3575\, Villa Devoto
+CATEGORIES:Emergencias
 END:VCARD
