@@ -1,0 +1,11 @@
+BEGIN:VCARD
+VERSION:3.0
+N:Mirador;Emergencias;;;
+FN:Emergencias Escuela del Mirador
+ORG:Escuela del Mirador
+TEL;TYPE=VOICE;TYPE=pref:911
+TEL;TYPE=VOICE:100
+TEL;TYPE=VOICE:107
+TEL;TYPE=VOICE:103
+NOTE:911 Emergencias y Policía · 100 Bomberos · 107 SAME · 103 Defensa Civil
+END:VCARD

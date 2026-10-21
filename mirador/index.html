@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alertas y emergencias · Escuela del Mirador</title>
+<meta name="description" content="Cómo consultar las alertas del SMN, instalar la app oficial y agendar los teléfonos de emergencia.">
+<style>
+:root{--verde:#2F6B4F;--verde-cl:#E7F0EA;--grafito:#4B4F54;--gris:#5B6B63;--tinta:#1D2622;--bordo:#6E1E2E;--bordo-cl:#F4E6E9;--linea:#D5DED8;--fondo:#F6F7F6;--blanco:#fff;
+--am:#F2C230;--na:#E8822A;--ro:#C62E2E}
+*{box-sizing:border-box}
+body{margin:0;background:var(--fondo);color:var(--tinta);font-family:-apple-system,"Segoe UI",Roboto,Calibri,Arial,sans-serif;font-size:17px;line-height:1.45}
+header{background:var(--verde);color:#fff;padding:22px 18px 20px}
+header small{display:block;letter-spacing:.12em;font-size:12px;font-weight:700;opacity:.85;text-transform:uppercase}
+header h1{margin:6px 0 4px;font-size:25px;line-height:1.2}
+header p{margin:0;opacity:.9;font-size:15px}
+main{max-width:640px;margin:0 auto;padding:14px 16px 40px}
+nav{display:flex;gap:8px;overflow-x:auto;padding:4px 0 10px}
+nav a{flex:0 0 auto;text-decoration:none;color:var(--verde);background:var(--blanco);border:1px solid var(--linea);border-radius:20px;padding:7px 13px;font-size:14px;font-weight:700}
+section{background:var(--blanco);border:1px solid var(--linea);border-radius:12px;padding:16px;margin:12px 0}
+h2{margin:0 0 10px;font-size:20px;color:var(--verde)}
+h3{margin:14px 0 6px;font-size:16px}
+ol,ul{margin:6px 0 0;padding-left:22px}
+li{margin:5px 0}
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:14px 16px;margin:8px 0;border-radius:10px;text-decoration:none;font-weight:700;font-size:17px;color:#fff;background:var(--verde);border:0}
+.btn.sec{background:var(--grafito)}
+.btn.bordo{background:var(--bordo)}
+.btn.out{background:var(--blanco);color:var(--verde);border:2px solid var(--verde)}
+.btn.tuyo{outline:3px solid var(--bordo);outline-offset:2px}
+.nota{font-size:14px;color:var(--gris);margin:8px 0 0}
+.tag{display:inline-block;font-size:12px;font-weight:700;padding:2px 8px;border-radius:10px;background:var(--bordo);color:#fff;margin-left:6px;vertical-align:middle}
+.nivel{border-radius:10px;padding:11px 13px;margin:8px 0;border-left:8px solid}
+.nivel b{display:block;font-size:16px}
+.nivel.a{border-color:var(--am);background:#FDF6DF}.nivel.n{border-color:var(--na);background:#FCEBDD}.nivel.r{border-color:var(--ro);background:#F8E1E1}.nivel.p{border-color:var(--bordo);background:var(--bordo-cl)}
+.tels{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tel{display:block;text-decoration:none;color:#fff;background:var(--verde);border-radius:10px;padding:12px}
+.tel.dc{background:var(--bordo)}
+.tel strong{display:block;font-size:30px;line-height:1.05}
+.tel span{font-size:14px}
+.serv{margin-top:10px;font-size:15px}
+.serv a{color:var(--verde);font-weight:700;text-decoration:none}
+footer{text-align:center;font-size:13px;color:var(--gris);padding:6px 16px 26px}
+</style>
+</head>
+<body>
+<header>
+  <small>Escuela del Mirador · Sistema de Autoprotección</small>
+  <h1>Alertas y emergencias</h1>
+  <p>Todo lo que hay que tener a mano en el celular.</p>
+</header>
+<main>
+<nav>
+  <a href="#alertas">Alertas SMN</a><a href="#app">App del SMN</a><a href="#niveles">Qué hacer</a><a href="#telefonos">Teléfonos</a>
+</nav>
+
+<section id="alertas">
+  <h2>1. Consultar las alertas del SMN</h2>
+  <a class="btn" href="https://www.smn.gob.ar/alertas">Abrir las alertas del SMN</a>
+  <ol>
+    <li>Buscar la zona <b>Ciudad de Buenos Aires</b>.</li>
+    <li>Mirar el <b>color</b> de la alerta, el <b>fenómeno</b> (lluvia, tormenta o viento) y el <b>horario</b> en que rige.</li>
+    <li>Las alertas se actualizan todos los días a las <b>6 y a las 18 h</b>, y cada vez que cambian las condiciones.</li>
+  </ol>
+  <p class="nota">Puede haber más de una alerta a la vez (por ejemplo, viento y lluvia): se responde a la de mayor nivel.</p>
+</section>
+
+<section id="app">
+  <h2>2. Instalar la app oficial</h2>
+  <p>La app <b>SMN: Tiempo y Pronóstico</b> es gratuita y avisa cuando sale una alerta para la ciudad elegida.</p>
+  <a class="btn" id="bAndroid" href="https://play.google.com/store/apps/details?id=ar.gob.smn">Descargar para Android</a>
+  <a class="btn sec" id="bIphone" href="https://apps.apple.com/ar/app/smn-tiempo-y-pron%C3%B3stico/id6443508769">Descargar para iPhone</a>
+  <h3>Para recibir los avisos</h3>
+  <ol>
+    <li>Instalar la app y abrirla.</li>
+    <li>Cuando pida permiso para enviar <b>notificaciones</b>, tocar <b>Permitir</b>.</li>
+    <li>Elegir <b>Ciudad de Buenos Aires</b> como ubicación.</li>
+    <li>Revisar en la configuración de la app que las <b>alertas</b> estén activadas.</li>
+  </ol>
+  <p class="nota">Si las notificaciones quedaron desactivadas, se activan desde los Ajustes del teléfono, en la sección de la app del SMN.</p>
+</section>
+
+<section id="niveles">
+  <h2>3. Qué hacer en cada nivel</h2>
+  <div class="nivel a"><b>Alerta amarilla · Informarse y prevenir</b>Fenómenos que pueden causar daños e interrumpir actividades por momentos. Se informa al personal y se revisan desagües, iluminación de emergencia y lo que el viento pueda desprender.</div>
+  <div class="nivel n"><b>Alerta naranja · Prepararse</b>Fenómenos peligrosos. Se suspenden las actividades en patios y sectores descubiertos, y la Dirección evalúa la suspensión y el retiro anticipado.</div>
+  <div class="nivel r"><b>Alerta roja · Seguir a las autoridades</b>Fenómenos excepcionales. Se procede según disponga el Ministerio de Educación y Defensa Civil; quienes estén en la escuela permanecen en las zonas de resguardo.</div>
+  <div class="nivel p"><b>Aviso a muy corto plazo · Actuar ya</b>Tormenta fuerte en las próximas 3 horas: todos adentro, ventanas cerradas y a las zonas de resguardo.</div>
+  <p class="nota">Ante cualquier duda, llamar a Defensa Civil al 103. Primero, siempre, avisar a la Coordinadora de Autoprotección.</p>
+</section>
+
+<section id="telefonos">
+  <h2>4. Teléfonos de emergencia</h2>
+  <div class="tels">
+    <a class="tel" href="tel:911"><strong>911</strong><span>Emergencias y Policía</span></a>
+    <a class="tel" href="tel:100"><strong>100</strong><span>Bomberos</span></a>
+    <a class="tel" href="tel:107"><strong>107</strong><span>SAME · emergencias médicas</span></a>
+    <a class="tel dc" href="tel:103"><strong>103</strong><span>Defensa Civil</span></a>
+  </div>
+  <a class="btn bordo" id="bVcf" href="emergencias-mirador.vcf">Agendar todos los números</a>
+  <p class="nota">Abre la ficha de contacto “Emergencias Escuela del Mirador”: tocar <b>Guardar</b> o <b>Agregar contacto</b>.</p>
+  <div class="serv"><b>Servicios:</b> Metrogas <a href="tel:43091050">4309-1050</a> · AySA <a href="tel:63332482">6333-2482</a> · Edesur <a href="tel:08003333787">0800-333-3787</a></div>
+  <p class="nota">Al llamar, indicar: Fernández de Enciso 3575, Villa Devoto; qué ocurre y si hay personas afectadas.</p>
+</section>
+</main>
+<footer>Escuela del Mirador · Capacitación del Sistema de Autoprotección 2026<br>Lic. Marcelo Elvira · M.P. 0656 C.P.I.I.</footer>
+<script>
+(function(){
+  // Resalta el botón de la tienda que corresponde al teléfono
+  var ua = navigator.userAgent || '';
+  var esIphone = /iPhone|iPad|iPod/i.test(ua), esAndroid = /Android/i.test(ua);
+  var b = esIphone ? document.getElementById('bIphone') : (esAndroid ? document.getElementById('bAndroid') : null);
+  if (b) { b.classList.add('tuyo'); b.insertAdjacentHTML('beforeend', '<span class="tag">tu teléfono</span>'); b.parentNode.insertBefore(b, document.getElementById('bAndroid')); }
+})();
+</script>
+</body>
+</html>
