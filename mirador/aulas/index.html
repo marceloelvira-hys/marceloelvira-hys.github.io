@@ -55,6 +55,17 @@ header p{margin:6px 0 0;font-size:14px;opacity:.92;line-height:1.4}
 .item.pre{border-style:dashed}
 .prop{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;font-size:12px;color:var(--tx2);background:var(--soft);border-radius:8px;padding:6px 8px}
 .prop .ok{border:1.5px solid var(--verde);background:var(--card);color:var(--verde);border-radius:8px;padding:6px 10px;font-weight:700;font-size:13px;cursor:pointer}
+.syncrow{margin-top:6px;font-size:12px}
+.sync{display:inline-block;padding:3px 9px;border-radius:999px;background:var(--line);color:var(--tx2)}
+.sync.ok{background:var(--soft);color:var(--verde);font-weight:600}
+.sync.w{background:var(--line);color:var(--tx2)}
+.sync.bad{background:#F6E3E6;color:var(--otro);font-weight:600}
+.robanner{margin:12px 0;padding:12px 14px;border-radius:12px;background:#F6E3E6;color:var(--otro);font-size:14px;line-height:1.45}
+.hrow{display:grid;grid-template-columns:1fr;gap:1px;padding:8px 0;border-top:1px solid var(--line);font-size:13px}
+.hrow:first-child{border-top:0}
+.hf{color:var(--tx2);font-size:12px}.hn{font-weight:600}.hv{color:var(--tx)}
+.vacio{color:var(--tx2);font-size:13px;margin:0}
+#histlist{max-height:340px;overflow:auto}
 .pin.sel{outline:3px solid #F28C28;outline-offset:2px}
 .list{padding:6px 12px 12px}
 .item{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:8px 0;background:var(--card)}
@@ -102,7 +113,7 @@ footer{color:var(--tx2);font-size:12px;text-align:center;padding:10px 16px 30px}
       <li><b>Primaria</b> o <b>Secundaria</b>.</li>
       <li><b>Otro</b>, y si querés escribí de qué es (por ejemplo: sala de música, gabinete, comedor).</li>
     </ol>
-    Si querés, podés anotar también el grado o la sección. Si hay un espacio que no tiene número, usá <b>＋ Marcar otro espacio</b> y tocalo en el plano. Lo que cargues queda guardado en este teléfono; al terminar, mandámelo con el botón del final.
+    Si querés, podés anotar también el grado o la sección. Si hay un espacio que no tiene número, usá <b>＋ Marcar otro espacio</b> y tocalo en el plano. <span id="guardtxt">Lo que cargues queda guardado en este dispositivo; al terminar, mandámelo con el botón del final.</span>
     <div class="legend">
       <span><i class="dot" style="background:#fff;box-shadow:0 0 0 2px #333"></i>Sin indicar</span>
       <span><i class="dot" style="background:var(--verde)"></i>Primaria</span>
@@ -114,11 +125,14 @@ footer{color:var(--tx2);font-size:12px;text-align:center;padding:10px 16px 30px}
   <div class="sticky">
     <div class="tabs" id="tabs"></div>
     <div class="prog"><div class="bar"><i id="barra"></i></div><span id="progtx"></span></div>
+    <div class="syncrow"><span id="sync" class="sync">Conectando…</span></div>
   </div>
+  <div class="robanner" id="robanner" hidden>Con este acceso la página no puede guardar en línea: lo que marques queda sólo en este dispositivo. Al terminar, mandámelo con los botones del final.</div>
   <div id="planes"></div>
+  <div class="send" id="hist"><h2>Historial de cambios</h2><p>Cada cambio que se guarda queda registrado acá, con la fecha y quién lo hizo.</p><div id="histlist"><p class="vacio">Todavía no hay cambios guardados.</p></div></div>
   <div class="send" id="enviar">
     <h2>Enviar a Marcelo</h2>
-    <p>Cuando termines (o si querés mandar lo que llevás hecho), elegí cómo enviarlo. Se manda un resumen con todos los espacios, piso por piso.</p>
+    <p>Lo que cargás ya me llega solo. Si querés avisarme que terminaste, o mandarme el resumen por otro lado, usá estos botones.</p>
     <div class="sendbtns">
       <a class="big wa" id="bwa" target="_blank" rel="noopener">Enviar por WhatsApp</a>
       <a class="big ml" id="bml">Enviar por mail</a>
@@ -137,7 +151,88 @@ const KEY='mirador-aulas-guido-v1';
 const TEL='5491145646462', MAIL='marcelo.a.elvira@gmail.com';
 let st={asig:{},extra:{}};
 try{const r=localStorage.getItem(KEY); if(r){const o=JSON.parse(r); st.asig=o.asig||{}; st.extra=o.extra||{};}}catch(e){}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){} refresh();}
+let DB=null, USR=null, ME=null, RO=false, LOG=[], NAMES={};
+const pend={};
+function persistLocal(){if(DB)return;try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){}}
+function save(){persistLocal(); refresh();}
+function setSync(t,c){const e=document.getElementById('sync');if(e){e.textContent=t;e.className='sync '+(c||'');}}
+function canWrite(){return DB&&!RO;}
+async function dbWrite(fn){
+  if(!canWrite())return;
+  setSync('Guardando…','w');
+  try{await fn();setSync('✓ Guardado en línea','ok');}
+  catch(e){
+    if(e&&(e.code==='invalid_argument'||e.code==='not_granted')){RO=true;setSync('Sin permiso para guardar en línea','bad');showRO();}
+    else if(e&&e.code==='unavailable'){setTimeout(()=>dbWrite(fn),1500+Math.random()*1000);}
+    else setSync('No se pudo guardar','bad');
+  }
+}
+function putAsig(id,val,delay){
+  if(val===undefined)delete st.asig[id]; else st.asig[id]=val; save();
+  if(!canWrite())return;
+  clearTimeout(pend[id]);
+  pend[id]=setTimeout(()=>{delete pend[id];
+    const v=st.asig[id];
+    dbWrite(async()=>{
+      if(!v){await DB.doc('asig/'+id).delete();}
+      else{const body={cat:v.cat||null,otro:v.otro||'',det:v.det||'',at:Date.now(),by:ME||''};await DB.doc('asig/'+id).set(body);}
+      await DB.collection('log').add({id,cat:v?v.cat||null:null,otro:v?v.otro||'':'',det:v?v.det||'':'',at:Date.now(),by:ME||''});
+    });
+  },delay||0);
+}
+function putExtra(pid){
+  save();
+  if(!canWrite())return;
+  const items=(st.extra[pid]||[]).slice();
+  dbWrite(()=>DB.doc('extra/'+pid).set({items}));
+}
+function showRO(){const b=document.getElementById('robanner');if(b)b.hidden=false;}
+function editing(){const a=document.activeElement;return a&&a.tagName==='INPUT';}
+async function initDb(){
+  if(!window.claude||!window.claude.use){setSync('Se guarda sólo en este dispositivo','');return;}
+  try{
+    const [db,usr]=await Promise.all([window.claude.use('db'),window.claude.use('user')]);
+    if(!db){setSync('Se guarda sólo en este dispositivo','');return;}
+    DB=db;USR=usr;
+    try{ME=usr?await usr.id():null;}catch(e){}
+    try{if(usr&&usr.can){const c=await usr.can('data.write');if(c===false){RO=true;showRO();}}}catch(e){}
+    setSync(RO?'Sólo lectura':'✓ Guardado en línea',RO?'bad':'ok');
+    if(!RO){const g=document.getElementById('guardtxt');if(g)g.textContent='Cada cambio se guarda solo, en línea, y lo veo yo desde esta misma página: no hace falta mandar nada. Si querés, al terminar avisame con el botón del final.';}
+    let first=true;
+    DB.collection('asig').onSnapshot(snap=>{
+      const m={};snap.docs.forEach(d=>{const v=d.data();m[d.id]={cat:v.cat||null,otro:v.otro||'',det:v.det||''};});
+      Object.keys(pend).forEach(id=>{if(st.asig[id])m[id]=st.asig[id];});
+      st.asig=m; if(editing())refresh(true); else render(); first=false;
+    },e=>setSync('Sin conexión con el guardado','bad'));
+    DB.collection('extra').onSnapshot(snap=>{
+      const m={};snap.docs.forEach(d=>{const v=d.data();m[d.id]=Array.isArray(v.items)?v.items:[];});
+      st.extra=m; if(!editing())render();
+    },()=>{});
+    DB.collection('log').orderBy('at','desc').limit(200).onSnapshot(snap=>{
+      LOG=snap.docs.map(d=>d.data()); renderLog();
+    },()=>{});
+  }catch(e){DB=null;setSync('Se guarda sólo en este dispositivo','');}
+}
+function nombreDe(id){for(const p of PLANS){const es=espacios(p);const i=es.findIndex(e=>e.id===id);if(i>=0)return p.piso+(p.sector!==p.piso?' · '+p.sector:'')+' · '+(i+1)+'. '+es[i].nombre;}return id;}
+async function renderLog(){
+  const box=document.getElementById('histlist');if(!box)return;
+  if(!LOG.length){box.innerHTML='<p class="vacio">Todavía no hay cambios guardados.</p>';return;}
+  const ids=[...new Set(LOG.map(l=>l.by).filter(Boolean))];
+  if(USR&&USR.profiles&&ids.length){try{const ps=await USR.profiles(ids);ids.forEach(i=>{NAMES[i]=(ps[i]&&ps[i].name)||'';});}catch(e){}}
+  box.innerHTML='';
+  LOG.forEach(l=>{
+    const d=new Date(l.at||0);
+    const f=d.toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit'})+' '+d.toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit',hour12:false});
+    let v=l.cat?CATN[l.cat]:'Sin indicar';if(l.cat==='o'&&l.otro)v+=': '+l.otro;if(l.cat&&l.det)v+=' ('+l.det+')';
+    const row=document.createElement('div');row.className='hrow';
+    const who=(l.by&&NAMES[l.by])||'';
+    row.innerHTML='<span class="hf"></span><span class="hn"></span><span class="hv"></span>';
+    row.querySelector('.hf').textContent=f+(who?' · '+who:'');
+    row.querySelector('.hn').textContent=nombreDe(l.id);
+    row.querySelector('.hv').textContent='→ '+v;
+    box.appendChild(row);
+  });
+}
 let zoom={}; const Z0=(window.innerWidth<700)?1.75:1; let adding=null, selId=null, curPlan=PLANS.length>1?PLANS[1].id:PLANS[0].id;
 
 function espacios(p){return p.espacios.concat(st.extra[p.id]||[]);}
@@ -199,7 +294,7 @@ function planCard(p){
     const arr=st.extra[p.id]||(st.extra[p.id]=[]);
     const n=arr.length+1, id=p.id+'-x'+Date.now().toString(36);
     arr.push({id,tipo:'Agregado',nombre:'Espacio agregado '+n,x,y,extra:true});
-    adding=null;selId=id;save();render();
+    adding=null;selId=id;putExtra(p.id);render();
     setTimeout(()=>{const it=document.getElementById('it-'+id);if(it)it.scrollIntoView({behavior:'smooth',block:'center'});},50);
   };
   return c;
@@ -219,17 +314,17 @@ function itemCard(p,e,i){
   </div>`;
   d.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{
     const cur=eff(e.id);const c=b.dataset.c;
-    st.asig[e.id]=Object.assign({},cur,{cat:(cur.cat===c&&!isPre(e.id))?null:c});selId=e.id;save();render();
+    selId=e.id;putAsig(e.id,Object.assign({},cur,{cat:(cur.cat===c&&!isPre(e.id))?null:c}));render();
     if(c==='o'&&st.asig[e.id].cat==='o'){const inp=document.querySelector('#it-'+CSS.escape(e.id)+' input[data-f="otro"]');if(inp)inp.focus();}
   });
   d.querySelectorAll('input[data-f]').forEach(inp=>{
-    inp.oninput=()=>{const cur=Object.assign({},eff(e.id));cur[inp.dataset.f]=inp.value;st.asig[e.id]=cur;try{localStorage.setItem(KEY,JSON.stringify(st));}catch(x){}
+    inp.oninput=()=>{const cur=Object.assign({},eff(e.id));cur[inp.dataset.f]=inp.value;st.asig[e.id]=cur;persistLocal();putAsig(e.id,cur,1200);
       const sm=d.querySelector('.nm small');if(cur.cat)sm.textContent=CATN[cur.cat]+(cur.cat==='o'&&cur.otro?': '+cur.otro:'');refresh(true);};
   });
   const okb=d.querySelector('.ok');
-  if(okb)okb.onclick=()=>{st.asig[e.id]=Object.assign({},PRE[e.id]);selId=e.id;save();render();};
+  if(okb)okb.onclick=()=>{selId=e.id;putAsig(e.id,Object.assign({},PRE[e.id]));render();};
   const del=d.querySelector('.del');
-  if(del)del.onclick=()=>{st.extra[p.id]=(st.extra[p.id]||[]).filter(x=>x.id!==e.id);delete st.asig[e.id];save();render();};
+  if(del)del.onclick=()=>{st.extra[p.id]=(st.extra[p.id]||[]).filter(x=>x.id!==e.id);putExtra(p.id);if(st.asig[e.id]){delete st.asig[e.id];putAsig(e.id,undefined);}render();};
   return d;
 }
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
@@ -276,9 +371,12 @@ document.getElementById('bcp').onclick=async()=>{
 let armed=false;
 document.getElementById('breset').onclick=function(){
   if(!armed){armed=true;this.textContent='Tocá de nuevo para confirmar que querés borrar todo';setTimeout(()=>{armed=false;this.textContent='Borrar todo lo cargado';},4000);return;}
-  st={asig:{},extra:{}};armed=false;this.textContent='Borrar todo lo cargado';save();render();toast('Se borró todo');
+  const ids=Object.keys(st.asig), pids=Object.keys(st.extra);
+  st={asig:{},extra:{}};armed=false;this.textContent='Borrar todo lo cargado';
+  ids.forEach(id=>putAsig(id,undefined)); pids.forEach(pid=>putExtra(pid)); save();render();toast('Se borró todo');
 };
 render();
+initDb();
 </script>
 </body>
 </html>
