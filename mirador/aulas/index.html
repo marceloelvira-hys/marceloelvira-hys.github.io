@@ -113,7 +113,7 @@ footer{color:var(--tx2);font-size:12px;text-align:center;padding:10px 16px 30px}
       <li><b>Primaria</b> o <b>Secundaria</b>.</li>
       <li><b>Otro</b>, y si querés escribí de qué es (por ejemplo: sala de música, gabinete, comedor).</li>
     </ol>
-    Si querés, podés anotar también el grado o la sección. Si hay un espacio que no tiene número, usá <b>＋ Marcar otro espacio</b> y tocalo en el plano. <span id="guardtxt">Lo que cargues queda guardado en este dispositivo; al terminar, mandámelo con el botón del final.</span>
+    Si querés, podés anotar también el grado o la sección. Si hay un espacio que no tiene número, usá <b>＋ Marcar otro espacio</b> y tocalo en el plano. <span id="guardtxt">Lo que cargues queda guardado en este dispositivo.</span>
     <div class="legend">
       <span><i class="dot" style="background:#fff;box-shadow:0 0 0 2px #333"></i>Sin indicar</span>
       <span><i class="dot" style="background:var(--verde)"></i>Primaria</span>
@@ -127,20 +127,10 @@ footer{color:var(--tx2);font-size:12px;text-align:center;padding:10px 16px 30px}
     <div class="prog"><div class="bar"><i id="barra"></i></div><span id="progtx"></span></div>
     <div class="syncrow"><span id="sync" class="sync">Conectando…</span></div>
   </div>
-  <div class="robanner" id="robanner" hidden>Con este acceso la página no puede guardar en línea: lo que marques queda sólo en este dispositivo. Al terminar, mandámelo con los botones del final.</div>
+  <div class="robanner" id="robanner" hidden>Con este acceso la página no puede guardar en línea: lo que marques queda sólo en este dispositivo. </div>
   <div id="planes"></div>
   <div class="send" id="hist"><h2>Historial de cambios</h2><p>Cada cambio que se guarda queda registrado acá, con la fecha y quién lo hizo.</p><div id="histlist"><p class="vacio">Todavía no hay cambios guardados.</p></div></div>
-  <div class="send" id="enviar">
-    <h2>Enviar a Marcelo</h2>
-    <p>Lo que cargás ya me llega solo. Si querés avisarme que terminaste, o mandarme el resumen por otro lado, usá estos botones.</p>
-    <div class="sendbtns">
-      <a class="big wa" id="bwa" target="_blank" rel="noopener">Enviar por WhatsApp</a>
-      <a class="big ml" id="bml">Enviar por mail</a>
-      <button class="big ml" id="bcp" type="button">Copiar el resumen</button>
-    </div>
-    <div class="resumen" id="resumen"></div>
-    <div class="reset"><button class="del" id="breset" type="button">Borrar todo lo cargado</button></div>
-  </div>
+</div>
 </div>
 <footer>Lic. Marcelo Andrés Elvira · Higiene y Seguridad Laboral · M.P. 0656 C.P.I.I.</footer>
 <div class="toast" id="toast"></div>
@@ -207,7 +197,7 @@ function editing(){const a=document.activeElement;return a&&a.tagName==='INPUT';
 function formMode(){
   if(!FORM_ON){setSync('Se guarda sólo en este dispositivo','');return;}
   setSync('✓ Guardado en línea','ok');
-  const g=document.getElementById('guardtxt');if(g)g.textContent='Cada cambio queda guardado en este dispositivo y además se me envía solo: no hace falta mandar nada. Si querés, al terminar avisame con el botón del final.';
+  const g=document.getElementById('guardtxt');if(g)g.textContent='Cada cambio queda guardado en este dispositivo y además se me envía solo: no hace falta mandar nada. Cuando termines, avisame.';
   const h=document.getElementById('hist');if(h)h.hidden=true;
 }
 async function initDb(){
@@ -219,7 +209,7 @@ async function initDb(){
     try{ME=usr?await usr.id():null;}catch(e){}
     try{if(usr&&usr.can){const c=await usr.can('data.write');if(c===false){RO=true;showRO();}}}catch(e){}
     setSync(RO?'Sólo lectura':'✓ Guardado en línea',RO?'bad':'ok');
-    if(!RO){const g=document.getElementById('guardtxt');if(g)g.textContent='Cada cambio se guarda solo, en línea, y lo veo yo desde esta misma página: no hace falta mandar nada. Si querés, al terminar avisame con el botón del final.';}
+    if(!RO){const g=document.getElementById('guardtxt');if(g)g.textContent='Cada cambio se guarda solo, en línea, y lo veo yo desde esta misma página: no hace falta mandar nada. Cuando termines, avisame.';}
     let first=true;
     DB.collection('asig').onSnapshot(snap=>{
       const m={};snap.docs.forEach(d=>{const v=d.data();m[d.id]={cat:v.cat||null,otro:v.otro||'',det:v.det||''};});
@@ -380,23 +370,9 @@ function refresh(soft){
   let tot=0,ok=0;PLANS.forEach(p=>espacios(p).forEach(e=>{tot++;if(st.asig[e.id]&&st.asig[e.id].cat)ok++;}));
   document.getElementById('barra').style.width=(tot?ok/tot*100:0)+'%';
   document.getElementById('progtx').textContent=`${ok} de ${tot} revisados`;
-  const r=resumen();document.getElementById('resumen').textContent=r;
-  document.getElementById('bwa').href='https://wa.me/'+TEL+'?text='+encodeURIComponent(r);
-  document.getElementById('bml').href='mailto:'+MAIL+'?subject='+encodeURIComponent('Escuela del Mirador - aulas por nivel')+'&body='+encodeURIComponent(r);
   if(!soft)buildTabs();
 }
 function toast(t){const e=document.getElementById('toast');e.textContent=t;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),1800);}
-document.getElementById('bcp').onclick=async()=>{
-  try{await navigator.clipboard.writeText(resumen());toast('Resumen copiado');}
-  catch(e){const r=document.createRange();r.selectNodeContents(document.getElementById('resumen'));const s=getSelection();s.removeAllRanges();s.addRange(r);toast('Seleccionado: copialo con el menú');}
-};
-let armed=false;
-document.getElementById('breset').onclick=function(){
-  if(!armed){armed=true;this.textContent='Tocá de nuevo para confirmar que querés borrar todo';setTimeout(()=>{armed=false;this.textContent='Borrar todo lo cargado';},4000);return;}
-  const ids=Object.keys(st.asig), pids=Object.keys(st.extra);
-  st={asig:{},extra:{}};armed=false;this.textContent='Borrar todo lo cargado';
-  ids.forEach(id=>putAsig(id,undefined)); pids.forEach(pid=>putExtra(pid)); save();render();toast('Se borró todo');
-};
 render();
 initDb();
 </script>
