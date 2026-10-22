@@ -149,6 +149,22 @@ const PLANS = [{"id": "ss", "piso": "Subsuelo", "sector": "Subsuelo", "w": 1230,
 const PRE = {"pb-03": {"cat": "o", "otro": "Sala de profesores"}, "pb-04": {"cat": "o", "otro": "Oficina"}, "pb-05": {"cat": "o", "otro": "Oficina"}, "pb-06": {"cat": "o", "otro": "Oficina"}, "pb-07": {"cat": "o", "otro": "Recepción"}, "pb-08": {"cat": "o", "otro": "Laboratorio"}, "pb-09": {"cat": "o", "otro": "SUM"}, "1a-01": {"cat": "p"}, "1a-02": {"cat": "p"}, "1a-03": {"cat": "s"}, "1a-04": {"cat": "s"}, "1a-05": {"cat": "s"}, "1a-06": {"cat": "p"}, "1a-07": {"cat": "p"}, "1a-08": {"cat": "o", "otro": "Oficina"}, "1b-01": {"cat": "p"}, "1b-02": {"cat": "p"}, "1b-03": {"cat": "o", "otro": "Oficina"}, "1b-04": {"cat": "o", "otro": "Oficina"}, "1b-05": {"cat": "o", "otro": "Biblioteca"}, "1b-06": {"cat": "o", "otro": "Oficina"}, "2a-01": {"cat": "p"}, "2a-02": {"cat": "p"}, "2a-03": {"cat": "s"}, "2a-04": {"cat": "s"}, "2a-05": {"cat": "s"}, "2a-06": {"cat": "p"}, "2a-07": {"cat": "p"}, "2b-01": {"cat": "p"}, "2b-02": {"cat": "p"}, "2c-01": {"cat": "o", "otro": "Oficina"}, "3a-01": {"cat": "p"}, "3a-02": {"cat": "p"}, "3a-03": {"cat": "s"}, "3a-04": {"cat": "s"}, "3a-05": {"cat": "s"}, "3a-06": {"cat": "p"}, "3a-07": {"cat": "o", "otro": "Preceptoría"}, "pb-01": {"cat": "p"}, "pb-02": {"cat": "p"}};
 const KEY='mirador-aulas-guido-v1';
 const TEL='5491145646462', MAIL='marcelo.a.elvira@gmail.com';
+const FORM={url:'https://docs.google.com/forms/d/e/1FAIpQLSfchNJrEFEHYOp6qHmQpsRzHjCsVY_kBF3vyD55_wz9r1Z9Hw/formResponse',cambio:'entry.1874500992',estado:'entry.935882267'};
+const FORM_ON=FORM.url.startsWith('https://');
+const fpend={};
+function formSend(id){
+  if(!FORM_ON||DB)return;
+  clearTimeout(fpend[id]);
+  fpend[id]=setTimeout(()=>{delete fpend[id];
+    const a=st.asig[id];let v=a&&a.cat?CATN[a.cat]:'Sin indicar';
+    if(a&&a.cat==='o'&&a.otro)v+=': '+a.otro; if(a&&a.cat&&a.det)v+=' ('+a.det+')';
+    const body=new URLSearchParams();
+    body.append(FORM.cambio,nombreDe(id)+' → '+v+'  ['+id+']');
+    body.append(FORM.estado,JSON.stringify({asig:st.asig,extra:st.extra}));
+    setSync('Guardando…','w');
+    fetch(FORM.url,{method:'POST',mode:'no-cors',body}).then(()=>setSync('✓ Guardado en línea','ok')).catch(()=>setSync('Sin conexión: queda en este dispositivo','bad'));
+  },id.startsWith('__')?0:1200);
+}
 let st={asig:{},extra:{}};
 try{const r=localStorage.getItem(KEY); if(r){const o=JSON.parse(r); st.asig=o.asig||{}; st.extra=o.extra||{};}}catch(e){}
 let DB=null, USR=null, ME=null, RO=false, LOG=[], NAMES={};
@@ -168,7 +184,7 @@ async function dbWrite(fn){
   }
 }
 function putAsig(id,val,delay){
-  if(val===undefined)delete st.asig[id]; else st.asig[id]=val; save();
+  if(val===undefined)delete st.asig[id]; else st.asig[id]=val; save(); formSend(id);
   if(!canWrite())return;
   clearTimeout(pend[id]);
   pend[id]=setTimeout(()=>{delete pend[id];
@@ -188,11 +204,17 @@ function putExtra(pid){
 }
 function showRO(){const b=document.getElementById('robanner');if(b)b.hidden=false;}
 function editing(){const a=document.activeElement;return a&&a.tagName==='INPUT';}
+function formMode(){
+  if(!FORM_ON){setSync('Se guarda sólo en este dispositivo','');return;}
+  setSync('✓ Guardado en línea','ok');
+  const g=document.getElementById('guardtxt');if(g)g.textContent='Cada cambio queda guardado en este dispositivo y además se me envía solo: no hace falta mandar nada. Si querés, al terminar avisame con el botón del final.';
+  const h=document.getElementById('hist');if(h)h.hidden=true;
+}
 async function initDb(){
-  if(!window.claude||!window.claude.use){setSync('Se guarda sólo en este dispositivo','');return;}
+  if(!window.claude||!window.claude.use){formMode();return;}
   try{
     const [db,usr]=await Promise.all([window.claude.use('db'),window.claude.use('user')]);
-    if(!db){setSync('Se guarda sólo en este dispositivo','');return;}
+    if(!db){formMode();return;}
     DB=db;USR=usr;
     try{ME=usr?await usr.id():null;}catch(e){}
     try{if(usr&&usr.can){const c=await usr.can('data.write');if(c===false){RO=true;showRO();}}}catch(e){}
