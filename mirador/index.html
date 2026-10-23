@@ -177,7 +177,7 @@ footer{text-align:center;font-size:13px;color:var(--gris);padding:6px 16px 26px}
 @media (max-width:380px){.tiles.t3{grid-template-columns:1fr 1fr}}
 
 .anim{border-radius:12px;overflow:hidden;border:1px solid var(--linea);background:#fff}
-.anim iframe{display:block;width:100%;aspect-ratio:1080/2430;border:0}
+.anim iframe{display:block;width:100%;aspect-ratio:1080/2560;border:0}
 .vid{border-radius:12px;overflow:hidden;background:#000;border:1px solid var(--linea)}
 .vid video{display:block;width:100%;height:auto;aspect-ratio:16/9;background:#000}
 #cap,.prog,.ctl{display:none!important}
@@ -329,8 +329,8 @@ footer{text-align:center;font-size:13px;color:var(--gris);padding:6px 16px 26px}
     <div class="cortes" style="margin:0 12px 12px">
     <div class="cg p"><span class="lb">Primaria</span>
       <div class="ct"><em>1</em><span>Fdez. de Enciso y Navarro</span><b>Mariana Lorge</b></div>
-      <div class="ct"><em>2</em><span>Sanabria y Fdez. de Enciso</span><b>Tomás Coxe</b></div>
-      <div class="ct"><em>3</em><span>J. L. Cantilo y Gualeguaychú</span><b>Natalia Monti</b></div></div>
+      <div class="ct"><em>2</em><span>Sanabria y Fdez. de Enciso</span><b>Juan Ignacio Correa<br>Josefina Lascala</b></div>
+      <div class="ct"><em>3</em><span>J. L. Cantilo y Gualeguaychú</span><b>Tomás Strehar<br>Natalia Monti<br>Francisco Pollet</b></div></div>
     <div class="cg s"><span class="lb">Secundaria</span>
       <div class="ct"><em>1</em><span>Sanabria y Navarro</span><b>Julián Hurtado Ferrante</b></div>
       <div class="ct"><em>2</em><span>Navarro y Gualeguaychú</span><b>Lara García</b></div>
@@ -359,7 +359,7 @@ document.querySelectorAll('.tp button').forEach(b=>b.addEventListener('click',()
   <p style="margin:0 0 8px">Todos salen por el <b>portón principal</b> (Fernández de Enciso) y cada nivel va por su camino hasta el <b>Jardín Cuentacuentos</b>, Gualeguaychú 3502.</p>
   <div class="anim"><iframe title="Animación del recorrido" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;es&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;&lt;style&gt;
 *{box-sizing:border-box}html,body{margin:0;overflow:hidden;background:#fff;font-family:-apple-system,&quot;Segoe UI&quot;,Roboto,Calibri,Carlito,Arial,sans-serif;color:#1D2622}
-#stg{position:absolute;left:0;top:0;width:1080px;height:2430px;transform-origin:0 0;background:#fff}
+#stg{position:absolute;left:0;top:0;width:1080px;height:2560px;transform-origin:0 0;background:#fff}
 #croquis{position:absolute;left:0;top:0;width:1080px;height:903px;background:#D3DAD5;overflow:hidden}
 #croquis svg{width:100%;height:100%;display:block}
 #croquis [data-id=leyenda]{display:none}#croquis .dot{opacity:0}
@@ -381,8 +381,8 @@ document.querySelectorAll('.tp button').forEach(b=>b.addEventListener('click',()
 .sl{font-size:31px;font-weight:800;min-height:38px;line-height:1.2;border-bottom:3px dashed #C9CFCB}
 .sl.ok{border-bottom-color:transparent}
 .lbl{position:absolute;left:0;top:0;opacity:0;padding:10px 20px;border-radius:14px;font-size:34px;font-weight:800;color:#fff;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.25);transform-origin:center;z-index:5}
-.lbl.prim{background:#3C9A68}.lbl.sec{background:#1F5FA8}
-.cols{position:absolute;top:1560px;left:0;width:1080px;display:flex;justify-content:center;gap:56px}
+.lbl{white-space:pre;text-align:center;line-height:1.2}.sl{white-space:pre-line}.lbl.prim{background:#3C9A68}.lbl.sec{background:#1F5FA8}
+.cols{position:absolute;top:1690px;left:0;width:1080px;display:flex;justify-content:center;gap:56px}
 .col{position:relative;width:420px}
 .pill{height:60px;border-radius:30px;color:#fff;font-weight:800;font-size:30px;display:flex;align-items:center;justify-content:center;letter-spacing:1px}
 .gr{text-align:center;font-weight:700;font-size:26px;margin:6px 0 12px}
@@ -433,7 +433,7 @@ var p3=q(&#x27;persona_1792535411401&#x27;), p3b=p3.cloneNode(true); p3b.setAttr
 var o3=tr(p3); setTr(p3b,{x:21.8,y:32.5,r:0,s:o3.s}); p3.parentNode.insertBefore(p3b,p3);
 var NG={prim:12,sec:10}, GAP=8.5*1.7*1.15, WAIT=1.4, VEL={prim:28,sec:37}, VC=95, BRAKE=26, ACC=0.75, ACORD=0.28, D2=72, GL=9.2*1.7-1.4, GW=9.2;
 // cruces: [zona, persona, anillo, texto, circulo numero, nombre]
-var CR={prim:[[&#x27;z1&#x27;,&#x27;p1&#x27;,&#x27;p1&#x27;,&#x27;Cruce 1 · Fdez. de Enciso y Navarro&#x27;,&#x27;n1&#x27;,&#x27;Mariana Lorge&#x27;],[&#x27;z2&#x27;,&#x27;persona_1792535414851&#x27;,&#x27;p2&#x27;,&#x27;Cruce 2 · Sanabria y Fdez. de Enciso&#x27;,&#x27;n2&#x27;,&#x27;Tomás Coxe&#x27;],[&#x27;z5&#x27;,&#x27;persona_1792535411401&#x27;,&#x27;x3&#x27;,&#x27;Cruce 3 · J. L. Cantilo y Gualeguaychú&#x27;,&#x27;n3&#x27;,&#x27;Natalia Monti&#x27;]],
+var CR={prim:[[&#x27;z1&#x27;,&#x27;p1&#x27;,&#x27;p1&#x27;,&#x27;Cruce 1 · Fdez. de Enciso y Navarro&#x27;,&#x27;n1&#x27;,&#x27;Mariana Lorge&#x27;],[&#x27;z2&#x27;,&#x27;persona_1792535414851&#x27;,&#x27;p2&#x27;,&#x27;Cruce 2 · Sanabria y Fdez. de Enciso&#x27;,&#x27;n2&#x27;,&#x27;Juan Ignacio Correa\nJosefina Lascala&#x27;],[&#x27;z5&#x27;,&#x27;persona_1792535411401&#x27;,&#x27;x3&#x27;,&#x27;Cruce 3 · J. L. Cantilo y Gualeguaychú&#x27;,&#x27;n3&#x27;,&#x27;Tomás Strehar\nNatalia Monti\nFrancisco Pollet&#x27;]],
         sec:[[&#x27;z3&#x27;,&#x27;persona_1792535414164&#x27;,&#x27;s1&#x27;,&#x27;Cruce 1 · Sanabria y Navarro&#x27;,&#x27;n4&#x27;,&#x27;Julián Hurtado Ferrante&#x27;],[&#x27;z4&#x27;,&#x27;persona_1792535413389&#x27;,&#x27;s2&#x27;,&#x27;Cruce 2 · Navarro y Gualeguaychú&#x27;,&#x27;n5&#x27;,&#x27;Lara García&#x27;],[&#x27;z5&#x27;,&#x27;p3sec&#x27;,&#x27;x3&#x27;,&#x27;Cruce 3 · J. L. Cantilo y Gualeguaychú&#x27;,&#x27;n3&#x27;,&#x27;Guido M. Coda&#x27;]]};
 var pj=q(&#x27;porton&#x27;).cloneNode(true); pj.setAttribute(&#x27;data-id&#x27;,&#x27;portonJardin&#x27;); setTr(pj,{x:71.5,y:45.5,r:8,s:0.62}); 
 var pjt=document.createElementNS(NS,&#x27;text&#x27;); pjt.setAttribute(&#x27;x&#x27;,62); pjt.setAttribute(&#x27;y&#x27;,63); pjt.setAttribute(&#x27;text-anchor&#x27;,&#x27;middle&#x27;); pjt.setAttribute(&#x27;font-size&#x27;,&#x27;6.4&#x27;); pjt.setAttribute(&#x27;font-weight&#x27;,&#x27;700&#x27;); pjt.setAttribute(&#x27;fill&#x27;,&#x27;#1F4A37&#x27;); pjt.setAttribute(&#x27;stroke&#x27;,&#x27;#fff&#x27;); pjt.setAttribute(&#x27;stroke-width&#x27;,&#x27;2.2&#x27;); pjt.setAttribute(&#x27;paint-order&#x27;,&#x27;stroke&#x27;); pjt.setAttribute(&#x27;font-family&#x27;,&#x27;Calibri,Carlito,Arial&#x27;); pjt.textContent=&#x27;PORTÓN (SECUNDARIA)&#x27;; q(&#x27;porton&#x27;).parentNode.appendChild(pjt);
