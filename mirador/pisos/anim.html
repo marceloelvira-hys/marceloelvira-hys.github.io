@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<title>Mirador · Evacuación por pisos</title>
+<style>
+html,body{margin:0;padding:0;background:#fff;overflow:hidden}
+canvas{display:block;width:100%;height:auto}
+</style></head><body>
+<canvas id="cv" width="1080" height="1080"></canvas>
+<script src="data.js"></script>
+<script>
+const Q = new URLSearchParams(location.search);
+const SEC = Q.get('sector') === 'B' ? 'B' : 'A';
+const KEEP = SEC === 'A' ? ['A2', 'A1', 'PB'] : ['B3', 'B2', 'B1', 'PB'];
+(function () {
+  for (const nv of ['p', 's']) {
+    const list = AULAS.filter(a => a.nv === nv), base = Math.floor(ALUMNOS[nv] / list.length); let extra = ALUMNOS[nv] - base * list.length;
+    list.forEach(a => { a.n = base + (extra > 0 ? 1 : 0); extra--; });
+  }
+  for (let i = AULAS.length - 1; i >= 0; i--) if (!KEEP.includes(AULAS[i].pl)) AULAS.splice(i, 1);
+  for (let i = LIDERES.length - 1; i >= 0; i--) if (!KEEP.includes(LIDERES[i].pl)) LIDERES.splice(i, 1);
+})();
+const DOTM = 1.6, PILLM = 2.6;
+const TURNO = Q.get('turno') === 'tarde' ? 'tarde' : 'manana';
+const cv = document.getElementById('cv'), ctx = cv.getContext('2d');
+const FONT = 'Carlito, Calibri, Arial, sans-serif';
+const C = { verde: '#3C9A68', azul: '#1F5FA8', bordo: '#6E1E2E', nar: '#E8822A', osc: '#1D2622', gris: '#5B6B63', esc: '#038F3D' };
+const NIV = { p: C.verde, s: C.azul };
+
+// ---------- parámetros ----------
+const V = 1.7, VL = 2.4, GAP = 1.45, DT = GAP / V, TREADY = 7, TF = 6, DWELL = 1.4;
+const ROW = 0.65, COL = 1.25;
+
+// ---------- utilidades ----------
+let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+const lerp = (a, b, t) => a + (b - a) * t, clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+const ease = t => t < 0 ? 0 : t > 1 ? 1 : t * t * (3 - 2 * t);
+const easeOut = t => t < 0 ? 0 : t > 1 ? 1 : 1 - Math.pow(1 - t, 3);
+const dist = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1]);
+const same = (a, b) => Math.abs(a[0] - b[0]) < 0.5 && Math.abs(a[1] - b[1]) < 0.5;
+function mkPath(pts, mg) { // pts en g; longitudes en metros
+  const L = [0]; for (let i = 1; i < pts.length; i++) L.push(L[i - 1] + dist(pts[i - 1], pts[i]) / mg);
+  return { pts, L, len: L[L.length - 1], mg };
+}
+function at(P, s) {
+  if (s <= 0) return P.pts[0]; if (s >= P.len) return P.pts[P.pts.length - 1];
+  let i = 1; while (P.L[i] < s) i++;
+  const t = (s - P.L[i - 1]) / (P.L[i] - P.L[i - 1] || 1);
+  return [lerp(P.pts[i - 1][0], P.pts[i][0], t), lerp(P.pts[i - 1][1], P.pts[i][1], t)];
+}
+function project(P, q) { // arco (m) del punto más cercano y distancia (g)
+  let best = [1e9, 0];
+  for (let i = 1; i < P.pts.length; i++) {
+    const a = P.pts[i - 1], b = P.pts[i], dx = b[0] - a[0], dy = b[1] - a[1], l2 = dx * dx + dy * dy || 1;
+    const t = clamp(((q[0] - a[0]) * dx + (q[1] - a[1]) * dy) / l2, 0, 1);
+    const p = [a[0] + dx * t, a[1] + dy * t], d = dist(p, q);
+    if (d < best[0]) best = [d, P.L[i - 1] + t * (P.L[i] - P.L[i - 1])];
+  }
+  return { d: best[0], s: best[1] };
+}
+function joinTo(via, to) { // une el tramo propio con el tramo final, sin volver sobre los pasos
+  const last = via[via.length - 1];
+  const k = to.findIndex(p => same(p, last));
+  return k >= 0 ? via.concat(to.slice(k + 1)) : via.concat(to);
+}
+
+// ---------- layout (vertical, por sector) ----------
+const LAY = {}; let CH = 0;
+(function () {
+  const W = 1080, M = 40, TOP = 190, LBL = 70, GAPR = 40;
+  const ancho = SEC === 'A' ? { A2: 640, A1: 700, PB: 1000 } : { B3: 1000, B2: 1000, B1: 1000, PB: 1000 };
+  let y = TOP; LAY.rows = {};
+  for (const id of KEEP) {
+    const P = PLANS[id], c = P.crop, k = ancho[id] / (c[2] - c[0]), h = (c[3] - c[1]) * k;
+    LAY.rows[id] = y; y += LBL;
+    LAY[id] = { x: (W - ancho[id]) / 2, y, k }; P.k = k; y += h + GAPR;
+  }
+  CH = Math.round(y + 10);
+})();
+cv.height = CH;
+function S(pl, g) { const L = LAY[pl], c = PLANS[pl].crop; return [L.x + (g[0] - c[0]) * L.k, L.y + (g[1] - c[1]) * L.k]; }
+
+// ---------- corte ----------
+const CO = { x0: 920, y0: 106, ground: 458, FH: 72, A: [985, 1215], B: [1250, 1770], col: { principal: 1195, caja: 1272, ext: 1800 }, porton: 1858 };
+CO.band = f => CO.ground - (f + 0.5) * CO.FH;
+const COLDIR = { principal: -1, caja: 1, ext: -1 };
+const COLSPAN = { principal: 1195 - 993, caja: 1762 - 1272, ext: 1800 - 1258 };
+
+// ---------- simulación ----------
+const PEOPLE = [], GROUPS = [], LEADS = [];
+function buildGroups() {
+  for (const a of AULAS) {
+    const P = PLANS[a.pl], mg = P.mg;
+    const to = a.st ? TO[a.pl][a.st] : SALIDA_PB;
+    const post = mkPath(joinTo([a.d, ...a.via], to).concat(a.st ? [] : AFUERA[a.nv]), mg);
+    const nr = Math.ceil(a.n / 2), head = [a.c[0], Math.max(a.d[1] + 0.9 * mg, a.c[1] - nr * ROW * mg / 2)];
+    const g = { a, post, head, members: [], floor: P.piso, lane: (GROUPS.length * 0.618) % 1 * 2 - 1 };
+    // seño adelante, chicos en fila de dos detrás
+    const seats = [[head[0], head[1] - 0.55 * mg]];
+    for (let j = 0; j < a.n; j++) { const r = Math.floor(j / 2), sd = j % 2 ? 1 : -1; seats.push([head[0] + sd * COL / 2 * mg, head[1] + r * ROW * mg]); }
+    seats.forEach((st, i) => {
+      const pre = i === 0 ? mkPath([st, a.d], mg) : mkPath([st, head, a.d], mg);
+      const p = { g, i, seno: i === 0, nv: a.nv, seat: st, pre, jit: clamp(g.lane + (rnd() * 2 - 1) * 0.12, -1, 1), jit2: rnd() };
+      g.members.push(p); PEOPLE.push(p);
+    });
+    GROUPS.push(g);
+  }
+  // programación por escalera y plano: primero los más cercanos; nadie se cruza con el grupo anterior
+  const keys = [...new Set(GROUPS.map(g => g.a.pl + '|' + g.a.st))];
+  for (const key of keys) {
+    const gs = GROUPS.filter(g => g.a.pl + '|' + g.a.st === key).sort((x, y) => x.post.len - y.post.len);
+    gs.forEach((g, k) => {
+      const lead = Math.max(...g.members.map(p => p.pre.len / V - p.i * DT));
+      let t0 = TREADY + Math.max(0, lead);
+      for (let j = 0; j < k; j++) {
+        const h = gs[j];
+        // primer punto del camino de g que comparte con el de h
+        let M = null;
+        for (let s = 0; s <= g.post.len; s += 0.25) { const q = at(g.post, s); const pr = project(h.post, q); if (pr.d < 0.6 * g.post.mg) { M = { sg: s, sh: pr.s }; break; } }
+        if (!M) continue;
+        t0 = Math.max(t0, h.t0 + h.members.length * DT + (M.sh - M.sg) / V + 0.4);
+      }
+      g.t0 = t0;
+    });
+  }
+  for (const g of GROUPS) {
+    for (const p of g.members) {
+      p.tDoor = g.t0 + p.i * DT; p.tStart = p.tDoor - p.pre.len / V;
+      p.tEnd = p.tDoor + g.post.len / V; // llega a la escalera (o sale por el portón en PB)
+      if (g.a.st) { p.st = g.a.st; p.tPB = p.tEnd + g.floor * TF; p.pbPath = mkPath(STAIRS[g.a.st].pb.concat(AFUERA[p.nv]), PLANS.PB.mg); p.tOut = p.tPB + p.pbPath.len / V; }
+      else { p.st = null; p.tPB = null; p.tOut = p.tEnd; }
+    }
+    g.tEmpty = g.members[g.members.length - 1].tDoor + 0.3;
+  }
+}
+function buildLeaders() {
+  const names = Object.fromEntries(Object.keys(NOMBRES.manana).map(k => [k, NOMBRES.manana[k] === NOMBRES.tarde[k] ? NOMBRES.manana[k] : NOMBRES.manana[k] + ' / ' + NOMBRES.tarde[k]]));
+  const aulaById = Object.fromEntries(GROUPS.map(g => [g.a.id, g]));
+  LIDERES.forEach((L, idx) => {
+    const P = PLANS[L.pl], mg = P.mg;
+    const segs = []; // {type:'walk', path, t0, t1} | {type:'check', pos, look, t0, t1, aula}
+    let pos = L.start, t = 2.2 + idx * 0.25; const tAppear = t;
+    const walkTo = (q) => { if (dist(pos, q) < 0.5) return; const path = mkPath([pos, q], mg); segs.push({ type: 'walk', path, t0: t, t1: t + path.len / VL }); t += path.len / VL; pos = q; };
+    const checks = [];
+    for (const it of L.ruta) {
+      if (Array.isArray(it)) { walkTo(it); continue; }
+      walkTo(it.c);
+      const g = aulaById[it.a], tEmpty = g ? g.tEmpty + 0.3 : 0;
+      if (t < tEmpty) { segs.push({ type: 'wait', pos, t0: t, t1: tEmpty }); t = tEmpty; }
+      const look = g ? g.a.c : OTROS[it.a].c;
+      segs.push({ type: 'check', pos, look, t0: t, t1: t + DWELL, aula: it.a }); checks.push({ pl: L.pl, c: look, t: t + DWELL * 0.75 });
+      t += DWELL;
+    }
+    const tail = L.st ? TO[L.pl][L.st] : SALIDA_PB;
+    const fin = joinTo([pos], tail).concat(L.st ? [] : AFUERA[NIVEL_LIDER[L.k]]);
+    // nunca antes que el último grupo de su piso
+    const gate = SALIDA_PB[1];
+    const ultimos = PEOPLE.filter(p => p.g.a.pl === L.pl);
+    let kWait, req;
+    if (L.st) { kWait = fin.length - 1; req = Math.max(...ultimos.map(p => p.tEnd)) + DT * 1.3; }
+    else { kWait = fin.findIndex(q => same(q, gate)); req = Math.max(...ultimos.map(p => p.tDoor + project(p.g.post, gate).s / V)) + DT * 1.3; }
+    if (L.k === 'B3a') req += DT;
+    for (let i = 1; i < kWait; i++) walkTo(fin[i]);
+    const dLast = dist(pos, fin[kWait]) / mg / VL;
+    if (t + dLast < req) { segs.push({ type: 'wait', pos, t0: t, t1: req - dLast }); t = req - dLast; }
+    for (let i = kWait; i < fin.length; i++) walkTo(fin[i]);
+    const lead = { L, name: names[L.k], segs, tAppear, tEnd: t, checks, pl: L.pl, floor: P.piso, st: L.st, seed: rnd() };
+    if (L.st) { lead.tPB = t + P.piso * TF; lead.pbPath = mkPath(STAIRS[L.st].pb.concat(AFUERA[NIVEL_LIDER[L.k]]), PLANS.PB.mg); lead.tOut = lead.tPB + lead.pbPath.len / V; }
+    else lead.tOut = t;
+    // largo restante (para el corte)
+    lead.remAt = (tt) => { let r = 0; for (const s of segs) { if (s.type !== 'walk') continue; if (tt <= s.t0) r += s.path.len; else if (tt < s.t1) r += s.path.len * (s.t1 - tt) / (s.t1 - s.t0); } return r; };
+    LEADS.push(lead);
+  });
+}
+buildGroups(); buildLeaders();
+const T_END = Math.max(...PEOPLE.map(p => p.tOut), ...LEADS.map(l => l.tOut));
+const TOTAL = PEOPLE.length + LEADS.length;
+const CHECKS = LEADS.flatMap(l => l.checks);
+
+// ---------- tiempo de video ----------
+const V0 = 1.0, VZ = 11.6, S1 = 1.6, S2 = 3.4, HOLD = 4.5;
+const simAt = v => v < V0 ? 0 : v < VZ ? (v - V0) * S1 : (VZ - V0) * S1 + (v - VZ) * S2;
+const V_END = VZ + (T_END + 0.8 - (VZ - V0) * S1) / S2;
+const DURATION = V_END + HOLD;
+
+// ---------- estado de una persona ----------
+function personState(p, t) {
+  const g = p.g;
+  if (t < p.tStart) return { where: 'plan', pl: g.a.pl, pos: p.seat, rem: p.pre.len + g.post.len };
+  if (t < p.tDoor) { const s = (t - p.tStart) * V; return { where: 'plan', pl: g.a.pl, pos: at(p.pre, s), rem: p.pre.len - s + g.post.len }; }
+  if (t < p.tEnd) { const s = (t - p.tDoor) * V; return { where: 'plan', pl: g.a.pl, pos: at(g.post, s), rem: g.post.len - s, fadeIn: g.a.st ? clamp((g.post.len - s) / 0.9, 0, 1) : 1 }; }
+  if (!p.st) { const out = (t - p.tEnd); return out < 1 ? { where: 'out', pl: 'PB', pos: g.post.pts[g.post.pts.length - 1], a: 1 - out } : null; }
+  if (t < p.tPB) return { where: 'stair', st: p.st, f: g.floor - (t - p.tEnd) / TF, from: g.floor, u: (t - p.tEnd) / (p.tPB - p.tEnd) };
+  if (t < p.tOut) { const s = (t - p.tPB) * V; return { where: 'pb', pl: 'PB', pos: at(p.pbPath, s), prog: s / p.pbPath.len, fadeIn: clamp(s / 0.8, 0, 1) }; }
+  const out = t - p.tOut; return out < 1 ? { where: 'out', pl: 'PB', pos: p.pbPath.pts[p.pbPath.pts.length - 1], a: 1 - out } : null;
+}
+function leadState(l, t) {
+  if (t < l.tAppear) return null;
+  if (t < l.tEnd) {
+    let seg = l.segs.find(s => t >= s.t0 && t < s.t1) || l.segs[l.segs.length - 1];
+    let pos, dir = null, check = null;
+    if (seg.type === 'walk') { const s = (t - seg.t0) * VL; pos = at(seg.path, s); const q = at(seg.path, s + 0.3); dir = Math.atan2(q[1] - pos[1], q[0] - pos[0]); }
+    else { pos = seg.pos; if (seg.type === 'check') check = { look: seg.look, u: (t - seg.t0) / (seg.t1 - seg.t0) }; }
+    const lastWalk = l.segs.filter(s => s.type === 'walk').pop();
+    const fade = l.st && lastWalk && t > lastWalk.t1 - 0.6 ? clamp((lastWalk.t1 - t) / 0.6, 0, 1) : 1;
+    return { where: 'plan', pl: l.pl, pos, dir, check, rem: l.remAt(t), fade };
+  }
+  if (!l.st) { const out = t - l.tEnd; return out < 1 ? { where: 'out', pl: 'PB', pos: AFUERA[NIVEL_LIDER[l.L.k]][2], a: 1 - out } : null; }
+  if (t < l.tPB) return { where: 'stair', st: l.st, f: l.floor - (t - l.tEnd) / TF, from: l.floor };
+  if (t < l.tOut) { const s = (t - l.tPB) * V; return { where: 'pb', pl: 'PB', pos: at(l.pbPath, s), prog: s / l.pbPath.len, fadeIn: clamp(s / 0.8, 0, 1) }; }
+  const out = t - l.tOut; return out < 1 ? { where: 'out', pl: 'PB', pos: l.pbPath.pts[l.pbPath.pts.length - 1], a: 1 - out } : null;
+}
+
+// ---------- imágenes ----------
+const IMG = {}; let loaded = 0; const NIMG = Object.keys(PLANS).length + 1;
+for (const id in PLANS) { const im = new Image(); im.onload = () => loaded++; im.src = PLANS[id].img; IMG[id] = im; }
+const LOGO = new Image(); LOGO.onload = () => loaded++; LOGO.src = 'img/logo.png';
+
+// ---------- dibujo ----------
+function rr(x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
+function pill(x, y, txt, bg, fg, size, anchor) {
+  ctx.font = `700 ${size}px ${FONT}`; const w = ctx.measureText(txt).width + size * 1.3, h = size * 1.6;
+  const x0 = anchor === 'c' ? x - w / 2 : anchor === 'r' ? x - w : x;
+  rr(x0, y - h / 2, w, h, h / 2); ctx.fillStyle = bg; ctx.fill();
+  ctx.fillStyle = fg; ctx.textBaseline = 'middle'; ctx.textAlign = 'left'; ctx.fillText(txt, x0 + size * 0.65, y + 1); return w;
+}
+function drawPlan(id) {
+  const P = PLANS[id], L = LAY[id], c = P.crop, f = P.W / 2000;
+  const w = (c[2] - c[0]) * L.k, h = (c[3] - c[1]) * L.k;
+  ctx.save(); rr(L.x, L.y, w, h, 10); ctx.clip();
+  ctx.drawImage(IMG[id], c[0] * f, c[1] * f, (c[2] - c[0]) * f, (c[3] - c[1]) * f, L.x, L.y, w, h);
+  ctx.restore();
+  ctx.save(); rr(L.x, L.y, w, h, 10); ctx.strokeStyle = 'rgba(29,38,34,.18)'; ctx.lineWidth = 1.5; ctx.stroke(); ctx.restore();
+  return [w, h];
+}
+function rowLabel(y, piso, sub, color) {
+  ctx.textBaseline = 'middle'; ctx.textAlign = 'left';
+  const w = pill(24, y + 15, piso, C.osc, '#fff', 19, 'l');
+  ctx.font = `600 19px ${FONT}`; ctx.fillStyle = color; ctx.fillText(sub, 24 + w + 12, y + 16);
+}
+function drawCard() {
+  const x = 700, y = 146, w = 196, hgt = 262;
+  rr(x, y, w, hgt, 14); ctx.fillStyle = '#F4F7F5'; ctx.fill(); ctx.strokeStyle = 'rgba(3,143,61,.25)'; ctx.lineWidth = 1.5; ctx.stroke();
+  ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic'; ctx.font = `700 19px ${FONT}`; ctx.fillStyle = C.esc; ctx.fillText('Para recordar', x + 16, y + 32);
+  const items = [[C.azul, 'Secundaria:', 'escalera exterior'], [C.verde, 'Primaria:', 'escaleras interiores'], [C.nar, 'Líderes:', 'revisan y salen último'], [C.bordo, 'Salida:', 'portón principal']];
+  items.forEach(([col, a, b], i) => {
+    const yy = y + 68 + i * 46; dot(x + 24, yy - 5, 7, col, 1, 1.6);
+    ctx.font = `700 17px ${FONT}`; ctx.fillStyle = C.osc; ctx.fillText(a, x + 40, yy - 8);
+    ctx.font = `400 17px ${FONT}`; ctx.fillStyle = C.osc; ctx.fillText(b, x + 40, yy + 12);
+  });
+  ctx.font = `600 15px ${FONT}`; ctx.fillStyle = C.bordo; ctx.fillText('El ascensor no se usa.', x + 16, y + hgt - 14);
+}
+function drawStatic(t) {
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, 1080, CH);
+  const SUB = { B3: ['3.er piso', 'Secundaria · escalera exterior', C.azul], B2: ['2.º piso', 'Sec.: exterior · Prim.: caja', C.osc],
+    B1: ['1.er piso', 'Primaria · caja de escalera', C.verde], A2: ['2.º piso', 'Primaria · escalera principal', C.verde], A1: ['1.er piso', 'Primaria · escalera principal', C.verde],
+    PB: ['Planta baja', 'Todos salen por el portón principal', C.bordo] };
+  for (const id of KEEP) {
+    const y = LAY.rows[id] + 30, [p, s, col] = SUB[id];
+    ctx.textBaseline = 'middle'; ctx.textAlign = 'left';
+    const w = pill(40, y, p, C.osc, '#fff', 36, 'l');
+    ctx.font = `600 35px ${FONT}`; ctx.fillStyle = col; ctx.fillText(s, 40 + w + 16, y + 2);
+    drawPlan(id);
+  }
+  const aDir = clamp((t - 25) / 2, 0, 1);
+  if (aDir > 0) { ctx.globalAlpha = aDir; let q = S('PB', [700, 195]); pill(q[0], q[1], 'Primaria → derecha', C.verde, '#fff', 22, 'r'); q = S('PB', [345, 590]); pill(q[0], q[1], 'Secundaria ← izquierda', C.azul, '#fff', 22, 'r'); ctx.globalAlpha = 1; }
+  const aAlt = clamp((t - 2) / 2, 0, 1);
+  if (aAlt > 0) { ctx.globalAlpha = aAlt; ALTERNATIVAS.forEach(q => { const s = S('PB', q); pill(s[0] + 14, s[1] - 22, 'Salida disponible', 'rgba(91,107,99,.88)', '#fff', 19, 'l'); }); ctx.globalAlpha = 1; }
+}
+function drawCorte(t) {
+  const { ground, FH } = CO, A = CO.A, B = CO.B;
+  ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left';
+  ctx.font = `700 22px ${FONT}`; ctx.fillStyle = C.osc; ctx.fillText('El edificio en corte', 930, 132);
+  ctx.font = `400 16px ${FONT}`; ctx.fillStyle = C.gris; ctx.fillText('Cada punto es una persona', 930, 154);
+  // pisos
+  ctx.fillStyle = '#F1F2F3';
+  ctx.fillRect(A[0], ground - 3 * FH, A[1] - A[0], 3 * FH);
+  ctx.fillRect(B[0], ground - 4 * FH, B[1] - B[0], 4 * FH);
+  ctx.fillRect(A[1], ground - FH, B[0] - A[1], FH);
+  ctx.fillRect(B[1], ground - FH, CO.porton - 34 - B[1], FH);
+  ctx.strokeStyle = 'rgba(29,38,34,.25)'; ctx.lineWidth = 1.5;
+  for (let f = 1; f <= 3; f++) { const y = ground - f * FH; ctx.beginPath(); if (f < 3) { ctx.moveTo(A[0], y); ctx.lineTo(A[1], y); } ctx.moveTo(B[0], y); ctx.lineTo(B[1], y); ctx.stroke(); }
+  ctx.strokeStyle = C.osc; ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.moveTo(A[0], ground); ctx.lineTo(A[0], ground - 3 * FH); ctx.lineTo(A[1], ground - 3 * FH); ctx.lineTo(A[1], ground - FH);
+  ctx.moveTo(B[0], ground - FH); ctx.lineTo(B[0], ground - 4 * FH); ctx.lineTo(B[1], ground - 4 * FH); ctx.lineTo(B[1], ground - FH);
+  ctx.moveTo(A[0], ground - FH); ctx.lineTo(CO.porton - 34, ground - FH);
+  ctx.stroke();
+  ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(960, ground); ctx.lineTo(1896, ground); ctx.stroke();
+  // rótulos de piso
+  ctx.font = `700 15px ${FONT}`; ctx.fillStyle = C.osc; ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+  ['PB', '1.er', '2.º', '3.er'].forEach((s, f) => ctx.fillText(s, A[0] - 8, CO.band(f)));
+  ctx.textAlign = 'center'; ctx.font = `600 14px ${FONT}`; ctx.fillStyle = C.gris; ctx.textBaseline = 'alphabetic';
+  ctx.fillText('Sector escalera principal', (A[0] + A[1]) / 2, ground + 18);
+  ctx.fillText('Ala sobre Av. Beiró', (B[0] + B[1]) / 2, ground + 18);
+  // columnas de escalera con escalones
+  const colDef = [['principal', 3, C.verde, '#DDEFE4', 'Escalera principal'], ['caja', 4, C.verde, '#DDEFE4', 'Caja de escalera'], ['ext', 4, C.azul, '#DCE7F5', 'Escalera exterior']];
+  for (const [k, nf, col, fill, name] of colDef) {
+    const x = CO.col[k], top = ground - nf * FH + 6, w = 30;
+    rr(x - w / 2, top, w, ground - top - 2, 7); ctx.fillStyle = fill; ctx.fill(); ctx.strokeStyle = col; ctx.lineWidth = 2.5; ctx.stroke();
+    ctx.strokeStyle = col; ctx.globalAlpha = 0.55; ctx.lineWidth = 1.6;
+    for (let f = 0; f < nf; f++) { const yb = ground - f * FH - 8, yt = ground - (f + 1) * FH + 12; for (let s = 0; s < 6; s++) { const y = lerp(yb, yt, s / 5); const xx = f % 2 ? lerp(x - 9, x + 9, s / 5) : lerp(x + 9, x - 9, s / 5); ctx.beginPath(); ctx.moveTo(xx - 5, y); ctx.lineTo(xx + 5, y); ctx.stroke(); } }
+    ctx.globalAlpha = 1;
+    pill(x, top - 16, name, col, '#fff', 13, 'c');
+  }
+  pill(CO.porton, CO.band(0), 'Portón', C.bordo, '#fff', 15, 'c');
+}
+function dot(x, y, r, fill, a, stroke) {
+  ctx.globalAlpha = a; ctx.beginPath(); ctx.arc(x, y, r, 0, 7);
+  if (stroke) { ctx.fillStyle = '#fff'; ctx.fill(); ctx.beginPath(); ctx.arc(x, y, r - stroke, 0, 7); }
+  ctx.fillStyle = fill; ctx.fill(); ctx.globalAlpha = 1;
+}
+function cortePos(st, rem, from, jit) {
+  if (st === null) return null;
+  const x = CO.col[st] + COLDIR[st] * clamp(8 + rem * 9.5, 8, COLSPAN[st]);
+  return [x, CO.band(from) + jit * CO.FH * 0.3];
+}
+function corteStair(st, f, from) {
+  const x = CO.col[st], fl = Math.floor(f), fr = f - fl;
+  const zz = (fl % 2 ? -1 : 1) * lerp(-8, 8, fr);
+  const y = CO.ground - (f + 0.5) * CO.FH;
+  return [x + zz, y];
+}
+function cortePB(st, prog, jit) {
+  const x0 = st ? CO.col[st] : 1400;
+  return [lerp(x0, CO.porton - 30, prog), CO.band(0) + jit * CO.FH * 0.3];
+}
+let CAM = { z: 1, cx: 960, cy: 540 };
+// del otro lado de la línea de fachada (Fernández de Enciso) = afuera
+const dentroAfuera = q => (q[0] - 60) * (60 - 945) - (q[1] - 945) * (985 - 60) > -(985 - 60) * 45 && q[1] + 0.957 * q[0] < 1010;
+const PSC = {}; for (const id in PLANS) if (LAY[id]) PSC[id] = clamp(PLANS[id].mg * LAY[id].k / 10.5, 0.85, 1.15);
+function drawPeople(t, z) {
+  const zr = Math.pow(z, -0.35) * DOTM, rK = 7.8 * zr, rS = 12.4 * zr;
+  // conos de los líderes (debajo)
+  for (const l of LEADS) {
+    const s = leadState(l, t); if (!s || s.where !== 'plan') continue;
+    const P = PLANS[l.pl], k = LAY[l.pl].k, sp = S(l.pl, s.pos);
+    let ang, R, alpha, half;
+    if (s.check) { const lk = S(l.pl, s.check.look); ang = Math.atan2(lk[1] - sp[1], lk[0] - sp[0]) + Math.sin(s.check.u * Math.PI * 2) * 0.42; R = Math.max(28, dist(sp, lk) * 1.35); alpha = 0.62 * Math.sin(Math.PI * clamp(s.check.u * 1.15, 0, 1)) + 0.12; half = 0.62; }
+    else if (s.dir !== null) { ang = s.dir; R = 2.6 * P.mg * k; alpha = 0.22; half = 0.5; }
+    else continue;
+    ctx.save(); ctx.globalAlpha = alpha * s.fade; ctx.filter = 'blur(2.5px)';
+    const gr = ctx.createRadialGradient(sp[0], sp[1], 2, sp[0], sp[1], R);
+    gr.addColorStop(0, 'rgba(232,130,42,.85)'); gr.addColorStop(0.55, 'rgba(232,130,42,.35)'); gr.addColorStop(1, 'rgba(232,130,42,0)');
+    ctx.fillStyle = gr; ctx.beginPath(); ctx.moveTo(sp[0], sp[1]); ctx.arc(sp[0], sp[1], R, ang - half, ang + half); ctx.closePath(); ctx.fill();
+    ctx.restore();
+  }
+  // aulas verificadas
+  for (const ch of CHECKS) {
+    if (t < ch.t) continue; const a = clamp((t - ch.t) / 0.4, 0, 1), sp = S(ch.pl, ch.c), r = 9 * DOTM * (1 + 0.35 * Math.sin(Math.PI * a));
+    ctx.globalAlpha = a; ctx.beginPath(); ctx.arc(sp[0], sp[1], r, 0, 7); ctx.fillStyle = '#fff'; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = C.nar; ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(sp[0] - r * 0.45, sp[1]); ctx.lineTo(sp[0] - r * 0.1, sp[1] + r * 0.38); ctx.lineTo(sp[0] + r * 0.5, sp[1] - r * 0.4); ctx.strokeStyle = C.nar; ctx.lineWidth = 2.2; ctx.stroke(); ctx.globalAlpha = 1;
+  }
+  // personas
+  let inside = 0;
+  for (const p of PEOPLE) {
+    const s = personState(p, t); if (!s) continue;
+    const col = NIV[p.nv], sc = PSC[s.pl] || 1, r = (p.seno ? rS : rK) * sc, sw = (p.seno ? 2.4 : 1.7) * sc;
+    if (s.where !== 'out' && !(s.pl === 'PB' && dentroAfuera(s.pos))) inside++;
+    if (s.where === 'plan' || s.where === 'pb' || s.where === 'out') {
+      const sp = S(s.pl, s.pos), a = s.where === 'out' ? s.a : (s.fadeIn ?? 1);
+      dot(sp[0], sp[1], r, col, a, sw);
+    }
+    continue;
+    const cr = p.seno ? 7.4 : 5.3;
+    if (s.where === 'plan') { const q = cortePos(p.st, s.rem, p.g.floor, p.jit); if (q) dot(q[0], q[1], cr, col, 0.9); else { const q2 = cortePB(null, clamp(1 - s.rem / 45, 0, 1), p.jit); dot(q2[0], q2[1], cr, col, 0.9); } }
+    else if (s.where === 'stair') { const q = corteStair(s.st, s.f, s.from); dot(q[0], q[1], cr, col, 1); }
+    else if (s.where === 'pb') { const q = cortePB(p.st, s.prog, p.jit); dot(q[0], q[1], cr, col, 1); }
+  }
+  // líderes
+  for (const l of LEADS) {
+    const s = leadState(l, t); if (!s) continue;
+    if (s.where !== 'out' && !(s.pl === 'PB' && dentroAfuera(s.pos))) inside++;
+    const pop = easeOut((t - l.tAppear) / 0.5);
+    if (s.where === 'plan' || s.where === 'pb' || s.where === 'out') {
+      const sp = S(s.pl, s.pos), a = s.where === 'out' ? s.a : s.where === 'pb' ? s.fadeIn : s.fade;
+      dot(sp[0], sp[1], 15 * DOTM * (0.6 + 0.4 * pop), C.nar, a, 3.4);
+    }
+    if (false) { const q = cortePos(l.st, s.rem, l.floor, l.seed * 2 - 1); if (q) dot(q[0], q[1], 8.5, C.nar, 1, 2); else { const q2 = cortePB(null, 0.2, 0); dot(q2[0], q2[1], 8.5, C.nar, 1, 2); } }
+
+
+  }
+  return inside;
+}
+function drawPills(t) { // en coordenadas de pantalla, después de la cámara
+  for (const l of LEADS) {
+    const s = leadState(l, t); if (!s || s.where === 'stair') continue;
+    let a = s.where === 'out' ? s.a : s.where === 'pb' ? s.fadeIn : s.fade; if (a <= 0) continue;
+    const sp = camPt(S(s.pl, s.pos));
+    const pop = easeOut((t - l.tAppear) / 0.55), sc = (0.4 + 0.6 * pop) * PILLM;
+    ctx.save(); ctx.globalAlpha = a * clamp(pop * 1.5, 0, 1); ctx.translate(sp[0], sp[1] - 26 * sc); ctx.scale(sc, sc);
+    ctx.font = `700 13px ${FONT}`; const w = ctx.measureText(l.name).width + 26, h = 22;
+    ctx.shadowColor = 'rgba(0,0,0,.25)'; ctx.shadowBlur = 6; ctx.shadowOffsetY = 2;
+    rr(-w / 2, -h, w, h, h / 2); ctx.fillStyle = C.bordo; ctx.fill(); ctx.shadowColor = 'transparent';
+    ctx.beginPath(); ctx.moveTo(-5, 0); ctx.lineTo(5, 0); ctx.lineTo(0, 6); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.arc(-w / 2 + 11, -h / 2, 4, 0, 7); ctx.fillStyle = C.nar; ctx.fill();
+    ctx.fillStyle = '#fff'; ctx.textBaseline = 'middle'; ctx.textAlign = 'left'; ctx.fillText(l.name, -w / 2 + 19, -h / 2 + 1);
+    ctx.restore();
+  }
+}
+function camPt(q) { return [(q[0] - CAM.cx) * CAM.z + 960, (q[1] - CAM.cy) * CAM.z + 540]; }
+const CAPS = [
+  [0, 'Suena la alarma. Cada docente forma a su grupo en fila de dos dentro del aula.'],
+  [9, 'Salen en fila de uno, con la docente adelante, hacia la escalera que les corresponde.'],
+  [32, 'Primaria baja por las escaleras interiores; secundaria, por la escalera exterior.'],
+  [62, 'Los líderes de piso revisan cada aula y salen detrás del último grupo.'],
+  [100, 'Todos salen por el portón principal: primaria dobla a la derecha y secundaria a la izquierda.'],
+];
+function caption(t) {
+  if (t >= T_END) return 'Edificio evacuado. Sigue el camino al punto de reunión: Jardín Cuentacuentos.';
+  let c = CAPS[0][1]; for (const [s, txt] of CAPS) if (t >= s) c = txt; return c;
+}
+function drawHeader(t, inside, v) {
+  ctx.fillStyle = 'rgba(255,255,255,.97)'; ctx.fillRect(0, 0, 1080, 172);
+  ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+  ctx.font = `700 48px ${FONT}`; ctx.fillStyle = C.esc; ctx.fillText(SEC === 'A' ? 'Sector A · escalera principal' : 'Sector B · ala Av. Beiró', 40, 58);
+  const txt = caption(t); if (txt !== drawHeader.last) { drawHeader.prev = drawHeader.last; drawHeader.last = txt; drawHeader.tv = v; }
+  const a = clamp((v - (drawHeader.tv ?? 0)) / 0.4, 0, 1);
+  const wrap = (s, y) => { ctx.font = `400 37px ${FONT}`; const words = s.split(' '); let line = '', yy = y; for (const w of words) { const tt = line ? line + ' ' + w : w; if (ctx.measureText(tt).width > 1000) { ctx.fillText(line, 40, yy); line = w; yy += 44; } else line = tt; } ctx.fillText(line, 40, yy); };
+  if (drawHeader.prev && a < 1) { ctx.globalAlpha = 1 - a; ctx.fillStyle = C.osc; wrap(drawHeader.prev, 104); }
+  ctx.globalAlpha = a; ctx.fillStyle = C.osc; wrap(txt, 104); ctx.globalAlpha = 1;
+  if (t < 9) { const pu = 0.5 + 0.5 * Math.sin(v * 9); ctx.beginPath(); ctx.arc(1030, 40, 10 + pu * 4, 0, 7); ctx.fillStyle = `rgba(214,40,40,${0.5 + 0.5 * pu})`; ctx.fill(); }
+  if (t >= T_END) pill(1040, 40, '✓ Evacuado', C.esc, '#fff', 24, 'r');
+}
+function drawFoot() {
+  ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic'; ctx.font = `400 15px ${FONT}`; ctx.fillStyle = C.gris;
+  ctx.fillText('Animación ilustrativa y acelerada. Alumnos por aula: promedio de la constancia del simulacro del 12/05/2026 (403 alumnos).', 24, 1062);
+}
+// cámara: acercamiento al 2.º piso al comienzo
+const ZT = { z: 2.05, cx: 470, cy: 585 };
+function camAt(v) {
+  const zin = ease((v - 1.3) / 1.6), zout = ease((v - 9.6) / 2.0), k = zin * (1 - zout);
+  return { z: lerp(1, ZT.z, k), cx: lerp(960, ZT.cx, k), cy: lerp(540, ZT.cy, k) };
+}
+function render(v) {
+  const t = simAt(v);
+  CAM = { z: 1, cx: 960, cy: 540 };
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  drawStatic(t);
+  const inside = drawPeople(t, 1);
+  drawPills(t);
+  drawHeader(t, inside, v);
+  if (v < 0.5) { ctx.fillStyle = `rgba(255,255,255,${1 - v / 0.5})`; ctx.fillRect(0, 0, 1080, CH); }
+}
+window.__ready = () => loaded >= NIMG;
+window.__render = render;
+window.__info = () => ({ T_END, DURATION, TOTAL, groups: GROUPS.map(g => [g.a.id, g.a.n, +g.t0.toFixed(1), +g.tEmpty.toFixed(1)]), leads: LEADS.map(l => [l.name, +l.tEnd.toFixed(1), +l.tOut.toFixed(1)]) });
+// reproducción en el navegador
+window.__start = () => { if (window.__run) return; window.__run = true; let t0 = null; const loop = ts => { if (window.__ready()) { if (t0 === null) t0 = ts; render(((ts - t0) / 1000) % (DURATION + 1)); } requestAnimationFrame(loop); }; requestAnimationFrame(loop); };
+const still = () => { if (window.__ready()) render(Math.min(14, DURATION)); else setTimeout(still, 100); }; still();
+window.addEventListener('message', e => { if (e.data === 'play') window.__start(); });
+if (Q.has('auto')) window.__start();
+if (false) { let t0 = null; const loop = ts => { if (window.__ready()) { if (t0 === null) t0 = ts; render(((ts - t0) / 1000) % (DURATION + 1)); } requestAnimationFrame(loop); }; requestAnimationFrame(loop); }
+</script></body></html>
