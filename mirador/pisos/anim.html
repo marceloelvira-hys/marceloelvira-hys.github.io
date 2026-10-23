@@ -16,8 +16,9 @@ const KEEP = SEC === 'A' ? ['A2', 'A1', 'PB'] : ['B3', 'B2', 'B1', 'PB'];
     const list = AULAS.filter(a => a.nv === nv), base = Math.floor(ALUMNOS[nv] / list.length); let extra = ALUMNOS[nv] - base * list.length;
     list.forEach(a => { a.n = base + (extra > 0 ? 1 : 0); extra--; });
   }
-  for (let i = AULAS.length - 1; i >= 0; i--) if (!KEEP.includes(AULAS[i].pl)) AULAS.splice(i, 1);
-  for (let i = LIDERES.length - 1; i >= 0; i--) if (!KEEP.includes(LIDERES[i].pl)) LIDERES.splice(i, 1);
+  const PROP = SEC === 'A' ? ['A2', 'A1'] : ['B3', 'B2', 'B1', 'PB']; // las aulas de PB están del lado del sector B
+  for (let i = AULAS.length - 1; i >= 0; i--) if (!PROP.includes(AULAS[i].pl)) AULAS.splice(i, 1);
+  for (let i = LIDERES.length - 1; i >= 0; i--) if (!PROP.includes(LIDERES[i].pl)) LIDERES.splice(i, 1);
 })();
 const DOTM = 1.6, PILLM = 2.6;
 const TURNO = Q.get('turno') === 'tarde' ? 'tarde' : 'manana';
@@ -110,8 +111,8 @@ function buildGroups() {
     const gs = GROUPS.filter(g => g.a.pl + '|' + g.a.st === key).sort((x, y) => x.post.len - y.post.len);
     gs.forEach((g, k) => {
       const lead = Math.max(...g.members.map(p => p.pre.len / V - p.i * DT));
-      let t0 = TREADY + Math.max(0, lead);
-      for (let j = 0; j < k; j++) {
+      let t0 = TREADY + Math.max(0, lead) + k * 0.7; // todos salen al sonar la alarma, casi a la vez
+      for (let j = 0; j < 0; j++) {
         const h = gs[j];
         // primer punto del camino de g que comparte con el de h
         let M = null;
