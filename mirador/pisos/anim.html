@@ -28,7 +28,7 @@ const C = { verde: '#3C9A68', azul: '#1F5FA8', bordo: '#6E1E2E', nar: '#E8822A',
 const NIV = { p: C.verde, s: C.azul };
 
 // ---------- parámetros ----------
-const V = 1.7, VL = 2.4, GAP = 1.45, DT = GAP / V, TREADY = 7, TF = 6, DWELL = 1.4;
+const V = 1.7, VL = 2.4, GAP = 1.45, DT = GAP / V, TREADY = 2.2, TF = 6, DWELL = 1.4;
 const ROW = 0.65, COL = 1.25;
 
 // ---------- utilidades ----------
@@ -139,7 +139,7 @@ function buildLeaders() {
   LIDERES.forEach((L, idx) => {
     const P = PLANS[L.pl], mg = P.mg;
     const segs = []; // {type:'walk', path, t0, t1} | {type:'check', pos, look, t0, t1, aula}
-    let pos = L.start, t = 2.2 + idx * 0.25; const tAppear = t;
+    let pos = L.start, t = 5 + idx * 0.25; const tAppear = t;
     const walkTo = (q) => { if (dist(pos, q) < 0.5) return; const path = mkPath([pos, q], mg); segs.push({ type: 'walk', path, t0: t, t1: t + path.len / VL }); t += path.len / VL; pos = q; };
     const checks = [];
     for (const it of L.ruta) {
@@ -401,7 +401,7 @@ function drawPills(t) { // en coordenadas de pantalla, después de la cámara
 function camPt(q) { return [(q[0] - CAM.cx) * CAM.z + 960, (q[1] - CAM.cy) * CAM.z + 540]; }
 const CAPS = [
   [0, 'Suena la alarma. Cada docente forma a su grupo en fila de dos dentro del aula.'],
-  [9, 'Salen en fila de uno, con la docente adelante, hacia la escalera que les corresponde.'],
+  [3, 'Salen en fila de uno, con la docente adelante, hacia la escalera que les corresponde.'],
   [32, 'Primaria baja por las escaleras interiores; secundaria, por la escalera exterior.'],
   [62, 'Los líderes de piso revisan cada aula y salen detrás del último grupo.'],
   [100, 'Todos salen por el portón principal: primaria dobla a la derecha y secundaria a la izquierda.'],
