@@ -111,8 +111,8 @@ function buildGroups() {
     const gs = GROUPS.filter(g => g.a.pl + '|' + g.a.st === key).sort((x, y) => x.post.len - y.post.len);
     gs.forEach((g, k) => {
       const lead = Math.max(...g.members.map(p => p.pre.len / V - p.i * DT));
-      let t0 = TREADY + Math.max(0, lead) + k * 0.7; // todos salen al sonar la alarma, casi a la vez
-      for (let j = 0; j < 0; j++) {
+      let t0 = TREADY + Math.max(0, lead);
+      for (let j = 0; j < k; j++) {
         const h = gs[j];
         // primer punto del camino de g que comparte con el de h
         let M = null;
