@@ -237,8 +237,26 @@ footer img{height:30px}
 .otdoc .p .ff{display:flex;gap:3px}
 .otdoc .p .ff img{width:72px;height:60px;object-fit:cover}
 .otdoc .p .hecho{grid-column:2 / -1;font-size:9pt;color:#333;border-top:1px dashed #ccc;padding-top:4px}
-.otdoc .firmas{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:22px;font-size:9.5pt}
-.otdoc .firmas div{border-top:1px solid #333;padding-top:4px}
+.otdoc .firmas{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:70px;font-size:9.5pt;break-inside:avoid}
+.otdoc .firmas div{border-top:1px solid #333;padding-top:6px;min-height:60px}
+.otdoc .firmas div span{display:block;margin-top:18px;color:#555}
+.otdoc .tema{margin:14px 0 6px;break-inside:avoid}
+.otdoc .tema h2{font-family:var(--font-h);font-size:14pt;font-weight:700;text-transform:uppercase;letter-spacing:.02em;background:#2A3640;color:#fff;padding:5px 9px;border-radius:3px;margin:0;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+.otdoc .tema .crit{font-size:9pt;color:#333;border:1px solid #ccc;border-top:0;padding:6px 9px;border-radius:0 0 3px 3px}
+.otdoc .anexo{break-before:page;page-break-before:always}
+.otdoc .anexo h1{margin-top:0}
+.otdoc .ap{break-before:page;page-break-before:always;padding-top:4px}
+.otdoc .ap.prim{break-before:auto;page-break-before:auto}
+.otdoc .ap .cab{display:flex;gap:12px;align-items:baseline;border-bottom:2px solid #1C262E;padding-bottom:6px;margin-bottom:6px}
+.otdoc .ap .cab .nn{font-family:var(--font-h);font-size:26pt;font-weight:700;color:#0A6FB5;line-height:1}
+.otdoc .ap .cab .t{font-size:13pt;font-weight:600}
+.otdoc .ap .s{font-size:10pt;color:#555}
+.otdoc .ap .a{font-size:10.5pt;margin:4px 0 8px}
+.otdoc .ap .gal{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.otdoc .ap .gal.una{grid-template-columns:1fr}
+.otdoc .ap .gal img{width:100%;height:112mm;object-fit:contain;background:#f2f2f2;border:1px solid #ddd;break-inside:avoid}
+.otdoc .ap .gal.una img{height:160mm}
+@media screen{.otvista .otdoc .ap{border-top:1px dashed #bbb;margin-top:18px;padding-top:12px}.otvista .otdoc .ap .gal img{height:min(70vh,520px)}.otvista .otdoc .anexo{margin-top:26px;border-top:3px solid #1C262E;padding-top:10px}}
 .otdoc .pie{font-size:8.5pt;color:#555;margin-top:12px}
 .chip.ot{background:#FFF1E8;color:#9A4413;border:1px solid #F6C9AA}
 .ghead .ots{font-size:12.5px;opacity:.9;width:100%;margin-top:2px}
@@ -251,7 +269,7 @@ footer img{height:30px}
 .login .logos img{height:34px;background:#fff;border-radius:3px;padding:4px 6px}
 .login h1{font-family:var(--font-h);font-size:26px;font-weight:600;text-transform:uppercase;letter-spacing:.02em}
 .login p{margin:0;color:#c8d0d6;font-size:14px}
-.login input[type=password]{border:0;border-radius:var(--r);padding:12px 14px;font-size:16px;width:100%}
+.login input[type=password]{color:var(--ink);background:#fff;border:0;border-radius:var(--r);padding:12px 14px;font-size:16px;width:100%}
 .login .rec{display:flex;gap:8px;align-items:center;font-size:13.5px;color:#c8d0d6}
 .login .err{color:#FFB59A;font-size:14px;min-height:20px}
 .login button{border:0;border-radius:var(--r);background:var(--accent);color:#fff;font-weight:700;font-size:16px;padding:12px;cursor:pointer}
@@ -266,7 +284,31 @@ footer img{height:30px}
 button.chip{cursor:pointer;font:inherit;font-size:inherit}
 .otcab{border:1px solid #F6C9AA;border-left:4px solid var(--accent);background:#FFF8F3;border-radius:var(--r);padding:10px 12px;margin-bottom:12px;font-size:14px}
 .salir{color:#fff!important;opacity:.85}
-@media print{.lot,.otcab .link{display:none}}
+@media print{.lot,.otcab .link,.ghead .tg{display:none}}
+.ghead{cursor:pointer;user-select:none}
+.ghead .tg{display:inline-block;width:18px;transition:transform .15s}
+.grupo.cerrado .ghead .tg{transform:rotate(-90deg)}
+.grupo.cerrado .criterio,.grupo.cerrado .filas,.grupo.cerrado .ots{display:none}
+.ghead .nsel{font-family:var(--font);font-size:13px;font-weight:600;text-transform:none;letter-spacing:0;background:var(--accent);color:#fff;border-radius:999px;padding:1px 9px;margin-left:8px;vertical-align:2px}
+.rk{display:flex;flex-direction:column;gap:2px}
+.rk .msg{font-size:12.5px;color:var(--ink);background:var(--bg);border-radius:var(--r);padding:8px 9px;margin:2px 0 8px;line-height:1.4}
+.rkr{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:2px 6px;border-radius:var(--r);padding:5px 6px;cursor:pointer;border:1px solid transparent}
+.rkr:hover{background:var(--bg)}
+.rkr.on{border-color:var(--brand);background:var(--brand-soft)}
+.rkr .nm{font-size:13px;line-height:1.25;min-width:0}
+.rkr .cn{font-size:13px;font-weight:700;font-variant-numeric:tabular-nums}
+.rkr .br{grid-column:1 / -1;height:7px;background:#E3E7EA;border-radius:4px;overflow:hidden;display:flex}
+.rkr .br i{display:block;height:100%}
+.rkr .br .h{background:var(--ok)} .rkr .br .p{background:#8FA3B1}
+.rkr .sug{grid-row:1;grid-column:2;display:none}
+.rk .ley{display:flex;gap:12px;font-size:11.5px;color:var(--muted);margin:6px 2px 0}
+.rk .ley i{display:inline-block;width:10px;height:7px;border-radius:2px;margin-right:4px;vertical-align:0}
+.otvista{width:min(900px,100%)}
+.otvista .cpo{max-height:none}
+.otacc{display:flex;gap:10px;flex-wrap:wrap;align-items:center;border-bottom:1px solid var(--line);padding-bottom:10px}
+.borrar{border:1px solid #E9B8B8;background:#FFF5F5;border-radius:var(--r);padding:10px;display:flex;flex-direction:column;gap:8px}
+.btn.peligro{border-color:#B3261E;color:#B3261E}
+.lot .mes{font-size:11px;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -342,6 +384,7 @@ let API_URL = "", API_TOKEN = "", CLAVE = null;
 
 const st = {mes: "", sector:"", tema:"", tipo:"todos", seg:"todos", ot:"", orden:"tema", q:"", soloSel:false};
 const SEL = new Set();                       // "mes|n"
+const CERR = new Set();                      // grupos minimizados (por título)
 let NOTAS = {}, ORDENES = [], AREAS_EXTRA = [];
 const ESTADOS = ["Pendiente", "En curso", "Listo para verificar"];
 const SLUG = {"Pendiente":"pendiente","En curso":"curso","Listo para verificar":"listo","Resuelto":"resuelto"};
@@ -478,6 +521,7 @@ function historia(m, p){
 }
 const desde = (m, p) => { const h = historia(m, p); return h[h.length - 1].mes; };
 const ordenMes = c => { const [a, b] = c.split("-").map(Number); return b * 100 + a; };
+const filtrando = () => !!(st.soloSel || st.sector || st.tema || st.tipo !== "todos" || st.seg !== "todos" || st.ot || st.q.trim());
 function filtrar(){
   const m = M(), q = st.q.trim().toLowerCase();
   return m.puntos.filter(p => {
@@ -535,11 +579,15 @@ function render(){
   const om = otsMes(m);
   $("fOT").innerHTML = `<option value="">Todas</option><option value="con" ${st.ot === "con" ? "selected" : ""}>Con orden de trabajo</option><option value="sin" ${st.ot === "sin" ? "selected" : ""}>Sin orden de trabajo</option>`
     + om.map(o => { const [h, t] = otAvance(o); return `<option value="${esc(o.numero)}" ${o.numero === st.ot ? "selected" : ""}>${esc(o.numero)} · ${esc(otNombre(o))} (${h}/${t} listos)</option>`; }).join("");
-  const nS = s => m.puntos.filter(p => p.sectores.includes(s)).length;
-  $("lateral").innerHTML = `<h3>Sectores</h3><div class="lsec"><label><input type="radio" name="ls" data-s="" ${!st.sector ? "checked" : ""}>Todos<span class="c tab">${m.puntos.length}</span></label></div>`
-    + sects.map(s => `<div class="lsec"><label><input type="radio" name="ls" data-s="${esc(s)}" ${s === st.sector ? "checked" : ""}>${esc(s)}<span class="c tab">${nS(s)}</span></label><button class="sug" type="button" data-sug="${esc(s)}" title="Sugerir otro nombre para este sector" aria-label="Sugerir otro nombre para ${esc(s)}">✎</button></div>`).join("")
-    + `<div class="ayuda">✎ Si en GALVASA a un sector lo llaman distinto, sugerí el nombre y lo unificamos en los próximos informes.</div>`
-    + `<h3 style="margin-top:18px">Órdenes de trabajo</h3>` + (om.length ? om.map(o => { const [h, t] = otAvance(o); return `<button type="button" class="lot${o.numero === st.ot ? " on" : ""}" data-otf="${esc(o.numero)}"><b>${esc(o.numero)}</b><span>${esc(otNombre(o))} · ${esc(o.fecha)}</span><span class="barra"><i style="width:${Math.round(100 * h / t)}%"></i></span><span class="c">${h} de ${t} listos para verificar o resueltos</span></button>`; }).join("") : `<div class="ayuda">Todavía no se armó ninguna orden con este informe. Seleccioná puntos y tocá «Armar orden de trabajo».</div>`);
+  const nS = s => m.puntos.filter(p => p.sectores.includes(s)), rank = sects.map(x => ({s: x, ps: nS(x)})).sort((a, b) => b.ps.length - a.ps.length || sects.indexOf(a.s) - sects.indexOf(b.s));
+  const mx = Math.max(...rank.map(r => r.ps.length)), top3 = rank.slice(0, 3).reduce((a, r) => a + r.ps.length, 0);
+  const rkFila = (s, ps) => { const h = ps.filter(p => hecho(ultEstado(m, p))).length; return `<div class="rkr${s === st.sector ? " on" : ""}" data-s="${esc(s)}" role="button" tabindex="0"><span class="nm">${esc(s || "Todos los sectores")}</span><span class="cn">${ps.length}</span>${s ? `<span class="br" title="${h} de ${ps.length} listos para verificar o resueltos"><i class="h" style="width:${100 * h / mx}%"></i><i class="p" style="width:${100 * (ps.length - h) / mx}%"></i></span>` : ""}</div>`; };
+  $("lateral").innerHTML = `<h3>Puntos por sector</h3><div class="rk"><div class="msg">Los ${Math.min(3, rank.length)} sectores de arriba reúnen ${top3} de los ${m.puntos.length} puntos: ahí cada arreglo mejora más la planta. Tocá un sector para ver sus puntos.</div>`
+    + rkFila("", m.puntos) + rank.map(r => rkFila(r.s, r.ps)).join("")
+    + `<div class="ley"><span><i style="background:var(--ok)"></i>listo o resuelto</span><span><i style="background:#8FA3B1"></i>por hacer</span></div></div>`
+    + (st.sector ? `<button class="link" type="button" data-sug="${esc(st.sector)}" style="margin-top:8px;text-align:left">✎ Sugerir otro nombre para «${esc(st.sector)}»</button>` : `<div class="ayuda">✎ Elegí un sector para sugerir otro nombre si en GALVASA lo llaman distinto.</div>`);
+  const todas = [...ORDENES].sort((a, b) => ordenMes(b.mes) - ordenMes(a.mes) || (a.numero < b.numero ? -1 : 1));
+  $("lateral").innerHTML += `<h3 style="margin-top:18px">Órdenes de trabajo</h3>` + (todas.length ? todas.map(o => { const [h, t] = otAvance(o); return `<button type="button" class="lot${o.numero === st.ot ? " on" : ""}" data-otf="${esc(o.numero)}" data-otm="${esc(o.mes)}"><b>${esc(o.numero)}</b><span>${esc(otNombre(o))} · ${esc(o.fecha)}</span><span class="barra"><i style="width:${Math.round(100 * h / t)}%"></i></span><span class="c">${h} de ${t} listos para verificar o resueltos</span></button>`; }).join("") : `<div class="ayuda">Todavía no hay órdenes. Seleccioná puntos y tocá «Armar orden de trabajo».</div>`);
   const act = [];
   if (st.soloSel) act.push("Sólo la selección");
   if (st.sector) act.push("Sector: " + st.sector);
@@ -550,16 +598,25 @@ function render(){
   if (st.q) act.push("“" + st.q + "”");
   const otSel = om.find(o => o.numero === st.ot);
   $("activos").innerHTML = act.map(a => `<span class="pill">${esc(a)}</span>`).join("") + (act.length ? `<button class="link" type="button" id="limpiar">Limpiar filtros</button>` : "")
-    + (otSel ? `<button class="link" type="button" data-bajot="${esc(otSel.numero)}">Volver a bajar la orden ${esc(otSel.numero)} (PDF)</button>` : "")
+    + (otSel ? `<button class="link" type="button" data-verot="${esc(otSel.numero)}">Ver la orden ${esc(otSel.numero)}</button>` : "")
     + (st.sector && innerWidth < 900 ? `<button class="link" type="button" data-sug="${esc(st.sector)}">Sugerir otro nombre para este sector</button>` : "")
     + `<span class="cuenta"><span class="tab">${lista.length} de ${m.puntos.length} puntos</span><button class="link" type="button" id="selFilt">Seleccionar los ${lista.length}</button></span>`;
   $("lista").innerHTML = (otSel ? `<div class="otcab"><b>${esc(otSel.numero)}</b> · dirigida a <b>${esc(otNombre(otSel))}</b> · pedida por ${esc(otSel.quien)} el ${esc(otSel.fecha)}${otSel.texto ? `<br><span class="muted">${esc(otSel.texto)}</span>` : ""}</div>` : "")
-    + (grupos(m, lista).map(g => `<section class="grupo"><div class="ghead"><h2>${esc(g.titulo)}</h2><span class="n tab">${g.ps.length} punto${g.ps.length === 1 ? "" : "s"}</span><button class="selg" type="button" data-selg="${g.ps.map(p => p.n).join(",")}">Seleccionar el grupo</button>${otsGrupo(m, g.ps)}</div>`
+    + (grupos(m, lista).map(g => { const ns = g.ps.filter(p => SEL.has(key(m, p))).length; return `<section class="grupo${CERR.has(g.titulo) ? " cerrado" : ""}"><div class="ghead" data-tg="${esc(g.titulo)}" title="Tocá para minimizar o desplegar"><h2><span class="tg">▾</span>${esc(g.titulo)}${ns ? `<span class="nsel">${ns} seleccionado${ns === 1 ? "" : "s"}</span>` : ""}</h2><span class="n tab">${g.ps.length} punto${g.ps.length === 1 ? "" : "s"}</span><button class="selg" type="button" data-selg="${g.ps.map(p => p.n).join(",")}">Seleccionar el grupo</button>${otsGrupo(m, g.ps)}</div>`
     + (g.tema ? `<details class="criterio"><summary>Criterio y normativa del tema</summary><p>${esc(g.tema.criterio)}</p><p><b>Encuadre:</b> ${esc(g.tema.enc)}</p></details>` : `<div style="height:8px"></div>`)
-    + `<div class="filas">${g.ps.map(p => fila(m, p)).join("")}</div></section>`).join("") || `<p class="muted">Ningún punto coincide con los filtros.</p>`);
+    + `<div class="filas">${g.ps.map(p => fila(m, p)).join("")}</div></section>`; }).join("") || `<p class="muted">Ningún punto coincide con los filtros.</p>`);
+  $("verif").hidden = filtrando();
   $("verif").innerHTML = `<div class="ghead"><h2>Verificado como corregido o conforme en la visita</h2><span class="n tab">${m.corregidos.length}</span></div><div class="vlist">`
     + m.corregidos.map(c => `<div class="vitem">${c.fotos[0] ? img(c.fotos[0]) : ""}<span>${esc(c.texto)}</span></div>`).join("") + `</div>`;
   selbar();
+}
+function nsel(){
+  document.querySelectorAll("#lista .grupo").forEach(g => {
+    const n = g.querySelectorAll(".fila.sel").length, h2 = g.querySelector(".ghead h2"); let b = h2.querySelector(".nsel");
+    if (!n){ if (b) b.remove(); return; }
+    if (!b){ b = document.createElement("span"); b.className = "nsel"; h2.appendChild(b); }
+    b.textContent = n + (n === 1 ? " seleccionado" : " seleccionados");
+  });
 }
 function selbar(){
   const n = SEL.size; $("selbar").hidden = !n;
@@ -579,7 +636,7 @@ function abrir(n){
     <h3 id="dTit">${esc(p.titulo)}</h3>
     <div class="acc"><b>Acción a realizar</b><br>${esc(p.rec)}</div>
     <label style="display:flex;gap:8px;align-items:center;font-size:14px;cursor:pointer"><input type="checkbox" data-ck="${p.n}" ${SEL.has(key(m, p)) ? "checked" : ""} style="width:18px;height:18px;accent-color:var(--accent)">Sumar este punto a la selección (orden de trabajo)</label>
-    ${os.length ? `<div class="bloque ots-det"><h4>Órdenes de trabajo</h4>${os.map(o => `<div class="o"><b>${esc(o.numero)}</b><span>${esc(otNombre(o))} · pedida por ${esc(o.quien)} el ${esc(o.fecha)}</span><span style="flex:1"></span><button class="link" type="button" data-otf="${esc(o.numero)}">Ver sus puntos</button><button class="link" type="button" data-bajot="${esc(o.numero)}">Bajar (PDF)</button></div>`).join("")}</div>` : ""}
+    ${os.length ? `<div class="bloque ots-det"><h4>Órdenes de trabajo</h4>${os.map(o => `<div class="o"><b>${esc(o.numero)}</b><span>${esc(otNombre(o))} · pedida por ${esc(o.quien)} el ${esc(o.fecha)}</span><span style="flex:1"></span><button class="link" type="button" data-otf="${esc(o.numero)}">Ver sus puntos</button><button class="link" type="button" data-verot="${esc(o.numero)}">Ver la orden</button></div>`).join("")}</div>` : ""}
     <div class="bloque"><h4>Tema · ${esc(t.nombre)}</h4><div class="muted">${esc(t.criterio)}</div><div class="muted" style="margin-top:4px"><b>Encuadre:</b> ${esc(t.enc)}</div></div>
     <div class="bloque"><h4>Historial del punto</h4><div class="hist">${h.map((x, i) => `<div class="hrow ${i ? "" : "actual"}"><div class="m">${esc(x.mes)}<small>punto ${esc(x.n)}</small></div><div class="ph">${x.fotos.length ? x.fotos.slice(0, 4).map(f => img(f, `data-f="${esc(f)}"`)).join("") : `<span class="muted">${x.solo ? "Informe en PDF" : "sin fotos"}</span>`}</div></div>`).join("")}</div></div>
     <div class="bloque"><h4>Seguimiento de GALVASA</h4>
@@ -638,7 +695,7 @@ async function generarOT(){
   const ot = {numero: r.numero || `OT ${m.clave}-${String(r.n || 1).padStart(3, "0")}`, mes: m.clave, fecha: hoy(), area, cargo: c, quien: pp, texto: o, puntos: ps.map(p => p.n)};
   ORDENES.push(ot); SEL.clear(); st.soloSel = false;
   $("velo").hidden = true; render();
-  await imprimirOT(ot); toast("Orden " + ot.numero + " generada");
+  verOT(ot.numero); toast("Orden " + ot.numero + " generada");
 }
 async function imprimirOT(ot){
   const m = mesDe(ot.mes); if (!m) return;
@@ -651,13 +708,42 @@ async function imprimirOT(ot){
   window.print(); document.body.classList.remove("imprimiendo-ot");
 }
 function otDoc(m, ps, ot){
+  const temas = m.temas.filter(t => ps.some(p => p.tema === t.key));
   return `<div class="otdoc"><div class="oth"><span class="g">${document.querySelector(".logo-g").innerHTML}</span><img src="${document.querySelector(".jea img").getAttribute("src")}" alt=""></div>
   <h1>Orden de trabajo</h1><div class="sub">${esc(ot.numero)} · Higiene y Seguridad · según el informe de visita ${m.clave} (visita del ${m.visita})</div>
   <div class="datos"><div><b>Dirigida a</b>${esc(otNombre(ot))}</div><div><b>Fecha</b>${esc(ot.fecha)}</div><div><b>Pedida por</b>${esc(ot.quien)}</div><div><b>Puntos</b>${ps.length}</div></div>
   ${ot.texto ? `<div class="obsot"><b>Observaciones:</b> ${esc(ot.texto)}</div>` : ""}
-  ${ps.map(p => `<div class="p"><span class="nn">${p.n}</span><div><div class="t">${esc(p.titulo)}</div><div class="s">${esc(p.lugar)}</div><div class="a"><b>Acción:</b> ${esc(p.rec)}</div></div><div class="ff">${p.fotos.slice(0, 2).map(f => img(f)).join("")}</div><div class="hecho">☐ Hecho · Fecha: ____/____/______ · Firma: ______________________ · Observaciones: ____________________________________</div></div>`).join("")}
-  <div class="firmas"><div>Entregó (GALVASA)</div><div>Recibió</div></div>
-  <div class="pie">Al terminar cada punto, marcarlo «Listo para verificar» en el portal de Higiene y Seguridad (filtro «Orden de trabajo» → ${esc(ot.numero)}). Criterios y normativa de cada tema: ver el informe de visita ${m.clave}.</div></div>`;
+  ${temas.map(t => `<div class="tema"><h2>${esc(t.nombre)}</h2><div class="crit">${esc(t.criterio)}<br><b>Encuadre:</b> ${esc(t.enc)}</div></div>`
+    + ps.filter(p => p.tema === t.key).map(p => `<div class="p"><span class="nn">${p.n}</span><div><div class="t">${esc(p.titulo)}</div><div class="s">${esc(p.lugar)}</div><div class="a"><b>Acción:</b> ${esc(p.rec)}</div></div><div class="ff">${p.fotos.slice(0, 2).map(f => img(f)).join("")}</div><div class="hecho">☐ Hecho · Fecha: ____/____/______ · Firma: ______________________ · Observaciones: ____________________________________</div></div>`).join("")).join("")}
+  <div class="firmas"><div>Entregó (GALVASA)<span>Aclaración:</span><span>Fecha:</span></div><div>Recibió<span>Aclaración:</span><span>Fecha:</span></div></div>
+  <div class="pie">Al terminar cada punto, marcarlo «Listo para verificar» en el portal de Higiene y Seguridad (filtro «Orden de trabajo» → ${esc(ot.numero)}). Las fotos en grande de cada punto van en las hojas siguientes.</div>
+  <div class="anexo"><h1>Fotos de los puntos</h1><div class="sub">${esc(ot.numero)} · dirigida a ${esc(otNombre(ot))} · una hoja por punto</div>
+  ${ps.map((p, i) => `<div class="ap${i ? "" : " prim"}"><div class="cab"><span class="nn">${p.n}</span><span class="t">${esc(p.titulo)}</span></div><div class="s">${esc(p.lugar)} · ${esc(corto(temaDe(m, p.tema).nombre))}</div><div class="a"><b>Acción:</b> ${esc(p.rec)}</div><div class="gal${p.fotos.length === 1 ? " una" : ""}">${p.fotos.map(f => img(f)).join("")}</div></div>`).join("")}</div></div>`;
+}
+function verOT(num){
+  const o = ORDENES.find(x => x.numero === num); if (!o) return;
+  const m = mesDe(o.mes); if (!m) return;
+  const ps = o.puntos.map(n => m.puntos.find(p => p.n === n)).filter(Boolean);
+  $("velo").innerHTML = `<div class="caja otvista" role="dialog" aria-modal="true" aria-labelledby="ovT"><div class="cab"><h3 id="ovT">${esc(o.numero)}</h3><button class="cerrar" type="button" data-cerrar>Cerrar ✕</button></div><div class="cpo">
+    <div class="otacc"><button class="btn prim" type="button" data-bajot="${esc(o.numero)}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 19h16"/></svg>Imprimir o guardar en PDF</button>
+      <button class="btn" type="button" data-otf="${esc(o.numero)}" data-otm="${esc(o.mes)}">Ver sus puntos en la lista</button><span style="flex:1"></span>
+      <button class="btn peligro" type="button" id="otBorrarA">Borrar esta orden</button></div>
+    <div class="borrar" id="otBorrar" hidden><b>¿Borrar ${esc(o.numero)}?</b><span class="aviso">Deja de aparecer en el portal. Sirve para órdenes armadas por error.</span>
+      <input id="obQ" type="text" placeholder="Tu nombre" value="${esc(ADMIN ? "Lic. Marcelo Elvira" : quien())}"><input id="obM" type="text" placeholder="Motivo (por ejemplo: la armé con puntos equivocados)">
+      <div style="display:flex;gap:10px"><button class="btn peligro" type="button" data-borrarot="${esc(o.numero)}">Sí, borrarla</button><button class="link" type="button" id="otBorrarNo">No, dejarla</button></div></div>
+    ${otDoc(m, ps, o)}</div></div>`;
+  $("velo").hidden = false;
+}
+async function borrarOT(num){
+  const q = $("obQ").value.trim(), mot = $("obM").value.trim();
+  if (!q){ toast("Poné tu nombre"); $("obQ").focus(); return; }
+  if (!mot){ toast("Escribí el motivo"); $("obM").focus(); return; }
+  setQuien(q);
+  const o = ORDENES.find(x => x.numero === num);
+  const r = await enviar({tipo: "borrar-orden", numero: num, mes: o ? o.mes : st.mes, puntos: o ? o.puntos : [], dirigida: o ? otNombre(o) : "", quien: q, texto: mot});
+  if (!r.ok){ toast("No se pudo borrar. Probá de nuevo."); return; }
+  ORDENES = ORDENES.filter(x => x.numero !== num); if (st.ot === num) st.ot = "";
+  $("velo").hidden = true; render(); toast("Orden " + num + " borrada");
 }
 
 // ---------- sugerir nombre de sector ----------
@@ -693,11 +779,17 @@ async function imprimirLista(){ toast("Preparando…"); await cargarTodas($("lis
 // ---------- eventos ----------
 document.addEventListener("click", e => {
   const t = e.target;
-  if (t.matches("[data-ck]")){ const m = M(), k = m.clave + "|" + t.dataset.ck; t.checked ? SEL.add(k) : SEL.delete(k); const f = document.querySelector(`.fila[data-n="${t.dataset.ck}"]`); if (f) f.classList.toggle("sel", t.checked); selbar(); return; }
+  if (t.matches("[data-ck]")){ const m = M(), k = m.clave + "|" + t.dataset.ck; t.checked ? SEL.add(k) : SEL.delete(k); const f = document.querySelector(`.fila[data-n="${t.dataset.ck}"]`); if (f) f.classList.toggle("sel", t.checked); selbar(); nsel(); return; }
   if (t.closest(".ck")) return;
   if (t.closest("#salir")){ salir(); return; }
-  const of = t.closest("[data-otf]"); if (of){ st.ot = st.ot === of.dataset.otf && of.classList.contains("lot") ? "" : of.dataset.otf; $("velo").hidden = true; render(); scrollTo(0, 0); return; }
-  const bo = t.closest("[data-bajot]"); if (bo){ const o = ORDENES.find(x => x.numero === bo.dataset.bajot); if (o) imprimirOT(o); return; }
+  const of = t.closest("[data-otf]"); if (of){ if (of.dataset.otm && of.dataset.otm !== st.mes && mesDe(of.dataset.otm)){ st.mes = of.dataset.otm; st.sector = ""; st.tema = ""; st.soloSel = false; } st.ot = st.ot === of.dataset.otf && of.classList.contains("lot") ? "" : of.dataset.otf; $("velo").hidden = true; render(); scrollTo(0, 0); return; }
+  const vo = t.closest("[data-verot]"); if (vo){ verOT(vo.dataset.verot); return; }
+  if (t.closest("#otBorrarA")){ $("otBorrar").hidden = false; $("obQ").focus(); return; }
+  if (t.closest("#otBorrarNo")){ $("otBorrar").hidden = true; return; }
+  const bb = t.closest("[data-borrarot]"); if (bb){ borrarOT(bb.dataset.borrarot); return; }
+  const rk = t.closest(".rkr"); if (rk){ st.sector = st.sector === rk.dataset.s ? "" : rk.dataset.s; render(); return; }
+  const tg = t.closest("[data-tg]"); if (tg && !t.closest("button")){ const k = tg.dataset.tg; CERR.has(k) ? CERR.delete(k) : CERR.add(k); tg.parentNode.classList.toggle("cerrado", CERR.has(k)); return; }
+  const bo = t.closest("[data-bajot]"); if (bo){ const o = ORDENES.find(x => x.numero === bo.dataset.bajot); if (o){ $("velo").hidden = true; imprimirOT(o); } return; }
   const sug = t.closest("[data-sug]"); if (sug){ abrirSug(sug.dataset.sug); return; }
   const mb = t.closest("[data-mes]"); if (mb){ st.mes = mb.dataset.mes; st.sector = ""; st.tema = ""; st.ot = ""; st.soloSel = false; render(); return; }
   const tb = t.closest("#fTipo button"); if (tb){ st.tipo = tb.dataset.v; document.querySelectorAll("#fTipo button").forEach(b => b.setAttribute("aria-pressed", b === tb)); render(); return; }
@@ -733,7 +825,7 @@ document.addEventListener("change", e => {
   if (t.name === "ls"){ st.sector = t.dataset.s; render(); }
 });
 $("fQ").addEventListener("input", e => { st.q = e.target.value; render(); });
-document.addEventListener("keydown", e => { if (e.key === "Escape") $("velo").hidden = true; });
+document.addEventListener("keydown", e => { if (e.key === "Escape") $("velo").hidden = true; if (e.key === "Enter" && e.target.classList && e.target.classList.contains("rkr")) e.target.click(); });
 
 function arrancar(){
   st.mes = DATA.meses[0].clave;
@@ -741,7 +833,7 @@ function arrancar(){
   if (!API_URL){ NOTAS = JSON.parse(JSON.stringify(DATA.ejemplo || {})); ORDENES = JSON.parse(JSON.stringify(DATA.ejemplo_ot || [])); otNum = ORDENES.length; }
   render(); cargarEstado();
 }
-window.PORTAL = {st, SEL, render, abrir, abrirOT, abrirSug, otDoc, imprimirOT, M, selPuntos, get ORDENES(){ return ORDENES; }};
+window.PORTAL = {st, SEL, render, abrir, abrirOT, abrirSug, otDoc, imprimirOT, cargarTodas, verOT, M, selPuntos, get ORDENES(){ return ORDENES; }};
 iniciar();
 </script>
 </body>
