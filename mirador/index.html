@@ -347,11 +347,11 @@ footer{text-align:center;font-size:13px;color:var(--gris);padding:6px 16px 26px}
   <div class="regla"><span class="nv s">Secundaria</span><span class="fl">→</span><b>Escalera externa</b></div>
   <h3>Cómo se evacúa cada sector</h3>
   <div class="tp" role="tablist"><button class="on" data-s="A">Sector A<small>1.er y 2.º piso</small></button><button data-s="B">Sector B<small>1.er, 2.º y 3.er piso</small></button></div>
-  <div class="anw"><iframe id="anim" title="Animación de la evacuación del sector" src="pisos/anim.html?sector=A" style="aspect-ratio:1080/2287" loading="lazy"></iframe><button class="play" id="play">▶ Ver la animación</button></div>
+  <div class="anw"><iframe id="anim" title="Animación de la evacuación del sector" src="pisos/anim.html?sector=A" style="aspect-ratio:1080/2287"></iframe><button class="play" id="play">▶ Ver la animación</button></div>
   <p class="nota">Animación ilustrativa y acelerada. Cada punto es una persona: verde primaria, azul secundaria, naranja los líderes. Todos terminan en planta baja y salen por el portón principal.</p>
 </section>
 <script>(function(){const fr=document.getElementById('anim'),pl=document.getElementById('play'),H={A:2287,B:2423};
-pl.addEventListener('click',()=>{fr.contentWindow.postMessage('play','*');pl.hidden=true});
+pl.addEventListener('click',()=>{const sec=(document.querySelector('.tp button.on')||{dataset:{s:'A'}}).dataset.s||'A';fr.src='pisos/anim.html?sector='+sec+'&auto=1&t='+Date.now();pl.hidden=true});
 document.querySelectorAll('.tp button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.tp button').forEach(x=>x.classList.toggle('on',x===b));fr.style.aspectRatio='1080/'+H[b.dataset.s];fr.src='pisos/anim.html?sector='+b.dataset.s+'&auto=1';pl.hidden=true}))})()</script>
 
 <section id="recorrido">
