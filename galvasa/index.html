@@ -1,0 +1,748 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>GALVASA · Informes de Higiene y Seguridad</title>
+<style>@font-face{font-family:'Barlow';font-weight:400;font-display:swap;src:url(fonts/barlow-400.woff2) format('woff2')}@font-face{font-family:'Barlow';font-weight:500;font-display:swap;src:url(fonts/barlow-500.woff2) format('woff2')}@font-face{font-family:'Barlow';font-weight:600;font-display:swap;src:url(fonts/barlow-600.woff2) format('woff2')}@font-face{font-family:'Barlow';font-weight:700;font-display:swap;src:url(fonts/barlow-700.woff2) format('woff2')}@font-face{font-family:'Barlow Condensed';font-weight:500;font-display:swap;src:url(fonts/barlow-condensed-500.woff2) format('woff2')}@font-face{font-family:'Barlow Condensed';font-weight:600;font-display:swap;src:url(fonts/barlow-condensed-600.woff2) format('woff2')}@font-face{font-family:'Barlow Condensed';font-weight:700;font-display:swap;src:url(fonts/barlow-condensed-700.woff2) format('woff2')}</style>
+<style>
+/* Portal GALVASA, opción C «Tablero de planta»: cabecera zinc · resumen + descargas · filtros · panel de sectores + renglones con casilla de selección · barra de selección → orden de trabajo */
+:root{
+  --bg:#EDF0F2; --card:#FFFFFF; --ink:#1E262C; --muted:#5F6A73; --line:#D5DBE0;
+  --brand:#21A1DC; --brand-dk:#0A6FB5; --brand-soft:#E1F1FA; --accent:#ED6D2B; --accent-ink:#FFFFFF;
+  --head:#1C262E; --topbar:#121A20; --tema:#2A3640;
+  --reinc:#6E1E2E; --reinc-soft:#F5E6E9;
+  --ok:#2F7D4A; --ok-soft:#E5F2E9; --curso:#C8641F; --curso-soft:#FCEBDD; --pend:#5E6670; --pend-soft:#ECEEF1; --listo:#0A6FB5; --listo-soft:#E1F1FA;
+  --font:"Barlow",system-ui,"Segoe UI",Arial,sans-serif; --font-h:"Barlow Condensed","Barlow",system-ui,sans-serif; --r:3px;
+  --pad-l:max(16px,env(safe-area-inset-left,0px)); --pad-r:max(16px,env(safe-area-inset-right,0px));
+}
+*{box-sizing:border-box}
+html,body{background:var(--bg);color:var(--ink)}
+body{margin:0;font-family:var(--font);font-size:15px;line-height:1.45;-webkit-text-size-adjust:100%;padding-bottom:70px}
+img{max-width:100%}
+button,select,input,textarea{font:inherit;color:inherit}
+.wrap{max-width:1240px;margin:0 auto;padding-left:var(--pad-l);padding-right:var(--pad-r)}
+h1,h2,h3{font-family:var(--font-h);text-wrap:balance;margin:0}
+.muted{color:var(--muted)} .tab{font-variant-numeric:tabular-nums}
+[hidden]{display:none!important}
+
+.topbar{background:var(--topbar);color:#cfd6db;font-size:12.5px}
+.topbar .wrap{display:flex;gap:12px;justify-content:space-between;align-items:center;padding-block:6px;flex-wrap:wrap}
+.topbar b{color:#fff;font-weight:600}
+.admin-badge{background:var(--accent);color:#fff;border-radius:999px;padding:1px 10px;font-weight:600}
+header.head{background:var(--head);color:#fff}
+header.head .wrap{display:flex;align-items:center;gap:18px;padding-block:16px;flex-wrap:wrap}
+.logo-g{height:34px;display:block;color:#fff}
+.sep{width:1px;align-self:stretch;background:#fff;opacity:.25}
+.titulo{flex:1;min-width:220px}
+.titulo h1{font-size:25px;font-weight:600;letter-spacing:.01em;text-transform:uppercase}
+.titulo p{margin:2px 0 0;font-size:13.5px;opacity:.8}
+.jea{display:flex;align-items:center;gap:10px;background:#fff;border-radius:var(--r);padding:6px 10px}
+.jea img{height:30px;display:block}
+.jea span{font-size:11.5px;line-height:1.25;color:#333}
+.jea span b{display:block;font-size:12px}
+
+.mesbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding-block:14px 10px}
+.lbl{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-right:4px}
+.mes{border:1.5px solid var(--line);background:var(--card);border-radius:999px;padding:5px 14px;cursor:pointer;font-weight:600;font-size:14px}
+.mes[aria-pressed="true"]{background:var(--brand);border-color:var(--brand);color:#fff}
+.mes .tag{font-size:11px;font-weight:600;margin-left:6px;opacity:.8}
+select.mes{font-weight:500;color:var(--muted);padding:5px 10px}
+.resumen{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between;padding-bottom:12px}
+.stats{display:flex;flex-wrap:wrap;gap:8px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:7px 12px;min-width:88px}
+.stat b{display:block;font-size:22px;font-family:var(--font-h);font-weight:700;line-height:1.1}
+.stat span{font-size:12.5px;color:var(--muted)}
+.stat.r b{color:var(--reinc)} .stat.ok b{color:var(--ok)} .stat.n b{color:var(--accent)} .stat.l b{color:var(--listo)}
+.descargas{display:flex;gap:8px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;border-radius:var(--r);padding:8px 13px;border:1.5px solid var(--brand-dk);background:var(--card);color:var(--brand-dk);font-weight:600;font-size:14px;cursor:pointer;text-decoration:none;white-space:nowrap}
+.btn.prim{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.osc{background:var(--head);border-color:var(--head);color:#fff}
+.btn.chico{padding:5px 10px;font-size:13px}
+.btn svg{width:16px;height:16px;flex:none}
+
+.filtros{position:sticky;top:0;z-index:6;background:var(--bg);border-block:1px solid var(--line)}
+.filtros .wrap{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;padding-block:8px}
+.campo{display:flex;flex-direction:column;gap:3px}
+.campo label{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.campo select,.campo input{border:1.5px solid var(--line);background:var(--card);border-radius:var(--r);padding:6px 10px;font-size:14px;min-width:0}
+#fSector{width:175px} #fTema{width:165px} #fSeg{width:140px} #fOrden{width:125px}
+.campo.q{flex:1;min-width:120px}
+.seg{display:inline-flex;border:1.5px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--card)}
+.seg button{border:0;background:transparent;padding:6px 11px;font-size:13.5px;cursor:pointer;border-right:1px solid var(--line)}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--brand-soft);color:var(--brand-dk);font-weight:700}
+.activos{display:flex;gap:6px;flex-wrap:wrap;align-items:center;width:100%;font-size:13px;min-height:24px}
+.pill{background:var(--brand-soft);color:var(--brand-dk);border-radius:999px;padding:2px 10px;font-weight:600}
+.link{border:0;background:none;color:var(--brand-dk);text-decoration:underline;cursor:pointer;font-size:13px;padding:0}
+.cuenta{margin-left:auto;font-size:13px;color:var(--muted);display:flex;gap:12px;align-items:center}
+
+.cuerpo{display:grid;grid-template-columns:270px minmax(0,1fr);gap:20px;align-items:start}
+.lateral{display:flex;flex-direction:column;gap:2px;position:sticky;top:96px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:12px;max-height:calc(100vh - 170px);overflow:auto;margin-top:16px}
+.lateral h3{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-family:var(--font);margin-bottom:4px}
+.lsec{display:flex;align-items:center;gap:6px;border-radius:var(--r)}
+.lsec:hover{background:var(--bg)}
+.lsec label{display:flex;gap:8px;align-items:center;font-size:13.5px;padding:4px 2px;cursor:pointer;flex:1;min-width:0}
+.lsec input{accent-color:var(--brand)}
+.lsec .c{margin-left:auto;color:var(--muted);font-size:12px}
+.lsec .sug{border:0;background:none;cursor:pointer;color:var(--muted);font-size:13px;padding:2px 4px;opacity:.55}
+.lsec:hover .sug,.lsec .sug:focus-visible{opacity:1;color:var(--brand-dk)}
+.lateral .ayuda{font-size:12px;color:var(--muted);border-top:1px dashed var(--line);margin-top:8px;padding-top:8px}
+
+main{padding-block:16px 40px;min-width:0}
+.grupo{margin-bottom:24px}
+.ghead{background:var(--tema);color:#fff;border-radius:var(--r);padding:9px 12px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.ghead h2{font-size:19px;font-weight:600;text-transform:uppercase;letter-spacing:.02em;flex:1;min-width:0}
+.ghead .n{font-size:13px;opacity:.85}
+.ghead .selg{border:1px solid rgba(255,255,255,.4);background:transparent;color:#fff;border-radius:var(--r);padding:3px 9px;font-size:12.5px;cursor:pointer}
+.criterio{font-size:13px;color:var(--muted);margin:6px 2px 10px;max-width:110ch}
+.criterio summary{cursor:pointer;color:var(--brand-dk);font-weight:600;list-style:none}
+.criterio summary::-webkit-details-marker{display:none}
+.criterio summary::before{content:"▸ "} .criterio[open] summary::before{content:"▾ "}
+.criterio p{margin:6px 0 0}
+.filas{display:flex;flex-direction:column;gap:6px}
+.fila{background:var(--card);border:1px solid var(--line);border-radius:var(--r);display:grid;grid-template-columns:30px 46px minmax(0,1.25fr) minmax(0,1fr) 196px;gap:12px;align-items:start;padding:10px 12px;cursor:pointer}
+.fila:hover{border-color:var(--brand)}
+.fila.sel{border-color:var(--accent);box-shadow:inset 4px 0 0 var(--accent)}
+.fila .ck{display:flex;align-items:center;justify-content:center;padding-top:3px}
+.fila .ck input{width:20px;height:20px;accent-color:var(--accent);cursor:pointer}
+.num{font-family:var(--font-h);font-weight:700;font-size:20px;color:var(--brand-dk);font-variant-numeric:tabular-nums}
+.meta{display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:12.5px;margin-bottom:4px}
+.chip{font-size:11.5px;font-weight:700;border-radius:3px;padding:2px 7px;letter-spacing:.02em;white-space:nowrap}
+.chip.reinc{background:var(--reinc-soft);color:var(--reinc)}
+.chip.nuevo{background:var(--brand-soft);color:var(--brand-dk)}
+.chip.est-pendiente{background:var(--pend-soft);color:var(--pend)}
+.chip.est-curso{background:var(--curso-soft);color:var(--curso)}
+.chip.est-listo{background:var(--listo-soft);color:var(--listo)}
+.chip.est-resuelto{background:var(--ok-soft);color:var(--ok)}
+.obs{font-weight:600;font-size:15px;line-height:1.3}
+.sector{color:var(--muted);font-size:12.5px;margin-top:2px}
+.acc{font-size:13.5px}
+.acc b{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-right:4px}
+.nota-mini{font-size:12.5px;background:var(--bg);border-radius:var(--r);padding:5px 8px;margin-top:6px}
+.thumbs{display:flex;gap:3px}
+.thumbs img{width:62px;height:62px;object-fit:cover;border-radius:2px}
+
+.verif .ghead{background:var(--ok)}
+.vlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:8px;margin-top:10px}
+.vitem{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--ok);border-radius:var(--r);padding:8px 10px;display:flex;gap:10px;align-items:flex-start;font-size:13.5px}
+.vitem img{width:60px;height:60px;object-fit:cover;border-radius:2px;flex:none}
+footer{border-top:1px solid var(--line);padding-block:18px 30px;font-size:12.5px;color:var(--muted)}
+footer .wrap{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+footer img{height:30px}
+
+/* barra de selección */
+.selbar{position:fixed;left:0;right:0;bottom:0;z-index:15;background:var(--head);color:#fff;padding-bottom:env(safe-area-inset-bottom,0px);box-shadow:0 -6px 20px rgba(0,0,0,.18)}
+.selbar .wrap{display:flex;gap:12px;align-items:center;padding-block:10px;flex-wrap:wrap}
+.selbar .n{font-family:var(--font-h);font-size:20px;font-weight:600}
+.selbar .link{color:#cfe7f5}
+
+/* ventanas */
+.velo{position:fixed;inset:0;background:rgba(15,20,25,.55);z-index:20;display:flex;align-items:flex-start;justify-content:center;padding:24px var(--pad-r) 24px var(--pad-l);overflow:auto}
+.det{background:var(--card);border-radius:5px;width:min(1080px,100%);display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.25)}
+.visor{background:#11161A;display:flex;flex-direction:column}
+.grande{position:relative;flex:1;display:flex;align-items:center;justify-content:center;min-height:420px}
+.grande img{max-height:560px;width:100%;object-fit:contain}
+.nav{position:absolute;top:50%;transform:translateY(-50%);border:0;background:rgba(255,255,255,.88);width:38px;height:38px;border-radius:50%;font-size:20px;cursor:pointer}
+.nav.izq{left:10px} .nav.der{right:10px}
+.leyenda{color:#E8ECEF;font-size:12.5px;padding:6px 10px 0}
+.tira{display:flex;gap:4px;padding:6px;overflow-x:auto}
+.tira img{width:64px;height:48px;object-fit:cover;opacity:.55;cursor:pointer;border-radius:2px}
+.tira img.on{opacity:1;outline:2px solid #fff}
+.info{padding:16px 20px;display:flex;flex-direction:column;gap:12px;max-height:640px;overflow:auto}
+.cerrar{align-self:flex-end;border:0;background:none;font-size:14px;color:var(--muted);cursor:pointer}
+.info h3{font-size:20px;line-height:1.25;font-weight:600}
+.bloque{border-top:1px solid var(--line);padding-top:10px;font-size:13.5px}
+.bloque h4{margin:0 0 6px;font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.hist{display:flex;flex-direction:column;gap:8px}
+.hrow{display:grid;grid-template-columns:62px minmax(0,1fr);gap:10px;align-items:center}
+.hrow .m{font-weight:700;font-size:13px}
+.hrow .m small{display:block;font-weight:500;color:var(--muted)}
+.hrow .ph{display:flex;gap:3px}
+.hrow .ph img{width:56px;height:42px;object-fit:cover;border-radius:2px;cursor:pointer}
+.hrow.actual .m{color:var(--brand-dk)}
+.form{display:flex;flex-direction:column;gap:8px}
+.form label{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.estados{display:flex;gap:6px;flex-wrap:wrap}
+.estados button{border:1.5px solid var(--line);background:var(--card);border-radius:999px;padding:5px 12px;font-size:13px;cursor:pointer}
+.estados button[aria-pressed="true"]{border-color:var(--brand-dk);background:var(--brand-soft);color:var(--brand-dk);font-weight:700}
+.estados button.adm{border-style:dashed;border-color:var(--ok);color:var(--ok)}
+.form textarea,.form input{border:1.5px solid var(--line);border-radius:var(--r);padding:8px 10px;font-size:14px;width:100%;background:var(--card)}
+.ejemplo{font-size:11px;font-weight:700;color:var(--curso);letter-spacing:.04em;text-transform:uppercase}
+.caja{background:var(--card);border-radius:5px;width:min(760px,100%);box-shadow:0 20px 50px rgba(0,0,0,.25);overflow:hidden}
+.caja .cab{background:var(--head);color:#fff;padding:14px 18px;display:flex;align-items:center;gap:12px}
+.caja .cab h3{font-size:21px;font-weight:600;flex:1}
+.caja .cab .cerrar{color:#cfd6db}
+.caja .cpo{padding:16px 18px;display:flex;flex-direction:column;gap:12px}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.lsel{border:1px solid var(--line);border-radius:var(--r);max-height:260px;overflow:auto}
+.lsel div{display:grid;grid-template-columns:40px minmax(0,1fr) 28px;gap:8px;padding:7px 10px;border-bottom:1px solid var(--line);font-size:13.5px;align-items:start}
+.lsel div:last-child{border-bottom:0}
+.lsel .x{border:0;background:none;cursor:pointer;color:var(--muted);font-size:16px}
+.aviso{font-size:12.5px;color:var(--muted)}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:84px;z-index:40;background:#1E262C;color:#fff;border-radius:999px;padding:9px 18px;font-size:14px;box-shadow:0 8px 20px rgba(0,0,0,.25)}
+
+/* orden de trabajo (sólo impresión) */
+#ot{display:none}
+:focus-visible{outline:2px solid var(--brand-dk);outline-offset:2px}
+
+@media (max-width:900px){
+  .cuerpo{display:block} .lateral{display:none}
+  .fila{grid-template-columns:28px 40px minmax(0,1fr)}
+  .fila .acc-col{grid-column:3}
+  .fila .thumbs{grid-column:3}
+  .det{grid-template-columns:minmax(0,1fr)} .velo{padding:10px}
+  .grande{min-height:260px} .grande img{max-height:340px}
+  .jea span,.sep{display:none}
+  .stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;width:100%}
+  .stat{padding:6px 8px;min-width:0} .stat b{font-size:19px} .stat span{font-size:11.5px}
+  #fSector,#fTema,#fSeg,#fOrden,#fOT{width:100%} .campo{flex:1 1 45%}
+  .dos{grid-template-columns:1fr}
+}
+@media (max-width:520px){
+  .titulo h1{font-size:21px}
+  .filtros{position:static}
+  .campo.q{min-width:100%}
+  .topbar .wrap span:last-child{display:none}
+  .selbar .wrap{gap:8px}
+  .chip{white-space:normal}
+}
+@media print{
+  @page{size:A4;margin:12mm}
+  html,body{background:#fff!important;font-size:10.5pt;padding:0}
+  body.imprimiendo-ot > *:not(#ot){display:none!important}
+  body.imprimiendo-ot #ot{display:block}
+  body:not(.imprimiendo-ot) .topbar,body:not(.imprimiendo-ot) .filtros,.mesbar,.descargas,.lateral,.selbar,.velo,.ck,.ghead .selg,.criterio summary,.stats,.toast{display:none!important}
+  .cuerpo{display:block}
+  .fila{break-inside:avoid;grid-template-columns:40px minmax(0,1.2fr) minmax(0,1fr) 140px}
+  .grupo{break-inside:avoid}
+  .ghead{print-color-adjust:exact;-webkit-print-color-adjust:exact}
+}
+/* hoja de la orden de trabajo */
+.otdoc{font-family:var(--font);color:#111}
+.otdoc .oth{display:flex;align-items:center;gap:14px;border-bottom:2px solid #1C262E;padding-bottom:8px}
+.otdoc .oth .g{height:28px;color:#1C262E}
+.otdoc .oth img{height:30px;margin-left:auto}
+.otdoc h1{font-family:var(--font-h);font-size:24pt;font-weight:700;letter-spacing:.02em;margin:10px 0 2px;text-transform:uppercase}
+.otdoc .sub{font-size:10pt;color:#444}
+.otdoc .datos{display:grid;grid-template-columns:1fr 1fr;gap:6px 16px;margin:10px 0;font-size:10.5pt;border:1px solid #bbb;border-radius:3px;padding:8px 10px}
+.otdoc .datos b{font-size:8.5pt;letter-spacing:.06em;text-transform:uppercase;color:#555;display:block}
+.otdoc .obsot{border:1px solid #bbb;border-left:4px solid #ED6D2B;border-radius:3px;padding:8px 10px;font-size:10.5pt;margin-bottom:10px;white-space:pre-wrap}
+.otdoc .p{display:grid;grid-template-columns:36px minmax(0,1fr) 150px;gap:10px;border:1px solid #ccc;border-radius:3px;padding:8px;margin-bottom:6px;break-inside:avoid}
+.otdoc .p .nn{font-family:var(--font-h);font-size:16pt;font-weight:700;color:#0A6FB5}
+.otdoc .p .t{font-weight:600}
+.otdoc .p .s{font-size:9pt;color:#555}
+.otdoc .p .a{font-size:9.5pt;margin-top:3px}
+.otdoc .p .ff{display:flex;gap:3px}
+.otdoc .p .ff img{width:72px;height:60px;object-fit:cover}
+.otdoc .p .hecho{grid-column:2 / -1;font-size:9pt;color:#333;border-top:1px dashed #ccc;padding-top:4px}
+.otdoc .firmas{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:22px;font-size:9.5pt}
+.otdoc .firmas div{border-top:1px solid #333;padding-top:4px}
+.otdoc .pie{font-size:8.5pt;color:#555;margin-top:12px}
+.chip.ot{background:#FFF1E8;color:#9A4413;border:1px solid #F6C9AA}
+.ghead .ots{font-size:12.5px;opacity:.9;width:100%;margin-top:2px}
+.ots-det .o{display:flex;gap:8px;align-items:center;flex-wrap:wrap;border:1px solid var(--line);border-radius:var(--r);padding:6px 8px;margin-bottom:6px;font-size:13px}
+#fOT{width:150px}
+.login{position:fixed;inset:0;z-index:50;background:var(--head);color:#fff;display:flex;align-items:center;justify-content:center;padding:24px var(--pad-r) 24px var(--pad-l)}
+.login .box{width:min(420px,100%);display:flex;flex-direction:column;gap:14px}
+.login .logos{display:flex;align-items:center;gap:16px}
+.login .logos .g{height:36px;color:#fff}
+.login .logos img{height:34px;background:#fff;border-radius:3px;padding:4px 6px}
+.login h1{font-family:var(--font-h);font-size:26px;font-weight:600;text-transform:uppercase;letter-spacing:.02em}
+.login p{margin:0;color:#c8d0d6;font-size:14px}
+.login input[type=password]{border:0;border-radius:var(--r);padding:12px 14px;font-size:16px;width:100%}
+.login .rec{display:flex;gap:8px;align-items:center;font-size:13.5px;color:#c8d0d6}
+.login .err{color:#FFB59A;font-size:14px;min-height:20px}
+.login button{border:0;border-radius:var(--r);background:var(--accent);color:#fff;font-weight:700;font-size:16px;padding:12px;cursor:pointer}
+.offline{background:#FFF1E8;color:#9A4413;font-size:12.5px;text-align:center;padding:4px}
+.lot{display:flex;flex-direction:column;gap:3px;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:8px 10px;margin-bottom:6px;cursor:pointer;font:inherit;font-size:13px;color:inherit}
+.lot:hover{border-color:var(--accent)}
+.lot.on{border-color:var(--accent);box-shadow:inset 3px 0 0 var(--accent)}
+.lot b{font-family:var(--font-h);font-size:15px;letter-spacing:.02em}
+.lot .barra{height:5px;background:#E3E7EA;border-radius:3px;overflow:hidden}
+.lot .barra i{display:block;height:100%;background:var(--ok,#2E7D4F)}
+.lot .c{font-size:11.5px;color:var(--muted)}
+button.chip{cursor:pointer;font:inherit;font-size:inherit}
+.otcab{border:1px solid #F6C9AA;border-left:4px solid var(--accent);background:#FFF8F3;border-radius:var(--r);padding:10px 12px;margin-bottom:12px;font-size:14px}
+.salir{color:#fff!important;opacity:.85}
+@media print{.lot,.otcab .link{display:none}}
+</style>
+</head>
+<body>
+<div class="login" id="login" hidden><form class="box" id="loginForm" autocomplete="on">
+  <div class="logos"><span class="g"> <svg fill="currentColor" style="height:100%;width:auto;display:block" role="img" aria-label="GALVASA" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 684.7 157.1" style="enable-background:new 0 0 684.7 157.1;" xml:space="preserve">  <g> <g> <path class="st0" d="M7.4,148.8c-0.4-1.4-0.7-3.5-0.7-6.4s0.2-5,0.7-6.4c0.6-1.9,1.7-3.3,3.2-4.2s3.3-1.5,5.5-1.5 c2.1,0,3.9,0.5,5.3,1.4c1.4,0.9,2.5,2.1,3,3.6c0.1,0.2,0.1,0.4-0.1,0.5l-3.7,1.6c-0.3,0.1-0.4,0-0.5-0.2c-0.9-1.6-2.3-2.4-4-2.4 c-2,0-3.2,0.9-3.8,2.6c-0.3,0.8-0.4,2.4-0.4,5c0,2.6,0.1,4.3,0.4,5c0.6,1.7,1.8,2.6,3.8,2.6c0.9,0,1.7-0.2,2.4-0.6 c0.7-0.4,1.2-1,1.4-1.8c0.2-0.6,0.3-1.4,0.3-2.3c0-0.1-0.1-0.2-0.2-0.2h-3.2c-0.2,0-0.3-0.1-0.3-0.3v-3.3c0-0.2,0.1-0.3,0.3-0.3 h8.1c0.2,0,0.3,0.1,0.3,0.3v1.9c0,2.3-0.2,4.1-0.6,5.3c-0.6,1.9-1.6,3.3-3.1,4.3c-1.5,1-3.3,1.5-5.4,1.5c-2.1,0-4-0.5-5.5-1.5 C9.1,152.1,8,150.7,7.4,148.8z"></path> <path class="st0" d="M26.3,153.8l8.1-22.8c0.1-0.2,0.2-0.3,0.4-0.3h4.3c0.2,0,0.4,0.1,0.4,0.3l7.9,22.8c0.1,0.2,0,0.3-0.2,0.3 h-4.5c-0.2,0-0.4-0.1-0.4-0.3l-1.3-4.1h-8.2l-1.3,4.1c-0.1,0.2-0.2,0.3-0.4,0.3h-4.5C26.3,154.1,26.3,154,26.3,153.8z M34.3,145.4 h5.4l-2.7-8.2h-0.1L34.3,145.4z"></path> <path class="st0" d="M50.3,153.8V131c0-0.2,0.1-0.3,0.3-0.3H55c0.2,0,0.3,0.1,0.3,0.3v18.4c0,0.1,0.1,0.2,0.2,0.2h10.4 c0.2,0,0.3,0.1,0.3,0.3v3.8c0,0.2-0.1,0.3-0.3,0.3H50.7C50.4,154.1,50.3,154,50.3,153.8z"></path> <path class="st0" d="M76.9,154.1h-4c-0.2,0-0.4-0.1-0.4-0.3l-7.5-22.7c-0.1-0.3,0-0.4,0.3-0.4h4.5c0.2,0,0.4,0.1,0.4,0.3l4.7,15.4 H75l4.6-15.4c0.1-0.2,0.2-0.3,0.4-0.3h4.5c0.3,0,0.3,0.1,0.3,0.4l-7.5,22.7C77.2,154,77.1,154.1,76.9,154.1z"></path> <path class="st0" d="M84.2,153.8l8.1-22.8c0.1-0.2,0.2-0.3,0.4-0.3h4.3c0.2,0,0.4,0.1,0.4,0.3l7.9,22.8c0.1,0.2,0,0.3-0.2,0.3 h-4.5c-0.2,0-0.4-0.1-0.4-0.3l-1.3-4.1h-8.2l-1.3,4.1c-0.1,0.2-0.2,0.3-0.4,0.3h-4.5C84.2,154.1,84.1,154,84.2,153.8z M92.1,145.4 h5.4l-2.7-8.2h-0.1L92.1,145.4z"></path> <path class="st0" d="M108.2,153.8V131c0-0.2,0.1-0.3,0.3-0.3h4.1c0.3,0,0.4,0.1,0.6,0.3l8.3,14.8h0.2V131c0-0.2,0.1-0.3,0.3-0.3 h3.9c0.2,0,0.3,0.1,0.3,0.3v22.8c0,0.2-0.1,0.3-0.3,0.3h-4.1c-0.3,0-0.4-0.1-0.6-0.3l-8.3-14.7h-0.2v14.7c0,0.2-0.1,0.3-0.3,0.3 h-3.9C108.3,154.1,108.2,154,108.2,153.8z"></path> <path class="st0" d="M130.8,153.8V131c0-0.2,0.1-0.3,0.3-0.3h4.4c0.2,0,0.3,0.1,0.3,0.3v22.8c0,0.2-0.1,0.3-0.3,0.3h-4.4 C130.9,154.1,130.8,154,130.8,153.8z"></path> <path class="st0" d="M155.2,154.1h-15.4c-0.2,0-0.3-0.1-0.3-0.3V150c0-0.1,0-0.2,0.1-0.3l10.1-14.4v-0.1h-9.5 c-0.2,0-0.3-0.1-0.3-0.3V131c0-0.2,0.1-0.3,0.3-0.3h15c0.2,0,0.3,0.1,0.3,0.3v3.8c0,0.1,0,0.3-0.1,0.3l-10.1,14.4v0.1h9.9 c0.2,0,0.3,0.1,0.3,0.3v3.8C155.6,154,155.5,154.1,155.2,154.1z"></path> <path class="st0" d="M157.5,153.8l8.1-22.8c0.1-0.2,0.2-0.3,0.4-0.3h4.3c0.2,0,0.4,0.1,0.4,0.3l7.9,22.8c0.1,0.2,0,0.3-0.2,0.3 H174c-0.2,0-0.4-0.1-0.4-0.3l-1.3-4.1H164l-1.3,4.1c-0.1,0.2-0.2,0.3-0.4,0.3h-4.5C157.5,154.1,157.4,154,157.5,153.8z M165.4,145.4h5.4l-2.7-8.2h-0.1L165.4,145.4z"></path> <path class="st0" d="M181.4,153.8V131c0-0.2,0.1-0.3,0.3-0.3h8.7c4.3,0,7,1.8,8.1,5.3c0.4,1.3,0.6,3.5,0.6,6.5 c0,3-0.2,5.1-0.6,6.5c-1.1,3.5-3.8,5.3-8.1,5.3h-8.7C181.6,154.1,181.4,154,181.4,153.8z M186.5,149.4c0,0.1,0.1,0.2,0.2,0.2h2.7 c2.4,0,3.8-0.9,4.3-2.6c0.3-0.7,0.4-2.3,0.4-4.6s-0.1-3.9-0.4-4.6c-0.5-1.7-2-2.6-4.3-2.6h-2.7c-0.1,0-0.2,0.1-0.2,0.2V149.4z"></path> <path class="st0" d="M217.2,153.1c-1.5,1-3.3,1.5-5.4,1.5c-2.1,0-3.9-0.5-5.4-1.5c-1.5-1-2.6-2.4-3.2-4.2 c-0.4-1.4-0.7-3.5-0.7-6.4s0.2-5,0.7-6.4c0.6-1.9,1.7-3.3,3.2-4.2s3.3-1.5,5.4-1.5c2.1,0,3.9,0.5,5.4,1.5s2.6,2.4,3.2,4.2 c0.4,1.4,0.7,3.5,0.7,6.4s-0.2,5-0.7,6.4C219.7,150.7,218.7,152.1,217.2,153.1z M211.8,150c1.9,0,3.1-0.9,3.7-2.6 c0.3-0.8,0.4-2.4,0.4-5s-0.1-4.3-0.4-5c-0.6-1.7-1.8-2.6-3.7-2.6c-1.9,0-3.1,0.9-3.7,2.6c-0.3,0.8-0.4,2.4-0.4,5s0.1,4.3,0.4,5 C208.6,149.2,209.9,150,211.8,150z"></path> <path class="st0" d="M236.5,154.1h-2.4c-0.2,0-0.3-0.1-0.3-0.3V131c0-0.2,0.1-0.3,0.3-0.3h8.4c2.3,0,4.1,0.6,5.4,1.9 c1.4,1.3,2,3,2,5.1s-0.7,3.8-2,5.1c-1.4,1.3-3.2,1.9-5.4,1.9h-5.4c-0.1,0-0.2,0.1-0.2,0.2v8.9C236.9,154,236.8,154.1,236.5,154.1z M242.3,141.8c1.4,0,2.6-0.4,3.4-1.1c0.8-0.7,1.2-1.7,1.2-3c0-1.3-0.4-2.3-1.2-3c-0.8-0.7-1.9-1.1-3.4-1.1h-5.2 c-0.1,0-0.2,0.1-0.2,0.2v7.9c0,0.1,0.1,0.2,0.2,0.2H242.3z"></path> <path class="st0" d="M262,154.5c-2,0-3.7-0.5-5-1.4c-1.4-0.9-2.4-2.3-3-4.1c-0.4-1.2-0.6-3.5-0.6-6.6s0.2-5.4,0.6-6.6 c0.6-1.8,1.6-3.2,3-4.1c1.4-0.9,3-1.4,5-1.4c4.1,0,6.8,1.8,8,5.5c0.4,1.2,0.6,3.5,0.6,6.6s-0.2,5.4-0.6,6.6 C268.8,152.7,266.1,154.5,262,154.5z M262,151.7c2.6,0,4.2-1.2,5-3.5c0.3-1.1,0.5-3,0.5-5.8s-0.2-4.7-0.5-5.8 c-0.8-2.3-2.4-3.5-5-3.5c-2.6,0-4.2,1.2-5,3.5c-0.3,1.1-0.5,3-0.5,5.8s0.2,4.7,0.5,5.8C257.8,150.5,259.5,151.7,262,151.7z"></path> <path class="st0" d="M292,154.1h-2.8c-0.2,0-0.4-0.1-0.4-0.3l-4.7-9.6h-5.2c-0.1,0-0.2,0.1-0.2,0.2v9.4c0,0.2-0.1,0.3-0.3,0.3H276 c-0.2,0-0.3-0.1-0.3-0.3V131c0-0.2,0.1-0.3,0.3-0.3h8.5c2.2,0,4,0.6,5.3,1.9c1.4,1.2,2,2.9,2,4.9c0,1.6-0.4,2.9-1.2,4 c-0.8,1.1-2,1.9-3.4,2.4l5,9.9c0.1,0.1,0.1,0.2,0,0.3C292.2,154.1,292.1,154.1,292,154.1z M284.4,141.3c1.4,0,2.4-0.3,3.2-1 c0.8-0.7,1.2-1.6,1.2-2.9s-0.4-2.2-1.2-2.9c-0.8-0.7-1.8-1-3.2-1h-5.5c-0.1,0-0.2,0.1-0.2,0.2v7.4c0,0.1,0.1,0.2,0.2,0.2H284.4z"></path> <path class="st0" d="M305.2,153.8V131c0-0.2,0.1-0.3,0.3-0.3h2.4c0.2,0,0.3,0.1,0.3,0.3v22.8c0,0.2-0.1,0.3-0.3,0.3h-2.4 C305.3,154.1,305.2,154,305.2,153.8z"></path> <path class="st0" d="M314.1,153.8V131c0-0.2,0.1-0.3,0.3-0.3h2.2c0.3,0,0.5,0.1,0.6,0.3l10.6,17.6h0.1V131c0-0.2,0.1-0.3,0.3-0.3 h2.2c0.2,0,0.3,0.1,0.3,0.3v22.8c0,0.2-0.1,0.3-0.3,0.3h-2.2c-0.3,0-0.5-0.1-0.6-0.3L317,136.3h-0.1v17.5c0,0.2-0.1,0.3-0.3,0.3 h-2.2C314.2,154.1,314.1,154,314.1,153.8z"></path> <path class="st0" d="M336.6,153.8V131c0-0.2,0.1-0.3,0.3-0.3h2.2c0.3,0,0.5,0.1,0.6,0.3l7,15.8h0.1l6.9-15.8 c0.1-0.2,0.3-0.3,0.6-0.3h2.2c0.2,0,0.3,0.1,0.3,0.3v22.8c0,0.2-0.1,0.3-0.3,0.3h-2.2c-0.2,0-0.3-0.1-0.3-0.3v-16.3h-0.1 l-5.8,12.9c-0.1,0.3-0.3,0.4-0.6,0.4h-1.4c-0.3,0-0.5-0.1-0.7-0.4l-5.8-12.9h-0.1v16.3c0,0.2-0.1,0.3-0.3,0.3H337 C336.8,154.1,336.6,154,336.6,153.8z"></path> <path class="st0" d="M362.7,153.8V131c0-0.2,0.1-0.3,0.3-0.3h14.1c0.2,0,0.3,0.1,0.3,0.3v2.2c0,0.2-0.1,0.3-0.3,0.3H366 c-0.1,0-0.2,0.1-0.2,0.2v6.9c0,0.1,0.1,0.2,0.2,0.2h9.5c0.2,0,0.3,0.1,0.3,0.3v2.2c0,0.2-0.1,0.3-0.3,0.3H366 c-0.1,0-0.2,0.1-0.2,0.2v7.1c0,0.1,0.1,0.2,0.2,0.2h11.2c0.2,0,0.3,0.1,0.3,0.3v2.2c0,0.2-0.1,0.3-0.3,0.3H363 C362.8,154.1,362.7,154,362.7,153.8z"></path> <path class="st0" d="M398.5,154.1h-2.8c-0.2,0-0.4-0.1-0.4-0.3l-4.7-9.6h-5.2c-0.1,0-0.2,0.1-0.2,0.2v9.4c0,0.2-0.1,0.3-0.3,0.3 h-2.4c-0.2,0-0.3-0.1-0.3-0.3V131c0-0.2,0.1-0.3,0.3-0.3h8.5c2.2,0,4,0.6,5.3,1.9c1.4,1.2,2,2.9,2,4.9c0,1.6-0.4,2.9-1.2,4 c-0.8,1.1-2,1.9-3.4,2.4l5,9.9c0.1,0.1,0.1,0.2,0,0.3S398.6,154.1,398.5,154.1z M390.9,141.3c1.4,0,2.4-0.3,3.2-1 c0.8-0.7,1.2-1.6,1.2-2.9s-0.4-2.2-1.2-2.9c-0.8-0.7-1.8-1-3.2-1h-5.5c-0.1,0-0.2,0.1-0.2,0.2v7.4c0,0.1,0.1,0.2,0.2,0.2H390.9z"></path> <path class="st0" d="M410.5,154.5c-1.6,0-3.1-0.3-4.6-0.8c-1.5-0.6-2.7-1.3-3.6-2.1c-0.2-0.2-0.2-0.3,0-0.5l1.5-1.8 c0.1-0.2,0.3-0.2,0.5,0c2,1.6,4.2,2.4,6.6,2.4c1.6,0,2.9-0.4,3.8-1.1c0.9-0.7,1.4-1.7,1.4-2.9c0-1.1-0.4-1.9-1.1-2.5 s-2-1.1-3.8-1.3l-1.2-0.2c-4.6-0.6-6.9-2.8-6.9-6.5c0-2.1,0.7-3.8,2.1-5s3.3-1.9,5.6-1.9c2.8,0,5.2,0.7,7.1,2.2 c0.2,0.1,0.2,0.3,0.1,0.5l-1.2,1.9c-0.1,0.2-0.3,0.2-0.5,0.1c-1.9-1.2-3.8-1.8-5.7-1.8c-1.4,0-2.5,0.3-3.3,1 c-0.8,0.7-1.2,1.6-1.2,2.8c0,1,0.4,1.9,1.2,2.5c0.8,0.6,2,1,3.8,1.3l1.1,0.2c4.6,0.6,6.9,2.8,6.9,6.6c0,2.1-0.7,3.8-2.2,5.1 S413.3,154.5,410.5,154.5z"></path> <path class="st0" d="M423.8,153.8V131c0-0.2,0.1-0.3,0.3-0.3h2.4c0.2,0,0.3,0.1,0.3,0.3v22.8c0,0.2-0.1,0.3-0.3,0.3h-2.4 C423.9,154.1,423.8,154,423.8,153.8z"></path> <path class="st0" d="M440.5,154.5c-2,0-3.7-0.5-5-1.4c-1.4-0.9-2.4-2.3-3-4.1c-0.4-1.2-0.6-3.5-0.6-6.6s0.2-5.4,0.6-6.6 c0.6-1.8,1.6-3.2,3-4.1c1.4-0.9,3-1.4,5-1.4c4.1,0,6.8,1.8,8,5.5c0.4,1.2,0.6,3.5,0.6,6.6s-0.2,5.4-0.6,6.6 C447.3,152.7,444.6,154.5,440.5,154.5z M440.5,151.7c2.6,0,4.2-1.2,5-3.5c0.3-1.1,0.5-3,0.5-5.8s-0.2-4.7-0.5-5.8 c-0.8-2.3-2.4-3.5-5-3.5c-2.6,0-4.2,1.2-5,3.5c-0.3,1.1-0.5,3-0.5,5.8s0.2,4.7,0.5,5.8C436.3,150.5,437.9,151.7,440.5,151.7z M440.7,127.8H439c-0.1,0-0.2,0-0.2-0.1c0-0.1,0-0.1,0.1-0.2l3-3.7c0.2-0.2,0.4-0.3,0.6-0.3h2.4c0.1,0,0.2,0,0.2,0.1 c0,0.1,0,0.1-0.1,0.2l-3.7,3.7C441.2,127.7,441,127.8,440.7,127.8z"></path> <path class="st0" d="M454.1,153.8V131c0-0.2,0.1-0.3,0.3-0.3h2.2c0.3,0,0.5,0.1,0.6,0.3l10.6,17.6h0.1V131c0-0.2,0.1-0.3,0.3-0.3 h2.2c0.2,0,0.3,0.1,0.3,0.3v22.8c0,0.2-0.1,0.3-0.3,0.3h-2.2c-0.3,0-0.5-0.1-0.6-0.3L457,136.3h-0.1v17.5c0,0.2-0.1,0.3-0.3,0.3 h-2.2C454.2,154.1,454.1,154,454.1,153.8z"></path> <path class="st0" d="M484.9,153.8V131c0-0.2,0.1-0.3,0.3-0.3h14.1c0.2,0,0.3,0.1,0.3,0.3v2.2c0,0.2-0.1,0.3-0.3,0.3h-11.2 c-0.1,0-0.2,0.1-0.2,0.2v6.9c0,0.1,0.1,0.2,0.2,0.2h9.5c0.2,0,0.3,0.1,0.3,0.3v2.2c0,0.2-0.1,0.3-0.3,0.3h-9.5 c-0.1,0-0.2,0.1-0.2,0.2v7.1c0,0.1,0.1,0.2,0.2,0.2h11.2c0.2,0,0.3,0.1,0.3,0.3v2.2c0,0.2-0.1,0.3-0.3,0.3h-14.1 C485,154.1,484.9,154,484.9,153.8z"></path> <path class="st0" d="M504.4,153.8V131c0-0.2,0.1-0.3,0.3-0.3h2.2c0.3,0,0.5,0.1,0.6,0.3l10.6,17.6h0.1V131c0-0.2,0.1-0.3,0.3-0.3 h2.2c0.2,0,0.3,0.1,0.3,0.3v22.8c0,0.2-0.1,0.3-0.3,0.3h-2.2c-0.3,0-0.5-0.1-0.6-0.3l-10.7-17.5h-0.1v17.5c0,0.2-0.1,0.3-0.3,0.3 h-2.2C504.5,154.1,504.4,154,504.4,153.8z"></path> <path class="st0" d="M535,149c-0.4-1.2-0.6-3.4-0.6-6.6c0-3.2,0.2-5.4,0.6-6.6c1.2-3.7,3.8-5.5,7.8-5.5c1.7,0,3.2,0.4,4.6,1.2 c1.3,0.8,2.3,2,3,3.5c0.1,0.2,0,0.4-0.1,0.4l-2.1,1c-0.2,0.1-0.4,0.1-0.5-0.2c-1.1-2.1-2.7-3.1-4.8-3.1c-2.5,0-4.1,1.2-4.9,3.5 c-0.3,0.9-0.4,2.9-0.4,5.8c0,2.9,0.1,4.9,0.4,5.8c0.8,2.3,2.4,3.5,4.9,3.5c2.2,0,3.8-1,4.8-3.1c0.1-0.2,0.3-0.3,0.5-0.2l2.1,1 c0.2,0.1,0.2,0.2,0.1,0.4c-0.7,1.5-1.7,2.7-3,3.5c-1.3,0.8-2.8,1.2-4.6,1.2C538.8,154.5,536.2,152.7,535,149z"></path> <path class="st0" d="M552.7,153.8l8.1-22.8c0.1-0.2,0.2-0.3,0.4-0.3h2.2c0.2,0,0.4,0.1,0.4,0.3l8,22.8c0.1,0.2,0,0.3-0.2,0.3h-2.4 c-0.2,0-0.4-0.1-0.4-0.3l-1.8-5.1h-9.5l-1.8,5.1c-0.1,0.2-0.2,0.3-0.4,0.3h-2.4C552.7,154.1,552.6,154,552.7,153.8z M558.6,145.9 h7.5l-3.7-10.7h-0.1L558.6,145.9z"></path> <path class="st0" d="M575.7,153.8V131c0-0.2,0.1-0.3,0.3-0.3h2.4c0.2,0,0.3,0.1,0.3,0.3v20.1c0,0.1,0.1,0.2,0.2,0.2h11.2 c0.2,0,0.3,0.1,0.3,0.3v2.2c0,0.2-0.1,0.3-0.3,0.3h-14.1C575.8,154.1,575.7,154,575.7,153.8z"></path> <path class="st0" d="M594.3,153.8V131c0-0.2,0.1-0.3,0.3-0.3h2.4c0.2,0,0.3,0.1,0.3,0.3v22.8c0,0.2-0.1,0.3-0.3,0.3h-2.4 C594.4,154.1,594.3,154,594.3,153.8z"></path> <path class="st0" d="M603.2,153.8V131c0-0.2,0.1-0.3,0.3-0.3h14.1c0.2,0,0.3,0.1,0.3,0.3v2.2c0,0.2-0.1,0.3-0.3,0.3h-11.2 c-0.1,0-0.2,0.1-0.2,0.2v6.9c0,0.1,0.1,0.2,0.2,0.2h9.5c0.2,0,0.3,0.1,0.3,0.3v2.2c0,0.2-0.1,0.3-0.3,0.3h-9.5 c-0.1,0-0.2,0.1-0.2,0.2v7.1c0,0.1,0.1,0.2,0.2,0.2h11.2c0.2,0,0.3,0.1,0.3,0.3v2.2c0,0.2-0.1,0.3-0.3,0.3h-14.1 C603.3,154.1,603.2,154,603.2,153.8z"></path> <path class="st0" d="M622.6,153.8V131c0-0.2,0.1-0.3,0.3-0.3h2.2c0.3,0,0.5,0.1,0.6,0.3l10.6,17.6h0.1V131c0-0.2,0.1-0.3,0.3-0.3 h2.2c0.2,0,0.3,0.1,0.3,0.3v22.8c0,0.2-0.1,0.3-0.3,0.3h-2.2c-0.3,0-0.5-0.1-0.6-0.3l-10.7-17.5h-0.1v17.5c0,0.2-0.1,0.3-0.3,0.3 h-2.2C622.7,154.1,622.6,154,622.6,153.8z"></path> <path class="st0" d="M652.7,154.1h-2.4c-0.2,0-0.3-0.1-0.3-0.3v-20.1c0-0.1-0.1-0.2-0.2-0.2h-6.4c-0.2,0-0.3-0.1-0.3-0.3V131 c0-0.2,0.1-0.3,0.3-0.3h16.3c0.2,0,0.3,0.1,0.3,0.3v2.2c0,0.2-0.1,0.3-0.3,0.3h-6.4c-0.1,0-0.2,0.1-0.2,0.2v20.1 C653.1,154,652.9,154.1,652.7,154.1z"></path> <path class="st0" d="M663.7,153.8V131c0-0.2,0.1-0.3,0.3-0.3h14.1c0.2,0,0.3,0.1,0.3,0.3v2.2c0,0.2-0.1,0.3-0.3,0.3H667 c-0.1,0-0.2,0.1-0.2,0.2v6.9c0,0.1,0.1,0.2,0.2,0.2h9.5c0.2,0,0.3,0.1,0.3,0.3v2.2c0,0.2-0.1,0.3-0.3,0.3H667 c-0.1,0-0.2,0.1-0.2,0.2v7.1c0,0.1,0.1,0.2,0.2,0.2h11.2c0.2,0,0.3,0.1,0.3,0.3v2.2c0,0.2-0.1,0.3-0.3,0.3H664 C663.8,154.1,663.7,154,663.7,153.8z"></path> </g> <g> <path class="st0" d="M73.7,60.7c-9.1,0-17.9,0-27,0c0-5.8,0-11.3,0-16.9c15.8,0,31.5,0,47.5,0c0,18.9,0,37.8,0,56.7 c-0.2,0.1-0.5,0.4-0.7,0.4c-17.4-0.1-34.9,0.4-52.2-0.6c-18.8-1.1-29.5-10.7-33.8-29c-3.3-13.7-3-27.5,1.4-41 C13.7,15,24.5,6,40.4,5.1C58.2,4.2,76,4.9,94.2,4.9c0,4.9,0,10.3,0,16.1c-1.4,0.1-2.8,0.2-4.1,0.2c-12.1,0-24.3,0-36.4,0 c-15.9,0-23.2,5.8-24.6,21.7c-0.8,8.5,0.4,17.3,1.8,25.8c1.5,8.9,7.7,14,16.7,14.6c8.6,0.6,17.3,0.1,26.2,0.1 C73.7,76.1,73.7,68.7,73.7,60.7z"></path> <path class="st0" d="M484,100.5c0-5.5,0-10.8,0-16.6c5.6,0,11,0,16.4,0c10.1,0,20.3,0.1,30.4,0c2.8,0,5.7-0.3,8.5-0.8 c5.6-1.1,8.6-4.6,8.8-9.9c0.3-6-2.6-10.7-8-12.2c-2.6-0.7-5.3-0.9-8-1c-9.1-0.3-18.3-0.2-27.4-0.7C481,58,474,33.1,484,16.3 c4.3-7.2,10.9-11,19-11.4c13.1-0.6,26.2-0.6,39.4-0.8c7.7-0.1,15.4,0,23.4,0c0,5.7,0,11.2,0,17.2c-1.5,0-3,0-4.6,0 c-15.7,0-31.4-0.1-47.1,0.1c-8.6,0.1-11.8,3.5-11.4,11.4c0.2,4.7,2.6,7.9,7.1,8.9c3,0.7,6.2,0.9,9.3,1c9,0.3,18,0.1,27,0.7 c19.1,1.3,26.4,15.4,24.8,32.2c-1.5,15.8-9.9,24.1-25.9,24.7C524.9,101.1,504.6,100.5,484,100.5z"></path> <path class="st0" d="M103,101c3.6-8.8,7-17.2,10.5-25.5c9.5-22.6,19-45.1,28.4-67.8c1.2-2.9,2.7-3.8,5.6-3.7 c5.4,0.2,10.9,0.3,16.3,0c3.1-0.2,4.2,1.2,5.2,3.7c10,23.9,20,47.8,30,71.7c2.9,6.9,5.8,13.9,9,21.5c-8,0-15.5,0.1-22.9-0.1 c-0.9,0-2.1-1.7-2.6-2.8c-2.5-5.4-4.6-11-7.2-16.4c-0.6-1.3-2.5-2.7-3.8-2.8c-10.7-0.2-21.4-0.2-32.1,0c-1.3,0-3.1,1.3-3.6,2.5 c-2.7,5.7-4.9,11.5-7.6,17.2c-0.5,1.1-2.1,2.4-3.3,2.4C117.7,101.1,110.6,101,103,101z M169.4,61.4c-4.6-11.4-9.1-22.4-14-34.5 c-4.9,12.2-9.4,23.2-14,34.5C151,61.4,159.9,61.4,169.4,61.4z"></path> <path class="st0" d="M368.8,101c4.5-10.8,8.8-21.2,13.1-31.5c8.6-20.6,17.4-41.2,25.9-61.9c1.1-2.6,2.3-3.7,5.2-3.6 c5.4,0.3,10.9,0.3,16.3,0c3.1-0.2,4.5,1.1,5.6,3.8c11.4,27.4,22.8,54.7,34.3,82c1.5,3.5,2.9,7.1,4.6,11.2 c-7.9,0-15.3,0.1-22.6-0.1c-1,0-2.2-1.5-2.7-2.6c-2.5-5.6-5-11.2-7.2-16.9c-0.8-2-1.8-2.8-4.1-2.8c-10.6,0.1-21.1,0.1-31.7,0 c-2.5,0-3.4,1-4.3,3.1c-2.2,5.4-4.6,10.7-6.8,16.2c-0.9,2.3-2.1,3.3-4.7,3.2C382.9,100.9,376.1,101,368.8,101z M435.3,61.4 c-4.7-11.5-9.1-22.5-14-34.4c-4.9,12.1-9.4,23.1-14,34.4C416.7,61.4,425.7,61.4,435.3,61.4z"></path> <path class="st0" d="M679.1,101c-7.3,0-14.6,0.1-21.8-0.1c-1.1,0-2.5-1.5-3.1-2.7c-2.5-5.4-4.8-10.9-7.1-16.5 c-0.8-2.1-1.8-3.1-4.3-3c-10.6,0.2-21.1,0.1-31.7,0c-2.2,0-3.2,0.8-4,2.8c-2.3,5.7-4.6,11.3-7.3,16.9c-0.6,1.2-2.3,2.5-3.6,2.5 c-7,0.2-14,0.1-21.5,0.1c0.7-1.9,1.2-3.6,1.9-5.3c12.3-29.3,24.6-58.6,36.8-87.9c1.3-3,2.8-4,6-3.8c5.6,0.3,11.1-0.1,16.7,0.2 c1.3,0.1,3.3,1.1,3.8,2.3C653,37.4,666,68.4,679,99.4C679.1,99.8,679.1,100.2,679.1,101z M613.1,61.3c9.6,0,18.5,0,28,0 C636.5,50,632,39,627.2,27C622.3,38.9,617.8,49.9,613.1,61.3z"></path> <path class="st0" d="M379.1,4.1c-4.9,11.1-9.5,21.6-14.1,32c-9,20.3-18.1,40.6-27,61c-1.2,2.8-2.6,4.4-5.9,4 c-3.1-0.3-6.3-0.5-9.4,0c-5.6,0.9-8.1-1.4-10.2-6.6C300.4,65.2,287.7,36,275.3,6.8c-0.3-0.6-0.5-1.3-0.9-2.3c7.8,0,15.2,0,23.2,0 c9.4,23.7,19,47.7,28.9,72.6c4.4-10.9,8.5-20.9,12.5-30.9c5.2-12.9,10.5-25.9,15.6-38.9c1-2.6,2.4-3.3,5.1-3.3 C365.8,4.2,372.1,4.1,379.1,4.1z"></path> <path class="st0" d="M218,4.3c6.3,0,12.8,0,19.7,0c0,3.6,0,7,0,10.4c0,15.9,0,31.7,0.1,47.6c0,1.1,0.1,2.3,0.1,3.4 c0.9,13.8,4.4,17.4,18.4,18c9.3,0.4,18.6,0.1,28.2,0.1c0,5.7,0,11.2,0,16.8c-11.6,0-23.2,0.1-34.8-0.1c-3.7-0.1-7.4-0.6-11-1.6 c-11.6-3.2-20.2-12.4-20.5-24.6C217.5,51.1,218,27.9,218,4.3z"></path> </g> </g> </svg>
+</span><img src="logo_jea.png" alt="JEA"></div>
+  <h1>Portal de Higiene y Seguridad</h1>
+  <p>Informes de visita del Lic. Marcelo Elvira para GALVASA S.A.</p>
+  <input type="text" name="username" value="galvasa" autocomplete="username" hidden>
+  <input type="password" id="clave" placeholder="Contraseña" autocomplete="current-password" required>
+  <label class="rec"><input type="checkbox" id="recordar" checked> Recordarla en este equipo</label>
+  <div class="err" id="loginErr" aria-live="polite"></div>
+  <button type="submit">Entrar</button>
+</form></div>
+<div class="offline" id="offline" hidden>Vista sin conexión a la planilla: el seguimiento y las órdenes no se guardan.</div>
+<div class="topbar"><div class="wrap"><span><b>Portal de Higiene y Seguridad</b> · GALVASA S.A. · Pres. Santiago Derqui 4780, Munro</span><span id="tbR">Asesoramiento: Lic. Marcelo Elvira · M.P. 0656 C.P.I.I.</span></div></div>
+<header class="head"><div class="wrap">
+  <span class="logo-g"> <svg fill="currentColor" style="height:100%;width:auto;display:block" role="img" aria-label="GALVASA" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 684.7 157.1" style="enable-background:new 0 0 684.7 157.1;" xml:space="preserve">  <g> <g> <path class="st0" d="M7.4,148.8c-0.4-1.4-0.7-3.5-0.7-6.4s0.2-5,0.7-6.4c0.6-1.9,1.7-3.3,3.2-4.2s3.3-1.5,5.5-1.5 c2.1,0,3.9,0.5,5.3,1.4c1.4,0.9,2.5,2.1,3,3.6c0.1,0.2,0.1,0.4-0.1,0.5l-3.7,1.6c-0.3,0.1-0.4,0-0.5-0.2c-0.9-1.6-2.3-2.4-4-2.4 c-2,0-3.2,0.9-3.8,2.6c-0.3,0.8-0.4,2.4-0.4,5c0,2.6,0.1,4.3,0.4,5c0.6,1.7,1.8,2.6,3.8,2.6c0.9,0,1.7-0.2,2.4-0.6 c0.7-0.4,1.2-1,1.4-1.8c0.2-0.6,0.3-1.4,0.3-2.3c0-0.1-0.1-0.2-0.2-0.2h-3.2c-0.2,0-0.3-0.1-0.3-0.3v-3.3c0-0.2,0.1-0.3,0.3-0.3 h8.1c0.2,0,0.3,0.1,0.3,0.3v1.9c0,2.3-0.2,4.1-0.6,5.3c-0.6,1.9-1.6,3.3-3.1,4.3c-1.5,1-3.3,1.5-5.4,1.5c-2.1,0-4-0.5-5.5-1.5 C9.1,152.1,8,150.7,7.4,148.8z"></path> <path class="st0" d="M26.3,153.8l8.1-22.8c0.1-0.2,0.2-0.3,0.4-0.3h4.3c0.2,0,0.4,0.1,0.4,0.3l7.9,22.8c0.1,0.2,0,0.3-0.2,0.3 h-4.5c-0.2,0-0.4-0.1-0.4-0.3l-1.3-4.1h-8.2l-1.3,4.1c-0.1,0.2-0.2,0.3-0.4,0.3h-4.5C26.3,154.1,26.3,154,26.3,153.8z M34.3,145.4 h5.4l-2.7-8.2h-0.1L34.3,145.4z"></path> <path class="st0" d="M50.3,153.8V131c0-0.2,0.1-0.3,0.3-0.3H55c0.2,0,0.3,0.1,0.3,0.3v18.4c0,0.1,0.1,0.2,0.2,0.2h10.4 c0.2,0,0.3,0.1,0.3,0.3v3.8c0,0.2-0.1,0.3-0.3,0.3H50.7C50.4,154.1,50.3,154,50.3,153.8z"></path> <path class="st0" d="M76.9,154.1h-4c-0.2,0-0.4-0.1-0.4-0.3l-7.5-22.7c-0.1-0.3,0-0.4,0.3-0.4h4.5c0.2,0,0.4,0.1,0.4,0.3l4.7,15.4 H75l4.6-15.4c0.1-0.2,0.2-0.3,0.4-0.3h4.5c0.3,0,0.3,0.1,0.3,0.4l-7.5,22.7C77.2,154,77.1,154.1,76.9,154.1z"></path> <path class="st0" d="M84.2,153.8l8.1-22.8c0.1-0.2,0.2-0.3,0.4-0.3h4.3c0.2,0,0.4,0.1,0.4,0.3l7.9,22.8c0.1,0.2,0,0.3-0.2,0.3 h-4.5c-0.2,0-0.4-0.1-0.4-0.3l-1.3-4.1h-8.2l-1.3,4.1c-0.1,0.2-0.2,0.3-0.4,0.3h-4.5C84.2,154.1,84.1,154,84.2,153.8z M92.1,145.4 h5.4l-2.7-8.2h-0.1L92.1,145.4z"></path> <path class="st0" d="M108.2,153.8V131c0-0.2,0.1-0.3,0.3-0.3h4.1c0.3,0,0.4,0.1,0.6,0.3l8.3,14.8h0.2V131c0-0.2,0.1-0.3,0.3-0.3 h3.9c0.2,0,0.3,0.1,0.3,0.3v22.8c0,0.2-0.1,0.3-0.3,0.3h-4.1c-0.3,0-0.4-0.1-0.6-0.3l-8.3-14.7h-0.2v14.7c0,0.2-0.1,0.3-0.3,0.3 h-3.9C108.3,154.1,108.2,154,108.2,153.8z"></path> <path class="st0" d="M130.8,153.8V131c0-0.2,0.1-0.3,0.3-0.3h4.4c0.2,0,0.3,0.1,0.3,0.3v22.8c0,0.2-0.1,0.3-0.3,0.3h-4.4 C130.9,154.1,130.8,154,130.8,153.8z"></path> <path class="st0" d="M155.2,154.1h-15.4c-0.2,0-0.3-0.1-0.3-0.3V150c0-0.1,0-0.2,0.1-0.3l10.1-14.4v-0.1h-9.5 c-0.2,0-0.3-0.1-0.3-0.3V131c0-0.2,0.1-0.3,0.3-0.3h15c0.2,0,0.3,0.1,0.3,0.3v3.8c0,0.1,0,0.3-0.1,0.3l-10.1,14.4v0.1h9.9 c0.2,0,0.3,0.1,0.3,0.3v3.8C155.6,154,155.5,154.1,155.2,154.1z"></path> <path class="st0" d="M157.5,153.8l8.1-22.8c0.1-0.2,0.2-0.3,0.4-0.3h4.3c0.2,0,0.4,0.1,0.4,0.3l7.9,22.8c0.1,0.2,0,0.3-0.2,0.3 H174c-0.2,0-0.4-0.1-0.4-0.3l-1.3-4.1H164l-1.3,4.1c-0.1,0.2-0.2,0.3-0.4,0.3h-4.5C157.5,154.1,157.4,154,157.5,153.8z M165.4,145.4h5.4l-2.7-8.2h-0.1L165.4,145.4z"></path> <path class="st0" d="M181.4,153.8V131c0-0.2,0.1-0.3,0.3-0.3h8.7c4.3,0,7,1.8,8.1,5.3c0.4,1.3,0.6,3.5,0.6,6.5 c0,3-0.2,5.1-0.6,6.5c-1.1,3.5-3.8,5.3-8.1,5.3h-8.7C181.6,154.1,181.4,154,181.4,153.8z M186.5,149.4c0,0.1,0.1,0.2,0.2,0.2h2.7 c2.4,0,3.8-0.9,4.3-2.6c0.3-0.7,0.4-2.3,0.4-4.6s-0.1-3.9-0.4-4.6c-0.5-1.7-2-2.6-4.3-2.6h-2.7c-0.1,0-0.2,0.1-0.2,0.2V149.4z"></path> <path class="st0" d="M217.2,153.1c-1.5,1-3.3,1.5-5.4,1.5c-2.1,0-3.9-0.5-5.4-1.5c-1.5-1-2.6-2.4-3.2-4.2 c-0.4-1.4-0.7-3.5-0.7-6.4s0.2-5,0.7-6.4c0.6-1.9,1.7-3.3,3.2-4.2s3.3-1.5,5.4-1.5c2.1,0,3.9,0.5,5.4,1.5s2.6,2.4,3.2,4.2 c0.4,1.4,0.7,3.5,0.7,6.4s-0.2,5-0.7,6.4C219.7,150.7,218.7,152.1,217.2,153.1z M211.8,150c1.9,0,3.1-0.9,3.7-2.6 c0.3-0.8,0.4-2.4,0.4-5s-0.1-4.3-0.4-5c-0.6-1.7-1.8-2.6-3.7-2.6c-1.9,0-3.1,0.9-3.7,2.6c-0.3,0.8-0.4,2.4-0.4,5s0.1,4.3,0.4,5 C208.6,149.2,209.9,150,211.8,150z"></path> <path class="st0" d="M236.5,154.1h-2.4c-0.2,0-0.3-0.1-0.3-0.3V131c0-0.2,0.1-0.3,0.3-0.3h8.4c2.3,0,4.1,0.6,5.4,1.9 c1.4,1.3,2,3,2,5.1s-0.7,3.8-2,5.1c-1.4,1.3-3.2,1.9-5.4,1.9h-5.4c-0.1,0-0.2,0.1-0.2,0.2v8.9C236.9,154,236.8,154.1,236.5,154.1z M242.3,141.8c1.4,0,2.6-0.4,3.4-1.1c0.8-0.7,1.2-1.7,1.2-3c0-1.3-0.4-2.3-1.2-3c-0.8-0.7-1.9-1.1-3.4-1.1h-5.2 c-0.1,0-0.2,0.1-0.2,0.2v7.9c0,0.1,0.1,0.2,0.2,0.2H242.3z"></path> <path class="st0" d="M262,154.5c-2,0-3.7-0.5-5-1.4c-1.4-0.9-2.4-2.3-3-4.1c-0.4-1.2-0.6-3.5-0.6-6.6s0.2-5.4,0.6-6.6 c0.6-1.8,1.6-3.2,3-4.1c1.4-0.9,3-1.4,5-1.4c4.1,0,6.8,1.8,8,5.5c0.4,1.2,0.6,3.5,0.6,6.6s-0.2,5.4-0.6,6.6 C268.8,152.7,266.1,154.5,262,154.5z M262,151.7c2.6,0,4.2-1.2,5-3.5c0.3-1.1,0.5-3,0.5-5.8s-0.2-4.7-0.5-5.8 c-0.8-2.3-2.4-3.5-5-3.5c-2.6,0-4.2,1.2-5,3.5c-0.3,1.1-0.5,3-0.5,5.8s0.2,4.7,0.5,5.8C257.8,150.5,259.5,151.7,262,151.7z"></path> <path class="st0" d="M292,154.1h-2.8c-0.2,0-0.4-0.1-0.4-0.3l-4.7-9.6h-5.2c-0.1,0-0.2,0.1-0.2,0.2v9.4c0,0.2-0.1,0.3-0.3,0.3H276 c-0.2,0-0.3-0.1-0.3-0.3V131c0-0.2,0.1-0.3,0.3-0.3h8.5c2.2,0,4,0.6,5.3,1.9c1.4,1.2,2,2.9,2,4.9c0,1.6-0.4,2.9-1.2,4 c-0.8,1.1-2,1.9-3.4,2.4l5,9.9c0.1,0.1,0.1,0.2,0,0.3C292.2,154.1,292.1,154.1,292,154.1z M284.4,141.3c1.4,0,2.4-0.3,3.2-1 c0.8-0.7,1.2-1.6,1.2-2.9s-0.4-2.2-1.2-2.9c-0.8-0.7-1.8-1-3.2-1h-5.5c-0.1,0-0.2,0.1-0.2,0.2v7.4c0,0.1,0.1,0.2,0.2,0.2H284.4z"></path> <path class="st0" d="M305.2,153.8V131c0-0.2,0.1-0.3,0.3-0.3h2.4c0.2,0,0.3,0.1,0.3,0.3v22.8c0,0.2-0.1,0.3-0.3,0.3h-2.4 C305.3,154.1,305.2,154,305.2,153.8z"></path> <path class="st0" d="M314.1,153.8V131c0-0.2,0.1-0.3,0.3-0.3h2.2c0.3,0,0.5,0.1,0.6,0.3l10.6,17.6h0.1V131c0-0.2,0.1-0.3,0.3-0.3 h2.2c0.2,0,0.3,0.1,0.3,0.3v22.8c0,0.2-0.1,0.3-0.3,0.3h-2.2c-0.3,0-0.5-0.1-0.6-0.3L317,136.3h-0.1v17.5c0,0.2-0.1,0.3-0.3,0.3 h-2.2C314.2,154.1,314.1,154,314.1,153.8z"></path> <path class="st0" d="M336.6,153.8V131c0-0.2,0.1-0.3,0.3-0.3h2.2c0.3,0,0.5,0.1,0.6,0.3l7,15.8h0.1l6.9-15.8 c0.1-0.2,0.3-0.3,0.6-0.3h2.2c0.2,0,0.3,0.1,0.3,0.3v22.8c0,0.2-0.1,0.3-0.3,0.3h-2.2c-0.2,0-0.3-0.1-0.3-0.3v-16.3h-0.1 l-5.8,12.9c-0.1,0.3-0.3,0.4-0.6,0.4h-1.4c-0.3,0-0.5-0.1-0.7-0.4l-5.8-12.9h-0.1v16.3c0,0.2-0.1,0.3-0.3,0.3H337 C336.8,154.1,336.6,154,336.6,153.8z"></path> <path class="st0" d="M362.7,153.8V131c0-0.2,0.1-0.3,0.3-0.3h14.1c0.2,0,0.3,0.1,0.3,0.3v2.2c0,0.2-0.1,0.3-0.3,0.3H366 c-0.1,0-0.2,0.1-0.2,0.2v6.9c0,0.1,0.1,0.2,0.2,0.2h9.5c0.2,0,0.3,0.1,0.3,0.3v2.2c0,0.2-0.1,0.3-0.3,0.3H366 c-0.1,0-0.2,0.1-0.2,0.2v7.1c0,0.1,0.1,0.2,0.2,0.2h11.2c0.2,0,0.3,0.1,0.3,0.3v2.2c0,0.2-0.1,0.3-0.3,0.3H363 C362.8,154.1,362.7,154,362.7,153.8z"></path> <path class="st0" d="M398.5,154.1h-2.8c-0.2,0-0.4-0.1-0.4-0.3l-4.7-9.6h-5.2c-0.1,0-0.2,0.1-0.2,0.2v9.4c0,0.2-0.1,0.3-0.3,0.3 h-2.4c-0.2,0-0.3-0.1-0.3-0.3V131c0-0.2,0.1-0.3,0.3-0.3h8.5c2.2,0,4,0.6,5.3,1.9c1.4,1.2,2,2.9,2,4.9c0,1.6-0.4,2.9-1.2,4 c-0.8,1.1-2,1.9-3.4,2.4l5,9.9c0.1,0.1,0.1,0.2,0,0.3S398.6,154.1,398.5,154.1z M390.9,141.3c1.4,0,2.4-0.3,3.2-1 c0.8-0.7,1.2-1.6,1.2-2.9s-0.4-2.2-1.2-2.9c-0.8-0.7-1.8-1-3.2-1h-5.5c-0.1,0-0.2,0.1-0.2,0.2v7.4c0,0.1,0.1,0.2,0.2,0.2H390.9z"></path> <path class="st0" d="M410.5,154.5c-1.6,0-3.1-0.3-4.6-0.8c-1.5-0.6-2.7-1.3-3.6-2.1c-0.2-0.2-0.2-0.3,0-0.5l1.5-1.8 c0.1-0.2,0.3-0.2,0.5,0c2,1.6,4.2,2.4,6.6,2.4c1.6,0,2.9-0.4,3.8-1.1c0.9-0.7,1.4-1.7,1.4-2.9c0-1.1-0.4-1.9-1.1-2.5 s-2-1.1-3.8-1.3l-1.2-0.2c-4.6-0.6-6.9-2.8-6.9-6.5c0-2.1,0.7-3.8,2.1-5s3.3-1.9,5.6-1.9c2.8,0,5.2,0.7,7.1,2.2 c0.2,0.1,0.2,0.3,0.1,0.5l-1.2,1.9c-0.1,0.2-0.3,0.2-0.5,0.1c-1.9-1.2-3.8-1.8-5.7-1.8c-1.4,0-2.5,0.3-3.3,1 c-0.8,0.7-1.2,1.6-1.2,2.8c0,1,0.4,1.9,1.2,2.5c0.8,0.6,2,1,3.8,1.3l1.1,0.2c4.6,0.6,6.9,2.8,6.9,6.6c0,2.1-0.7,3.8-2.2,5.1 S413.3,154.5,410.5,154.5z"></path> <path class="st0" d="M423.8,153.8V131c0-0.2,0.1-0.3,0.3-0.3h2.4c0.2,0,0.3,0.1,0.3,0.3v22.8c0,0.2-0.1,0.3-0.3,0.3h-2.4 C423.9,154.1,423.8,154,423.8,153.8z"></path> <path class="st0" d="M440.5,154.5c-2,0-3.7-0.5-5-1.4c-1.4-0.9-2.4-2.3-3-4.1c-0.4-1.2-0.6-3.5-0.6-6.6s0.2-5.4,0.6-6.6 c0.6-1.8,1.6-3.2,3-4.1c1.4-0.9,3-1.4,5-1.4c4.1,0,6.8,1.8,8,5.5c0.4,1.2,0.6,3.5,0.6,6.6s-0.2,5.4-0.6,6.6 C447.3,152.7,444.6,154.5,440.5,154.5z M440.5,151.7c2.6,0,4.2-1.2,5-3.5c0.3-1.1,0.5-3,0.5-5.8s-0.2-4.7-0.5-5.8 c-0.8-2.3-2.4-3.5-5-3.5c-2.6,0-4.2,1.2-5,3.5c-0.3,1.1-0.5,3-0.5,5.8s0.2,4.7,0.5,5.8C436.3,150.5,437.9,151.7,440.5,151.7z M440.7,127.8H439c-0.1,0-0.2,0-0.2-0.1c0-0.1,0-0.1,0.1-0.2l3-3.7c0.2-0.2,0.4-0.3,0.6-0.3h2.4c0.1,0,0.2,0,0.2,0.1 c0,0.1,0,0.1-0.1,0.2l-3.7,3.7C441.2,127.7,441,127.8,440.7,127.8z"></path> <path class="st0" d="M454.1,153.8V131c0-0.2,0.1-0.3,0.3-0.3h2.2c0.3,0,0.5,0.1,0.6,0.3l10.6,17.6h0.1V131c0-0.2,0.1-0.3,0.3-0.3 h2.2c0.2,0,0.3,0.1,0.3,0.3v22.8c0,0.2-0.1,0.3-0.3,0.3h-2.2c-0.3,0-0.5-0.1-0.6-0.3L457,136.3h-0.1v17.5c0,0.2-0.1,0.3-0.3,0.3 h-2.2C454.2,154.1,454.1,154,454.1,153.8z"></path> <path class="st0" d="M484.9,153.8V131c0-0.2,0.1-0.3,0.3-0.3h14.1c0.2,0,0.3,0.1,0.3,0.3v2.2c0,0.2-0.1,0.3-0.3,0.3h-11.2 c-0.1,0-0.2,0.1-0.2,0.2v6.9c0,0.1,0.1,0.2,0.2,0.2h9.5c0.2,0,0.3,0.1,0.3,0.3v2.2c0,0.2-0.1,0.3-0.3,0.3h-9.5 c-0.1,0-0.2,0.1-0.2,0.2v7.1c0,0.1,0.1,0.2,0.2,0.2h11.2c0.2,0,0.3,0.1,0.3,0.3v2.2c0,0.2-0.1,0.3-0.3,0.3h-14.1 C485,154.1,484.9,154,484.9,153.8z"></path> <path class="st0" d="M504.4,153.8V131c0-0.2,0.1-0.3,0.3-0.3h2.2c0.3,0,0.5,0.1,0.6,0.3l10.6,17.6h0.1V131c0-0.2,0.1-0.3,0.3-0.3 h2.2c0.2,0,0.3,0.1,0.3,0.3v22.8c0,0.2-0.1,0.3-0.3,0.3h-2.2c-0.3,0-0.5-0.1-0.6-0.3l-10.7-17.5h-0.1v17.5c0,0.2-0.1,0.3-0.3,0.3 h-2.2C504.5,154.1,504.4,154,504.4,153.8z"></path> <path class="st0" d="M535,149c-0.4-1.2-0.6-3.4-0.6-6.6c0-3.2,0.2-5.4,0.6-6.6c1.2-3.7,3.8-5.5,7.8-5.5c1.7,0,3.2,0.4,4.6,1.2 c1.3,0.8,2.3,2,3,3.5c0.1,0.2,0,0.4-0.1,0.4l-2.1,1c-0.2,0.1-0.4,0.1-0.5-0.2c-1.1-2.1-2.7-3.1-4.8-3.1c-2.5,0-4.1,1.2-4.9,3.5 c-0.3,0.9-0.4,2.9-0.4,5.8c0,2.9,0.1,4.9,0.4,5.8c0.8,2.3,2.4,3.5,4.9,3.5c2.2,0,3.8-1,4.8-3.1c0.1-0.2,0.3-0.3,0.5-0.2l2.1,1 c0.2,0.1,0.2,0.2,0.1,0.4c-0.7,1.5-1.7,2.7-3,3.5c-1.3,0.8-2.8,1.2-4.6,1.2C538.8,154.5,536.2,152.7,535,149z"></path> <path class="st0" d="M552.7,153.8l8.1-22.8c0.1-0.2,0.2-0.3,0.4-0.3h2.2c0.2,0,0.4,0.1,0.4,0.3l8,22.8c0.1,0.2,0,0.3-0.2,0.3h-2.4 c-0.2,0-0.4-0.1-0.4-0.3l-1.8-5.1h-9.5l-1.8,5.1c-0.1,0.2-0.2,0.3-0.4,0.3h-2.4C552.7,154.1,552.6,154,552.7,153.8z M558.6,145.9 h7.5l-3.7-10.7h-0.1L558.6,145.9z"></path> <path class="st0" d="M575.7,153.8V131c0-0.2,0.1-0.3,0.3-0.3h2.4c0.2,0,0.3,0.1,0.3,0.3v20.1c0,0.1,0.1,0.2,0.2,0.2h11.2 c0.2,0,0.3,0.1,0.3,0.3v2.2c0,0.2-0.1,0.3-0.3,0.3h-14.1C575.8,154.1,575.7,154,575.7,153.8z"></path> <path class="st0" d="M594.3,153.8V131c0-0.2,0.1-0.3,0.3-0.3h2.4c0.2,0,0.3,0.1,0.3,0.3v22.8c0,0.2-0.1,0.3-0.3,0.3h-2.4 C594.4,154.1,594.3,154,594.3,153.8z"></path> <path class="st0" d="M603.2,153.8V131c0-0.2,0.1-0.3,0.3-0.3h14.1c0.2,0,0.3,0.1,0.3,0.3v2.2c0,0.2-0.1,0.3-0.3,0.3h-11.2 c-0.1,0-0.2,0.1-0.2,0.2v6.9c0,0.1,0.1,0.2,0.2,0.2h9.5c0.2,0,0.3,0.1,0.3,0.3v2.2c0,0.2-0.1,0.3-0.3,0.3h-9.5 c-0.1,0-0.2,0.1-0.2,0.2v7.1c0,0.1,0.1,0.2,0.2,0.2h11.2c0.2,0,0.3,0.1,0.3,0.3v2.2c0,0.2-0.1,0.3-0.3,0.3h-14.1 C603.3,154.1,603.2,154,603.2,153.8z"></path> <path class="st0" d="M622.6,153.8V131c0-0.2,0.1-0.3,0.3-0.3h2.2c0.3,0,0.5,0.1,0.6,0.3l10.6,17.6h0.1V131c0-0.2,0.1-0.3,0.3-0.3 h2.2c0.2,0,0.3,0.1,0.3,0.3v22.8c0,0.2-0.1,0.3-0.3,0.3h-2.2c-0.3,0-0.5-0.1-0.6-0.3l-10.7-17.5h-0.1v17.5c0,0.2-0.1,0.3-0.3,0.3 h-2.2C622.7,154.1,622.6,154,622.6,153.8z"></path> <path class="st0" d="M652.7,154.1h-2.4c-0.2,0-0.3-0.1-0.3-0.3v-20.1c0-0.1-0.1-0.2-0.2-0.2h-6.4c-0.2,0-0.3-0.1-0.3-0.3V131 c0-0.2,0.1-0.3,0.3-0.3h16.3c0.2,0,0.3,0.1,0.3,0.3v2.2c0,0.2-0.1,0.3-0.3,0.3h-6.4c-0.1,0-0.2,0.1-0.2,0.2v20.1 C653.1,154,652.9,154.1,652.7,154.1z"></path> <path class="st0" d="M663.7,153.8V131c0-0.2,0.1-0.3,0.3-0.3h14.1c0.2,0,0.3,0.1,0.3,0.3v2.2c0,0.2-0.1,0.3-0.3,0.3H667 c-0.1,0-0.2,0.1-0.2,0.2v6.9c0,0.1,0.1,0.2,0.2,0.2h9.5c0.2,0,0.3,0.1,0.3,0.3v2.2c0,0.2-0.1,0.3-0.3,0.3H667 c-0.1,0-0.2,0.1-0.2,0.2v7.1c0,0.1,0.1,0.2,0.2,0.2h11.2c0.2,0,0.3,0.1,0.3,0.3v2.2c0,0.2-0.1,0.3-0.3,0.3H664 C663.8,154.1,663.7,154,663.7,153.8z"></path> </g> <g> <path class="st0" d="M73.7,60.7c-9.1,0-17.9,0-27,0c0-5.8,0-11.3,0-16.9c15.8,0,31.5,0,47.5,0c0,18.9,0,37.8,0,56.7 c-0.2,0.1-0.5,0.4-0.7,0.4c-17.4-0.1-34.9,0.4-52.2-0.6c-18.8-1.1-29.5-10.7-33.8-29c-3.3-13.7-3-27.5,1.4-41 C13.7,15,24.5,6,40.4,5.1C58.2,4.2,76,4.9,94.2,4.9c0,4.9,0,10.3,0,16.1c-1.4,0.1-2.8,0.2-4.1,0.2c-12.1,0-24.3,0-36.4,0 c-15.9,0-23.2,5.8-24.6,21.7c-0.8,8.5,0.4,17.3,1.8,25.8c1.5,8.9,7.7,14,16.7,14.6c8.6,0.6,17.3,0.1,26.2,0.1 C73.7,76.1,73.7,68.7,73.7,60.7z"></path> <path class="st0" d="M484,100.5c0-5.5,0-10.8,0-16.6c5.6,0,11,0,16.4,0c10.1,0,20.3,0.1,30.4,0c2.8,0,5.7-0.3,8.5-0.8 c5.6-1.1,8.6-4.6,8.8-9.9c0.3-6-2.6-10.7-8-12.2c-2.6-0.7-5.3-0.9-8-1c-9.1-0.3-18.3-0.2-27.4-0.7C481,58,474,33.1,484,16.3 c4.3-7.2,10.9-11,19-11.4c13.1-0.6,26.2-0.6,39.4-0.8c7.7-0.1,15.4,0,23.4,0c0,5.7,0,11.2,0,17.2c-1.5,0-3,0-4.6,0 c-15.7,0-31.4-0.1-47.1,0.1c-8.6,0.1-11.8,3.5-11.4,11.4c0.2,4.7,2.6,7.9,7.1,8.9c3,0.7,6.2,0.9,9.3,1c9,0.3,18,0.1,27,0.7 c19.1,1.3,26.4,15.4,24.8,32.2c-1.5,15.8-9.9,24.1-25.9,24.7C524.9,101.1,504.6,100.5,484,100.5z"></path> <path class="st0" d="M103,101c3.6-8.8,7-17.2,10.5-25.5c9.5-22.6,19-45.1,28.4-67.8c1.2-2.9,2.7-3.8,5.6-3.7 c5.4,0.2,10.9,0.3,16.3,0c3.1-0.2,4.2,1.2,5.2,3.7c10,23.9,20,47.8,30,71.7c2.9,6.9,5.8,13.9,9,21.5c-8,0-15.5,0.1-22.9-0.1 c-0.9,0-2.1-1.7-2.6-2.8c-2.5-5.4-4.6-11-7.2-16.4c-0.6-1.3-2.5-2.7-3.8-2.8c-10.7-0.2-21.4-0.2-32.1,0c-1.3,0-3.1,1.3-3.6,2.5 c-2.7,5.7-4.9,11.5-7.6,17.2c-0.5,1.1-2.1,2.4-3.3,2.4C117.7,101.1,110.6,101,103,101z M169.4,61.4c-4.6-11.4-9.1-22.4-14-34.5 c-4.9,12.2-9.4,23.2-14,34.5C151,61.4,159.9,61.4,169.4,61.4z"></path> <path class="st0" d="M368.8,101c4.5-10.8,8.8-21.2,13.1-31.5c8.6-20.6,17.4-41.2,25.9-61.9c1.1-2.6,2.3-3.7,5.2-3.6 c5.4,0.3,10.9,0.3,16.3,0c3.1-0.2,4.5,1.1,5.6,3.8c11.4,27.4,22.8,54.7,34.3,82c1.5,3.5,2.9,7.1,4.6,11.2 c-7.9,0-15.3,0.1-22.6-0.1c-1,0-2.2-1.5-2.7-2.6c-2.5-5.6-5-11.2-7.2-16.9c-0.8-2-1.8-2.8-4.1-2.8c-10.6,0.1-21.1,0.1-31.7,0 c-2.5,0-3.4,1-4.3,3.1c-2.2,5.4-4.6,10.7-6.8,16.2c-0.9,2.3-2.1,3.3-4.7,3.2C382.9,100.9,376.1,101,368.8,101z M435.3,61.4 c-4.7-11.5-9.1-22.5-14-34.4c-4.9,12.1-9.4,23.1-14,34.4C416.7,61.4,425.7,61.4,435.3,61.4z"></path> <path class="st0" d="M679.1,101c-7.3,0-14.6,0.1-21.8-0.1c-1.1,0-2.5-1.5-3.1-2.7c-2.5-5.4-4.8-10.9-7.1-16.5 c-0.8-2.1-1.8-3.1-4.3-3c-10.6,0.2-21.1,0.1-31.7,0c-2.2,0-3.2,0.8-4,2.8c-2.3,5.7-4.6,11.3-7.3,16.9c-0.6,1.2-2.3,2.5-3.6,2.5 c-7,0.2-14,0.1-21.5,0.1c0.7-1.9,1.2-3.6,1.9-5.3c12.3-29.3,24.6-58.6,36.8-87.9c1.3-3,2.8-4,6-3.8c5.6,0.3,11.1-0.1,16.7,0.2 c1.3,0.1,3.3,1.1,3.8,2.3C653,37.4,666,68.4,679,99.4C679.1,99.8,679.1,100.2,679.1,101z M613.1,61.3c9.6,0,18.5,0,28,0 C636.5,50,632,39,627.2,27C622.3,38.9,617.8,49.9,613.1,61.3z"></path> <path class="st0" d="M379.1,4.1c-4.9,11.1-9.5,21.6-14.1,32c-9,20.3-18.1,40.6-27,61c-1.2,2.8-2.6,4.4-5.9,4 c-3.1-0.3-6.3-0.5-9.4,0c-5.6,0.9-8.1-1.4-10.2-6.6C300.4,65.2,287.7,36,275.3,6.8c-0.3-0.6-0.5-1.3-0.9-2.3c7.8,0,15.2,0,23.2,0 c9.4,23.7,19,47.7,28.9,72.6c4.4-10.9,8.5-20.9,12.5-30.9c5.2-12.9,10.5-25.9,15.6-38.9c1-2.6,2.4-3.3,5.1-3.3 C365.8,4.2,372.1,4.1,379.1,4.1z"></path> <path class="st0" d="M218,4.3c6.3,0,12.8,0,19.7,0c0,3.6,0,7,0,10.4c0,15.9,0,31.7,0.1,47.6c0,1.1,0.1,2.3,0.1,3.4 c0.9,13.8,4.4,17.4,18.4,18c9.3,0.4,18.6,0.1,28.2,0.1c0,5.7,0,11.2,0,16.8c-11.6,0-23.2,0.1-34.8-0.1c-3.7-0.1-7.4-0.6-11-1.6 c-11.6-3.2-20.2-12.4-20.5-24.6C217.5,51.1,218,27.9,218,4.3z"></path> </g> </g> </svg>
+</span><span class="sep" aria-hidden="true"></span>
+  <div class="titulo"><h1>Informes de visita</h1><p id="subt"></p></div>
+  <div class="jea"><img src="logo_jea.png" alt="JEA Prevención de Riesgos"><span><b>Lic. Marcelo Elvira</b>Higiene y Seguridad en el Trabajo</span></div>
+</div></header>
+
+<div class="wrap">
+  <div class="mesbar" id="mesbar"></div>
+  <div class="resumen"><div class="stats" id="stats"></div>
+    <div class="descargas">
+      <button class="btn" id="bPdf" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 19h16"/></svg>Informe completo (PDF)</button>
+      <button class="btn" id="bFilt" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V3h12v6M6 18H4v-7h16v7h-2M8 14h8v7H8z"/></svg>Bajar lo filtrado</button>
+      <button class="btn" id="bCsv" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4zM4 10h16M10 4v16"/></svg>Planilla (Excel)</button>
+    </div>
+  </div>
+</div>
+
+<div class="filtros"><div class="wrap">
+  <div class="campo"><label for="fSector">Sector</label><select id="fSector"></select></div>
+  <div class="campo"><label for="fTema">Tema</label><select id="fTema"></select></div>
+  <div class="campo"><label>Tipo</label><div class="seg" id="fTipo"><button type="button" data-v="todos" aria-pressed="true">Todos</button><button type="button" data-v="reinc">Reincidencias</button><button type="button" data-v="nuevo">Nuevos</button></div></div>
+  <div class="campo"><label for="fSeg">Seguimiento</label><select id="fSeg"><option value="todos">Todos</option><option value="sin">Sin anotar</option><option>Pendiente</option><option>En curso</option><option>Listo para verificar</option><option>Resuelto</option></select></div>
+  <div class="campo"><label for="fOT">Orden de trabajo</label><select id="fOT"></select></div>
+  <div class="campo"><label for="fOrden">Ordenar</label><select id="fOrden"><option value="tema">Por tema</option><option value="sector">Por sector</option><option value="numero">Por número</option><option value="antig">Más antiguos primero</option></select></div>
+  <div class="campo q"><label for="fQ">Buscar</label><input id="fQ" type="search" placeholder="matafuego, contratapa, escalera…"></div>
+  <div class="activos" id="activos"></div>
+</div></div>
+
+<div class="wrap"><div class="cuerpo">
+  <aside class="lateral" id="lateral"></aside>
+  <main><div id="lista"></div><section class="grupo verif" id="verif"></section></main>
+</div></div>
+<footer><div class="wrap"><img src="logo_jea.png" alt=""><span>Informes elaborados por el Lic. Marcelo Elvira, Higiene y Seguridad en el Trabajo (M.P. 0656 C.P.I.I.) · JEA Prevención de Riesgos · marcelo.a.elvira@gmail.com · 15-4564-6462</span></div></footer>
+
+<div class="selbar" id="selbar" hidden><div class="wrap">
+  <span class="n tab" id="selN"></span><span id="selTxt"></span>
+  <button class="link" type="button" id="selVer">Ver solo la selección</button>
+  <button class="link" type="button" id="selLimpiar">Quitar selección</button>
+  <span style="flex:1"></span>
+  <button class="btn prim" type="button" id="selOT"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5h10M9 12h10M9 19h10M4 5h1M4 12h1M4 19h1"/></svg>Armar orden de trabajo</button>
+</div></div>
+
+<div class="velo" id="velo" hidden></div>
+<div class="toast" id="toast" hidden></div>
+<div id="ot"></div>
+
+<script>
+// ---------- configuración ----------
+// Versión publicada: los datos, las fotos y los PDF van cifrados (AES-256-GCM, clave derivada de la contraseña con PBKDF2).
+// Vista previa: DATA va en la página y no se envía nada a la planilla.
+const CIFRADO = true;
+const SAL = "MkYwSudEOCIyyczOQEEo7A==", ITER = 310000;
+const ADMIN = /(^|[#&])lic=/.test(location.hash);   // modo Lic. Elvira (link propio)
+let DATA = null;
+let API_URL = "", API_TOKEN = "", CLAVE = null;
+
+const st = {mes: "", sector:"", tema:"", tipo:"todos", seg:"todos", ot:"", orden:"tema", q:"", soloSel:false};
+const SEL = new Set();                       // "mes|n"
+let NOTAS = {}, ORDENES = [], AREAS_EXTRA = [];
+const ESTADOS = ["Pendiente", "En curso", "Listo para verificar"];
+const SLUG = {"Pendiente":"pendiente","En curso":"curso","Listo para verificar":"listo","Resuelto":"resuelto"};
+let otNum = 0;
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const M = () => DATA.meses.find(m => m.clave === st.mes);
+const mesDe = c => DATA.meses.find(m => m.clave === c);
+const mesIdx = c => DATA.meses.findIndex(m => m.clave === c);
+const temaDe = (m, k) => m.temas.find(t => t.key === k);
+const notas = (m, p) => ((NOTAS[m.clave] || {})[String(p.n)] || []);
+const ultEstado = (m, p) => { const n = notas(m, p); return n.length ? n[n.length - 1].estado : ""; };
+const hecho = e => e === "Listo para verificar" || e === "Resuelto";
+const hoy = () => new Date().toLocaleDateString("es-AR");
+const key = (m, p) => m.clave + "|" + p.n;
+const corto = s => s.replace("Instalación eléctrica — ", "Eléctrico · ");
+function ls(k, v){ try { if (v === undefined) return localStorage.getItem(k) || ""; if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch(e){ return ""; } }
+const quien = () => ls("galvasa-nombre"), setQuien = v => ls("galvasa-nombre", v);
+function toast(t){ const el = $("toast"); el.textContent = t; el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => el.hidden = true, 2800); }
+
+// ---------- cifrado ----------
+const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+const a64 = u => btoa(String.fromCharCode(...new Uint8Array(u)));
+async function derivar(pw){
+  const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(pw), "PBKDF2", false, ["deriveKey"]);
+  return crypto.subtle.deriveKey({name: "PBKDF2", salt: b64(SAL), iterations: ITER, hash: "SHA-256"}, base, {name: "AES-GCM", length: 256}, true, ["decrypt"]);
+}
+async function descifrar(buf){
+  const u = new Uint8Array(buf);
+  return crypto.subtle.decrypt({name: "AES-GCM", iv: u.slice(0, 12)}, CLAVE, u.slice(12));
+}
+async function bajarCifrado(ruta){
+  const r = await fetch(ruta + ".enc", {cache: "no-cache"}); if (!r.ok) throw new Error(ruta);
+  return descifrar(await r.arrayBuffer());
+}
+// fotos: en la vista previa van directo; cifradas se bajan, se descifran y se muestran como blob
+const BLOBS = new Map();
+function urlFoto(ruta){
+  if (!CIFRADO) return Promise.resolve(ruta);
+  if (!BLOBS.has(ruta)) BLOBS.set(ruta, bajarCifrado(ruta).then(b => URL.createObjectURL(new Blob([b], {type: "image/jpeg"}))).catch(() => ""));
+  return BLOBS.get(ruta);
+}
+const img = (ruta, extra = "") => `<img data-e="${esc(ruta)}" alt="" ${extra}>`;
+function ponerFoto(el, ruta){ el.dataset.e = ruta; el.removeAttribute("src"); return urlFoto(ruta).then(u => { if (el.dataset.e === ruta && u) el.src = u; }); }
+const visibles = "IntersectionObserver" in window ? new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting){ visibles.unobserve(e.target); ponerFoto(e.target, e.target.dataset.e); } }), {rootMargin: "400px"}) : null;
+function hidratar(root){ root.querySelectorAll("img[data-e]:not([src])").forEach(el => visibles ? visibles.observe(el) : ponerFoto(el, el.dataset.e)); }
+function cargarTodas(root){
+  return Promise.all([...root.querySelectorAll("img[data-e]")].map(el => (el.src ? Promise.resolve() : ponerFoto(el, el.dataset.e))
+    .then(() => el.complete ? null : new Promise(r => { el.onload = el.onerror = r; }))));
+}
+new MutationObserver(ms => ms.forEach(m => m.addedNodes.forEach(n => { if (n.nodeType === 1){ if (n.matches("img[data-e]") && !n.src) hidratar(n.parentNode); else hidratar(n); } })))
+  .observe(document.body, {childList: true, subtree: true});
+
+async function bajarPdf(clave, nombre){
+  if (!CIFRADO){ location.href = "pdf/" + encodeURIComponent(nombre); return; }
+  toast("Preparando el PDF…");
+  try {
+    const b = await bajarCifrado("pdf/" + clave + ".pdf");
+    const u = URL.createObjectURL(new Blob([b], {type: "application/pdf"}));
+    const a = document.createElement("a"); a.href = u; a.download = nombre; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(u), 60000);
+  } catch(e){ toast("No se pudo bajar el PDF"); }
+}
+
+// ---------- ingreso ----------
+async function abrirCon(k){
+  CLAVE = k;
+  const d = JSON.parse(new TextDecoder().decode(await bajarCifrado("d")));
+  return d;
+}
+async function iniciar(){
+  if (!CIFRADO){ arrancar(); return; }
+  const g = ls("galvasa-k");
+  if (g){
+    try { const k = await crypto.subtle.importKey("raw", b64(g), "AES-GCM", true, ["decrypt"]); DATA = await abrirCon(k); arrancar(); return; }
+    catch(e){ ls("galvasa-k", null); }
+  }
+  $("login").hidden = false; $("clave").focus();
+}
+$("loginForm").addEventListener("submit", async e => {
+  e.preventDefault(); $("loginErr").textContent = "Abriendo…";
+  try {
+    const k = await derivar($("clave").value);
+    DATA = await abrirCon(k);
+    if ($("recordar").checked) ls("galvasa-k", a64(await crypto.subtle.exportKey("raw", k)));
+    $("login").hidden = true; arrancar();
+  } catch(err){ $("loginErr").textContent = "Contraseña incorrecta."; $("clave").select(); }
+});
+function salir(){ ls("galvasa-k", null); location.reload(); }
+
+// ---------- envío a la planilla (registro + aviso por mail) ----------
+async function enviar(ev){
+  ev = Object.assign({ts: new Date().toISOString(), mes: st.mes, pagina: "galvasa"}, ev);
+  if (ADMIN){ const m = location.hash.match(/lic=([^&]+)/); if (m) ev.clave = decodeURIComponent(m[1]); }
+  if (!API_URL && CIFRADO) return {ok: false};
+  if (!API_URL){ (window.ENVIADOS = window.ENVIADOS || []).push(ev); return {ok: true, preview: true, n: ++otNum}; }
+  try {
+    const r = await fetch(API_URL, {method: "POST", headers: {"Content-Type": "text/plain;charset=utf-8"}, body: JSON.stringify(Object.assign({token: API_TOKEN}, ev))});
+    return await r.json();
+  } catch(e){ return {ok: false}; }
+}
+async function cargarEstado(){
+  if (!API_URL){ if (CIFRADO) $("offline").hidden = false; return; }
+  try {
+    const r = await fetch(API_URL + "?accion=estado&token=" + encodeURIComponent(API_TOKEN)); const j = await r.json();
+    if (!j || !j.ok) throw 0;
+    NOTAS = j.seguimiento || {}; ORDENES = j.ordenes || []; AREAS_EXTRA = j.areas || [];
+    $("offline").hidden = true; render();
+  } catch(e){ $("offline").hidden = false; }
+}
+
+// ---------- órdenes de trabajo ----------
+const otsDe = (m, p) => ORDENES.filter(o => o.mes === m.clave && o.puntos.includes(p.n));
+const otsMes = m => ORDENES.filter(o => o.mes === m.clave);
+const otNombre = o => o.area + (o.cargo ? " · " + o.cargo : "");
+function otAvance(o){ const m = mesDe(o.mes); if (!m) return [0, o.puntos.length]; return [o.puntos.filter(n => { const p = m.puntos.find(x => x.n === n); return p && hecho(ultEstado(m, p)); }).length, o.puntos.length]; }
+function areas(){
+  const out = []; [...(DATA.areas || []), ...AREAS_EXTRA, ...ORDENES.map(o => o.area)].forEach(a => { a = String(a || "").trim(); if (a && !out.some(x => x.toLowerCase() === a.toLowerCase())) out.push(a); });
+  return out;
+}
+
+// ---------- historial y filtros ----------
+function refs(r){ return (String(r).match(/\d+/g) || []).map(Number); }
+function historia(m, p){
+  const out = [{mes: m.clave, n: p.n, fotos: p.fotos}];
+  let cm = m, cp = p;
+  while (cp && cp.ref){
+    const prev = DATA.meses[mesIdx(cm.clave) + 1], rs = refs(cp.ref);
+    if (!prev){ out.push({mes: cm.anterior, n: rs.join(" y "), fotos: [], solo: true}); break; }
+    const pp = prev.puntos.find(x => x.n === rs[0]); if (!pp) break;
+    out.push({mes: prev.clave, n: rs.join(" y "), fotos: pp.fotos}); cm = prev; cp = pp;
+  }
+  return out;
+}
+const desde = (m, p) => { const h = historia(m, p); return h[h.length - 1].mes; };
+const ordenMes = c => { const [a, b] = c.split("-").map(Number); return b * 100 + a; };
+function filtrar(){
+  const m = M(), q = st.q.trim().toLowerCase();
+  return m.puntos.filter(p => {
+    const ots = otsDe(m, p);
+    return (!st.soloSel || SEL.has(key(m, p))) &&
+    (!st.sector || p.sectores.includes(st.sector)) &&
+    (!st.tema || p.tema === st.tema) &&
+    (st.tipo === "todos" || (st.tipo === "reinc" ? !!p.ref : !p.ref)) &&
+    (st.seg === "todos" || (st.seg === "sin" ? !ultEstado(m, p) : ultEstado(m, p) === st.seg)) &&
+    (!st.ot || (st.ot === "sin" ? !ots.length : st.ot === "con" ? ots.length : ots.some(o => o.numero === st.ot))) &&
+    (!q || (p.titulo + " " + p.rec + " " + p.lugar + " " + ots.map(o => o.numero + " " + otNombre(o)).join(" ")).toLowerCase().includes(q));
+  });
+}
+function chips(m, p){
+  let s = p.ref ? `<span class="chip reinc">Reincidencia · punto ${esc(p.ref)} del ${esc(m.anterior)}${desde(m, p) !== m.anterior ? " · desde el " + esc(desde(m, p)) : ""}</span>` : `<span class="chip nuevo">Nuevo</span>`;
+  const e = ultEstado(m, p); if (e) s += `<span class="chip est-${SLUG[e]}">${e}</span>`;
+  otsDe(m, p).forEach(o => s += `<button type="button" class="chip ot" data-otf="${esc(o.numero)}" title="Ver los puntos de esta orden">${esc(o.numero)} · ${esc(o.area)}</button>`);
+  return s;
+}
+function fila(m, p){
+  const n = notas(m, p), u = n[n.length - 1], on = SEL.has(key(m, p));
+  return `<article class="fila${on ? " sel" : ""}" data-n="${p.n}">
+    <span class="ck"><input type="checkbox" data-ck="${p.n}" ${on ? "checked" : ""} aria-label="Seleccionar punto ${p.n}"></span>
+    <span class="num">${p.n}</span>
+    <div><div class="meta">${chips(m, p)}</div><div class="obs">${esc(p.titulo)}</div><div class="sector">${esc(p.lugar)}</div></div>
+    <div class="acc acc-col"><b>Acción</b>${esc(p.rec)}${u ? `<div class="nota-mini"><b>${esc(u.quien)}</b> · ${esc(u.fecha)}: ${esc(u.texto)}</div>` : ""}</div>
+    <div class="thumbs">${p.fotos.slice(0, 3).map(x => img(x)).join("")}</div></article>`;
+}
+function grupos(m, lista){
+  const g = [];
+  if (st.orden === "tema") m.temas.forEach(t => { const ps = lista.filter(p => p.tema === t.key); if (ps.length) g.push({titulo: t.nombre, tema: t, ps}); });
+  else if (st.orden === "sector"){ const o = []; lista.forEach(p => { const s = p.sectores[0]; if (!o.includes(s)) o.push(s); }); o.forEach(s => g.push({titulo: s, ps: lista.filter(p => p.sectores[0] === s)})); }
+  else if (st.orden === "antig") g.push({titulo: "Más antiguos primero", ps: [...lista].sort((a, b) => (a.ref ? ordenMes(desde(m, a)) : 99999) - (b.ref ? ordenMes(desde(m, b)) : 99999) || a.n - b.n)});
+  else g.push({titulo: "Por número", ps: lista});
+  return g;
+}
+function otsGrupo(m, ps){
+  const os = otsMes(m).filter(o => ps.some(p => o.puntos.includes(p.n)));
+  if (!os.length) return "";
+  return `<div class="ots">Órdenes de trabajo: ${os.map(o => { const k = ps.filter(p => o.puntos.includes(p.n)).length; return `<button type="button" class="chip ot" data-otf="${esc(o.numero)}">${esc(o.numero)} · ${esc(otNombre(o))} · ${k} de este grupo</button>`; }).join(" ")}</div>`;
+}
+
+// ---------- pantalla ----------
+function render(){
+  const m = M(), lista = filtrar();
+  $("subt").textContent = `Informe ${m.clave} · visita del ${m.visita} · emitido el ${m.emision}`;
+  $("tbR").innerHTML = (ADMIN ? `<span class="admin-badge">Modo Lic. Elvira</span> ` : "") + (CIFRADO ? `<button class="link salir" type="button" id="salir">Salir</button>` : "");
+  $("mesbar").innerHTML = `<span class="lbl">Informe</span>` + DATA.meses.map((x, i) => `<button class="mes" type="button" data-mes="${x.clave}" aria-pressed="${x.clave === st.mes}">${x.clave}${i === 0 ? '<span class="tag">último</span>' : ""}</button>`).join("")
+    + `<select class="mes" id="fArch" aria-label="Informes anteriores en PDF"><option value="">Anteriores (PDF) ▾</option>${DATA.archivo.map(a => `<option value="${esc(a.clave)}">Informe ${a.clave}</option>`).join("")}</select>`;
+  const nr = m.puntos.filter(p => p.ref).length, cnt = e => m.puntos.filter(p => ultEstado(m, p) === e).length, nOt = m.puntos.filter(p => otsDe(m, p).length).length;
+  $("stats").innerHTML = `<div class="stat"><b class="tab">${m.puntos.length}</b><span>puntos</span></div><div class="stat r"><b class="tab">${nr}</b><span>reincidencias</span></div><div class="stat n"><b class="tab">${m.puntos.length - nr}</b><span>nuevos</span></div><div class="stat"><b class="tab">${nOt}</b><span>con orden de trabajo</span></div><div class="stat"><b class="tab">${cnt("En curso")}</b><span>en curso</span></div><div class="stat l"><b class="tab">${cnt("Listo para verificar")}</b><span>listos para verificar</span></div><div class="stat ok"><b class="tab">${m.corregidos.length}</b><span>corregidos en la visita</span></div>`;
+  const sects = []; m.puntos.forEach(p => p.sectores.forEach(s => { if (!sects.includes(s)) sects.push(s); }));
+  $("fSector").innerHTML = `<option value="">Todos los sectores</option>` + sects.map(s => `<option ${s === st.sector ? "selected" : ""}>${esc(s)}</option>`).join("");
+  $("fTema").innerHTML = `<option value="">Todos los temas</option>` + m.temas.map(t => `<option value="${t.key}" ${t.key === st.tema ? "selected" : ""}>${esc(corto(t.nombre))}</option>`).join("");
+  const om = otsMes(m);
+  $("fOT").innerHTML = `<option value="">Todas</option><option value="con" ${st.ot === "con" ? "selected" : ""}>Con orden de trabajo</option><option value="sin" ${st.ot === "sin" ? "selected" : ""}>Sin orden de trabajo</option>`
+    + om.map(o => { const [h, t] = otAvance(o); return `<option value="${esc(o.numero)}" ${o.numero === st.ot ? "selected" : ""}>${esc(o.numero)} · ${esc(otNombre(o))} (${h}/${t} listos)</option>`; }).join("");
+  const nS = s => m.puntos.filter(p => p.sectores.includes(s)).length;
+  $("lateral").innerHTML = `<h3>Sectores</h3><div class="lsec"><label><input type="radio" name="ls" data-s="" ${!st.sector ? "checked" : ""}>Todos<span class="c tab">${m.puntos.length}</span></label></div>`
+    + sects.map(s => `<div class="lsec"><label><input type="radio" name="ls" data-s="${esc(s)}" ${s === st.sector ? "checked" : ""}>${esc(s)}<span class="c tab">${nS(s)}</span></label><button class="sug" type="button" data-sug="${esc(s)}" title="Sugerir otro nombre para este sector" aria-label="Sugerir otro nombre para ${esc(s)}">✎</button></div>`).join("")
+    + `<div class="ayuda">✎ Si en GALVASA a un sector lo llaman distinto, sugerí el nombre y lo unificamos en los próximos informes.</div>`
+    + `<h3 style="margin-top:18px">Órdenes de trabajo</h3>` + (om.length ? om.map(o => { const [h, t] = otAvance(o); return `<button type="button" class="lot${o.numero === st.ot ? " on" : ""}" data-otf="${esc(o.numero)}"><b>${esc(o.numero)}</b><span>${esc(otNombre(o))} · ${esc(o.fecha)}</span><span class="barra"><i style="width:${Math.round(100 * h / t)}%"></i></span><span class="c">${h} de ${t} listos para verificar o resueltos</span></button>`; }).join("") : `<div class="ayuda">Todavía no se armó ninguna orden con este informe. Seleccioná puntos y tocá «Armar orden de trabajo».</div>`);
+  const act = [];
+  if (st.soloSel) act.push("Sólo la selección");
+  if (st.sector) act.push("Sector: " + st.sector);
+  if (st.tema) act.push("Tema: " + corto(temaDe(m, st.tema).nombre));
+  if (st.tipo !== "todos") act.push(st.tipo === "reinc" ? "Reincidencias" : "Nuevos");
+  if (st.seg !== "todos") act.push("Seguimiento: " + (st.seg === "sin" ? "sin anotar" : st.seg));
+  if (st.ot) act.push(st.ot === "sin" ? "Sin orden de trabajo" : st.ot === "con" ? "Con orden de trabajo" : "Orden " + st.ot);
+  if (st.q) act.push("“" + st.q + "”");
+  const otSel = om.find(o => o.numero === st.ot);
+  $("activos").innerHTML = act.map(a => `<span class="pill">${esc(a)}</span>`).join("") + (act.length ? `<button class="link" type="button" id="limpiar">Limpiar filtros</button>` : "")
+    + (otSel ? `<button class="link" type="button" data-bajot="${esc(otSel.numero)}">Volver a bajar la orden ${esc(otSel.numero)} (PDF)</button>` : "")
+    + (st.sector && innerWidth < 900 ? `<button class="link" type="button" data-sug="${esc(st.sector)}">Sugerir otro nombre para este sector</button>` : "")
+    + `<span class="cuenta"><span class="tab">${lista.length} de ${m.puntos.length} puntos</span><button class="link" type="button" id="selFilt">Seleccionar los ${lista.length}</button></span>`;
+  $("lista").innerHTML = (otSel ? `<div class="otcab"><b>${esc(otSel.numero)}</b> · dirigida a <b>${esc(otNombre(otSel))}</b> · pedida por ${esc(otSel.quien)} el ${esc(otSel.fecha)}${otSel.texto ? `<br><span class="muted">${esc(otSel.texto)}</span>` : ""}</div>` : "")
+    + (grupos(m, lista).map(g => `<section class="grupo"><div class="ghead"><h2>${esc(g.titulo)}</h2><span class="n tab">${g.ps.length} punto${g.ps.length === 1 ? "" : "s"}</span><button class="selg" type="button" data-selg="${g.ps.map(p => p.n).join(",")}">Seleccionar el grupo</button>${otsGrupo(m, g.ps)}</div>`
+    + (g.tema ? `<details class="criterio"><summary>Criterio y normativa del tema</summary><p>${esc(g.tema.criterio)}</p><p><b>Encuadre:</b> ${esc(g.tema.enc)}</p></details>` : `<div style="height:8px"></div>`)
+    + `<div class="filas">${g.ps.map(p => fila(m, p)).join("")}</div></section>`).join("") || `<p class="muted">Ningún punto coincide con los filtros.</p>`);
+  $("verif").innerHTML = `<div class="ghead"><h2>Verificado como corregido o conforme en la visita</h2><span class="n tab">${m.corregidos.length}</span></div><div class="vlist">`
+    + m.corregidos.map(c => `<div class="vitem">${c.fotos[0] ? img(c.fotos[0]) : ""}<span>${esc(c.texto)}</span></div>`).join("") + `</div>`;
+  selbar();
+}
+function selbar(){
+  const n = SEL.size; $("selbar").hidden = !n;
+  $("selN").textContent = n; $("selTxt").textContent = n === 1 ? "punto seleccionado" : "puntos seleccionados";
+  $("selVer").textContent = st.soloSel ? "Ver todos" : "Ver solo la selección";
+}
+
+// ---------- detalle y seguimiento ----------
+let cur = null, fi = 0, fotosDet = [];
+function abrir(n){
+  const m = M(), p = m.puntos.find(x => x.n === n); if (!p) return;
+  cur = p; fi = 0; const h = historia(m, p), t = temaDe(m, p.tema), ns = notas(m, p), os = otsDe(m, p);
+  fotosDet = h.flatMap(x => x.fotos.map(f => ({f, mes: x.mes})));
+  $("velo").innerHTML = `<div class="det" role="dialog" aria-modal="true" aria-labelledby="dTit"><div class="visor"><div class="grande"><button class="nav izq" type="button" id="pPrev" aria-label="Foto anterior">‹</button><img id="pBig" alt=""><button class="nav der" type="button" id="pNext" aria-label="Foto siguiente">›</button></div><div class="leyenda" id="pLey"></div><div class="tira" id="pTira"></div></div>
+  <div class="info"><button class="cerrar" type="button" data-cerrar>Cerrar ✕</button>
+    <div class="meta"><span class="num">Punto ${p.n}</span><span class="sector">${esc(p.lugar)}</span></div><div class="meta">${chips(m, p)}</div>
+    <h3 id="dTit">${esc(p.titulo)}</h3>
+    <div class="acc"><b>Acción a realizar</b><br>${esc(p.rec)}</div>
+    <label style="display:flex;gap:8px;align-items:center;font-size:14px;cursor:pointer"><input type="checkbox" data-ck="${p.n}" ${SEL.has(key(m, p)) ? "checked" : ""} style="width:18px;height:18px;accent-color:var(--accent)">Sumar este punto a la selección (orden de trabajo)</label>
+    ${os.length ? `<div class="bloque ots-det"><h4>Órdenes de trabajo</h4>${os.map(o => `<div class="o"><b>${esc(o.numero)}</b><span>${esc(otNombre(o))} · pedida por ${esc(o.quien)} el ${esc(o.fecha)}</span><span style="flex:1"></span><button class="link" type="button" data-otf="${esc(o.numero)}">Ver sus puntos</button><button class="link" type="button" data-bajot="${esc(o.numero)}">Bajar (PDF)</button></div>`).join("")}</div>` : ""}
+    <div class="bloque"><h4>Tema · ${esc(t.nombre)}</h4><div class="muted">${esc(t.criterio)}</div><div class="muted" style="margin-top:4px"><b>Encuadre:</b> ${esc(t.enc)}</div></div>
+    <div class="bloque"><h4>Historial del punto</h4><div class="hist">${h.map((x, i) => `<div class="hrow ${i ? "" : "actual"}"><div class="m">${esc(x.mes)}<small>punto ${esc(x.n)}</small></div><div class="ph">${x.fotos.length ? x.fotos.slice(0, 4).map(f => img(f, `data-f="${esc(f)}"`)).join("") : `<span class="muted">${x.solo ? "Informe en PDF" : "sin fotos"}</span>`}</div></div>`).join("")}</div></div>
+    <div class="bloque"><h4>Seguimiento de GALVASA</h4>
+      ${ns.map(x => `<div class="nota-mini" style="margin-bottom:6px"><span class="chip est-${SLUG[x.estado] || "pendiente"}">${esc(x.estado)}</span> <b>${esc(x.quien)}</b> · ${esc(x.fecha)}<br>${esc(x.texto)}${x.ejemplo ? ' <span class="ejemplo">· ejemplo</span>' : ""}</div>`).join("")}
+      <div class="form" id="fSegForm"><div class="estados">${ESTADOS.map(e => `<button type="button" aria-pressed="false" data-est="${e}">${e}</button>`).join("")}${ADMIN ? `<button type="button" class="adm" aria-pressed="false" data-est="Resuelto">Resuelto (verificado)</button>` : ""}</div>
+      <textarea id="sTxt" rows="2" placeholder="Qué se hizo o qué falta (por ejemplo: pedimos presupuesto al electricista)"></textarea>
+      <input id="sQuien" type="text" placeholder="Tu nombre" value="${esc(ADMIN ? "Lic. Marcelo Elvira" : quien())}">
+      <button class="btn prim" type="button" id="sGuardar" style="align-self:flex-start">Guardar seguimiento</button>
+      <span class="aviso">«Listo para verificar» avisa que ya está hecho; el Lic. Elvira lo verifica en la próxima visita y lo marca como resuelto.</span></div></div>
+  </div></div>`;
+  foto(); $("velo").hidden = false;
+}
+function foto(){
+  if (!fotosDet.length){ $("pBig").removeAttribute("src"); $("pTira").innerHTML = ""; $("pLey").textContent = "Sin fotos"; return; }
+  ponerFoto($("pBig"), fotosDet[fi].f);
+  $("pLey").textContent = `Visita ${fotosDet[fi].mes}${fotosDet[fi].mes !== st.mes ? " (informe anterior)" : ""} · foto ${fi + 1} de ${fotosDet.length}`;
+  $("pTira").innerHTML = fotosDet.map((x, i) => img(x.f, `class="${i === fi ? "on" : ""}" data-i="${i}"`)).join("");
+}
+async function guardarSeg(){
+  const est = document.querySelector("#fSegForm [data-est][aria-pressed='true']"), txt = $("sTxt").value.trim(), q = $("sQuien").value.trim();
+  if (!est){ toast("Elegí un estado"); return; }
+  if (!q){ toast("Poné tu nombre"); $("sQuien").focus(); return; }
+  if (!ADMIN) setQuien(q);
+  const m = M(), nota = {estado: est.dataset.est, quien: q, fecha: hoy(), texto: txt};
+  $("sGuardar").disabled = true;
+  const r = await enviar({tipo: "seguimiento", punto: cur.n, sector: cur.lugar, titulo: cur.titulo, estado: nota.estado, texto: txt, quien: q});
+  if (!r.ok){ toast("No se pudo guardar. Revisá la conexión y probá de nuevo."); $("sGuardar").disabled = false; return; }
+  ((NOTAS[m.clave] = NOTAS[m.clave] || {})[cur.n] = NOTAS[m.clave][cur.n] || []).push(nota);
+  toast("Seguimiento guardado"); const n = cur.n; render(); abrir(n);
+}
+
+// ---------- orden de trabajo ----------
+function selPuntos(){ const m = M(); return m.puntos.filter(p => SEL.has(key(m, p))); }
+function abrirOT(){
+  const ps = selPuntos(), m = M();
+  const ya = ps.filter(p => otsDe(m, p).length);
+  $("velo").innerHTML = `<div class="caja" role="dialog" aria-modal="true" aria-labelledby="otT"><div class="cab"><h3 id="otT">Orden de trabajo</h3><button class="cerrar" type="button" data-cerrar>Cerrar ✕</button></div><div class="cpo">
+    <div class="dos"><div class="form"><label for="otA">Área</label><input id="otA" type="text" list="otAreas" autocomplete="off" placeholder="Elegí de la lista o escribí una nueva"><datalist id="otAreas">${areas().map(a => `<option value="${esc(a)}">`).join("")}</datalist></div>
+    <div class="form"><label for="otC">A cargo de (opcional)</label><input id="otC" type="text" placeholder="Nombre del responsable"></div></div>
+    <div class="dos"><div class="form"><label for="otP">Pedida por</label><input id="otP" type="text" value="${esc(quien())}" placeholder="Tu nombre"></div><div></div></div>
+    <div class="form"><label for="otO">Observaciones para esta orden</label><textarea id="otO" rows="3" placeholder="Indicaciones, prioridades, a quién avisar al terminar…"></textarea></div>
+    ${ya.length ? `<div class="aviso">Ojo: ${ya.length === 1 ? "el punto" : "los puntos"} ${ya.map(p => p.n).join(", ")} ya ${ya.length === 1 ? "está" : "están"} en otra orden (${[...new Set(ya.flatMap(p => otsDe(m, p).map(o => o.numero)))].join(", ")}). Se pueden repetir si hace falta.</div>` : ""}
+    <div class="form"><label>Puntos incluidos (${ps.length})</label><div class="lsel">${ps.map(p => `<div><span class="num" style="font-size:16px">${p.n}</span><span><b>${esc(p.titulo)}</b><br><span class="muted">${esc(p.lugar)}</span></span><button class="x" type="button" data-quitar="${p.n}" aria-label="Quitar el punto ${p.n}">✕</button></div>`).join("")}</div></div>
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><button class="btn prim" type="button" id="otGen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 19h16"/></svg>Generar la orden (PDF)</button><span class="aviso">Queda numerada y asociada a cada punto, para filtrarla y seguirla después. Sale un PDF para imprimir o mandar.</span></div>
+  </div></div>`;
+  $("velo").hidden = false;
+}
+async function generarOT(){
+  const ps = selPuntos(), a = $("otA").value.trim(), c = $("otC").value.trim(), pp = $("otP").value.trim(), o = $("otO").value.trim(), m = M();
+  if (!a){ toast("Indicá el área"); $("otA").focus(); return; }
+  if (!pp){ toast("Poné tu nombre"); $("otP").focus(); return; }
+  setQuien(pp); $("otGen").disabled = true;
+  const area = areas().find(x => x.toLowerCase() === a.toLowerCase()) || a;
+  const r = await enviar({tipo: "orden", puntos: ps.map(p => p.n), area, cargo: c, dirigida: area + (c ? " · " + c : ""), quien: pp, texto: o});
+  if (!r.ok){ toast("No se pudo registrar la orden. Revisá la conexión y probá de nuevo."); $("otGen").disabled = false; return; }
+  const ot = {numero: r.numero || `OT ${m.clave}-${String(r.n || 1).padStart(3, "0")}`, mes: m.clave, fecha: hoy(), area, cargo: c, quien: pp, texto: o, puntos: ps.map(p => p.n)};
+  ORDENES.push(ot); SEL.clear(); st.soloSel = false;
+  $("velo").hidden = true; render();
+  await imprimirOT(ot); toast("Orden " + ot.numero + " generada");
+}
+async function imprimirOT(ot){
+  const m = mesDe(ot.mes); if (!m) return;
+  const ps = ot.puntos.map(n => m.puntos.find(p => p.n === n)).filter(Boolean);
+  $("ot").innerHTML = otDoc(m, ps, ot);
+  toast("Preparando la orden…");
+  await cargarTodas($("ot"));
+  document.body.classList.add("imprimiendo-ot");
+  await new Promise(r => setTimeout(r, 200));
+  window.print(); document.body.classList.remove("imprimiendo-ot");
+}
+function otDoc(m, ps, ot){
+  return `<div class="otdoc"><div class="oth"><span class="g">${document.querySelector(".logo-g").innerHTML}</span><img src="${document.querySelector(".jea img").getAttribute("src")}" alt=""></div>
+  <h1>Orden de trabajo</h1><div class="sub">${esc(ot.numero)} · Higiene y Seguridad · según el informe de visita ${m.clave} (visita del ${m.visita})</div>
+  <div class="datos"><div><b>Dirigida a</b>${esc(otNombre(ot))}</div><div><b>Fecha</b>${esc(ot.fecha)}</div><div><b>Pedida por</b>${esc(ot.quien)}</div><div><b>Puntos</b>${ps.length}</div></div>
+  ${ot.texto ? `<div class="obsot"><b>Observaciones:</b> ${esc(ot.texto)}</div>` : ""}
+  ${ps.map(p => `<div class="p"><span class="nn">${p.n}</span><div><div class="t">${esc(p.titulo)}</div><div class="s">${esc(p.lugar)}</div><div class="a"><b>Acción:</b> ${esc(p.rec)}</div></div><div class="ff">${p.fotos.slice(0, 2).map(f => img(f)).join("")}</div><div class="hecho">☐ Hecho · Fecha: ____/____/______ · Firma: ______________________ · Observaciones: ____________________________________</div></div>`).join("")}
+  <div class="firmas"><div>Entregó (GALVASA)</div><div>Recibió</div></div>
+  <div class="pie">Al terminar cada punto, marcarlo «Listo para verificar» en el portal de Higiene y Seguridad (filtro «Orden de trabajo» → ${esc(ot.numero)}). Criterios y normativa de cada tema: ver el informe de visita ${m.clave}.</div></div>`;
+}
+
+// ---------- sugerir nombre de sector ----------
+function abrirSug(s){
+  $("velo").innerHTML = `<div class="caja" role="dialog" aria-modal="true" aria-labelledby="sgT" style="width:min(560px,100%)"><div class="cab"><h3 id="sgT">Sugerir otro nombre</h3><button class="cerrar" type="button" data-cerrar>Cerrar ✕</button></div><div class="cpo">
+    <div class="form"><label>Nombre en el informe</label><input type="text" value="${esc(s)}" readonly id="sgA"></div>
+    <div class="form"><label for="sgN">Cómo lo llaman en GALVASA</label><input id="sgN" type="text" placeholder="Por ejemplo: Taller de mantenimiento"></div>
+    <div class="form"><label for="sgC">Comentario (opcional)</label><textarea id="sgC" rows="2" placeholder="Dónde queda, si incluye otro sector…"></textarea></div>
+    <div class="form"><label for="sgQ">Tu nombre</label><input id="sgQ" type="text" value="${esc(quien())}"></div>
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><button class="btn prim" type="button" id="sgEnv">Enviar sugerencia</button><span class="aviso">Le llega al Lic. Elvira; si la valida, el nombre cambia en los próximos informes y en esta página.</span></div>
+  </div></div>`;
+  $("velo").hidden = false;
+}
+async function enviarSug(){
+  const n = $("sgN").value.trim(), q = $("sgQ").value.trim();
+  if (!n){ toast("Escribí el nombre sugerido"); $("sgN").focus(); return; }
+  if (!q){ toast("Poné tu nombre"); $("sgQ").focus(); return; }
+  setQuien(q);
+  const r = await enviar({tipo: "sector", sector: $("sgA").value, sugerido: n, texto: $("sgC").value.trim(), quien: q});
+  if (!r.ok){ toast("No se pudo enviar. Probá de nuevo."); return; }
+  $("velo").hidden = true; toast("Sugerencia enviada. ¡Gracias!");
+}
+
+function csv(){
+  const m = M(), l = SEL.size ? selPuntos() : filtrar(), q = s => '"' + String(s).replace(/"/g, '""') + '"';
+  const rows = [["Informe", "N.º", "Tema", "Planta / sector", "Observación", "Acción a realizar", "Reincidencia", "Seguimiento", "Órdenes de trabajo"]]
+    .concat(l.map(p => [m.clave, p.n, temaDe(m, p.tema).nombre, p.lugar, p.titulo, p.rec, p.ref ? "Punto " + p.ref + " del " + m.anterior : "Nuevo", ultEstado(m, p), otsDe(m, p).map(o => o.numero + " (" + otNombre(o) + ")").join(" / ")]));
+  const b = new Blob(["﻿" + rows.map(r => r.map(q).join(";")).join("\r\n")], {type: "text/csv"});
+  const a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = `GALVASA informe ${m.clave}${st.ot && st.ot.startsWith("OT") ? " " + st.ot : ""}.csv`; a.click();
+}
+async function imprimirLista(){ toast("Preparando…"); await cargarTodas($("lista")); window.print(); }
+
+// ---------- eventos ----------
+document.addEventListener("click", e => {
+  const t = e.target;
+  if (t.matches("[data-ck]")){ const m = M(), k = m.clave + "|" + t.dataset.ck; t.checked ? SEL.add(k) : SEL.delete(k); const f = document.querySelector(`.fila[data-n="${t.dataset.ck}"]`); if (f) f.classList.toggle("sel", t.checked); selbar(); return; }
+  if (t.closest(".ck")) return;
+  if (t.closest("#salir")){ salir(); return; }
+  const of = t.closest("[data-otf]"); if (of){ st.ot = st.ot === of.dataset.otf && of.classList.contains("lot") ? "" : of.dataset.otf; $("velo").hidden = true; render(); scrollTo(0, 0); return; }
+  const bo = t.closest("[data-bajot]"); if (bo){ const o = ORDENES.find(x => x.numero === bo.dataset.bajot); if (o) imprimirOT(o); return; }
+  const sug = t.closest("[data-sug]"); if (sug){ abrirSug(sug.dataset.sug); return; }
+  const mb = t.closest("[data-mes]"); if (mb){ st.mes = mb.dataset.mes; st.sector = ""; st.tema = ""; st.ot = ""; st.soloSel = false; render(); return; }
+  const tb = t.closest("#fTipo button"); if (tb){ st.tipo = tb.dataset.v; document.querySelectorAll("#fTipo button").forEach(b => b.setAttribute("aria-pressed", b === tb)); render(); return; }
+  if (t.closest("#limpiar")){ Object.assign(st, {sector: "", tema: "", tipo: "todos", seg: "todos", ot: "", q: "", soloSel: false}); $("fQ").value = ""; $("fSeg").value = "todos"; document.querySelectorAll("#fTipo button").forEach(b => b.setAttribute("aria-pressed", b.dataset.v === "todos")); render(); return; }
+  if (t.closest("#selFilt")){ const m = M(); filtrar().forEach(p => SEL.add(key(m, p))); render(); return; }
+  const sg = t.closest("[data-selg]"); if (sg){ const m = M(); sg.dataset.selg.split(",").forEach(n => SEL.add(m.clave + "|" + n)); render(); return; }
+  if (t.closest("#selLimpiar")){ SEL.clear(); st.soloSel = false; render(); return; }
+  if (t.closest("#selVer")){ st.soloSel = !st.soloSel; render(); scrollTo(0, 0); return; }
+  if (t.closest("#selOT")){ abrirOT(); return; }
+  const qt = t.closest("[data-quitar]"); if (qt){ SEL.delete(M().clave + "|" + qt.dataset.quitar); render(); if (SEL.size) abrirOT(); else $("velo").hidden = true; return; }
+  if (t.closest("#otGen")){ generarOT(); return; }
+  if (t.closest("#sgEnv")){ enviarSug(); return; }
+  if (t.closest("#sGuardar")){ guardarSeg(); return; }
+  const es = t.closest("[data-est]"); if (es){ es.parentNode.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", b === es)); return; }
+  const c = t.closest(".fila[data-n]"); if (c){ abrir(Number(c.dataset.n)); return; }
+  if (t.id === "velo" || t.closest("[data-cerrar]")){ $("velo").hidden = true; return; }
+  if (t.closest("#pPrev")){ fi = (fi - 1 + fotosDet.length) % fotosDet.length; foto(); return; }
+  if (t.closest("#pNext")){ fi = (fi + 1) % fotosDet.length; foto(); return; }
+  const ti = t.closest("[data-i]"); if (ti){ fi = Number(ti.dataset.i); foto(); return; }
+  const hf = t.closest("[data-f]"); if (hf){ fi = Math.max(0, fotosDet.findIndex(x => x.f === hf.dataset.f)); foto(); return; }
+  if (t.closest("#bPdf")){ const m = M(); bajarPdf(m.clave, m.pdf); return; }
+  if (t.closest("#bFilt")){ imprimirLista(); return; }
+  if (t.closest("#bCsv")){ csv(); return; }
+});
+document.addEventListener("change", e => {
+  const t = e.target;
+  if (t.id === "fArch" && t.value){ const a = DATA.archivo.find(x => x.clave === t.value); t.value = ""; if (a) bajarPdf(a.clave, a.pdf); }
+  if (t.id === "fSector"){ st.sector = t.value; render(); }
+  if (t.id === "fTema"){ st.tema = t.value; render(); }
+  if (t.id === "fSeg"){ st.seg = t.value; render(); }
+  if (t.id === "fOT"){ st.ot = t.value; render(); }
+  if (t.id === "fOrden"){ st.orden = t.value; render(); }
+  if (t.name === "ls"){ st.sector = t.dataset.s; render(); }
+});
+$("fQ").addEventListener("input", e => { st.q = e.target.value; render(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") $("velo").hidden = true; });
+
+function arrancar(){
+  st.mes = DATA.meses[0].clave;
+  if (DATA.api){ API_URL = DATA.api.url || ""; API_TOKEN = DATA.api.token || ""; }
+  if (!API_URL){ NOTAS = JSON.parse(JSON.stringify(DATA.ejemplo || {})); ORDENES = JSON.parse(JSON.stringify(DATA.ejemplo_ot || [])); otNum = ORDENES.length; }
+  render(); cargarEstado();
+}
+window.PORTAL = {st, SEL, render, abrir, abrirOT, abrirSug, otDoc, imprimirOT, M, selPuntos, get ORDENES(){ return ORDENES; }};
+iniciar();
+</script>
+</body>
+</html>
