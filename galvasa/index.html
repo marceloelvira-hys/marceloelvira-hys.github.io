@@ -309,6 +309,16 @@ button.chip{cursor:pointer;font:inherit;font-size:inherit}
 .borrar{border:1px solid #E9B8B8;background:#FFF5F5;border-radius:var(--r);padding:10px;display:flex;flex-direction:column;gap:8px}
 .btn.peligro{border-color:#B3261E;color:#B3261E}
 .lot .mes{font-size:11px;color:var(--muted)}
+.subir{display:flex;flex-direction:column;gap:8px}
+.subir label.btn{align-self:flex-start;cursor:pointer;text-transform:none;letter-spacing:0;font-size:14px;color:var(--brand-dk)}
+.subir .prev{display:flex;gap:6px;flex-wrap:wrap}
+.subir .prev span{position:relative}
+.subir .prev img{width:74px;height:74px;object-fit:cover;border-radius:var(--r);border:1px solid var(--line)}
+.subir .prev .x{position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:50%;border:0;background:var(--ink);color:#fff;font-size:11px;cursor:pointer}
+.avf{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.avf img{width:84px;height:84px;object-fit:cover;border-radius:var(--r);cursor:pointer;border:2px solid var(--ok)}
+.nota-mini .cam{color:var(--ok);font-weight:600;white-space:nowrap}
+.otdoc .ap .avt{font-weight:700;color:#2F7D4A;margin:8px 0 4px;font-size:10.5pt}
 </style>
 </head>
 <body>
@@ -396,6 +406,7 @@ const mesDe = c => DATA.meses.find(m => m.clave === c);
 const mesIdx = c => DATA.meses.findIndex(m => m.clave === c);
 const temaDe = (m, k) => m.temas.find(t => t.key === k);
 const notas = (m, p) => ((NOTAS[m.clave] || {})[String(p.n)] || []);
+const avance = (m, p) => notas(m, p).flatMap(x => (x.fotos || []).map(f => ({f, x})));
 const ultEstado = (m, p) => { const n = notas(m, p); return n.length ? n[n.length - 1].estado : ""; };
 const hecho = e => e === "Listo para verificar" || e === "Resuelto";
 const hoy = () => new Date().toLocaleDateString("es-AR");
@@ -423,6 +434,12 @@ async function bajarCifrado(ruta){
 // fotos: en la vista previa van directo; cifradas se bajan, se descifran y se muestran como blob
 const BLOBS = new Map();
 function urlFoto(ruta){
+  if (ruta.startsWith("data:")) return Promise.resolve(ruta);
+  if (ruta.startsWith("drive:")){      // foto de avance: está en el Drive de Marcelo, la trae el script
+    if (!BLOBS.has(ruta)) BLOBS.set(ruta, fetch(API_URL + "?accion=foto&token=" + encodeURIComponent(API_TOKEN) + "&id=" + encodeURIComponent(ruta.slice(6)))
+      .then(r => r.json()).then(j => j.ok ? URL.createObjectURL(new Blob([b64(j.b64)], {type: j.tipo || "image/jpeg"})) : "").catch(() => ""));
+    return BLOBS.get(ruta);
+  }
   if (!CIFRADO) return Promise.resolve(ruta);
   if (!BLOBS.has(ruta)) BLOBS.set(ruta, bajarCifrado(ruta).then(b => URL.createObjectURL(new Blob([b], {type: "image/jpeg"}))).catch(() => ""));
   return BLOBS.get(ruta);
@@ -491,7 +508,8 @@ async function cargarEstado(){
   try {
     const r = await fetch(API_URL + "?accion=estado&token=" + encodeURIComponent(API_TOKEN)); const j = await r.json();
     if (!j || !j.ok) throw 0;
-    NOTAS = j.seguimiento || {}; ORDENES = j.ordenes || []; AREAS_EXTRA = j.areas || [];
+    NOTAS = j.seguimiento || {}; ORDENES = j.ordenes || [];
+    Object.values(NOTAS).forEach(pm => Object.values(pm).forEach(ns => ns.forEach(x => x.fotos = (x.fotos || []).map(id => "drive:" + id)))); AREAS_EXTRA = j.areas || [];
     $("offline").hidden = true; render();
   } catch(e){ $("offline").hidden = false; }
 }
@@ -547,7 +565,7 @@ function fila(m, p){
     <span class="ck"><input type="checkbox" data-ck="${p.n}" ${on ? "checked" : ""} aria-label="Seleccionar punto ${p.n}"></span>
     <span class="num">${p.n}</span>
     <div><div class="meta">${chips(m, p)}</div><div class="obs">${esc(p.titulo)}</div><div class="sector">${esc(p.lugar)}</div></div>
-    <div class="acc acc-col"><b>Acción</b>${esc(p.rec)}${u ? `<div class="nota-mini"><b>${esc(u.quien)}</b> · ${esc(u.fecha)}: ${esc(u.texto)}</div>` : ""}</div>
+    <div class="acc acc-col"><b>Acción</b>${esc(p.rec)}${u ? `<div class="nota-mini"><b>${esc(u.quien)}</b> · ${esc(u.fecha)}: ${esc(u.texto)}${avance(m, p).length ? ` <span class="cam">📷 ${avance(m, p).length} foto${avance(m, p).length === 1 ? "" : "s"} de avance</span>` : ""}</div>` : ""}</div>
     <div class="thumbs">${p.fotos.slice(0, 3).map(x => img(x)).join("")}</div></article>`;
 }
 function grupos(m, lista){
@@ -625,11 +643,22 @@ function selbar(){
 }
 
 // ---------- detalle y seguimiento ----------
-let cur = null, fi = 0, fotosDet = [];
+let cur = null, fi = 0, fotosDet = [], NUEVAS = [];
+function achicar(file){      // máx. 1600 px, JPEG 0,8 → unos 300 KB
+  return new Promise((ok, mal) => {
+    const u = URL.createObjectURL(file), im = new Image();
+    im.onload = () => { const k = Math.min(1, 1600 / Math.max(im.naturalWidth, im.naturalHeight)), c = document.createElement("canvas");
+      c.width = Math.round(im.naturalWidth * k); c.height = Math.round(im.naturalHeight * k); c.getContext("2d").drawImage(im, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(u); ok(c.toDataURL("image/jpeg", 0.8)); };
+    im.onerror = () => { URL.revokeObjectURL(u); mal(); }; im.src = u;
+  });
+}
+function prevNuevas(){ $("sPrev").innerHTML = NUEVAS.map((d, i) => `<span><img src="${d}" alt=""><button type="button" class="x" data-qf="${i}" aria-label="Quitar foto">✕</button></span>`).join(""); }
 function abrir(n){
   const m = M(), p = m.puntos.find(x => x.n === n); if (!p) return;
   cur = p; fi = 0; const h = historia(m, p), t = temaDe(m, p.tema), ns = notas(m, p), os = otsDe(m, p);
-  fotosDet = h.flatMap(x => x.fotos.map(f => ({f, mes: x.mes})));
+  fotosDet = h.flatMap((x, i) => x.fotos.map(f => ({f, mes: x.mes})).concat(i ? [] : avance(m, p).map(a => ({f: a.f, ley: `Avance cargado por ${a.x.quien} el ${a.x.fecha}`}))));
+  NUEVAS = [];
   $("velo").innerHTML = `<div class="det" role="dialog" aria-modal="true" aria-labelledby="dTit"><div class="visor"><div class="grande"><button class="nav izq" type="button" id="pPrev" aria-label="Foto anterior">‹</button><img id="pBig" alt=""><button class="nav der" type="button" id="pNext" aria-label="Foto siguiente">›</button></div><div class="leyenda" id="pLey"></div><div class="tira" id="pTira"></div></div>
   <div class="info"><button class="cerrar" type="button" data-cerrar>Cerrar ✕</button>
     <div class="meta"><span class="num">Punto ${p.n}</span><span class="sector">${esc(p.lugar)}</span></div><div class="meta">${chips(m, p)}</div>
@@ -640,9 +669,10 @@ function abrir(n){
     <div class="bloque"><h4>Tema · ${esc(t.nombre)}</h4><div class="muted">${esc(t.criterio)}</div><div class="muted" style="margin-top:4px"><b>Encuadre:</b> ${esc(t.enc)}</div></div>
     <div class="bloque"><h4>Historial del punto</h4><div class="hist">${h.map((x, i) => `<div class="hrow ${i ? "" : "actual"}"><div class="m">${esc(x.mes)}<small>punto ${esc(x.n)}</small></div><div class="ph">${x.fotos.length ? x.fotos.slice(0, 4).map(f => img(f, `data-f="${esc(f)}"`)).join("") : `<span class="muted">${x.solo ? "Informe en PDF" : "sin fotos"}</span>`}</div></div>`).join("")}</div></div>
     <div class="bloque"><h4>Seguimiento de GALVASA</h4>
-      ${ns.map(x => `<div class="nota-mini" style="margin-bottom:6px"><span class="chip est-${SLUG[x.estado] || "pendiente"}">${esc(x.estado)}</span> <b>${esc(x.quien)}</b> · ${esc(x.fecha)}<br>${esc(x.texto)}${x.ejemplo ? ' <span class="ejemplo">· ejemplo</span>' : ""}</div>`).join("")}
+      ${ns.map(x => `<div class="nota-mini" style="margin-bottom:6px"><span class="chip est-${SLUG[x.estado] || "pendiente"}">${esc(x.estado)}</span> <b>${esc(x.quien)}</b> · ${esc(x.fecha)}<br>${esc(x.texto)}${x.ejemplo ? ' <span class="ejemplo">· ejemplo</span>' : ""}${(x.fotos || []).length ? `<div class="avf">${x.fotos.map(f => img(f, `data-f="${esc(f)}"`)).join("")}</div>` : ""}</div>`).join("")}
       <div class="form" id="fSegForm"><div class="estados">${ESTADOS.map(e => `<button type="button" aria-pressed="false" data-est="${e}">${e}</button>`).join("")}${ADMIN ? `<button type="button" class="adm" aria-pressed="false" data-est="Resuelto">Resuelto (verificado)</button>` : ""}</div>
       <textarea id="sTxt" rows="2" placeholder="Qué se hizo o qué falta (por ejemplo: pedimos presupuesto al electricista)"></textarea>
+      <div class="subir"><label class="btn" for="sFotos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>Agregar fotos del avance</label><input id="sFotos" type="file" accept="image/*" multiple hidden><div class="prev" id="sPrev"></div></div>
       <input id="sQuien" type="text" placeholder="Tu nombre" value="${esc(ADMIN ? "Lic. Marcelo Elvira" : quien())}">
       <button class="btn prim" type="button" id="sGuardar" style="align-self:flex-start">Guardar seguimiento</button>
       <span class="aviso">«Listo para verificar» avisa que ya está hecho; el Lic. Elvira lo verifica en la próxima visita y lo marca como resuelto.</span></div></div>
@@ -652,7 +682,7 @@ function abrir(n){
 function foto(){
   if (!fotosDet.length){ $("pBig").removeAttribute("src"); $("pTira").innerHTML = ""; $("pLey").textContent = "Sin fotos"; return; }
   ponerFoto($("pBig"), fotosDet[fi].f);
-  $("pLey").textContent = `Visita ${fotosDet[fi].mes}${fotosDet[fi].mes !== st.mes ? " (informe anterior)" : ""} · foto ${fi + 1} de ${fotosDet.length}`;
+  $("pLey").textContent = `${fotosDet[fi].ley || "Visita " + fotosDet[fi].mes + (fotosDet[fi].mes !== st.mes ? " (informe anterior)" : "")} · foto ${fi + 1} de ${fotosDet.length}`;
   $("pTira").innerHTML = fotosDet.map((x, i) => img(x.f, `class="${i === fi ? "on" : ""}" data-i="${i}"`)).join("");
 }
 async function guardarSeg(){
@@ -661,9 +691,12 @@ async function guardarSeg(){
   if (!q){ toast("Poné tu nombre"); $("sQuien").focus(); return; }
   if (!ADMIN) setQuien(q);
   const m = M(), nota = {estado: est.dataset.est, quien: q, fecha: hoy(), texto: txt};
-  $("sGuardar").disabled = true;
-  const r = await enviar({tipo: "seguimiento", punto: cur.n, sector: cur.lugar, titulo: cur.titulo, estado: nota.estado, texto: txt, quien: q});
+  $("sGuardar").disabled = true; if (NUEVAS.length) toast("Subiendo " + NUEVAS.length + (NUEVAS.length === 1 ? " foto…" : " fotos…"));
+  const r = await enviar({tipo: "seguimiento", punto: cur.n, sector: cur.lugar, titulo: cur.titulo, estado: nota.estado, texto: txt, quien: q, fotos: NUEVAS});
   if (!r.ok){ toast("No se pudo guardar. Revisá la conexión y probá de nuevo."); $("sGuardar").disabled = false; return; }
+  const sinFotos = NUEVAS.length && API_URL && !r.fotos;
+  nota.fotos = r.fotos ? r.fotos.map(id => "drive:" + id) : (API_URL ? [] : NUEVAS.slice()); NUEVAS = [];
+  if (sinFotos){ ((NOTAS[m.clave] = NOTAS[m.clave] || {})[cur.n] = NOTAS[m.clave][cur.n] || []).push(nota); toast("Se guardó el seguimiento, pero las fotos todavía no se pueden subir. Probá más tarde."); const n = cur.n; render(); abrir(n); return; }
   ((NOTAS[m.clave] = NOTAS[m.clave] || {})[cur.n] = NOTAS[m.clave][cur.n] || []).push(nota);
   toast("Seguimiento guardado"); const n = cur.n; render(); abrir(n);
 }
@@ -718,7 +751,7 @@ function otDoc(m, ps, ot){
   <div class="firmas"><div>Entregó (GALVASA)<span>Aclaración:</span><span>Fecha:</span></div><div>Recibió<span>Aclaración:</span><span>Fecha:</span></div></div>
   <div class="pie">Al terminar cada punto, marcarlo «Listo para verificar» en el portal de Higiene y Seguridad (filtro «Orden de trabajo» → ${esc(ot.numero)}). Las fotos en grande de cada punto van en las hojas siguientes.</div>
   <div class="anexo"><h1>Fotos de los puntos</h1><div class="sub">${esc(ot.numero)} · dirigida a ${esc(otNombre(ot))} · una hoja por punto</div>
-  ${ps.map((p, i) => `<div class="ap${i ? "" : " prim"}"><div class="cab"><span class="nn">${p.n}</span><span class="t">${esc(p.titulo)}</span></div><div class="s">${esc(p.lugar)} · ${esc(corto(temaDe(m, p.tema).nombre))}</div><div class="a"><b>Acción:</b> ${esc(p.rec)}</div><div class="gal${p.fotos.length === 1 ? " una" : ""}">${p.fotos.map(f => img(f)).join("")}</div></div>`).join("")}</div></div>`;
+  ${ps.map((p, i) => `<div class="ap${i ? "" : " prim"}"><div class="cab"><span class="nn">${p.n}</span><span class="t">${esc(p.titulo)}</span></div><div class="s">${esc(p.lugar)} · ${esc(corto(temaDe(m, p.tema).nombre))}</div><div class="a"><b>Acción:</b> ${esc(p.rec)}</div><div class="gal${p.fotos.length === 1 ? " una" : ""}">${p.fotos.map(f => img(f)).join("")}</div>${avance(m, p).length ? `<div class="avt">Avance cargado en el portal</div><div class="gal">${avance(m, p).map(a => img(a.f)).join("")}</div>` : ""}</div>`).join("")}</div></div>`;
 }
 function verOT(num){
   const o = ORDENES.find(x => x.numero === num); if (!o) return;
@@ -803,6 +836,7 @@ document.addEventListener("click", e => {
   if (t.closest("#otGen")){ generarOT(); return; }
   if (t.closest("#sgEnv")){ enviarSug(); return; }
   if (t.closest("#sGuardar")){ guardarSeg(); return; }
+  const qf = t.closest("[data-qf]"); if (qf){ NUEVAS.splice(Number(qf.dataset.qf), 1); prevNuevas(); return; }
   const es = t.closest("[data-est]"); if (es){ es.parentNode.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", b === es)); return; }
   const c = t.closest(".fila[data-n]"); if (c){ abrir(Number(c.dataset.n)); return; }
   if (t.id === "velo" || t.closest("[data-cerrar]")){ $("velo").hidden = true; return; }
@@ -816,6 +850,7 @@ document.addEventListener("click", e => {
 });
 document.addEventListener("change", e => {
   const t = e.target;
+  if (t.id === "sFotos" && t.files.length){ const fs = [...t.files].slice(0, 6 - NUEVAS.length); t.value = ""; (async () => { for (const f of fs){ try { NUEVAS.push(await achicar(f)); } catch(e){ toast("No se pudo leer una foto"); } } prevNuevas(); })(); if (NUEVAS.length + fs.length >= 6) toast("Hasta 6 fotos por vez"); }
   if (t.id === "fArch" && t.value){ const a = DATA.archivo.find(x => x.clave === t.value); t.value = ""; if (a) bajarPdf(a.clave, a.pdf); }
   if (t.id === "fSector"){ st.sector = t.value; render(); }
   if (t.id === "fTema"){ st.tema = t.value; render(); }
