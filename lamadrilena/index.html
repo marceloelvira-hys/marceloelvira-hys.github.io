@@ -320,7 +320,17 @@ button.chip{cursor:pointer;font:inherit;font-size:inherit}
 .nota-mini .cam{color:var(--ok);font-weight:600;white-space:nowrap}
 .otdoc .ap .avt{font-weight:700;color:#2F7D4A;margin:8px 0 4px;font-size:10.5pt}
 /* ---- La Madrileña: ajustes de identidad ---- */
-.login .logos .g{height:30px}
+.login .logos .g{height:30px}.login .logos .g img{background:none!important;padding:0!important;height:30px!important}
+.prof-login{display:flex;align-items:center;gap:12px;background:#fff;border-radius:6px;padding:8px 12px;color:#222529;align-self:flex-start}.prof-login img{height:34px!important;background:none!important;padding:0!important}.prof-login span{font-size:12px;line-height:1.3}.prof-login b{display:block;font-size:13.5px}
+.jea a{color:#fff;text-decoration:none;opacity:.85}.jea a:hover{text-decoration:underline}
+/* descargas agrupadas */
+.g-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-bottom:16px}
+.g-box{background:#fff;border:1px solid var(--line);border-top:5px solid var(--c);border-radius:8px;padding:14px 16px}
+.g-box h3{font-size:14.5px;margin:0 0 2px;color:var(--c);font-family:var(--font)}.g-box .x-m{display:block;margin-bottom:10px}
+.g-sel{display:flex;gap:8px;flex-wrap:wrap}.g-sel select{flex:1;min-width:180px;border:1px solid var(--line);border-radius:6px;padding:8px 10px;font-size:13.5px;background:#fff}
+.g-btn{background:var(--c);border:0;color:#fff;border-radius:6px;padding:8px 14px;font-weight:600;font-size:13px;cursor:pointer}
+.g-list{display:flex;flex-direction:column;gap:8px}.g-it{display:flex;align-items:center;gap:10px;justify-content:space-between;border:1px solid #EEE;border-radius:6px;padding:8px 10px;font-size:13.5px}
+.g-sec{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:18px 0 8px}
 .otdoc .oth .g img{filter:invert(1)}
 .otdoc .oth .prof{margin-left:auto;font-size:11px;text-align:right;line-height:1.3}
 .jea{background:transparent;padding:0;border-left:1px solid rgba(255,255,255,.25);padding-left:14px;border-radius:0}
@@ -377,9 +387,9 @@ body.extra .selbar{display:none!important}
 </head>
 <body>
 <div class="login" id="login" hidden><form class="box" id="loginForm" autocomplete="on">
-  <div class="logos"><span class="g"><img src="logo_lm.png" alt="La Madrileña" style="height:100%;width:auto;display:block"></span></div>
+  <div class="logos"><span class="g"><img src="logo_lm.png" alt="La Madrileña" style="height:100%;width:auto;display:block"></span></div><div class="prof-login"><img src="logo_jea.png" alt="JEA"><span><b>Lic. Marcelo Elvira</b>Lic. en Higiene y Seguridad · M.P. 0656 C.P.I.I.</span></div>
   <h1>Portal de Higiene y Seguridad</h1>
-  <p>Seguridad e Higiene del depósito de Itaquí 3131 · Lic. Marcelo Elvira, Lic. en Higiene y Seguridad</p>
+  <p>Depósito de Itaquí 3131 · La Madrileña S.A.C.I.A.F.I.</p>
   <input type="text" name="username" value="lamadrilena" autocomplete="username" hidden>
   <input type="password" id="clave" placeholder="Contraseña" autocomplete="current-password" required>
   <label class="rec"><input type="checkbox" id="recordar" checked> Recordarla en este equipo</label>
@@ -391,7 +401,7 @@ body.extra .selbar{display:none!important}
 <header class="head"><div class="wrap">
   <span class="logo-g"><img src="logo_lm.png" alt="La Madrileña" style="height:100%;width:auto;display:block"></span><span class="sep" aria-hidden="true"></span>
   <div class="titulo"><h1>Seguridad e Higiene</h1><p id="subt"></p></div>
-  <div class="jea"><span><b>Lic. Marcelo Elvira</b>Lic. en Higiene y Seguridad</span></div>
+  <div class="jea"><span><b>Lic. Marcelo Elvira</b>Lic. en Higiene y Seguridad<br><a href="tel:+5491145646462">15-4564-6462</a> · <a href="mailto:marcelo.a.elvira@gmail.com">marcelo.a.elvira@gmail.com</a></span></div>
 </div></header>
 
 <nav class="solapas" id="solapas"><div class="wrap" id="solapasW"></div></nav>
@@ -963,16 +973,23 @@ function vDocs(){
   <div class="x-row x-docs h"><span>Documento</span><span>Para qué</span><span>Estado</span><span>Situación</span><span></span></div>
   ${[...ds].sort((a, b) => ord[a.estado] - ord[b.estado]).map((d, i) => `<div class="x-row x-docs"><div><div class="x-t">${esc(d.doc)}</div><div class="x-m">Lo pide: ${esc(d.pide)}</div></div><div class="x-m">${esc(d.para)}</div><div><span class="x-st ${d.estado}">${DOCST[d.estado]}</span></div><div class="x-m">${esc(d.sit) || "—"}</div><div>${d.estado === "OK" || d.estado === "NUESTRO" ? "" : `<button type="button" class="x-btn" data-aviso="${esc(d.doc)}">Avisar que lo envié</button>`}</div></div>`).join("")}</div>`;
 }
+function grupoBox(g){
+  const sel = g.mes ? `<div class="g-sel"><select id="sel-${g.id}">${g.items.map(i => `<option value="${i.k}">${esc(i.t)}</option>`).join("")}</select><button type="button" class="g-btn" data-dlsel="${g.id}">Descargar</button></div>`
+    : `<div class="g-list">${g.items.map(i => `<div class="g-it"><span>${esc(i.t)}</span><button type="button" class="g-btn" data-dl="${i.k}">${X().archivos[i.k].tipo === "text/html" ? "Abrir" : "Descargar"}</button></div>`).join("")}</div>`;
+  return `<div class="g-box" style="--c:${g.color}"><h3>${esc(g.titulo)}</h3><span class="x-m">${esc(g.nota)}</span>${sel}</div>`;
+}
+const G = id => X().grupos.find(g => g.id === id);
 function vHys(){
   const e = X().estudios;
-  return `<h2>Documentación de higiene y seguridad</h2><p class="x-intro">Estudios contratados, su vigencia y su estado al ${esc(X().fecha)}. Cada uno se puede bajar cuando está terminado.</p>
-  <div class="x-box"><div class="x-bh">Estudios<span>presupuesto del 24/8/2026</span></div>
-  <div class="x-row x-est h"><span>Estudio</span><span>Norma</span><span>Vigencia</span><span>Estado</span><span>Situación</span><span>Documento</span></div>
-  ${e.map(s => `<div class="x-row x-est"><div class="x-t">${esc(s.estudio)}</div><div class="x-m">${esc(s.norma)}</div><div class="x-m">${esc(s.vigencia)}</div><div class="x-e ${s.estado}">${esc(s.estado)}</div><div class="x-m">${esc(s.sit)}</div><div class="x-dl">${s.archivos.length ? s.archivos.map(k => btnDl(k, k === "11-26" ? "Informe 11-26" : k === "8-26" ? "Informe 8-26" : k === "pat" ? "Protocolo PAT" : "")).join("") : `<span class="x-m">Se publica al terminar</span>`}</div></div>`).join("")}</div>
-  <div class="x-box"><div class="x-bh">Formularios para completar</div>
-  ${X().formularios.map(f => `<div class="x-row x-cot" style="grid-template-columns:1.3fr 1.4fr 230px"><div><div class="x-t">${esc(f.nombre)}</div><div class="x-m">${esc(f.uso)}</div></div><div class="x-m"><b>Normativa:</b> ${esc(f.norma)}</div><div>${btnDl(f.archivo, "Bajar la constancia (PDF)")}</div></div>`).join("")}</div>
-  <div class="x-box"><div class="x-bh">Otros estudios que corresponden al establecimiento</div>
-  ${X().cotizar.map(c => `<div class="x-row x-cot"><div class="x-t">${esc(c.estudio)}</div><div class="x-m">${esc(c.norma)}</div><div><span class="x-st CONFIRMAR">A presupuestar</span></div></div>`).join("")}</div>`;
+  return `<h2>Documentación de higiene y seguridad</h2><p class="x-intro">Informes, estudios y formularios, con su estado al ${esc(X().fecha)}.</p>
+  <div class="g-row">${grupoBox(G("inf"))}${grupoBox(G("est"))}</div>
+  <div class="g-sec">Estudios</div>
+  <div class="x-box" style="border-top:5px solid #2E5FA3"><div class="x-row x-est h"><span>Estudio</span><span>Norma</span><span>Vigencia</span><span>Estado</span><span>Situación</span><span>Documento</span></div>
+  ${e.map(s => `<div class="x-row x-est"><div class="x-t">${esc(s.estudio)}</div><div class="x-m">${esc(s.norma)}</div><div class="x-m">${esc(s.vigencia)}</div><div class="x-e ${s.estado}">${esc(s.estado)}</div><div class="x-m">${esc(s.sit)}</div><div class="x-dl">${s.archivos.filter(k => k !== "11-26" && k !== "8-26").map(k => btnDl(k, k === "pat" ? "Protocolo PAT" : "")).join("") || (s.archivos.length ? `<span class="x-m">Arriba, en Informes de visita</span>` : `<span class="x-m">Se publica al terminar</span>`)}</div></div>`).join("")}</div>
+  <div class="g-sec">Formularios para completar</div>
+  <div class="x-box" style="border-top:5px solid #2F7D4A">${X().formularios.map(f => `<div class="x-row x-cot" style="grid-template-columns:1.3fr 1.4fr 230px"><div><div class="x-t">${esc(f.nombre)}</div><div class="x-m">${esc(f.uso)}</div></div><div class="x-m"><b>Normativa:</b> ${esc(f.norma)}</div><div>${btnDl(f.archivo, "Bajar la constancia (PDF)")}</div></div>`).join("")}</div>
+  <div class="g-sec">Otros estudios que corresponden al establecimiento</div>
+  <div class="x-box" style="border-top:5px solid #9AA0A6">${X().cotizar.map(c => `<div class="x-row x-cot"><div class="x-t">${esc(c.estudio)}</div><div class="x-m">${esc(c.norma)}</div><div><span class="x-st CONFIRMAR">A presupuestar</span></div></div>`).join("")}</div>`;
 }
 function vEpp(){
   const t = X().tareas;
@@ -992,8 +1009,10 @@ function vMaq(){
   ${m.archivos.length ? `<h4>Material</h4><div class="x-dl">${m.archivos.map(k => btnDl(k, k.startsWith("sim") ? "Abrir el simulador" : "Ficha de máquina (PDF)")).join("")}</div>` : ""}</div></div>`;
 }
 function vDl(){
-  return `<h2>Descargas</h2><p class="x-intro">Informes, estudios y formularios de La Madrileña.</p><div class="x-dls">${X().descargas.map(k => { const a = X().archivos[k], h = a.tipo === "text/html";
-    return `<div class="x-doc"><div class="x-ic${k === "11-26" || k === "estado" ? "" : " h"}">${h ? "HTML" : "PDF"}</div><div><b>${esc(a.nombre.replace(/\.(pdf|html)$/, ""))}</b><div style="margin-top:8px"><button type="button" class="x-btn p" data-dl="${k}">${h ? "Abrir" : "Descargar"}</button></div></div></div>`; }).join("")}</div>`;
+  const gs = X().grupos;
+  return `<h2>Descargas</h2><p class="x-intro">Todo lo de La Madrileña para bajar, agrupado por tipo.</p>
+  <div class="g-row">${grupoBox(G("inf"))}${grupoBox(G("est"))}</div>
+  <div class="g-row">${gs.filter(g => !g.mes).map(grupoBox).join("")}</div>`;
 }
 function renderExtra(){ $("vExtra").innerHTML = ({docs: vDocs, hys: vHys, epp: vEpp, maq: vMaq, dl: vDl})[TAB](); }
 function abrirAviso(doc){
@@ -1012,7 +1031,8 @@ async function enviarAviso(){
   $("velo").hidden = true; toast("Aviso enviado. Gracias.");
 }
 document.addEventListener("click", e => {
-  const t = e.target.closest("[data-tab],[data-dl],[data-maq],[data-aviso],#avEnv"); if (!t) return;
+  const t = e.target.closest("[data-tab],[data-dl],[data-dlsel],[data-maq],[data-aviso],#avEnv"); if (!t) return;
+  if (t.dataset.dlsel){ bajarArch($("sel-" + t.dataset.dlsel).value); return; }
   if (t.dataset.tab) irA(t.dataset.tab);
   else if (t.dataset.dl) bajarArch(t.dataset.dl);
   else if (t.dataset.maq){ MAQ = t.dataset.maq; renderExtra(); }
