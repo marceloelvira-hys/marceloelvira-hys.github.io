@@ -383,6 +383,17 @@ body.extra .selbar{display:none!important}
   .x-mxw{overflow-x:auto}.x-mx{min-width:720px}
 }
 
+/* 4/11/2026: resumen por tema en la barra izquierda */
+.rkr .prs{grid-column:1 / -1;display:flex;gap:4px;flex-wrap:wrap;margin-top:1px}
+.rkr .pr{font-size:11px;font-weight:600;border-radius:3px;padding:0 5px;line-height:17px}
+.rkr .pr.prio-alta{background:#FBE9EA;color:#C0392B}.rkr .pr.prio-media{background:#FDF2E3;color:#A0611A}.rkr .pr.prio-baja{background:#E6EEF8;color:#2E5FA3}
+/* 4/11/2026: fotos de cada punto más grandes: ocupan todo el alto del renglón, de borde a borde, sin agrandarlo (mismo ancho de columna) */
+.fila .thumbs{align-self:stretch;position:relative;min-height:62px;margin:-10px -12px -10px 0}
+.fila .thumbs .tw{position:absolute;inset:0;display:flex;gap:3px;border-radius:0 5px 5px 0;overflow:hidden}
+.fila .thumbs img{flex:1 1 0;min-width:0;width:auto;height:100%;object-fit:cover;border-radius:0}
+@media (max-width:900px){.fila .thumbs{min-height:130px;margin:0}.fila .thumbs .tw{border-radius:3px}}
+@media print{.fila .thumbs{min-height:70px;margin:0}}
+
 </style>
 </head>
 <body>
@@ -634,7 +645,7 @@ function fila(m, p){
     <span class="num">${p.n}</span>
     <div><div class="meta">${chips(m, p)}</div><div class="obs">${esc(p.titulo)}</div><div class="sector">${esc(p.lugar)}</div></div>
     <div class="acc acc-col"><b>Acción</b>${esc(p.rec)}${u ? `<div class="nota-mini"><b>${esc(u.quien)}</b> · ${esc(u.fecha)}: ${esc(u.texto)}${avance(m, p).length ? ` <span class="cam">📷 ${avance(m, p).length} foto${avance(m, p).length === 1 ? "" : "s"} de avance</span>` : ""}</div>` : ""}</div>
-    <div class="thumbs">${p.fotos.slice(0, 3).map(x => img(x)).join("")}</div></article>`;
+    <div class="thumbs"><div class="tw">${p.fotos.slice(0, 3).map(x => img(x)).join("")}</div></div></article>`;
 }
 function grupos(m, lista){
   const g = [];
@@ -665,13 +676,15 @@ function render(){
   const om = otsMes(m);
   $("fOT").innerHTML = `<option value="">Todas</option><option value="con" ${st.ot === "con" ? "selected" : ""}>Con orden de trabajo</option><option value="sin" ${st.ot === "sin" ? "selected" : ""}>Sin orden de trabajo</option>`
     + om.map(o => { const [h, t] = otAvance(o); return `<option value="${esc(o.numero)}" ${o.numero === st.ot ? "selected" : ""}>${esc(o.numero)} · ${esc(otNombre(o))} (${h}/${t} listos)</option>`; }).join("");
-  const nS = s => m.puntos.filter(p => p.sectores.includes(s)), rank = sects.map(x => ({s: x, ps: nS(x)})).sort((a, b) => b.ps.length - a.ps.length || sects.indexOf(a.s) - sects.indexOf(b.s));
-  const mx = Math.max(...rank.map(r => r.ps.length)), top3 = rank.slice(0, 3).reduce((a, r) => a + r.ps.length, 0);
-  const rkFila = (s, ps) => { const h = ps.filter(p => hecho(ultEstado(m, p))).length; return `<div class="rkr${s === st.sector ? " on" : ""}" data-s="${esc(s)}" role="button" tabindex="0"><span class="nm">${esc(s || "Todos los sectores")}</span><span class="cn">${ps.length}</span>${s ? `<span class="br" title="${h} de ${ps.length} listos para verificar o resueltos"><i class="h" style="width:${100 * h / mx}%"></i><i class="p" style="width:${100 * (ps.length - h) / mx}%"></i></span>` : ""}</div>`; };
-  $("lateral").innerHTML = `<h3>Puntos por sector</h3><div class="rk"><div class="msg">Los ${Math.min(3, rank.length)} sectores de arriba reúnen ${top3} de los ${m.puntos.length} puntos: ahí cada arreglo mejora más el depósito. Tocá un sector para ver sus puntos.</div>`
-    + rkFila("", m.puntos) + rank.map(r => rkFila(r.s, r.ps)).join("")
-    + `<div class="ley"><span><i style="background:var(--ok)"></i>listo o resuelto</span><span><i style="background:#8FA3B1"></i>por hacer</span></div></div>`
-    + (st.sector ? `<button class="link" type="button" data-sug="${esc(st.sector)}" style="margin-top:8px;text-align:left">✎ Sugerir otro nombre para «${esc(st.sector)}»</button>` : `<div class="ayuda">✎ Elegí un sector para sugerir otro nombre si en La Madrileña lo llaman distinto.</div>`);
+  const tms = m.temas.map(t => ({t, ps: m.puntos.filter(p => p.tema === t.key)})).filter(r => r.ps.length).sort((a, b) => b.ps.length - a.ps.length || m.temas.indexOf(a.t) - m.temas.indexOf(b.t));
+  const mx = Math.max(...tms.map(r => r.ps.length)), top3 = tms.slice(0, 3).reduce((a, r) => a + r.ps.length, 0);
+  const PR = ["alta", "media", "baja"], np = (ps, k) => ps.filter(p => (p.prio || "").toLowerCase() === k).length;
+  const prs = ps => PR.map(k => [k, np(ps, k)]).filter(x => x[1]).map(([k, n]) => `<span class="pr prio-${k}">${n} ${k}</span>`).join("");
+  const rkFila = (k, nom, ps) => { const h = ps.filter(p => hecho(ultEstado(m, p))).length; return `<div class="rkr${k === st.tema ? " on" : ""}" data-t="${esc(k)}" role="button" tabindex="0"><span class="nm">${esc(nom)}</span><span class="cn">${ps.length}</span>${k ? `<span class="br" title="${h} de ${ps.length} listos para verificar o resueltos"><i class="h" style="width:${100 * h / mx}%"></i><i class="p" style="width:${100 * (ps.length - h) / mx}%"></i></span><span class="prs">${prs(ps)}</span>` : ""}</div>`; };
+  const hTot = m.puntos.filter(p => hecho(ultEstado(m, p))).length, conPr = PR.some(k => np(m.puntos, k));
+  $("lateral").innerHTML = `<h3>Puntos por tema</h3><div class="rk"><div class="msg"><b>${m.puntos.length} puntos en ${tms.length} temas</b>${conPr ? ` · prioridad alta ${np(m.puntos, "alta")}, media ${np(m.puntos, "media")} y baja ${np(m.puntos, "baja")}` : ""}.${hTot ? ` ${hTot} ya están listos para verificar o resueltos.` : ""} Los ${Math.min(3, tms.length)} temas de arriba reúnen ${top3} de los ${m.puntos.length} puntos. Tocá un tema para ver sus puntos.</div>`
+    + rkFila("", "Todos los temas", m.puntos) + tms.map(r => rkFila(r.t.key, corto(r.t.nombre), r.ps)).join("")
+    + `<div class="ley"><span><i style="background:var(--ok)"></i>listo o resuelto</span><span><i style="background:#8FA3B1"></i>por hacer</span></div></div>`;
   const todas = [...ORDENES].sort((a, b) => ordenMes(b.mes) - ordenMes(a.mes) || (a.numero < b.numero ? -1 : 1));
   $("lateral").innerHTML += `<h3 style="margin-top:18px">Órdenes de trabajo</h3>` + (todas.length ? todas.map(o => { const [h, t] = otAvance(o); return `<button type="button" class="lot${o.numero === st.ot ? " on" : ""}" data-otf="${esc(o.numero)}" data-otm="${esc(o.mes)}"><b>${esc(o.numero)}</b><span>${esc(otNombre(o))} · ${esc(o.fecha)}</span><span class="barra"><i style="width:${Math.round(100 * h / t)}%"></i></span><span class="c">${h} de ${t} listos para verificar o resueltos</span></button>`; }).join("") : `<div class="ayuda">Todavía no hay órdenes. Seleccioná puntos y tocá «Armar orden de trabajo».</div>`);
   const act = [];
@@ -685,7 +698,7 @@ function render(){
   const otSel = om.find(o => o.numero === st.ot);
   $("activos").innerHTML = act.map(a => `<span class="pill">${esc(a)}</span>`).join("") + (act.length ? `<button class="link" type="button" id="limpiar">Limpiar filtros</button>` : "")
     + (otSel ? `<button class="link" type="button" data-verot="${esc(otSel.numero)}">Ver la orden ${esc(otSel.numero)}</button>` : "")
-    + (st.sector && innerWidth < 900 ? `<button class="link" type="button" data-sug="${esc(st.sector)}">Sugerir otro nombre para este sector</button>` : "")
+    + (st.sector ? `<button class="link" type="button" data-sug="${esc(st.sector)}">Sugerir otro nombre para este sector</button>` : "")
     + `<span class="cuenta"><span class="tab">${lista.length} de ${m.puntos.length} puntos</span><button class="link" type="button" id="selFilt">Seleccionar los ${lista.length}</button></span>`;
   $("lista").innerHTML = (otSel ? `<div class="otcab"><b>${esc(otSel.numero)}</b> · dirigida a <b>${esc(otNombre(otSel))}</b> · pedida por ${esc(otSel.quien)} el ${esc(otSel.fecha)}${otSel.texto ? `<br><span class="muted">${esc(otSel.texto)}</span>` : ""}</div>` : "")
     + (grupos(m, lista).map(g => { const ns = g.ps.filter(p => SEL.has(key(m, p))).length; return `<section class="grupo${CERR.has(g.titulo) ? " cerrado" : ""}"><div class="ghead" data-tg="${esc(g.titulo)}" title="Tocá para minimizar o desplegar"><h2><span class="tg">▾</span>${esc(g.titulo)}${ns ? `<span class="nsel">${ns} seleccionado${ns === 1 ? "" : "s"}</span>` : ""}</h2><span class="n tab">${g.ps.length} punto${g.ps.length === 1 ? "" : "s"}</span><button class="selg" type="button" data-selg="${g.ps.map(p => p.n).join(",")}">Seleccionar el grupo</button>${otsGrupo(m, g.ps)}</div>`
@@ -888,7 +901,7 @@ document.addEventListener("click", e => {
   if (t.closest("#otBorrarA")){ $("otBorrar").hidden = false; $("obQ").focus(); return; }
   if (t.closest("#otBorrarNo")){ $("otBorrar").hidden = true; return; }
   const bb = t.closest("[data-borrarot]"); if (bb){ borrarOT(bb.dataset.borrarot); return; }
-  const rk = t.closest(".rkr"); if (rk){ st.sector = st.sector === rk.dataset.s ? "" : rk.dataset.s; render(); return; }
+  const rk = t.closest(".rkr"); if (rk){ st.tema = st.tema === rk.dataset.t ? "" : rk.dataset.t; render(); return; }
   const tg = t.closest("[data-tg]"); if (tg && !t.closest("button")){ const k = tg.dataset.tg; CERR.has(k) ? CERR.delete(k) : CERR.add(k); tg.parentNode.classList.toggle("cerrado", CERR.has(k)); return; }
   const bo = t.closest("[data-bajot]"); if (bo){ const o = ORDENES.find(x => x.numero === bo.dataset.bajot); if (o){ $("velo").hidden = true; imprimirOT(o); } return; }
   const sug = t.closest("[data-sug]"); if (sug){ abrirSug(sug.dataset.sug); return; }
