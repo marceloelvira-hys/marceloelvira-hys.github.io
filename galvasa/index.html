@@ -413,7 +413,9 @@ const hoy = () => new Date().toLocaleDateString("es-AR");
 const key = (m, p) => m.clave + "|" + p.n;
 const corto = s => s.replace("Instalación eléctrica — ", "Eléctrico · ");
 function ls(k, v){ try { if (v === undefined) return localStorage.getItem(k) || ""; if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch(e){ return ""; } }
-const quien = () => ls("galvasa-nombre"), setQuien = v => ls("galvasa-nombre", v);
+// v2 (4/11/2026): se descartan los nombres que quedaron guardados de las pruebas
+const quien = () => ls("galvasa-nombre-2"), setQuien = v => ls("galvasa-nombre-2", v);
+ls("galvasa-nombre", null);
 function toast(t){ const el = $("toast"); el.textContent = t; el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => el.hidden = true, 2800); }
 
 // ---------- cifrado ----------
