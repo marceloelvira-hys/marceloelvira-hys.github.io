@@ -286,6 +286,8 @@ footer img{height:30px}
 button.chip{cursor:pointer;font:inherit;font-size:inherit}
 .otcab{border:1px solid #F6C9AA;border-left:4px solid var(--accent);background:#FFF8F3;border-radius:var(--r);padding:10px 12px;margin-bottom:12px;font-size:14px}
 .salir{color:#fff!important;opacity:.85}
+.vidb{border-color:var(--brand)!important;color:var(--brand)!important}
+.vidcaja{width:min(1100px,100%)} .vidcaja video{display:block;width:100%;background:#000;aspect-ratio:16/9}
 @media print{.lot,.otcab .link,.ghead .tg{display:none}}
 .ghead{cursor:pointer;user-select:none}
 .ghead .tg{display:inline-block;width:18px;transition:transform .15s}
@@ -358,6 +360,7 @@ button.chip{cursor:pointer;font:inherit;font-size:inherit}
       <button class="btn" id="bPdf" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 19h16"/></svg>Informe completo (PDF)</button>
       <button class="btn" id="bFilt" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V3h12v6M6 18H4v-7h16v7h-2M8 14h8v7H8z"/></svg>Bajar lo filtrado</button>
       <button class="btn" id="bCsv" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4zM4 10h16M10 4v16"/></svg>Planilla (Excel)</button>
+      <button class="btn vidb" id="bVid" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M10 8.5v7l6-3.5z" fill="currentColor"/></svg>Cómo se usa (video)</button>
     </div>
   </div>
 </div>
@@ -469,6 +472,19 @@ function cargarTodas(root){
 new MutationObserver(ms => ms.forEach(m => m.addedNodes.forEach(n => { if (n.nodeType === 1){ if (n.matches("img[data-e]") && !n.src) hidratar(n.parentNode); else hidratar(n); } })))
   .observe(document.body, {childList: true, subtree: true});
 
+function cerrarVelo(){ $("velo").querySelectorAll("video").forEach(v => v.pause()); $("velo").hidden = true; }
+let VIDEO_URL = null;
+async function verVideo(){
+  $("velo").innerHTML = `<div class="caja vidcaja" role="dialog" aria-modal="true" aria-labelledby="vT"><div class="cab"><h3 id="vT">Cómo se usa el portal</h3><button class="cerrar" type="button" data-cerrar>Cerrar ✕</button></div><video id="vid" controls playsinline preload="auto"></video></div>`;
+  $("velo").hidden = false;
+  try {
+    if (!VIDEO_URL){
+      if (!CIFRADO) VIDEO_URL = "video/tutorial.mp4";
+      else { toast("Cargando el video…"); VIDEO_URL = URL.createObjectURL(new Blob([await bajarCifrado("video/tutorial.mp4")], {type: "video/mp4"})); }
+    }
+    const v = $("vid"); if (!v) return; v.src = VIDEO_URL; v.play().catch(() => {});
+  } catch(e){ toast("No se pudo cargar el video"); }
+}
 async function bajarPdf(clave, nombre){
   if (!CIFRADO){ location.href = "pdf/" + encodeURIComponent(nombre); return; }
   toast("Preparando el PDF…");
@@ -878,7 +894,8 @@ document.addEventListener("click", e => {
   const qf = t.closest("[data-qf]"); if (qf){ NUEVAS.splice(Number(qf.dataset.qf), 1); prevNuevas(); return; }
   const es = t.closest("[data-est]"); if (es){ es.parentNode.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", b === es)); return; }
   const c = t.closest(".fila[data-n]"); if (c){ abrir(Number(c.dataset.n)); return; }
-  if (t.id === "velo" || t.closest("[data-cerrar]")){ $("velo").hidden = true; return; }
+  if (t.id === "velo" || t.closest("[data-cerrar]")){ cerrarVelo(); return; }
+  if (t.closest("#bVid")){ verVideo(); return; }
   if (t.closest("#pPrev")){ fi = (fi - 1 + fotosDet.length) % fotosDet.length; foto(); return; }
   if (t.closest("#pNext")){ fi = (fi + 1) % fotosDet.length; foto(); return; }
   const ti = t.closest("[data-i]"); if (ti){ fi = Number(ti.dataset.i); foto(); return; }
@@ -899,7 +916,7 @@ document.addEventListener("change", e => {
   if (t.name === "ls"){ st.sector = t.dataset.s; render(); }
 });
 $("fQ").addEventListener("input", e => { st.q = e.target.value; render(); });
-document.addEventListener("keydown", e => { if (e.key === "Escape") $("velo").hidden = true; if (e.key === "Enter" && e.target.classList && e.target.classList.contains("rkr")) e.target.click(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") cerrarVelo(); if (e.key === "Enter" && e.target.classList && e.target.classList.contains("rkr")) e.target.click(); });
 
 function arrancar(){
   if (!CIFRADO) ADMIN = USUARIO.admin;
