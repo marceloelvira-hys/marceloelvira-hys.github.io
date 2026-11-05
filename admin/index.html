@@ -110,12 +110,21 @@ h2 small{font:500 13px Barlow,sans-serif;color:var(--muted)}
 .cargando{padding:18px 16px;color:var(--muted)}
 
 /* páginas y sin portal */
-.pags{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
-.pag{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:12px;padding:10px 12px;text-decoration:none;border-left:6px solid}
+.pags{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;align-items:start}
+.pag{background:var(--card);border-radius:12px;border-left:6px solid;overflow:hidden}
+.pag .cab{display:flex;align-items:center;gap:12px;padding:10px 12px;width:100%;border:0;background:none;text-align:left}
 .pag .lg{width:46px;height:46px;border-radius:8px;display:grid;place-items:center;flex:none}
 .pag .lg img{max-width:38px;max-height:38px}
-.pag b{display:block}
-.pag span{font-size:13px;color:var(--muted)}
+.pag b{display:block;font-size:16px}
+.pag .cab span{font-size:13px;color:var(--muted)}
+.pag .fl{margin-left:auto;font-size:18px;color:var(--muted)}
+.pag .op{border-top:1px solid #EFECE8;padding:4px 12px 10px}
+.pag .o{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;padding:9px 0;border-bottom:1px solid #F3F1EE}
+.pag .o:last-child{border-bottom:0}
+.pag .o .t{flex:1 1 160px}
+.pag .o .t small{display:block;color:var(--muted);font-size:12.5px}
+.pag .o a,.pag .o button,.copiar{border:1px solid var(--line);background:#fff;border-radius:7px;padding:5px 10px;font-size:13px;font-weight:600;text-decoration:none;color:var(--ink)}
+.copiar.ok{background:var(--ok);border-color:var(--ok);color:#fff}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 .chips span{background:var(--card);border:1px dashed #C8C3BC;border-radius:20px;padding:5px 12px;font-size:14px;color:var(--muted)}
 .llego{display:inline-block;font:700 13px Barlow,sans-serif;background:#EEF0F2;color:#3B4148;border-radius:6px;padding:2px 8px;margin-bottom:5px}
@@ -127,6 +136,22 @@ h2 small{font:500 13px Barlow,sans-serif;color:var(--muted)}
 .bts button.tb{background:var(--ink);color:#fff;border-color:var(--ink)}
 .bts button.res{background:var(--ok);color:#fff;border-color:var(--ok)}
 .vacio a{color:var(--muted)}
+.usr{margin:12px 16px 0;background:#F7F5F2;border-radius:10px;padding:10px 14px}
+.usr h4{margin:2px 0 6px;font:600 17px "Barlow Condensed",sans-serif}
+.ur{display:grid;grid-template-columns:1.2fr 1.3fr 1.5fr;gap:6px 12px;align-items:center;padding:8px 0;border-top:1px solid #E6E2DC}
+.ur:first-of-type{border-top:0}
+.un b{display:block}.un small,.uc{display:block;font-size:12px;color:var(--muted)}
+.ua{display:flex;flex-wrap:wrap;gap:5px}
+code{font:600 13.5px ui-monospace,Consolas,monospace;background:#fff;border:1px solid var(--line);border-radius:5px;padding:1px 6px}
+.clv{display:inline-flex;align-items:center;gap:4px}
+.mini{border:0;background:none;padding:2px 4px;font-size:14px}
+.clv .copiar,.un .copiar{padding:1px 6px;margin-left:4px}
+.mini2{border:1px solid var(--line);background:#fff;border-radius:7px;padding:5px 9px;font-size:12.5px;font-weight:600}
+.mini2.baja{color:var(--ver)}.mini2.ok{background:var(--ok);border-color:var(--ok);color:#fff}
+.alta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:10px 0 4px;border-top:1px solid #E6E2DC}
+.alta input{border:1px solid var(--line);border-radius:7px;padding:6px 8px;font:inherit;font-size:14px;width:160px}
+.unota{font-size:12.5px;color:var(--muted);padding:6px 0 2px}
+@media (max-width:640px){.ur{grid-template-columns:1fr}}
 footer{color:var(--muted);font-size:12.5px;padding:10px 0 30px}
 
 @media (max-width:640px){
@@ -264,6 +289,68 @@ async function resolver(id, mes, punto, btn) {
 }
 function alertar(id, t) { const c = document.getElementById('c_' + id); if (c) c.insertAdjacentHTML('afterbegin', `<div class="aviso">${esc(t)}</div>`); }
 
+const BASE = 'https://marceloelvira-hys.github.io/';
+let PAGAB = {};
+function pintarPags() {
+  document.getElementById('pags').innerHTML = CFG.paginas.map((g, k) => `
+    <div class="pag" style="border-color:${g.color}">
+      <button class="cab" onclick="PAGAB[${k}]=!PAGAB[${k}];pintarPags()">
+        <div class="lg" style="background:${g.color}">${g.logo ? `<img src="${g.logo}" alt="">` : `<b style="color:#fff">${esc(g.cliente[0])}</b>`}</div>
+        <div><b>${esc(g.cliente)}</b><span>${g.paginas.length} página${g.paginas.length > 1 ? 's' : ''}</span></div><span class="fl">${PAGAB[k] ? '▴' : '▾'}</span></button>
+      ${PAGAB[k] ? `<div class="op">${g.paginas.map(x => `<div class="o"><div class="t">${esc(x.titulo)}<small>${esc(x.detalle || '')}</small></div>
+        <a href="../${x.url}" target="_blank">Abrir ↗</a>${btnCopiar(BASE + x.url)}</div>`).join('')}</div>` : ''}
+    </div>`).join('');
+}
+function btnCopiar(url, txt = '🔗 Copiar link para el cliente') { return `<button class="copiar" data-url="${esc(url)}" onclick="copiar(this)">${txt}</button>`; }
+async function copiar(b) {
+  const u = b.dataset.url;
+  try { await navigator.clipboard.writeText(u); }
+  catch (e) { const t = document.createElement('textarea'); t.value = u; document.body.appendChild(t); t.select(); try { document.execCommand('copy'); } catch (x) {} t.remove(); }
+  const txt = b.textContent; b.classList.add('ok'); b.textContent = '✓ Copiado'; setTimeout(() => { b.classList.remove('ok'); b.textContent = txt; }, 1800);
+}
+
+/* ---------- usuarios y claves ---------- */
+let USR = {}, ALTA = {};
+const clave = c => `<span class="clv"><code data-c="${esc(c)}">••••••</code><button class="mini" onclick="const e=this.previousElementSibling;e.textContent=e.textContent==='••••••'?e.dataset.c:'••••••'">👁</button>${btnCopiar(c, '📋')}</span>`;
+function accesoTxt(p, u, cl) { return `Portal de Higiene y Seguridad de ${p.nombre}\n${BASE}${p.url.replace('../', '')}\n` + (u ? `Usuario: ${u}\n` : '') + `Clave: ${cl}`; }
+function panelUsuarios(p, x) {
+  const A = p.acceso, url = BASE + p.url.replace('../', '');
+  if (A.tipo === 'compartida') return `<div class="usr"><h4>🔑 Acceso al portal</h4>
+    <div class="ur"><div class="un"><b>Clave del portal</b><small>Una sola para todos los de ${esc(p.nombre)}</small></div>${clave(A.clave)}${btnCopiar(accesoTxt(p, '', A.clave), '📋 Copiar acceso para el cliente')}</div>
+    <div class="ur"><div class="un"><b>Tu link de administrador</b><small>Entra directo como Lic. Marcelo Elvira</small></div>${btnCopiar(A.admin_link, '🔗 Copiar mi link')}</div>
+    <div class="unota">Para cambiar la clave o pasar a usuarios por persona, pedímelo: hay que volver a cifrar el portal.</div></div>`;
+  const vivo = x && x.d && x.d.cuentas, lista = vivo || A.usuarios.map(u => ({...u, propia: null}));
+  const fila = u => {
+    let c, acc = '';
+    if (u.admin) c = `${clave(A.admin_clave)}<small class="uc">Tu clave (también la del tablero)</small>`;
+    else if (u.propia === null) c = `<span class="uc">Inicial ${esc(u.inicial)} · no se sabe si ya la cambió</span>`;
+    else if (u.propia && u.clave) c = `${clave(u.clave)}<small class="uc">La eligió ${esc(u.fecha)}</small>`;
+    else if (u.propia) c = `<span class="uc">Ya eligió la suya (te llegó por mail)</span>`;
+    else c = `<code>${esc(u.inicial)}</code><small class="uc">Inicial: la cambia al entrar</small>`;
+    if (!u.admin) {
+      acc += btnCopiar(accesoTxt(p, u.usuario, u.propia ? (u.clave || 'la que elegiste') : `${u.inicial} (la primera vez te pide elegir una nueva)`), '📋 Copiar acceso');
+      if (vivo) acc += `<button class="mini2" onclick="opCuenta('${p.id}','resetear','${esc(u.usuario)}',this)">↺ Volver a ${esc(u.inicial || '123')}</button><button class="mini2 baja" onclick="opCuenta('${p.id}','baja','${esc(u.usuario)}',this)">✕ Dar de baja</button>`;
+    }
+    return `<div class="ur"><div class="un"><b>${esc(u.nombre)}</b><small>usuario: <code>${esc(u.usuario)}</code>${btnCopiar(u.usuario, '📋')}</small></div><div class="uv">${c}</div><div class="ua">${acc}</div></div>`;
+  };
+  return `<div class="usr"><h4>🔑 Usuarios y claves</h4>${lista.map(fila).join('')}
+    ${A.soporte ? `<div class="ur"><div class="un"><b>Clave de soporte</b><small>Sólo vos: entra como cualquier usuario sin pedir cambio</small></div><div class="uv">${clave(A.soporte)}</div><div class="ua"></div></div>` : ''}
+    ${vivo ? `<div class="alta"><b>Agregar usuario</b><input placeholder="Nombre y apellido" id="an_${p.id}" oninput="const u=document.getElementById('au_${p.id}');if(!u.dataset.tocado)u.value=this.value.trim().split(/\s+/)[0].toLowerCase().normalize('NFD').replace(/[^a-z0-9]/g,'')">
+      <input placeholder="usuario" id="au_${p.id}" oninput="this.dataset.tocado=1"><button class="mini2 ok" onclick="alta('${p.id}',this)">＋ Agregar (clave inicial 123)</button></div>`
+      : '<div class="unota">Para dar de alta, de baja o volver una clave a 123 desde acá, falta publicar la versión nueva del script.</div>'}</div>`;
+}
+async function opCuenta(id, op, usuario, b) {
+  if (b.dataset.ok !== '1') { b.dataset.ok = '1'; b.textContent = '¿Confirmás? Tocá de nuevo'; return; }
+  const p = CFG.portales.find(q => q.id === id); b.disabled = true; b.textContent = 'Guardando…';
+  try { await enviar(p, {accion: 'cuenta', op, usuario}); await leer(p); pintar(); } catch (e) { alertar(id, 'No se pudo hacer el cambio en la cuenta.'); }
+}
+async function alta(id, b) {
+  const p = CFG.portales.find(q => q.id === id), n = document.getElementById('an_' + id).value.trim(), u = document.getElementById('au_' + id).value.trim().toLowerCase();
+  if (!n || !/^[a-z0-9.]+$/.test(u)) { alertar(id, 'Completá el nombre y un usuario sin espacios ni acentos.'); return; }
+  b.disabled = true; b.textContent = 'Guardando…';
+  try { await enviar(p, {accion: 'cuenta', op: 'alta', usuario: u, nombre: n}); await leer(p); pintar(); }
+  catch (e) { alertar(id, e && e.error === 'existe' ? 'Ese usuario ya existe.' : 'No se pudo agregar el usuario.'); b.disabled = false; }
+}
 /* ---------- pantalla ---------- */
 function iniciar() {
   document.getElementById('login').remove();
@@ -277,15 +364,12 @@ function iniciar() {
   <main class="wrap">
     <section><h2>Dónde poner el foco</h2><div class="tiles" id="tiles"></div><div class="ranking" id="ranking"></div></section>
     <section><h2>Portales de clientes <small>informes, seguimiento y órdenes de trabajo</small></h2><div class="grid" id="grid"></div></section>
-    <section><h2>Páginas informativas <small>QR y aplicaciones, sin seguimiento</small></h2><div class="pags" id="pags"></div></section>
+    <section><h2>Páginas informativas <small>QR y aplicaciones, sin seguimiento · tocá el cliente para elegir</small></h2><div class="pags" id="pags"></div></section>
     <section><h2>Clientes sin portal todavía <small>${CFG.sin_portal.length}</small></h2><div class="chips" id="chips"></div></section>
     <footer>«Nuevo» = todavía no lo marcaste como visto. Lo visto sigue en la lista hasta que lo marques «Ya lo trabajé». Los puntos para verificar quedan hasta que se marcan Resueltos. Las marcas quedan guardadas en la planilla de cada portal: son las mismas en la compu y en el celular. Lo que cargás vos no cuenta como nuevo.</footer>
   </main>`;
   document.getElementById('act').onclick = actualizar;
-  document.getElementById('pags').innerHTML = CFG.paginas.map(g => `
-    <a class="pag" href="../${g.url}" target="_blank" style="border-color:${g.color}">
-      <div class="lg" style="background:${g.color}">${g.logo ? `<img src="${g.logo}" alt="">` : `<b style="color:#fff">${esc(g.cliente[0])}</b>`}</div>
-      <div><b>${esc(g.cliente)}</b><span>${esc(g.titulo)}</span></div></a>`).join('');
+  pintarPags();
   document.getElementById('chips').innerHTML = CFG.sin_portal.map(n => `<span>${esc(n)}</span>`).join('');
   actualizar();
 }
@@ -321,10 +405,13 @@ function tarjeta(p) {
   const pie = `<div class="acc">
       <a class="pri" href="${p.admin_url}" target="_blank">Entrar como admin ↗</a>
       <a href="${p.url}" target="_blank">Ver como el cliente</a>
+      ${btnCopiar(BASE + p.url.replace('../', ''))}
+      <button onclick="USR['${p.id}']=!USR['${p.id}'];pintar()">🔑 Usuarios y claves</button>
       <span class="nota">${esc(p.admin_entrada)}</span>
       ${nuevos && !a.viejo ? `<button class="visto" onclick="todoVisto('${p.id}')">👁 Marcar todo como visto (${nuevos})</button>` : ''}</div>`;
-  if (x.cargando) return `<div class="card" id="c_${p.id}">${top}<div class="cargando">Leyendo la planilla…</div>${pie}</div>`;
-  if (x.error) return `<div class="card" id="c_${p.id}">${top}<div class="aviso">No se pudo leer la planilla del portal. Probá «Actualizar»; si sigue, avisame.</div>${pie}</div>`;
+  const pie2 = (USR[p.id] ? panelUsuarios(p, x) : '') + pie;
+  if (x.cargando) return `<div class="card" id="c_${p.id}">${top}<div class="cargando">Leyendo la planilla…</div>${pie2}</div>`;
+  if (x.error) return `<div class="card" id="c_${p.id}">${top}<div class="aviso">No se pudo leer la planilla del portal. Probá «Actualizar»; si sigue, avisame.</div>${pie2}</div>`;
   const cnt = (cl, l, n, nv) => `<button class="cnt ${cl}${n ? '' : ' cero'}${ab === cl ? ' on' : ''}" onclick="abrirLista('${p.id}','${cl}')"><span class="n">${n}</span><span class="l">${l}<small>${nv ? nv + ' sin ver' : n ? 'todo visto' : 'nada pendiente'}</small></span></button>`;
   const L = {ver: a.verificar, ot: a.ots, av: a.avances}, c3 = k => [pend(L[k]).length, L[k].filter(i => !i.m).length];
   const m = p.meses[0], est = a.porMes[m.clave] || {};
@@ -336,7 +423,7 @@ function tarjeta(p) {
   return `<div class="card" id="c_${p.id}">${top}
     ${a.viejo ? '<div class="aviso">Falta publicar la versión nueva del script de este portal: por ahora se ve sin hora y sin marcas.</div>' : ''}
     <div class="cont">${cnt('ver', 'Para verificar', ...c3('ver'))}${cnt('ot', 'Órdenes de trabajo', ...c3('ot'))}${cnt('av', 'Avances y comentarios', ...c3('av'))}</div>
-    ${prog}${ab ? lista(p, a, ab) : ''}${pie}</div>`;
+    ${prog}${ab ? lista(p, a, ab) : ''}${pie2}</div>`;
 }
 function abrirLista(id, cl) { ABIERTO[id] = ABIERTO[id] === cl ? null : cl; pintar(); }
 function verTrab(id) { VERTRAB[id] = !VERTRAB[id]; pintar(); }
