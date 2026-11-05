@@ -1144,7 +1144,7 @@ function esgDoc(gen){
   return `<table class="esg-pg"><tbody><tr><td>
   <div class="esg-mem"><b>Lic. Marcelo Elvira</b><span>Lic. en Higiene y Seguridad en el Trabajo</span><small>M.P. 0656 C.P.I.I. · 15-4564-6462 · marcelo.a.elvira@gmail.com</small></div>
   <h1>Estado de situación general</h1>
-  <div class="esg-fe">Higiene y Seguridad en el Trabajo · situación al ${esc(x.fecha)} · <b>informe generado el ${esc(gen)}</b></div>
+  <div class="esg-fe">Higiene y Seguridad en el Trabajo · última actualización: ${esc(x.fecha)} · <b>informe generado el ${esc(gen)}</b></div>
   <table class="esg-t esg-dat"><tr><th>Cliente</th><td>${esc(g.razon || DATA.cliente)}</td><th>CUIT</th><td>${esc(g.cuit || "")}</td></tr>
   <tr><th>Establecimiento</th><td>${esc(g.establecimiento || "")}</td><th>Superficie</th><td>${esc(g.superficie || "")}</td></tr>
   <tr><th>Domicilio</th><td>${esc(g.domicilio || DATA.domicilio)}</td><th>Encuadre</th><td>${esc(g.encuadre || "")}</td></tr></table>
@@ -1161,7 +1161,7 @@ function esgDoc(gen){
   ${[...x.docs].sort((a, b) => ord[a.estado] - ord[b.estado]).map(o => `<tr><td><b>${esc(o.doc)}</b><small>Para: ${esc(o.para)}</small></td><td>${st(o.estado, ESG_LBL[o.estado])}</td><td>${esc(o.sit) || "—"}</td></tr>`).join("")}</tbody></table>
   ${(g.textos || []).length ? `<div class="esg-bar">4. MÁQUINAS Y ELEMENTOS DE PROTECCIÓN PERSONAL</div>${g.textos.map(t => `<p class="esg-p">${esc(t)}</p>`).join("")}` : ""}
   <div class="esg-fi">${ESG_FIRMA ? `<img src="${ESG_FIRMA}" alt="">` : ""}<b>Lic. Marcelo Elvira</b><span>Lic. en Higiene y Seguridad en el Trabajo · M.P. 0656 C.P.I.I.</span></div>
-  </td></tr></tbody><tfoot><tr><td><div class="esg-pie">Estado de situación general — ${esc(g.razon || DATA.cliente)} — ${esc(g.corto_dom || DATA.domicilio)} — situación al ${esc(x.fecha)} — generado el ${esc(gen)}</div></td></tr></tfoot></table>`;
+  </td></tr></tbody><tfoot><tr><td><div class="esg-pie">Estado de situación general — ${esc(g.razon || DATA.cliente)} — ${esc(g.corto_dom || DATA.domicilio)} — última actualización: ${esc(x.fecha)} — generado el ${esc(gen)}</div></td></tr></tfoot></table>`;
 }
 async function imprimirEsg(){
   toast("Generando el estado de situación…");
