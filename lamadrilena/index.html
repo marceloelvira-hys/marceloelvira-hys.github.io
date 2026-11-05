@@ -1161,7 +1161,7 @@ function esgDoc(gen){
   ${[...x.docs].sort((a, b) => ord[a.estado] - ord[b.estado]).map(o => `<tr><td><b>${esc(o.doc)}</b><small>Para: ${esc(o.para)}</small></td><td>${st(o.estado, ESG_LBL[o.estado])}</td><td>${esc(o.sit) || "—"}</td></tr>`).join("")}</tbody></table>
   ${(g.textos || []).length ? `<div class="esg-bar">4. MÁQUINAS Y ELEMENTOS DE PROTECCIÓN PERSONAL</div>${g.textos.map(t => `<p class="esg-p">${esc(t)}</p>`).join("")}` : ""}
   <div class="esg-fi">${ESG_FIRMA ? `<img src="${ESG_FIRMA}" alt="">` : ""}<b>Lic. Marcelo Elvira</b><span>Lic. en Higiene y Seguridad en el Trabajo · M.P. 0656 C.P.I.I.</span></div>
-  </td></tr></tbody><tfoot><tr><td><div class="esg-pie">Estado de situación general — ${esc(g.razon || DATA.cliente)} — ${esc(g.corto_dom || DATA.domicilio)} — última actualización: ${esc(x.fecha)} — generado el ${esc(gen)}</div></td></tr></tfoot></table>`;
+  </td></tr></tbody><tfoot><tr><td><div class="esg-pie">Estado de situación general — ${esc(g.razon || DATA.cliente)} — ${esc(g.corto_dom || DATA.domicilio)}</div></td></tr></tfoot></table>`;
 }
 async function imprimirEsg(){
   toast("Generando el estado de situación…");
