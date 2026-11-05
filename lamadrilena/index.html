@@ -953,7 +953,10 @@ function arrancar(){
 const TABS = [["informe", "Informe de visita"], ["docs", "Documentación pedida"], ["hys", "Documentación de HyS"], ["epp", "EPP"], ["maq", "Máquinas"], ["dl", "Descargas"]];
 const DOCST = {FALTA: "Falta", PARCIAL: "Parcial", CONFIRMAR: "A confirmar", NUESTRO: "Lo hacemos nosotros", OK: "Presentado"};
 let TAB = "informe", MAQ = "embaladora";
-const X = () => DATA.extra;
+// 4/11/2026: la ficha de máquina todavía no se muestra en la página (sí el simulador)
+const OCULTOS = ["ficha-emb"];
+let XF = null;
+const X = () => { const e = DATA.extra; if (e && XF !== e){ XF = e; e.maquinas.forEach(m => m.archivos = m.archivos.filter(k => !OCULTOS.includes(k))); e.grupos.forEach(g => g.items = g.items.filter(i => !OCULTOS.includes(i.k))); } return e; };
 function solapas(){
   const pend = X().docs.filter(d => d.estado === "FALTA" || d.estado === "PARCIAL").length;
   $("solapasW").innerHTML = TABS.map(([k, t]) => `<button type="button" data-tab="${k}" aria-pressed="${k === TAB}">${t}${k === "docs" && pend ? `<i>${pend}</i>` : ""}${k === "informe" ? `<i>${DATA.meses[0].puntos.length}</i>` : ""}</button>`).join("");
