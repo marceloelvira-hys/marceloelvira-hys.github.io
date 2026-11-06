@@ -5,16 +5,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Metalúrgica MIT · Higiene y Seguridad</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&family=Open+Sans:wght@400;600;700&display=swap">
 <style>
 /* Portal Metalúrgica MIT (base: portal MIT / GALVASA opción C): cabecera zinc · resumen + descargas · filtros · panel de sectores + renglones con casilla de selección · barra de selección → orden de trabajo */
 :root{
-  --bg:#F4F3F7; --card:#FFFFFF; --ink:#222529; --muted:#696969; --line:#E2E2E2;
-  --brand:#34106A; --brand-dk:#24094D; --brand-soft:#EEE8F6; --accent:#34106A; --accent-ink:#FFFFFF;
-  --head:#34106A; --topbar:#1E0841; --tema:#34106A; --celeste:#008DEA;
+  --bg:#F4F6F9; --card:#FFFFFF; --ink:#222529; --muted:#696969; --line:#E2E2E2;
+  --brand:#0060B4; --brand-dk:#004F9B; --brand-soft:#EAF2FA; --accent:#0060B4; --accent-ink:#FFFFFF;
+  --head:#16305A; --topbar:#12213F; --tema:#16305A; --celeste:#00A5FF;
   --reinc:#6E1E2E; --reinc-soft:#F5E6E9;
   --ok:#2F7D4A; --ok-soft:#E5F2E9; --curso:#C8641F; --curso-soft:#FCEBDD; --pend:#5E6670; --pend-soft:#ECEEF1; --listo:#2E5FA3; --listo-soft:#E6EEF8;
-  --font:"Poppins",system-ui,"Segoe UI",Arial,sans-serif; --font-h:"Poppins",system-ui,sans-serif; --r:6px;
+  --font:"Open Sans",system-ui,"Segoe UI",Arial,sans-serif; --font-h:Rubik,"Open Sans",sans-serif; --r:6px;
   --pad-l:max(16px,env(safe-area-inset-left,0px)); --pad-r:max(16px,env(safe-area-inset-right,0px));
 }
 *{box-sizing:border-box}
@@ -322,7 +322,7 @@ button.chip{cursor:pointer;font:inherit;font-size:inherit}
 .nota-mini .cam{color:var(--ok);font-weight:600;white-space:nowrap}
 .otdoc .ap .avt{font-weight:700;color:#2F7D4A;margin:8px 0 4px;font-size:10.5pt}
 /* ---- Metalúrgica MIT: ajustes de identidad (base MIT) ---- */
-.login .logos .g{height:64px}.login .logos .g img{background:none!important;padding:0!important;height:64px!important;border-radius:4px}
+.login .logos .g{height:46px}.login .logos .g img{background:none!important;padding:0!important;height:46px!important}
 .prof-login{display:flex;align-items:center;gap:12px;background:#fff;border-radius:6px;padding:8px 12px;color:#222529;align-self:flex-start}.prof-login img{height:34px!important;background:none!important;padding:0!important}.prof-login span{font-size:12px;line-height:1.3}.prof-login b{display:block;font-size:13.5px}
 .jea a{color:#fff;text-decoration:none;opacity:.85}.jea a:hover{text-decoration:underline}
 /* descargas agrupadas */
@@ -358,8 +358,8 @@ body.extra .selbar{display:none!important}
 .x-docs{grid-template-columns:1.4fr 1fr 150px 1.3fr 140px}.x-est{grid-template-columns:1.3fr 140px 150px 120px 1.4fr 170px}.x-cot{grid-template-columns:1.4fr 1fr 150px}
 .x-m{color:var(--muted);font-size:12.5px}.x-t{font-weight:600}
 .x-st{font-size:11.5px;font-weight:600;border-radius:999px;padding:2px 9px;display:inline-block}
-.x-st.FALTA{background:#FBE9EA;color:#C0392B}.x-st.PARCIAL{background:#FFF4DC;color:#8A5A12}.x-st.CONFIRMAR{background:#EEF0F3;color:#555B66}.x-st.NUESTRO{background:#E6EEF8;color:#5B3A94}.x-st.OK{background:#E5F2E9;color:#2F7D4A}
-.x-e{font-size:11.5px;font-weight:700}.x-e.EJECUTADO{color:#2F7D4A}.x-e.EN.CURSO,.x-e.EN{color:#C8641F}.x-e.A{color:#5B3A94}.x-e.SIN,.x-e.POSTERIOR{color:#777}
+.x-st.FALTA{background:#FBE9EA;color:#C0392B}.x-st.PARCIAL{background:#FFF4DC;color:#8A5A12}.x-st.CONFIRMAR{background:#EEF0F3;color:#555B66}.x-st.NUESTRO{background:#E6EEF8;color:#0060B4}.x-st.OK{background:#E5F2E9;color:#2F7D4A}
+.x-e{font-size:11.5px;font-weight:700}.x-e.EJECUTADO{color:#2F7D4A}.x-e.EN.CURSO,.x-e.EN{color:#C8641F}.x-e.A{color:#0060B4}.x-e.SIN,.x-e.POSTERIOR{color:#777}
 .x-btn{border:1px solid var(--line);background:#fff;border-radius:6px;padding:6px 10px;font-size:12.5px;font-weight:600;cursor:pointer;text-align:left}
 .x-btn.p{background:var(--brand);border-color:var(--brand);color:#fff}
 .x-dl{display:flex;flex-direction:column;gap:6px}
@@ -388,7 +388,7 @@ body.extra .selbar{display:none!important}
 /* 4/11/2026: resumen por tema en la barra izquierda */
 .rkr .prs{grid-column:1 / -1;display:flex;gap:4px;flex-wrap:wrap;margin-top:1px}
 .rkr .pr{font-size:11px;font-weight:600;border-radius:3px;padding:0 5px;line-height:17px}
-.rkr .pr.prio-alta{background:#FBE9EA;color:#C0392B}.rkr .pr.prio-media{background:#FDF2E3;color:#A0611A}.rkr .pr.prio-baja{background:#E6EEF8;color:#5B3A94}
+.rkr .pr.prio-alta{background:#FBE9EA;color:#C0392B}.rkr .pr.prio-media{background:#FDF2E3;color:#A0611A}.rkr .pr.prio-baja{background:#E6EEF8;color:#0060B4}
 /* 4/11/2026: fotos de cada punto más grandes: ocupan todo el alto del renglón, de borde a borde, sin agrandarlo (mismo ancho de columna) */
 .fila .thumbs{align-self:stretch;position:relative;min-height:62px;margin:-10px -12px -10px 0}
 .fila .thumbs .tw{position:absolute;inset:0;display:flex;gap:3px;border-radius:0 5px 5px 0;overflow:hidden}
@@ -404,22 +404,22 @@ body.extra .selbar{display:none!important}
   #esg .esg-pg{width:100%;border-collapse:collapse}
   #esg .esg-pg > tbody > tr > td,#esg .esg-pg > tfoot > tr > td{padding:0}
   #esg .esg-pie{border-top:1px solid #ccc;margin-top:8px;padding-top:4px;text-align:center;font-size:7pt;color:#666}
-  #esg .esg-mem{border-bottom:1.5px solid #34106A;padding-bottom:5px;display:flex;flex-direction:column}
-  #esg .esg-mem b{font-size:15pt;color:#34106A}
-  #esg .esg-mem span{font-size:10.5pt;color:#5B3A94}
+  #esg .esg-mem{border-bottom:1.5px solid #16305A;padding-bottom:5px;display:flex;flex-direction:column}
+  #esg .esg-mem b{font-size:15pt;color:#16305A}
+  #esg .esg-mem span{font-size:10.5pt;color:#0060B4}
   #esg .esg-mem small{font-size:7.5pt;color:#666}
-  #esg h1{font-size:16pt;color:#34106A;margin:12px 0 0}
+  #esg h1{font-size:16pt;color:#16305A;margin:12px 0 0}
   #esg .esg-fe{font-size:9.5pt;color:#555;margin-bottom:8px}
-  #esg .esg-fe b{color:#34106A}
-  #esg .esg-bar{background:#34106A;color:#fff;font-weight:700;font-size:9.5pt;padding:3px 8px;margin:12px 0 4px;break-after:avoid}
+  #esg .esg-fe b{color:#16305A}
+  #esg .esg-bar{background:#16305A;color:#fff;font-weight:700;font-size:9.5pt;padding:3px 8px;margin:12px 0 4px;break-after:avoid}
   #esg .esg-t{width:100%;border-collapse:collapse;font-size:8.3pt}
   #esg .esg-t th,#esg .esg-t td{border:1px solid #bfbfbf;padding:3px 5px;vertical-align:top;text-align:left}
-  #esg .esg-t thead th{background:#E6DFF1;color:#34106A;font-size:7.6pt}
+  #esg .esg-t thead th{background:#DCE9F6;color:#16305A;font-size:7.6pt}
   #esg .esg-t tr{break-inside:avoid}
   #esg .esg-t td.c,#esg .esg-t th:nth-child(n+2){text-align:center}
   #esg .esg-t small{display:block;color:#666;font-size:7.4pt}
   #esg .esg-t tr.tot td{font-weight:700;background:#F2F2F2}
-  #esg .esg-dat th{background:#F1EDF7;width:15%;text-align:left!important;color:#222}
+  #esg .esg-dat th{background:#EEF4FA;width:15%;text-align:left!important;color:#222}
   #esg .esg-n{font-size:8pt;color:#666;margin:4px 0}
   #esg .esg-p{font-size:9pt;margin:4px 0}
   #esg .esg-fi{display:flex;flex-direction:column;align-items:flex-end;margin-top:18px;break-inside:avoid}
@@ -468,7 +468,7 @@ body.extra .selbar{display:none!important}
 .mq-ss{display:flex;gap:6px;flex-wrap:wrap}.mq-ss button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:4px 10px;font-size:12px;cursor:pointer}.mq-ss button[aria-pressed=true]{background:var(--brand);color:#fff;border-color:var(--brand)}
 .mq-sec{background:#F6F4FA;font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--brand);padding:7px 14px;border-bottom:1px solid #EEE}
 .mq{border-bottom:1px solid #EEE}.mq summary{display:grid;grid-template-columns:52px 1fr auto auto;gap:10px;align-items:center;padding:8px 14px;cursor:pointer;font-size:13.5px;list-style:none}
-.mq summary::-webkit-details-marker{display:none}.mq summary b{color:var(--brand)}.mq summary em{font-style:normal;font-size:11.5px;color:var(--muted);background:#F1EDF7;border-radius:4px;padding:1px 7px}
+.mq summary::-webkit-details-marker{display:none}.mq summary b{color:var(--brand)}.mq summary em{font-style:normal;font-size:11.5px;color:var(--muted);background:#EEF4FA;border-radius:4px;padding:1px 7px}
 .mq summary i{font-style:normal;font-size:11px;font-weight:700;background:#6E1E2E;color:#fff;border-radius:999px;padding:1px 8px}
 .mq[open] summary{background:#FAF8FD}
 .mq-d{display:grid;grid-template-columns:1fr 1fr 1.3fr;gap:14px;padding:10px 14px 14px 76px;font-size:13px}
@@ -480,11 +480,49 @@ body.extra .selbar{display:none!important}
 .solapas button{padding:12px 11px;font-size:13px}
 .plantas .pl-vid{margin-left:auto;border-color:var(--celeste);min-width:150px}.plantas .pl-vid b{color:var(--celeste)}
 
+/* ---- MIT 6/11: colores y letra de mit.com.ar ---- */
+body{font-family:"Open Sans",system-ui,Arial,sans-serif}
+h1,h2,h3,.titulo h1,.solapas button,.plantas button b,.g-box h3,.x-bh{font-family:Rubik,"Open Sans",sans-serif}
+.head{background:linear-gradient(to right top,#12213F,#16305A,#163F77,#124F95,#0060B4)!important}
+.head .logo-g img{border-radius:0;height:40px!important}
+.titulo h1::after{content:"";display:block;width:46px;height:3px;background:#DC3F3F;margin-top:4px}
+.plantas{background:#EAF2FA;border-bottom:1px solid #CFE0F1}
+.plantas button{border-color:#C9DCEF}
+.plantas button[aria-pressed=true]{background:#0060B4;border-color:#0060B4;box-shadow:inset 0 -4px 0 #DC3F3F}
+.plantas button[aria-pressed=true] span{color:#DCEBFA}
+.plantas .pl-lbl{color:#0060B4}
+.plantas .pl-ed{border-color:#6E1E2E;min-width:150px}.plantas .pl-ed b{color:#6E1E2E}.plantas .pl-ed.on{background:#6E1E2E}.plantas .pl-ed.on b,.plantas .pl-ed.on span{color:#fff}
+.plantas .pl-vid{margin-left:auto}.plantas .pl-vid + .pl-ed{margin-left:0}.plantas .pl-ed:only-of-type{margin-left:auto}
+.ig-bars i{background:#0060B4}
+.sap-c{border-top-color:#0060B4}.sap-k div{background:#EAF2FA}.sap-k b{color:#0060B4}.sap-l{border-left-color:#C9DCEF}.sap-l i{border-color:#0060B4}.sap-l .ok i{background:#0060B4}
+.mq-sec{background:#EEF4FA;color:#0060B4}.mq summary b{color:#0060B4}.mq summary em{background:#EAF2FA}.mq[open] summary{background:#F7FAFD}
+.mq-ss button[aria-pressed=true]{background:#0060B4;border-color:#0060B4}
+/* estado de los estudios */
+.x-est{grid-template-columns:1.5fr 150px 120px 120px 140px 170px}
+.x-e{font-size:11.5px;font-weight:700;border-radius:999px;padding:3px 10px;display:inline-block}
+.x-e.VIGENTE{background:#E5F2E9;color:#2F7D4A}.x-e.VENCIDO{background:#FBE9EA;color:#C0392B}.x-e.EN-CURSO{background:#FFF4DC;color:#8A5A12}
+/* P1 / P2 / P1 y P2 */
+.pl-tag{font-style:normal;font-size:10.5px;font-weight:700;border-radius:4px;padding:1px 6px;margin-right:4px;white-space:nowrap;vertical-align:1px}
+.pl-tag.pl-P1{background:#0060B4;color:#fff}.pl-tag.pl-P2{background:#00A5FF;color:#08263F}.pl-tag.pl-G{background:#16305A;color:#fff}
+/* publicación por sección (sólo el Lic.) */
+.pub{display:flex;gap:10px;align-items:center;flex-wrap:wrap;border:1px dashed #C08A00;background:#FFF8E6;border-radius:8px;padding:8px 12px;margin-bottom:14px;font-size:13px;font-weight:600;color:#8A5A12}
+.pub.on{border-color:#2F7D4A;background:#EEF7F1;color:#2F7D4A}.pub span{flex:1;min-width:220px}
+#pubInf .pub{margin:12px 0 0}
+.solapas button.wip{color:#A77B1A}
+/* editar textos */
+body.editando [data-ed]{outline:1.5px dashed #6E1E2E;outline-offset:2px;border-radius:2px;cursor:text;min-width:20px;display:inline-block}
+body.editando [data-ed]:focus{outline-style:solid;background:#FFF}
+/* capacitación */
+.x-cap{grid-template-columns:100px 1.3fr 1fr 1.2fr}
+.prop{background:#EAF2FA;border-radius:6px;padding:5px 8px;margin-bottom:6px;font-size:12.5px}.prop b{display:block}.prop span{color:var(--muted);font-size:11.5px}
+.caja .err{color:#C0392B;font-size:13px}
+@media (max-width:900px){.x-cap{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
 <div class="login" id="login" hidden><form class="box" id="loginForm" autocomplete="on">
-  <div class="logos"><span class="g"><img src="logo_mit.png" alt="MIT" style="height:100%;width:auto;display:block"></span></div><div class="prof-login"><img src="logo_jea.png" alt="JEA"><span><b>Lic. Marcelo Elvira</b>Lic. en Higiene y Seguridad · M.P. 0656 C.P.I.I.</span></div>
+  <div class="logos"><span class="g"><img src="logo_mit.svg" alt="MIT" style="height:100%;width:auto;display:block"></span></div><div class="prof-login"><img src="logo_jea.png" alt="JEA"><span><b>Lic. Marcelo Elvira</b>Lic. en Higiene y Seguridad · M.P. 0656 C.P.I.I.</span></div>
   <h1>Portal de Higiene y Seguridad</h1>
   <p>Plantas de Cnel. Ramón Lista 5076 y 5158 · Metalúrgica MIT S.A. Entrá con tu usuario y tu clave: todo lo que cargues queda a tu nombre.</p>
   <div id="paso1" class="pasos">
@@ -503,7 +541,7 @@ body.extra .selbar{display:none!important}
 <div class="offline" id="offline" hidden>Vista sin conexión a la planilla: el seguimiento y las órdenes no se guardan.</div>
 <div class="topbar"><div class="wrap"><span><b>Portal de Higiene y Seguridad</b> · Metalúrgica MIT S.A. · Cnel. Ramón Lista 5076 y 5158, Villa Devoto</span><span id="tbR">Asesoramiento: Lic. Marcelo Elvira · M.P. 0656 C.P.I.I.</span></div></div>
 <header class="head"><div class="wrap">
-  <span class="logo-g"><img src="logo_mit.png" alt="MIT" style="height:100%;width:auto;display:block"></span><span class="sep" aria-hidden="true"></span>
+  <span class="logo-g"><img src="logo_mit.svg" alt="MIT" style="height:100%;width:auto;display:block"></span><span class="sep" aria-hidden="true"></span>
   <div class="titulo"><h1>Higiene y Seguridad</h1><p id="subt"></p></div>
   <div class="jea"><span><b>Lic. Marcelo Elvira</b>Lic. en Higiene y Seguridad<br><a href="tel:+5491145646462">15-4564-6462</a> · <a href="mailto:marcelo.a.elvira@gmail.com">marcelo.a.elvira@gmail.com</a></span></div>
 </div></header>
@@ -512,6 +550,7 @@ body.extra .selbar{display:none!important}
 <nav class="solapas" id="solapas"><div class="wrap" id="solapasW"></div></nav>
 <div id="vInforme">
 <div class="wrap">
+  <div id="pubInf"></div>
   <div class="mesbar" id="mesbar"></div>
   <div class="resumen"><div class="stats" id="stats"></div>
     <div class="descargas">
@@ -716,7 +755,7 @@ async function cargarEstado(){
     const r = await fetch(API_URL + "?accion=estado&token=" + encodeURIComponent(API_TOKEN)); const j = await r.json();
     if (!j || !j.ok) throw 0;
     NOTAS = j.seguimiento || {}; ORDENES = j.ordenes || [];
-    Object.values(NOTAS).forEach(pm => Object.values(pm).forEach(ns => ns.forEach(x => x.fotos = (x.fotos || []).map(id => "drive:" + id)))); AREAS_EXTRA = j.areas || [];
+    Object.values(NOTAS).forEach(pm => Object.values(pm).forEach(ns => ns.forEach(x => x.fotos = (x.fotos || []).map(id => "drive:" + id)))); AREAS_EXTRA = j.areas || []; mitEstado(j);
     $("offline").hidden = true; render();
   } catch(e){ $("offline").hidden = false; }
 }
@@ -1080,6 +1119,19 @@ const TABS = [["informe", "Informe de visita"], ["sap", "Autoprotección"], ["hy
 const DOCST = {FALTA: "Falta", PARCIAL: "Parcial", CONFIRMAR: "A confirmar", NUESTRO: "Lo hacemos nosotros", OK: "Presentado"};
 let TAB = "informe", PL = "P1", TODOS = null, MAQ = "", MQQ = "", MQS = "";
 const X = () => DATA.extra;
+let TXT = {}, PUB = null, CONST_UP = [], PROPS = [], EDIT = false;
+const PUB_DEF = {informe: true};                       // hasta que el Lic. publique otras secciones, el cliente ve sólo el informe
+const pubOn = k => PUB && PUB[k] !== undefined ? PUB[k] : !!PUB_DEF[k];
+const tabsVis = () => TABS.filter(([k]) => ADMIN || pubOn(k));
+const getP = path => path.split(".").reduce((o, k) => o == null ? o : o[k], DATA.extra);
+const T = (k, def) => TXT[k] !== undefined ? TXT[k] : (def !== undefined ? def : getP(k));
+const E = (k, def) => `<span data-ed="${esc(k)}">${esc(T(k, def) ?? "")}</span>`;   // texto que el Lic. puede editar desde la página
+const plTag = pl => `<i class="pl-tag pl-${pl}">${pl === "G" ? "P1 y P2" : pl}</i>`;
+function mitEstado(j){
+  TXT = j.textos || TXT; PUB = j.publicacion || PUB || {}; CONST_UP = j.constancias || []; PROPS = j.propuestas || [];
+  solapas(); if (!tabsVis().some(t => t[0] === TAB)){ irA(tabsVis()[0][0]); return; }
+  if (!$("vExtra").hidden) renderExtra();
+}
 const PNOM = () => (PLS.find(p => p[0] === PL) || [])[1] || "";
 const enPl = x => PL === "G" ? x.pl === "G" : x.pl === PL;
 const fISO = s => { const [a, m, d] = s.split("-"); return `${d}/${m}/${a}`; };
@@ -1097,14 +1149,17 @@ function aplicarPlanta(inicio){
   st.mes = DATA.meses[0].clave; st.sector = ""; st.tema = ""; st.ot = ""; st.q = ""; st.seg = "todos"; SEL.clear();
   const q = $("fQ"); if (q) q.value = "";
   document.body.dataset.planta = PL;
-  $("plantasW").innerHTML = `<span class="pl-lbl">Ver</span>` + PLS.map(([k, n, d]) => `<button type="button" data-pl="${k}" aria-pressed="${k === PL}"><b>${n}</b><span>${d}</span></button>`).join("") + (X().archivos.video ? `<button type="button" class="pl-vid" data-video="1"><b>▶ Cómo se usa</b><span>Video de 2 minutos</span></button>` : "");
+  $("plantasW").innerHTML = `<span class="pl-lbl">Ver</span>` + PLS.map(([k, n, d]) => `<button type="button" data-pl="${k}" aria-pressed="${k === PL}"><b>${n}</b><span>${d}</span></button>`).join("") + (X().archivos.video && (ADMIN || pubOn("video")) ? `<button type="button" class="pl-vid" data-video="1"><b>▶ Cómo se usa</b><span>Video de 2 minutos</span></button>` : "")
+    + (ADMIN ? `<button type="button" class="pl-ed${EDIT ? " on" : ""}" data-editar="1"><b>✏ ${EDIT ? "Terminar de editar" : "Editar textos"}</b><span>${EDIT ? "Tocá un texto y escribí" : "Sólo el Lic. Elvira"}</span></button>` : "");
   if (!inicio){ ls("mit-planta", PL); solapas(); irA(TAB); }
 }
 function solapas(){
   const pend = X().docs.filter(d => d.estado === "FALTA" || d.estado === "PARCIAL").length;
   const nPts = PL === "G" ? mesesPl("P1")[0].puntos.length + mesesPl("P2")[0].puntos.length : DATA.meses[0].puntos.length;
-  $("solapasW").innerHTML = TABS.map(([k, t]) => `<button type="button" data-tab="${k}" aria-pressed="${k === TAB}">${t}${k === "docs" && pend ? `<i>${pend}</i>` : ""}${k === "informe" ? `<i>${nPts}</i>` : ""}</button>`).join("");
+  $("solapasW").innerHTML = tabsVis().map(([k, t]) => `<button type="button" data-tab="${k}" aria-pressed="${k === TAB}"${ADMIN && !pubOn(k) ? ' class="wip" title="En revisión: MIT no la ve"' : ""}>${ADMIN && !pubOn(k) ? "🚧 " : ""}${t}${k === "docs" && pend ? `<i>${pend}</i>` : ""}${k === "informe" ? `<i>${nPts}</i>` : ""}</button>`).join("");
+  const pi = $("pubInf"); if (pi) pi.innerHTML = ADMIN ? pubCtl("informe") : "";
 }
+const pubCtl = k => ADMIN ? `<div class="pub ${pubOn(k) ? "on" : ""}"><span>${pubOn(k) ? "✔ Sección publicada: MIT la ve" : "🚧 En revisión: MIT todavía no la ve"}</span><button type="button" class="x-btn" data-pub="${k}">${pubOn(k) ? "Sacar de la publicación" : "Publicar esta sección"}</button></div>` : "";
 function irA(k){
   TAB = k; solapas();
   const extra = k !== "informe" || PL === "G";
@@ -1154,8 +1209,8 @@ function sapCard(pl, chico){
     <div><span>Próximo simulacro</span>${prox ? `<b>${fISO(prox.f)}</b><em>${falta(prox.f)}</em>` : `<b>—</b><em>Se fijan al renovar</em>`}</div>
     <div><span>Vigencia del SAP</span><b>${fISO(s.vig_bianual)}</b><em>${esc(s.disp)}</em></div>
   </div>
-  ${chico ? "" : `<div class="sap-l">${s.hitos.map(h => `<div class="${h.ok ? "ok" : dias(h.f) < 0 ? "ok" : "pe"}${h.venc ? " ve" : ""}"><i></i><b>${fISO(h.f)}</b><span>${esc(h.t)}</span>${!h.ok && dias(h.f) >= 0 ? `<em>${falta(h.f)}</em>` : ""}</div>`).join("")}</div>
-  <p class="x-m" style="margin:10px 0">Expediente ${esc(s.exp)} · presentado el ${esc(s.presentado)} · aprobado el ${esc(s.disp_fecha)}. ${esc(s.nota)}</p>
+  ${chico ? "" : `<div class="sap-l">${s.hitos.map(h => `<div class="${h.ok ? "ok" : dias(h.f) < 0 ? "ok" : "pe"}${h.venc ? " ve" : ""}"><i></i><b>${fISO(h.f)}</b><span>${E("sap." + pl + ".hitos." + s.hitos.indexOf(h) + ".t")}</span>${!h.ok && dias(h.f) >= 0 ? `<em>${falta(h.f)}</em>` : ""}</div>`).join("")}</div>
+  <p class="x-m" style="margin:10px 0">Expediente ${esc(s.exp)} · presentado el ${esc(s.presentado)} · aprobado el ${esc(s.disp_fecha)}. ${E("sap." + pl + ".nota")}</p>
   <div class="x-dl x-dlrow">${s.archivos.map(k => btnDl(k)).join("")}</div>`}</div>`;
 }
 function vSap(){
@@ -1166,57 +1221,125 @@ function vSap(){
 
 // ---------- estudios ----------
 function grupoInf(){
-  return `<div class="g-box" style="--c:var(--brand)"><h3>Informes de visita</h3><span class="x-m">Un solo informe por visita, con las dos plantas</span>
+  return `<div class="g-box" style="--c:var(--brand)"><h3>Informes de visita</h3><span class="x-m">${plTag("G")} Un solo informe por visita, con las dos plantas</span>
   <div class="g-sel"><select id="sel-inf">${["9-26", "8-26", "4-26", "3-26", "1-26", "12-25"].map(k => `<option value="${k}">Informe ${k}</option>`).join("")}</select><button type="button" class="g-btn" data-dlsel="inf">Descargar</button></div></div>`;
 }
 function grupoEsg(){
   return `<div class="g-box" style="--c:#222529"><h3>Estado de situación general</h3><span class="x-m">Se genera en el momento, con lo último cargado en el portal</span>
   <div class="g-sel"><select id="esgPl"><option value="P1"${PL === "P1" ? " selected" : ""}>Planta 1</option><option value="P2"${PL === "P2" ? " selected" : ""}>Planta 2</option><option value="AMBAS"${PL === "G" ? " selected" : ""}>Las dos plantas</option></select><button type="button" class="g-btn" data-esg="1">Generar e imprimir</button></div></div>`;
 }
+const estEst = s => { if (s.estado !== "EJECUTADO") return [s.estado, ""]; if (!s.meses || !s.iso) return ["VIGENTE", ""];
+  const d = new Date(s.iso + "T12:00:00"); d.setMonth(d.getMonth() + s.meses); const iso = d.toISOString().slice(0, 10);
+  return [dias(iso) < 0 ? "VENCIDO" : "VIGENTE", "vence el " + fISO(iso)]; };
 function vHys(){
   const e = X().estudios.filter(enPl);
   return `<h2>Estudios de higiene y seguridad · ${esc(PNOM())}</h2><p class="x-intro">Mediciones, protocolos y estudios${PL === "G" ? " comunes a las dos plantas" : " de la planta"}, con su estado al ${esc(X().fecha)}.</p>
   ${comun("El estrés térmico, la carga de fuego y el control de matafuegos son de las dos plantas y están en General.")}
   <div class="g-row">${grupoInf()}${grupoEsg()}</div>
-  <div class="x-box" style="border-top:5px solid #2E5FA3"><div class="x-row x-est h"><span>Estudio</span><span>Norma</span><span>Fecha</span><span>Estado</span><span>Situación</span><span>Documento</span></div>
-  ${e.map(s => `<div class="x-row x-est"><div class="x-t">${esc(s.estudio)}<div class="x-m">Vigencia: ${esc(s.vigencia)}</div></div><div class="x-m">${esc(s.norma)}</div><div class="x-m">${esc(s.fecha)}</div><div class="x-e ${s.estado}">${esc(s.estado)}</div><div class="x-m">${esc(s.sit) || "—"}</div><div class="x-dl">${s.archivos.map(k => btnDl(k, "Descargar")).join("") || `<span class="x-m">Se publica al terminar</span>`}</div></div>`).join("")}</div>`;
+  <div class="x-box" style="border-top:5px solid var(--brand)"><div class="x-row x-est h"><span>Estudio</span><span>Norma</span><span>Fecha</span><span>Vigencia</span><span>Estado</span><span>Documento</span></div>
+  ${e.map(s => { const i = X().estudios.indexOf(s), [st, ve] = estEst(s); return `<div class="x-row x-est"><div class="x-t">${E("estudios." + i + ".estudio")}</div><div class="x-m">${E("estudios." + i + ".norma")}</div><div class="x-m">${E("estudios." + i + ".fecha")}</div><div class="x-m">${E("estudios." + i + ".vigencia")}</div><div><span class="x-e ${st.replace(" ", "-")}">${st === "EN CURSO" ? "EN PREPARACIÓN" : st}</span>${ve ? `<div class="x-m">${ve}</div>` : ""}</div><div class="x-dl">${s.archivos.map(k => btnDl(k, "Descargar")).join("") || `<span class="x-m">Se publica al terminar</span>`}</div></div>`; }).join("")}</div>`;
 }
 
-// ---------- capacitación ----------
+// ---------- capacitación: programa con propuestas de fecha + constancias (las del Lic. y las que sube MIT) ----------
+const PLN = {P1: "Planta 1", P2: "Planta 2", G: "Plantas 1 y 2", AMBAS: "Plantas 1 y 2"};
 function vCap(){
-  const c = X().cap, cs = c.constancias.filter(enPl);
-  const prog = `<div class="x-box"><div class="x-bh">Programa de capacitación 2026<span>${btnDl("prog", "Programa 2026 (PDF)").replace('class="x-btn"', 'class="x-btn x-inv"')}</span></div>
-    <div class="x-row x-cap h"><span>Mes</span><span>Tema</span><span>Destinado a</span></div>${c.prog.map(p => `<div class="x-row x-cap"><b>${esc(p.mes)}</b><span>${esc(p.tema)}</span><span class="x-m">${esc(p.para)}</span></div>`).join("")}</div>
-    <div class="x-note"><span style="flex:1;min-width:240px">Registro de capacitación de MIT (FOR-RH-05) para completar en cada charla: tema, fecha, asistentes y firma.</span>${btnDl("forrh05", "Registro FOR-RH-05 (Excel)")}</div>`;
-  if (PL === "G") return `<h2>Capacitación · las dos plantas</h2><p class="x-intro">Programa anual y registro para completar. Las constancias firmadas de cada planta están al elegir Planta 1 o Planta 2.</p>${prog}`;
-  return `<h2>Capacitación · ${esc(PNOM())}</h2><p class="x-intro">Constancias firmadas de las capacitaciones dadas en la planta.</p>${comun("El programa anual y el registro de capacitación son de las dos plantas y están en General.")}
-  <div class="x-box">${cs.length ? cs.map(x => `<div class="x-row x-cot" style="grid-template-columns:1fr 260px"><div class="x-t">${esc(x.t)}</div><div>${btnDl(x.k, "Constancia firmada (PDF)")}</div></div>`).join("") : `<div class="x-row x-m">Todavía no hay constancias cargadas.</div>`}</div>`;
+  const c = X().cap, plOk = pl => PL === "G" || pl === PL || pl === "AMBAS" || pl === "G";
+  const props = i => PROPS.filter(p => p.tema === c.prog[i].tema && plOk(p.planta));
+  const prog = `<div class="x-box"><div class="x-bh">${E("ui.cap.prog", "Programa de capacitación 2026")}<span>${btnDl("prog", "Programa 2026 (PDF)").replace('class="x-btn"', 'class="x-btn x-inv"')}</span></div>
+    <div class="x-row x-cap h"><span>Mes</span><span>Tema</span><span>Destinado a</span><span>Fecha a coordinar</span></div>
+    ${c.prog.map((p, i) => `<div class="x-row x-cap"><b>${E("cap.prog." + i + ".mes")}</b><span>${E("cap.prog." + i + ".tema")}</span><span class="x-m">${E("cap.prog." + i + ".para")}</span>
+      <div>${props(i).map(q => `<div class="prop"><b>${esc(q.fechas)}${q.horario ? " · " + esc(q.horario) : ""}</b><span>${esc(PLN[q.planta] || q.planta)} · propuso ${esc(q.quien)} el ${esc(q.cargada)}${q.estado && q.estado !== "Propuesta" ? " · " + esc(q.estado) : ""}</span></div>`).join("")}
+      <button type="button" class="x-btn" data-prop="${i}">📅 Proponer fecha y horario</button></div></div>`).join("")}</div>`;
+  const fijas = c.constancias.filter(x => PL === "G" || x.pl === PL).map(x => ({pl: x.pl, t: x.t, btn: btnDl(x.k, "Constancia (PDF)"), sub: "Cargada por el Lic. Marcelo Elvira"}));
+  const subidas = CONST_UP.filter(x => PL === "G" || x.planta === PL || x.planta === "AMBAS").map(x => ({pl: x.planta === "AMBAS" ? "G" : x.planta, t: x.cap + (x.fecha ? " · " + x.fecha : ""), btn: `<button type="button" class="x-btn" data-cdl="${esc(x.id)}" data-cnom="${esc(x.nombre)}">↓ ${esc(x.nombre)}</button>`, sub: `Subida por ${x.quien} el ${x.subida}`}));
+  const lista = fijas.concat(subidas);
+  const cons = `<div class="g-sec">Constancias de capacitación${PL === "G" ? " de las dos plantas" : " · " + esc(PNOM())}</div>
+  <div class="x-box">${lista.length ? lista.map(x => `<div class="x-row x-cot" style="grid-template-columns:1fr 280px"><div><div class="x-t">${plTag(x.pl)} ${esc(x.t)}</div><div class="x-m">${esc(x.sub)}</div></div><div>${x.btn}</div></div>`).join("") : `<div class="x-row x-m">Todavía no hay constancias cargadas.</div>`}
+  <div class="x-row" style="background:#F6F8FB"><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><button type="button" class="x-btn p" data-subir="1">⬆ Subir una constancia de capacitación</button><span class="x-m">PDF o foto de la planilla firmada. Le llega al Lic. Marcelo Elvira y queda acá para todos.</span></div></div></div>`;
+  const reg = `<div class="x-note"><span style="flex:1;min-width:240px">${E("ui.cap.reg", "Registro de capacitación de MIT (FOR-RH-05) para completar en cada charla: tema, fecha, asistentes y firma.")}</span>${btnDl("forrh05", "Registro FOR-RH-05 (Excel)")}</div>`;
+  return `<h2>Capacitación · ${esc(PNOM())}</h2><p class="x-intro">${E("ui.cap.intro", "Programa anual: se puede proponer la fecha y el horario de cada charla. Abajo, las constancias firmadas de las capacitaciones dadas; también se pueden subir desde acá.")}</p>${prog}${cons}${reg}`;
+}
+function abrirProp(i){
+  const p = X().cap.prog[i];
+  $("velo").innerHTML = `<div class="caja" role="dialog" aria-modal="true" aria-labelledby="ppT" style="width:min(560px,100%)"><div class="cab"><h3 id="ppT">Proponer fecha · ${esc(T("cap.prog." + i + ".tema"))}</h3><button class="cerrar" type="button" data-cerrar>Cerrar ✕</button></div><div class="cpo">
+    <div class="form"><label for="ppP">Planta</label><select id="ppP"><option value="P1"${PL === "P1" ? " selected" : ""}>Planta 1</option><option value="P2"${PL === "P2" ? " selected" : ""}>Planta 2</option><option value="AMBAS"${PL === "G" ? " selected" : ""}>Las dos plantas</option></select></div>
+    <div class="dos"><div class="form"><label for="ppF1">Fecha propuesta</label><input type="date" id="ppF1"></div><div class="form"><label for="ppF2">Otra fecha posible (opcional)</label><input type="date" id="ppF2"></div></div>
+    <div class="form"><label for="ppH">Horario</label><input type="text" id="ppH" placeholder="por ejemplo: 10:00 a 10:30, antes del almuerzo"></div>
+    <div class="form"><label for="ppC">Comentario (opcional)</label><textarea id="ppC" rows="2" placeholder="Turno, cantidad de personas, lugar…"></textarea></div>
+    <span class="aviso">Se guarda a nombre de <b>${esc(quien())}</b> y le llega al Lic. Marcelo Elvira para confirmarla.</span><span class="err" id="ppE"></span>
+    <div style="display:flex;gap:10px"><button class="btn prim" type="button" id="ppEnv" data-pi="${i}">Enviar propuesta</button></div></div></div>`;
+  $("velo").hidden = false;
+}
+async function enviarProp(i){
+  const f = [$("ppF1").value, $("ppF2").value].filter(Boolean).map(x => fISO(x)), h = $("ppH").value.trim();
+  if (!f.length){ $("ppE").textContent = "Elegí al menos una fecha."; return; }
+  $("ppEnv").disabled = true;
+  const ev = {tipo: "propuesta", cap: T("cap.prog." + i + ".tema"), planta: $("ppP").value, fechas: f.join(" o "), horario: h, texto: $("ppC").value.trim(), quien: quien()};
+  const r = await enviar(ev);
+  if (!r.ok){ toast("No se pudo enviar. Probá de nuevo."); $("ppEnv").disabled = false; return; }
+  PROPS.push({tema: ev.cap, planta: ev.planta, fechas: ev.fechas, horario: h, comentario: ev.texto, quien: ev.quien, estado: "Propuesta", cargada: fISO(new Date().toISOString().slice(0, 10))});
+  $("velo").hidden = true; toast("Propuesta enviada. Gracias."); renderExtra();
+}
+function abrirSubir(){
+  const temas = X().cap.prog.map((p, i) => T("cap.prog." + i + ".tema"));
+  $("velo").innerHTML = `<div class="caja" role="dialog" aria-modal="true" aria-labelledby="suT" style="width:min(560px,100%)"><div class="cab"><h3 id="suT">Subir constancia de capacitación</h3><button class="cerrar" type="button" data-cerrar>Cerrar ✕</button></div><div class="cpo">
+    <div class="form"><label for="suC">Capacitación</label><select id="suC">${temas.map(t => `<option>${esc(t)}</option>`).join("")}<option value="">Otra…</option></select><input type="text" id="suO" placeholder="Nombre de la capacitación" hidden></div>
+    <div class="dos"><div class="form"><label for="suP">Planta</label><select id="suP"><option value="P1"${PL === "P1" ? " selected" : ""}>Planta 1</option><option value="P2"${PL === "P2" ? " selected" : ""}>Planta 2</option><option value="AMBAS"${PL === "G" ? " selected" : ""}>Las dos plantas</option></select></div><div class="form"><label for="suF">Fecha de la charla</label><input type="date" id="suF"></div></div>
+    <div class="form"><label for="suA">Archivo (PDF o foto, hasta 15 MB)</label><input type="file" id="suA" accept="application/pdf,image/*"></div>
+    <span class="aviso">Se guarda a nombre de <b>${esc(quien())}</b>.</span><span class="err" id="suE"></span>
+    <div style="display:flex;gap:10px"><button class="btn prim" type="button" id="suEnv">Subir</button></div></div></div>`;
+  $("velo").hidden = false;
+  $("suC").onchange = () => { $("suO").hidden = !!$("suC").value; };
+}
+async function enviarSubir(){
+  const a = $("suA").files[0], cap = $("suC").value || $("suO").value.trim();
+  if (!cap){ $("suE").textContent = "Indicá la capacitación."; return; }
+  if (!a){ $("suE").textContent = "Elegí el archivo."; return; }
+  if (a.size > 15 * 1024 * 1024){ $("suE").textContent = "El archivo pesa más de 15 MB."; return; }
+  $("suEnv").disabled = true; $("suE").textContent = "Subiendo…";
+  const url = await new Promise((ok, mal) => { const r = new FileReader(); r.onload = () => ok(r.result); r.onerror = mal; r.readAsDataURL(a); });
+  const ev = {tipo: "constancia", cap, planta: $("suP").value, fecha: $("suF").value ? fISO($("suF").value) : "", nombre: a.name, archivo: url, quien: quien()};
+  const r = await enviar(ev);
+  if (!r.ok){ $("suE").textContent = "No se pudo subir. Probá de nuevo."; $("suEnv").disabled = false; return; }
+  CONST_UP.push({id: r.id || "", planta: ev.planta, cap, fecha: ev.fecha, nombre: a.name, quien: ev.quien, subida: fISO(new Date().toISOString().slice(0, 10))});
+  $("velo").hidden = true; toast("Constancia subida. Gracias."); renderExtra();
+}
+async function bajarSubida(id, nombre){
+  if (!API_URL || !id){ toast("Disponible al publicar el portal"); return; }
+  toast("Preparando el archivo…");
+  try {
+    const j = await (await fetch(API_URL + "?accion=archivo&id=" + encodeURIComponent(id) + "&token=" + encodeURIComponent(API_TOKEN))).json();
+    if (!j.ok) throw 0;
+    const b = Uint8Array.from(atob(j.b64), c => c.charCodeAt(0)), u = URL.createObjectURL(new Blob([b], {type: j.tipo}));
+    const el = document.createElement("a"); el.href = u; el.download = nombre || j.nombre; document.body.appendChild(el); el.click(); el.remove(); setTimeout(() => URL.revokeObjectURL(u), 60000);
+  } catch(e){ toast("No se pudo bajar el archivo"); }
 }
 
 // ---------- EPP ----------
 function mxEpp(pl){
   const ss = X().sect[pl], es = X().epp.filter(e => (e.s[pl] || []).length);
   return `<div class="x-box"><div class="x-bh">${esc(cabPl(pl))}<span>elemento por sector</span></div><div class="x-mxw"><table class="x-mx"><tr><th style="width:26%">Elemento</th>${ss.map(x => `<th>${esc(x)}</th>`).join("")}</tr>
-  ${es.map(e => `<tr><td><b>${esc(e.elem)}</b><div class="x-m">${esc(e.det)}</div></td>${ss.map((_, i) => e.s[pl].includes(i) ? `<td><span class="x-dot" title="Se usa"></span></td>` : `<td class="x-no">—</td>`).join("")}</tr>`).join("")}</table></div></div>`;
+  ${es.map(e => `<tr><td><b>${E("epp." + X().epp.indexOf(e) + ".elem")}</b><div class="x-m">${E("epp." + X().epp.indexOf(e) + ".det")}</div></td>${ss.map((_, i) => e.s[pl].includes(i) ? `<td><span class="x-dot" title="Se usa"></span></td>` : `<td class="x-no">—</td>`).join("")}</tr>`).join("")}</table></div></div>`;
 }
 function vEpp(){
   const pls = PL === "G" ? ["P1", "P2"] : [PL], es = X().epp.filter(e => pls.some(pl => (e.s[pl] || []).length));
   return `<h2>Elementos de protección personal · ${esc(PNOM())}</h2><p class="x-intro">Dónde hay que usar cada elemento, por sector. La protección auditiva sale de las mediciones de ruido 2026.</p>
   ${pls.map(mxEpp).join("")}
-  <div class="x-cards">${es.map(e => `<div class="x-card"><b>${esc(e.elem)}</b><span class="x-m">${esc(e.cuando)}</span></div>`).join("")}</div>
-  <div class="x-note"><span style="flex:1;min-width:240px">${esc(X().epp_nota)} La entrega de cada elemento se registra en la constancia de la Res. SRT 299/11 (formulario oficial), firmada por el trabajador.</span>${pls.map(pl => btnDl(pl.toLowerCase() + "-epp299", "Constancia de entrega de EPP · " + X().plantas[pl].nombre)).join("")}</div>`;
+  <div class="x-cards">${es.map(e => `<div class="x-card"><b>${E("epp." + X().epp.indexOf(e) + ".elem")}</b><span class="x-m">${E("epp." + X().epp.indexOf(e) + ".cuando")}</span></div>`).join("")}</div>
+  <div class="x-note"><span style="flex:1;min-width:240px">${E("epp_nota")} La entrega de cada elemento se registra en la constancia de la Res. SRT 299/11 (formulario oficial), firmada por el trabajador.</span>${pls.map(pl => btnDl(pl.toLowerCase() + "-epp299", "Constancia de entrega de EPP · " + X().plantas[pl].nombre)).join("")}</div>`;
 }
 
 // ---------- máquinas ----------
 const li = xs => xs.map(x => `<li>${esc(x)}</li>`).join("");
+const liE = (p, xs) => xs.map((x, i) => `<li>${E(p + "." + i)}</li>`).join("");
 const ptsChips = q => (q.pts || []).map(([c, n]) => `<button type="button" class="chip ot" data-irpt="${esc(c)}|${n}">Punto ${n} · ${esc(c.split(" ")[1] === "P1" ? "Planta 1" : "Planta 2")} · informe 9-26</button>`).join(" ");
 function vMaq(){
   const L = X().listado.filter(enPl), T = X().tipos, ds = X().destacadas.filter(enPl), d = ds.find(x => x.c === MAQ) || ds[0];
   const det = d ? (() => { const t = T[d.t], q = X().listado.find(x => x.c === d.c) || {};
     return `<div class="x-maqs">${ds.map(x => `<button type="button" class="x-maq${x.c === d.c ? " on" : ""}" data-maq="${x.c}">${img(x.fotos[0])}<div><b>${esc(x.nombre)}</b><span class="x-m">${esc(x.donde)}</span></div></button>`).join("")}</div>
     <div class="x-det"><div>${img(d.fotos[0], 'class="big"')}<div class="mq-fs">${d.fotos.slice(1).map(f => img(f)).join("")}</div></div>
-    <div><h4>Datos</h4><b style="font-size:16px">${esc(d.nombre)}</b><div class="x-m" style="margin-bottom:8px">${esc(d.marca)} · ${esc(d.donde)}</div><h4>Riesgos</h4><ul>${li(t.r)}</ul>${(q.pts || []).length ? `<h4>Puntos del informe</h4><div class="mq-pts">${ptsChips(q)}</div>` : ""}</div>
-    <div><h4>EPP obligatorios</h4><div class="x-epp">${t.e.map(e => `<span>${esc(e)}</span>`).join("")}</div><h4>Recomendaciones</h4><ul>${li(d.rec_extra.concat(t.rec))}</ul>
+    <div><h4>Datos</h4><b style="font-size:16px">${esc(d.nombre)}</b><div class="x-m" style="margin-bottom:8px">${esc(d.marca)} · ${esc(d.donde)}</div><h4>Riesgos</h4><ul>${liE("tipos." + d.t + ".r", t.r)}</ul>${(q.pts || []).length ? `<h4>Puntos del informe</h4><div class="mq-pts">${ptsChips(q)}</div>` : ""}</div>
+    <div><h4>EPP obligatorios</h4><ul>${liE("tipos." + d.t + ".e", t.e)}</ul><h4>Recomendaciones</h4><ul>${liE("destacadas." + X().destacadas.indexOf(d) + ".rec_extra", d.rec_extra)}${liE("tipos." + d.t + ".rec", t.rec)}</ul>
     <h4>Material</h4><div class="x-dl">${btnDl(d.sim, "Abrir el simulador")}</div></div></div>`; })() : "";
   const secs = [...new Set(L.map(x => x.s))], q = MQQ.trim().toLowerCase();
   const fl = L.filter(x => (!MQS || x.s === MQS) && (!q || (x.c + " " + x.m + " " + T[x.t].n).toLowerCase().includes(q)));
@@ -1228,15 +1351,15 @@ function vMaq(){
   <div class="mq-f"><input type="search" id="mqQ" placeholder="Buscar por número o nombre (ej. 612, agujereadora)" value="${esc(MQQ)}"><div class="mq-ss"><button type="button" data-mqs="" aria-pressed="${!MQS}">Todos (${L.length})</button>${secs.map(s => `<button type="button" data-mqs="${esc(s)}" aria-pressed="${s === MQS}">${esc(s)} (${L.filter(x => x.s === s).length})</button>`).join("")}</div></div>
   <div class="mq-l">${secs.filter(s => fl.some(x => x.s === s)).map(s => `<div class="mq-sec">${esc(s)}</div>` + fl.filter(x => x.s === s).map(x => { const t = T[x.t];
     return `<details class="mq"><summary><b>${esc(x.c)}</b><span>${esc(x.m)}</span><em>${esc(t.n)}</em>${(x.pts || []).length ? `<i>${x.pts.length} punto${x.pts.length > 1 ? "s" : ""}</i>` : ""}</summary>
-    <div class="mq-d"><div><h4>Riesgos</h4><ul>${li(t.r)}</ul></div><div><h4>EPP</h4><div class="x-epp">${t.e.map(e => `<span>${esc(e)}</span>`).join("") || `<span>No requiere</span>`}</div></div><div><h4>Recomendaciones</h4><ul>${li(t.rec)}</ul></div>${(x.pts || []).length ? `<div class="mq-pts">${ptsChips(x)}</div>` : ""}</div></details>`; }).join("")).join("") || `<div class="x-row x-m">No hay máquinas con ese criterio.</div>`}</div></div>`;
+    <div class="mq-d"><div><h4>Riesgos</h4><ul>${liE("tipos." + x.t + ".r", t.r)}</ul></div><div><h4>EPP</h4><ul>${liE("tipos." + x.t + ".e", t.e) || "<li>No requiere</li>"}</ul></div><div><h4>Recomendaciones</h4><ul>${liE("tipos." + x.t + ".rec", t.rec)}</ul></div>${(x.pts || []).length ? `<div class="mq-pts">${ptsChips(x)}</div>` : ""}</div></details>`; }).join("")).join("") || `<div class="x-row x-m">No hay máquinas con ese criterio.</div>`}</div></div>`;
 }
 
 // ---------- normas y procedimientos ----------
 function vNormas(){
-  const fil = (t, xs, c) => xs.length ? `<div class="g-sec">${t}</div><div class="x-box" style="border-top:5px solid ${c}">${xs.map(x => `<div class="x-row x-cot" style="grid-template-columns:1fr 90px 220px"><div class="x-t">${esc(x.t)}</div><div class="x-m">${esc(x.a)}</div><div>${btnDl(x.k, "Descargar (PDF)")}</div></div>`).join("")}</div>` : "";
+  const fil = (t, xs, c) => xs.length ? `<div class="g-sec">${t}</div><div class="x-box" style="border-top:5px solid ${c}">${xs.map(x => `<div class="x-row x-cot" style="grid-template-columns:1fr 90px 220px"><div class="x-t">${E((X().normas.includes(x) ? "normas." + X().normas.indexOf(x) : "ast." + X().ast.indexOf(x)) + ".t")}</div><div class="x-m">${esc(x.a)}</div><div>${btnDl(x.k, "Descargar (PDF)")}</div></div>`).join("")}</div>` : "";
   return `<h2>Normas y procedimientos · ${esc(PNOM())}</h2><p class="x-intro">Normas internas de seguridad, análisis de seguridad de las tareas (AST) y planillas ATS de MIT.</p>
   ${comun("Las normas generales (balancines, escaleras, solventes, derrames, contratistas…) son de las dos plantas y están en General.")}
-  ${fil("Normas de seguridad", X().normas.filter(enPl), "#34106A")}${fil("Análisis de seguridad de la tarea", X().ast.filter(enPl), "#008DEA")}
+  ${fil("Normas de seguridad", X().normas.filter(enPl), "#16305A")}${fil("Análisis de seguridad de la tarea", X().ast.filter(enPl), "#00A5FF")}
   ${PL === "G" ? "" : (X().normas.filter(enPl).length + X().ast.filter(enPl).length ? "" : `<div class="x-note">No hay documentos propios de esta planta.</div>`)}`;
 }
 
@@ -1245,23 +1368,27 @@ function vDocs(){
   const ds = X().docs, ord = {FALTA: 0, PARCIAL: 1, CONFIRMAR: 2, NUESTRO: 3, OK: 4};
   return `<h2>Documentación pedida a MIT</h2><p class="x-intro">Lo que necesitamos de MIT para el legajo de higiene y seguridad de las dos plantas, con su estado al ${esc(X().fecha)}. Cuando manden algo, avisen desde acá: queda registrado y le llega al Lic. Marcelo Elvira.</p>
   <div class="x-box"><div class="x-row x-docs h"><span>Documento</span><span>Para qué</span><span>Estado</span><span>Situación</span><span></span></div>
-  ${[...ds].sort((a, b) => ord[a.estado] - ord[b.estado]).map(d => `<div class="x-row x-docs"><div><div class="x-t">${esc(d.doc)}</div><div class="x-m">Lo pide: ${esc(d.pide)}</div></div><div class="x-m">${esc(d.para)}</div><div><span class="x-st ${d.estado}">${DOCST[d.estado]}</span></div><div class="x-m">${esc(d.sit) || "—"}</div><div>${d.estado === "OK" || d.estado === "NUESTRO" ? "" : `<button type="button" class="x-btn" data-aviso="${esc(d.doc)}">Avisar que lo envié</button>`}</div></div>`).join("")}</div>`;
+  ${[...ds].sort((a, b) => ord[a.estado] - ord[b.estado]).map(d => `<div class="x-row x-docs"><div><div class="x-t">${E("docs." + ds.indexOf(d) + ".doc")}</div><div class="x-m">Lo pide: ${E("docs." + ds.indexOf(d) + ".pide")}</div></div><div class="x-m">${E("docs." + ds.indexOf(d) + ".para")}</div><div><span class="x-st ${d.estado}">${DOCST[d.estado]}</span></div><div class="x-m">${E("docs." + ds.indexOf(d) + ".sit")}</div><div>${d.estado === "OK" || d.estado === "NUESTRO" ? "" : `<button type="button" class="x-btn" data-aviso="${esc(d.doc)}">Avisar que lo envié</button>`}</div></div>`).join("")}</div>`;
 }
 
-// ---------- descargas ----------
+// ---------- descargas: cada archivo dice si es de P1, de P2 o de las dos ----------
 function vDl(){
-  const box = (t, c, ks) => ks.length ? `<div class="g-box" style="--c:${c}"><h3>${t}</h3><div class="g-list">${ks.map(([k, tx]) => `<div class="g-it"><span>${esc(tx || nomArch(k))}</span><button type="button" class="g-btn" data-dl="${k}">${X().archivos[k].tipo === "text/html" ? "Abrir" : "Descargar"}</button></div>`).join("")}</div></div>` : "";
-  const x = X(), sap = PL === "G" ? [] : x.sap[PL].archivos.map(k => [k]);
-  const est = x.estudios.filter(enPl).flatMap(s => s.archivos.map(k => [k, s.estudio + " · " + s.fecha]));
-  const cap = PL === "G" ? [["prog"], ["forrh05"]] : x.cap.constancias.filter(enPl).map(c => [c.k, c.t]);
-  const form = (PL === "G" ? ["P1", "P2"] : [PL]).map(pl => [pl.toLowerCase() + "-epp299", "Constancia de entrega de EPP (Res. SRT 299/11) · " + x.plantas[pl].nombre]).concat(PL === "G" ? [["forrh05", "Registro de capacitación FOR-RH-05"]] : []);
-  const nor = x.normas.filter(enPl).concat(x.ast.filter(enPl)).map(n => [n.k, n.t]);
-  const maq = x.destacadas.filter(enPl).map(d => [d.sim, d.nombre + " · simulador"]);
-  return `<h2>Descargas · ${esc(PNOM())}</h2><p class="x-intro">Todo lo de ${PL === "G" ? "las dos plantas" : esc(PNOM())} para bajar, agrupado por tipo.</p>${comun("Lo común a las dos plantas (estrés térmico, carga de fuego, programa de capacitación, normas generales) está en General.")}
+  const x = X(), ok = pl => PL === "G" || pl === PL || pl === "G";
+  const box = (t, c, ks) => ks.length ? `<div class="g-box" style="--c:${c}"><h3>${t}</h3><div class="g-list">${ks.map(([k, tx, pl]) => `<div class="g-it"><span>${plTag(pl)} ${esc(tx || nomArch(k))}</span><button type="button" class="g-btn" data-dl="${k}">${x.archivos[k].tipo === "text/html" ? "Abrir" : "Descargar"}</button></div>`).join("")}</div></div>` : "";
+  const sap = ["P1", "P2"].filter(ok).flatMap(pl => x.sap[pl].archivos.map(k => [k, "", pl]));
+  const est = x.estudios.filter(s => ok(s.pl)).flatMap(s => s.archivos.map(k => [k, T("estudios." + x.estudios.indexOf(s) + ".estudio") + " · " + s.fecha, s.pl]));
+  const cap = [["prog", "Programa de capacitación 2026", "G"]].concat(x.cap.constancias.filter(c => ok(c.pl)).map(c => [c.k, c.t, c.pl]));
+  const form = ["P1", "P2"].filter(ok).map(pl => [pl.toLowerCase() + "-epp299", "Constancia de entrega de EPP (Res. SRT 299/11)", pl]).concat([["forrh05", "Registro de capacitación FOR-RH-05", "G"]]);
+  const nor = x.normas.filter(n => ok(n.pl)).concat(x.ast.filter(n => ok(n.pl))).map(n => [n.k, n.t, n.pl]);
+  const maq = x.destacadas.filter(d => ok(d.pl)).map(d => [d.sim, d.nombre + " · simulador", d.pl]);
+  return `<h2>Descargas · ${esc(PNOM())}</h2><p class="x-intro">${E("ui.dl.intro", "Todo para bajar, agrupado por tipo. Cada archivo indica si es de Planta 1 (P1), de Planta 2 (P2) o de las dos (P1 y P2).")}</p>
   <div class="g-row">${grupoInf()}${grupoEsg()}</div>
-  <div class="g-row">${box("Sistema de Autoprotección", "#34106A", sap)}${box("Estudios", "#2E5FA3", est)}${box("Capacitación", "#8A5A12", cap)}${box("Formularios para completar", "#2F7D4A", form)}${box("Normas y procedimientos", "#008DEA", nor)}${box("Máquinas", "#6E1E2E", maq)}</div>`;
+  <div class="g-row">${box("Sistema de Autoprotección", "#16305A", sap)}${box("Estudios", "#0060B4", est)}${box("Capacitación", "#8A5A12", cap)}${box("Formularios para completar", "#2F7D4A", form)}${box("Normas y procedimientos", "#00A5FF", nor)}${box("Máquinas", "#6E1E2E", maq)}</div>`;
 }
-function renderExtra(){ $("vExtra").innerHTML = ({informe: vInfG, sap: vSap, hys: vHys, cap: vCap, epp: vEpp, maq: vMaq, normas: vNormas, docs: vDocs, dl: vDl})[TAB](); }
+function renderExtra(){
+  $("vExtra").innerHTML = pubCtl(TAB) + ({informe: vInfG, sap: vSap, hys: vHys, cap: vCap, epp: vEpp, maq: vMaq, normas: vNormas, docs: vDocs, dl: vDl})[TAB]();
+  if (EDIT) $("vExtra").querySelectorAll("[data-ed]").forEach(e => e.contentEditable = "true");
+}
 
 function abrirAviso(doc){
   $("velo").innerHTML = `<div class="caja" role="dialog" aria-modal="true" aria-labelledby="avT" style="width:min(560px,100%)"><div class="cab"><h3 id="avT">Avisar que se envió</h3><button class="cerrar" type="button" data-cerrar>Cerrar ✕</button></div><div class="cpo">
@@ -1278,7 +1405,15 @@ async function enviarAviso(){
   $("velo").hidden = true; toast("Aviso enviado. Gracias.");
 }
 document.addEventListener("click", e => {
-  const t = e.target.closest("[data-tab],[data-dl],[data-dlsel],[data-maq],[data-aviso],[data-pl],[data-mqs],[data-irpt],#avEnv"); if (!t) return;
+  if (EDIT && e.target.closest("[data-ed]")) return;   // editando: el clic es para escribir
+  const t = e.target.closest("[data-tab],[data-dl],[data-dlsel],[data-maq],[data-aviso],[data-pl],[data-mqs],[data-irpt],[data-pub],[data-editar],[data-prop],[data-subir],[data-cdl],#avEnv,#ppEnv,#suEnv"); if (!t) return;
+  if (t.dataset.pub){ const k = t.dataset.pub, on = !pubOn(k); PUB = PUB || {}; PUB[k] = on; enviar({tipo: "publicar", seccion: k, on}).then(r => toast(r.ok ? (on ? "Sección publicada" : "Sección sacada de la publicación") : "No se pudo guardar")); solapas(); if (!$("vExtra").hidden) renderExtra(); return; }
+  if (t.dataset.editar){ EDIT = !EDIT; document.body.classList.toggle("editando", EDIT); aplicarPlanta(); toast(EDIT ? "Tocá cualquier texto con borde punteado y escribí. Se guarda al salir del texto." : "Edición terminada"); return; }
+  if (t.dataset.prop){ abrirProp(+t.dataset.prop); return; }
+  if (t.dataset.subir){ abrirSubir(); return; }
+  if (t.dataset.cdl !== undefined){ bajarSubida(t.dataset.cdl, t.dataset.cnom); return; }
+  if (t.id === "ppEnv"){ enviarProp(+t.dataset.pi); return; }
+  if (t.id === "suEnv"){ enviarSubir(); return; }
   if (t.dataset.pl !== undefined && t.dataset.pl){ if (t.dataset.pl !== PL){ PL = t.dataset.pl; if (TAB === "informe" && PL !== "G"){} aplicarPlanta(); } return; }
   if (t.dataset.dlsel){ bajarArch($("sel-" + t.dataset.dlsel).value); return; }
   if (t.dataset.tab) irA(t.dataset.tab);
@@ -1289,10 +1424,18 @@ document.addEventListener("click", e => {
   else if (t.dataset.aviso) abrirAviso(t.dataset.aviso);
   else if (t.id === "avEnv") enviarAviso();
 });
+document.addEventListener("focusin", e => { const d = e.target.closest && e.target.closest("[data-ed]"); if (d) d.dataset.antes = d.innerText; });
+document.addEventListener("focusout", async e => {
+  const d = e.target.closest && e.target.closest("[data-ed]"); if (!d || !EDIT) return;
+  const v = d.innerText.replace(/\s+\n/g, "\n").trim(); if (v === (d.dataset.antes || "").trim()) return;
+  TXT[d.dataset.ed] = v; const r = await enviar({tipo: "textos", clave: d.dataset.ed, texto: v});
+  toast(r.ok ? "Texto guardado" : "No se pudo guardar el texto");
+});
+document.addEventListener("keydown", e => { if (EDIT && e.key === "Enter" && !e.shiftKey && e.target.closest && e.target.closest("[data-ed]")){ e.preventDefault(); e.target.blur(); } });
 document.addEventListener("input", e => { if (e.target.id === "mqQ"){ MQQ = e.target.value; const p = e.target.selectionStart; renderExtra(); const q = $("mqQ"); q.focus(); q.setSelectionRange(p, p); } });
 
 // ---------- estado de situación general a demanda (por planta o las dos) ----------
-const ESG_COL = {FALTA: "#C0392B", PARCIAL: "#B7791F", CONFIRMAR: "#555B66", NUESTRO: "#2E5FA3", OK: "#2E7D32", EJECUTADO: "#2E7D32", "EN CURSO": "#B7791F", APROBADO: "#2E7D32"};
+const ESG_COL = {FALTA: "#C0392B", PARCIAL: "#B7791F", CONFIRMAR: "#555B66", NUESTRO: "#0060B4", OK: "#2E7D32", EJECUTADO: "#2E7D32", VIGENTE: "#2E7D32", VENCIDO: "#C0392B", "EN CURSO": "#B7791F", APROBADO: "#2E7D32"};
 const ESG_LBL = {FALTA: "FALTA", PARCIAL: "PARCIAL", CONFIRMAR: "A CONFIRMAR", NUESTRO: "LO HACEMOS NOSOTROS", OK: "PRESENTADO"};
 let ESG_FIRMA = "";
 function esgDoc(gen, cual){
@@ -1318,11 +1461,11 @@ function esgDoc(gen, cual){
   ${pls.map(tabla).join('<div style="height:6px"></div>')}
   <p class="esg-n">El detalle de cada punto, con sus fotos y la acción a realizar, está en el informe de visita 9-26 y en el portal. El avance es el cargado en el portal al momento de generar este informe.</p>
   <div class="esg-bar">3. ESTUDIOS DE HIGIENE Y SEGURIDAD</div>
-  <table class="esg-t"><thead><tr><th style="width:34%">Estudio</th><th style="width:14%">Fecha</th><th style="width:14%">Estado</th><th>Situación</th></tr></thead><tbody>
-  ${ests.map(s => `<tr><td><b>${esc(s.estudio)}</b><small>${esc(s.norma)} · vigencia: ${esc(s.vigencia)}</small></td><td>${esc(s.fecha)}</td><td>${stl(s.estado)}</td><td>${esc(s.sit) || "—"}</td></tr>`).join("")}</tbody></table>
+  <table class="esg-t"><thead><tr><th style="width:44%">Estudio</th><th style="width:18%">Fecha</th><th style="width:18%">Vigencia</th><th>Estado</th></tr></thead><tbody>
+  ${ests.map(s => { const i = x.estudios.indexOf(s), [st, ve] = estEst(s); return `<tr><td><b>${esc(T("estudios." + i + ".estudio"))}</b><small>${esc(T("estudios." + i + ".norma"))}</small></td><td>${esc(T("estudios." + i + ".fecha"))}</td><td>${esc(T("estudios." + i + ".vigencia"))}</td><td>${stl(st, st === "EN CURSO" ? "EN PREPARACIÓN" : st)}${ve ? "<small>" + ve + "</small>" : ""}</td></tr>`; }).join("")}</tbody></table>
   <div class="esg-bar">4. DOCUMENTACIÓN SOLICITADA A MIT</div>
   <table class="esg-t"><thead><tr><th style="width:43%">Documento</th><th style="width:15%">Estado</th><th>Situación</th></tr></thead><tbody>
-  ${x.docs.map(o => `<tr><td><b>${esc(o.doc)}</b><small>Para: ${esc(o.para)}</small></td><td>${stl(o.estado, ESG_LBL[o.estado])}</td><td>${esc(o.sit) || "—"}</td></tr>`).join("")}</tbody></table>
+  ${x.docs.map((o, i) => `<tr><td><b>${esc(T("docs." + i + ".doc"))}</b><small>Para: ${esc(T("docs." + i + ".para"))}</small></td><td>${stl(o.estado, ESG_LBL[o.estado])}</td><td>${esc(T("docs." + i + ".sit")) || "—"}</td></tr>`).join("")}</tbody></table>
   <div class="esg-fi">${ESG_FIRMA ? `<img src="${ESG_FIRMA}" alt="">` : ""}<b>Lic. Marcelo Elvira</b><span>Lic. en Higiene y Seguridad en el Trabajo · M.P. 0656 C.P.I.I.</span></div>
   </td></tr></tbody><tfoot><tr><td><div class="esg-pie">Estado de situación general — ${esc(g.razon)} — ${pls.map(pl => esc(x.plantas[pl].dom)).join(" y ")}, C.A.B.A.</div></td></tr></tfoot></table>`;
 }
