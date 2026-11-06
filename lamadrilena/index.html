@@ -444,6 +444,11 @@ body.extra .selbar{display:none!important}
 .caja.sn-zoom{width:min(1600px,98vw)!important;max-height:96vh}.caja.sn-zoom .cpo{overflow:auto}.caja.sn-zoom img{width:1500px;max-width:none;display:block}
 a.x-btn{color:inherit;text-decoration:none;display:inline-flex;align-items:center}
 
+.sn-app{position:relative;background:#fff;border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-bottom:16px}
+.sn-app iframe{display:block;width:100%;height:max(620px,calc(100vh - 230px));border:0}
+.sn-carga{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#fff;color:var(--muted);font-weight:600}
+.sn-carga[hidden]{display:none}
+
 </style>
 </head>
 <body>
@@ -1046,13 +1051,14 @@ let TAB = "informe", MAQ = "embaladora";
 const OCULTOS = ["ficha-emb"];
 let XF = null;
 // ---------- publicación por sección (6/11/2026, como MIT): el Lic. decide qué ve el cliente ----------
-let PUB = null, SNH = 0;
+let PUB = null;
 const PUB_DEF = {informe: true, docs: true, hys: true, epp: true, maq: true, dl: true, senal: false};   // lo que ya estaba a la vista sigue publicado; lo nuevo entra en revisión
 const pubOn = k => PUB && PUB[k] !== undefined ? PUB[k] : !!PUB_DEF[k];
 const tabsVis = () => TABS.filter(([k]) => ADMIN || pubOn(k));
 const pubCtl = k => ADMIN ? `<div class="pub ${pubOn(k) ? "on" : ""}"><span>${pubOn(k) ? "✔ Sección publicada: La Madrileña la ve" : "🚧 En revisión: La Madrileña todavía no la ve"}</span><button type="button" class="x-btn" data-pub="${k}">${pubOn(k) ? "Sacar de la publicación" : "Publicar esta sección"}</button></div>` : "";
 function lmEstado(j){
   PUB = j.publicacion || PUB || {};
+  if (j.senal){ try { const n = JSON.parse(j.senal); if (!SN_EST || (n.ts || 0) >= (SN_EST.ts || 0)) SN_EST = n; } catch(e){} }
   solapas(); if (!tabsVis().some(t => t[0] === TAB)){ irA((tabsVis()[0] || ["informe"])[0]); return; }
   if (!$("vExtra").hidden) renderExtra();
 }
@@ -1132,40 +1138,44 @@ function vDl(){
   <div class="g-row">${grupoBox(G("inf"))}${grupoBox(G("est"))}</div>
   <div class="g-row">${gs.filter(g => !g.mes).map(grupoBox).join("")}</div>`;
 }
-function renderExtra(){ $("vExtra").innerHTML = pubCtl(TAB) + ({docs: vDocs, hys: vHys, epp: vEpp, maq: vMaq, senal: vSenal, dl: vDl})[TAB](); if (TAB === "senal") cargarSnImg(); }
-// ---------- señalización (6/11/2026) ----------
-const SN_URL = {};
+function renderExtra(){ $("vExtra").innerHTML = pubCtl(TAB) + ({docs: vDocs, hys: vHys, epp: vEpp, maq: vMaq, senal: vSenal, dl: vDl})[TAB](); if (TAB === "senal") cargarSnApp(); }
+// ---------- señalización (6/11/2026): la app de carteles adentro del portal ----------
+// El Lic. (modo admin) la edita y la guarda en la planilla; el cliente sólo la ve, la recorre e imprime/guarda en PDF.
+let SN_EST = null, SN_HTML = null, SN_URL = null, SN_KEY = "";
 function vSenal(){
-  const s = X().senal;
-  if (!s) return `<h2>Señalización</h2><p class="x-intro">Todavía no hay una propuesta cargada.</p>`;
-  const h = s.hojas[SNH] || s.hojas[0];
-  return `<h2>Señalización</h2><p class="x-intro">${esc(s.intro)}</p>
-  <div class="x-note"><span style="flex:1;min-width:240px">Propuesta del ${esc(s.fecha)}: <b>${s.total} carteles</b> en las tres plantas.</span>${btnDl("senal", "Descargar la propuesta (PDF)")}${ADMIN && s.app ? `<a class="x-btn" href="${esc(s.app)}" target="_blank" rel="noopener">✏ Editar en la app</a>` : ""}</div>
-  <div class="sn-tabs">${s.hojas.map((x, i) => `<button type="button" data-snh="${i}" aria-pressed="${x === h}">${esc(x.t)}<i>${x.n}</i></button>`).join("")}</div>
-  <div class="sn-plano"><img data-snimg="${h.k}" alt="Plano de señalización · ${esc(h.t)}"><div class="x-m">Tocá el plano para verlo en grande. Cada recuadro bordó es un cartel; el código está en la tabla de abajo.</div></div>
-  <div class="x-box"><div class="x-bh">Qué carteles van<span>cantidades por planta</span></div><div class="x-mxw"><table class="x-mx sn-t">
-  <tr><th>Cód.</th><th style="text-align:left">Cartel</th><th>PB</th><th>EP dep.</th><th>EP adm.</th><th>Total</th><th style="text-align:left">Medida</th><th style="text-align:left">Cómo se coloca</th></tr>
-  ${s.tabla.map(r => `<tr><td><b class="sn-c">${esc(r.c)}</b></td><td style="text-align:left"><b>${esc(r.n)}</b></td>${r.q.map(v => `<td>${v || "—"}</td>`).join("")}<td><b>${r.t}</b></td><td style="text-align:left" class="x-m">${esc(r.m)}</td><td style="text-align:left" class="x-m">${esc(r.mo)}</td></tr>`).join("")}
-  </table></div></div>
-  ${s.notas && s.notas.length ? `<div class="x-box"><div class="x-bh">A tener en cuenta</div><ul class="sn-n">${s.notas.map(n => `<li>${esc(n)}</li>`).join("")}</ul></div>` : ""}`;
+  const s = X().senal || {};
+  return `<h2>Señalización</h2><p class="x-intro">${esc(s.intro || "")}</p>
+  <div class="x-note"><span style="flex:1;min-width:240px">${ADMIN ? "Movés, agregás o borrás carteles directamente en el plano y tocás <b>«Guardar en el portal»</b>: La Madrileña ve siempre la última versión guardada." : "Elegí la planta arriba del plano. Con «Imprimir / PDF» se baja la propuesta completa (los tres planos y el resumen); en el diálogo de impresión elegí «Guardar como PDF» y hoja A3 apaisada."}</span></div>
+  <div class="sn-app"><iframe id="snFrame" title="Señalización"></iframe><div class="sn-carga" id="snCarga">Abriendo los planos…</div></div>`;
 }
-async function cargarSnImg(){
-  for (const im of document.querySelectorAll("img[data-snimg]")){
-    const k = im.dataset.snimg;
-    try {
-      if (!SN_URL[k]){ const a = X().archivos[k], b = CIFRADO ? await bajarCifrado("arch/" + k) : await (await fetch("arch/" + k)).arrayBuffer(); SN_URL[k] = URL.createObjectURL(new Blob([b], {type: a.tipo})); }
-      if (im.isConnected) im.src = SN_URL[k];
-    } catch(e){ im.alt = "No se pudo cargar el plano"; }
-  }
+async function cargarSnApp(){
+  const fr = $("snFrame"); if (!fr) return;
+  try {
+    if (!SN_HTML){ const b = CIFRADO ? await bajarCifrado("arch/senal_app") : await (await fetch("arch/senal_app")).arrayBuffer(); SN_HTML = new TextDecoder().decode(b); }
+    const modo = ADMIN ? "admin" : "cliente", est = SN_EST ? JSON.stringify(SN_EST).replace(/<\//g, "<\\/") : null, key = modo + "|" + (est ? est.length + ":" + (SN_EST.ts || 0) : "base");
+    if (key !== SN_KEY){
+      let h = SN_HTML.replace("<head>", `<head><script>window.PORTAL_MODO=${JSON.stringify(modo)};<\/script>`);
+      if (est) h = h.replace(/(<script id="estado" type="application\/json">)[\s\S]*?(<\/script>)/, (m, a, c) => a + est + c);
+      if (SN_URL) URL.revokeObjectURL(SN_URL);
+      SN_URL = URL.createObjectURL(new Blob([h], {type: "text/html"})); SN_KEY = key;
+    }
+    if (fr.src !== SN_URL) fr.src = SN_URL;
+    fr.onload = () => { const c = $("snCarga"); if (c) c.hidden = true; };
+  } catch(e){ const c = $("snCarga"); if (c) c.textContent = "No se pudieron abrir los planos. Recargá la página."; }
 }
+window.addEventListener("message", async e => {
+  const m = e.data || {}, fr = $("snFrame"); if (m.tipo !== "senal-guardar" || !fr || e.source !== fr.contentWindow || !ADMIN) return;
+  const txt = JSON.stringify(m.estado);
+  const r = txt.length > 49000 ? {ok: false} : await enviar({tipo: "senal", estado: txt});
+  if (r.ok){ SN_EST = m.estado; SN_KEY = (ADMIN ? "admin" : "cliente") + "|" + JSON.stringify(SN_EST).replace(/<\//g, "<\\/").length + ":" + (SN_EST.ts || 0); toast("Señalización guardada: La Madrileña ya ve esta versión"); }
+  else toast("No se pudo guardar la señalización");
+  fr.contentWindow.postMessage({tipo: "senal-ok", ok: !!r.ok}, "*");
+});
 document.addEventListener("click", e => {
   const p = e.target.closest("[data-pub]");
   if (p){ const k = p.dataset.pub, on = !pubOn(k); PUB = PUB || {}; PUB[k] = on;
     enviar({tipo: "publicar", seccion: k, on}).then(r => toast(r.ok ? (on ? "Sección publicada: La Madrileña ya la ve" : "Sección sacada de la publicación") : "No se pudo guardar"));
     solapas(); if (!$("vExtra").hidden) renderExtra(); return; }
-  const h = e.target.closest("[data-snh]"); if (h){ SNH = +h.dataset.snh; renderExtra(); return; }
-  const im = e.target.closest("img[data-snimg]");
-  if (im && im.src){ $("velo").innerHTML = `<div class="caja sn-zoom" role="dialog" aria-modal="true"><div class="cab"><h3>${esc(im.alt)}</h3><button class="cerrar" type="button" data-cerrar>Cerrar ✕</button></div><div class="cpo"><img src="${im.src}" alt=""></div></div>`; $("velo").hidden = false; }
 });
 function abrirAviso(doc){
   $("velo").innerHTML = `<div class="caja" role="dialog" aria-modal="true" aria-labelledby="avT" style="width:min(560px,100%)"><div class="cab"><h3 id="avT">Avisar que se envió</h3><button class="cerrar" type="button" data-cerrar>Cerrar ✕</button></div><div class="cpo">
