@@ -420,7 +420,7 @@ function panelCap(q) {
   const A = q.acceso, url = BASE + q.url.replace('../', '');
   const txt = (u, cl) => `Videos de capacitación · ${q.nombre}\n${url}\nUsuario: ${u}\nClave: ${cl}`;
   const fila = u => `<div class="ur"><div class="un"><b>${esc(u.nombre)}</b><small>Usuario: ${esc(u.usuario)} · ${esc(u.cargo || u.rol)}</small></div>
-      <div>${u.clave ? clave(u.clave) : '<span class="uc">Entra con 123 y elige la suya (te llega por mail)</span>'}${/admin/i.test(u.rol) ? '<small class="uc">Tu usuario: ves todo y no figurás en la lista</small>' : u.usuario === 'prueba' ? '<small class="uc">Usuario de prueba: ve lo mismo que la directora</small>' : /directora/i.test(u.rol) ? '<small class="uc">Ve quién vio cada video y la documentación</small>' : ''}</div>
+      <div>${u.clave ? clave(u.clave) : '<span class="uc">Entra con 123 y elige la suya (te llega por mail)</span>'}${/admin/i.test(u.rol) ? '<small class="uc">Tu usuario: ves todo y no figurás en la lista</small>' : u.usuario === 'prueba' ? '<small class="uc">Usuario de prueba: ve lo mismo que el personal (no lo de Nati)</small>' : /directora/i.test(u.rol) ? '<small class="uc">Ve quién vio cada video y la documentación</small>' : ''}</div>
       <div>${u.clave ? btnCopiar(txt(u.usuario, u.clave), '📋 Copiar acceso') : ''}</div></div>`;
   return `<div class="usr"><h4>🔑 Usuarios y claves <small>${A.usuarios.length}</small></h4>
     ${A.soporte ? `<div class="ur"><div class="un"><b>Clave de emergencia</b><small>Entra con cualquier usuario menos el de admin</small></div><div>${clave(A.soporte)}</div><div></div></div>` : ''}
