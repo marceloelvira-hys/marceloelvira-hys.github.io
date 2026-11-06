@@ -427,6 +427,23 @@ body.extra .selbar{display:none!important}
   #esg .esg-fi span{font-size:8pt;color:#666}
 }
 
+/* 6/11/2026: publicación por sección (como MIT) + señalización */
+.pub{display:flex;gap:10px;align-items:center;flex-wrap:wrap;border:1px dashed #C08A00;background:#FFF8E6;border-radius:8px;padding:8px 12px;margin:0 0 14px;font-size:13px;font-weight:600;color:#7A5A00}
+.pub.on{border-color:#2F7D4A;background:#EEF7F1;color:#2F7D4A}.pub span{flex:1;min-width:220px}
+#pubInf .pub{margin:12px 0 0}
+.solapas button.wip{color:#A77B1A}
+.sn-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 10px}
+.sn-tabs button{border:1px solid var(--line);background:#fff;border-radius:6px;padding:8px 14px;font:inherit;font-size:14px;font-weight:600;cursor:pointer}
+.sn-tabs button[aria-pressed=true]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.sn-tabs button i{font-style:normal;margin-left:8px;background:var(--brand);color:#fff;border-radius:10px;padding:1px 7px;font-size:12px}
+.sn-plano{background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px;margin-bottom:16px}
+.sn-plano img{width:100%;height:auto;display:block;cursor:zoom-in;min-height:120px;background:#f3f3f3}
+.sn-t td,.sn-t th{text-align:center;font-size:14px}
+.sn-c{color:#6E1E2E}
+.sn-n{margin:0;padding:10px 14px 12px 32px;font-size:14px;line-height:1.5}
+.caja.sn-zoom{width:min(1600px,98vw)!important;max-height:96vh}.caja.sn-zoom .cpo{overflow:auto}.caja.sn-zoom img{width:1500px;max-width:none;display:block}
+a.x-btn{color:inherit;text-decoration:none;display:inline-flex;align-items:center}
+
 </style>
 </head>
 <body>
@@ -458,6 +475,7 @@ body.extra .selbar{display:none!important}
 <nav class="solapas" id="solapas"><div class="wrap" id="solapasW"></div></nav>
 <div id="vInforme">
 <div class="wrap">
+  <div id="pubInf"></div>
   <div class="mesbar" id="mesbar"></div>
   <div class="resumen"><div class="stats" id="stats"></div>
     <div class="descargas">
@@ -662,7 +680,7 @@ async function cargarEstado(){
     const r = await fetch(API_URL + "?accion=estado&token=" + encodeURIComponent(API_TOKEN)); const j = await r.json();
     if (!j || !j.ok) throw 0;
     NOTAS = j.seguimiento || {}; ORDENES = j.ordenes || [];
-    Object.values(NOTAS).forEach(pm => Object.values(pm).forEach(ns => ns.forEach(x => x.fotos = (x.fotos || []).map(id => "drive:" + id)))); AREAS_EXTRA = j.areas || [];
+    Object.values(NOTAS).forEach(pm => Object.values(pm).forEach(ns => ns.forEach(x => x.fotos = (x.fotos || []).map(id => "drive:" + id)))); AREAS_EXTRA = j.areas || []; lmEstado(j);
     $("offline").hidden = true; render();
   } catch(e){ $("offline").hidden = false; }
 }
@@ -1021,16 +1039,28 @@ function arrancar(){
   solapas(); render(); cargarEstado();
 }
 // ---------- solapas de La Madrileña: documentación, HyS, EPP, máquinas, descargas ----------
-const TABS = [["informe", "Informe de visita"], ["docs", "Documentación pedida"], ["hys", "Documentación de HyS"], ["epp", "EPP"], ["maq", "Máquinas"], ["dl", "Descargas"]];
+const TABS = [["informe", "Informe de visita"], ["docs", "Documentación pedida"], ["hys", "Documentación de HyS"], ["epp", "EPP"], ["maq", "Máquinas"], ["senal", "Señalización"], ["dl", "Descargas"]];
 const DOCST = {FALTA: "Falta", PARCIAL: "Parcial", CONFIRMAR: "A confirmar", NUESTRO: "Lo hacemos nosotros", OK: "Presentado"};
 let TAB = "informe", MAQ = "embaladora";
 // 4/11/2026: la ficha de máquina todavía no se muestra en la página (sí el simulador)
 const OCULTOS = ["ficha-emb"];
 let XF = null;
+// ---------- publicación por sección (6/11/2026, como MIT): el Lic. decide qué ve el cliente ----------
+let PUB = null, SNH = 0;
+const PUB_DEF = {informe: true, docs: true, hys: true, epp: true, maq: true, dl: true, senal: false};   // lo que ya estaba a la vista sigue publicado; lo nuevo entra en revisión
+const pubOn = k => PUB && PUB[k] !== undefined ? PUB[k] : !!PUB_DEF[k];
+const tabsVis = () => TABS.filter(([k]) => ADMIN || pubOn(k));
+const pubCtl = k => ADMIN ? `<div class="pub ${pubOn(k) ? "on" : ""}"><span>${pubOn(k) ? "✔ Sección publicada: La Madrileña la ve" : "🚧 En revisión: La Madrileña todavía no la ve"}</span><button type="button" class="x-btn" data-pub="${k}">${pubOn(k) ? "Sacar de la publicación" : "Publicar esta sección"}</button></div>` : "";
+function lmEstado(j){
+  PUB = j.publicacion || PUB || {};
+  solapas(); if (!tabsVis().some(t => t[0] === TAB)){ irA((tabsVis()[0] || ["informe"])[0]); return; }
+  if (!$("vExtra").hidden) renderExtra();
+}
 const X = () => { const e = DATA.extra; if (e && XF !== e){ XF = e; e.maquinas.forEach(m => m.archivos = m.archivos.filter(k => !OCULTOS.includes(k))); e.grupos.forEach(g => g.items = g.items.filter(i => !OCULTOS.includes(i.k))); } return e; };
 function solapas(){
   const pend = X().docs.filter(d => d.estado === "FALTA" || d.estado === "PARCIAL").length;
-  $("solapasW").innerHTML = TABS.map(([k, t]) => `<button type="button" data-tab="${k}" aria-pressed="${k === TAB}">${t}${k === "docs" && pend ? `<i>${pend}</i>` : ""}${k === "informe" ? `<i>${DATA.meses[0].puntos.length}</i>` : ""}</button>`).join("");
+  $("solapasW").innerHTML = tabsVis().map(([k, t]) => `<button type="button" data-tab="${k}" aria-pressed="${k === TAB}"${ADMIN && !pubOn(k) ? ' class="wip" title="En revisión: La Madrileña no la ve"' : ""}>${ADMIN && !pubOn(k) ? "🚧 " : ""}${t}${k === "docs" && pend ? `<i>${pend}</i>` : ""}${k === "informe" ? `<i>${DATA.meses[0].puntos.length}</i>` : ""}</button>`).join("");
+  const pi = $("pubInf"); if (pi) pi.innerHTML = ADMIN ? pubCtl("informe") : "";
 }
 function irA(k){
   TAB = k; solapas(); document.body.classList.toggle("extra", k !== "informe");
@@ -1102,7 +1132,41 @@ function vDl(){
   <div class="g-row">${grupoBox(G("inf"))}${grupoBox(G("est"))}</div>
   <div class="g-row">${gs.filter(g => !g.mes).map(grupoBox).join("")}</div>`;
 }
-function renderExtra(){ $("vExtra").innerHTML = ({docs: vDocs, hys: vHys, epp: vEpp, maq: vMaq, dl: vDl})[TAB](); }
+function renderExtra(){ $("vExtra").innerHTML = pubCtl(TAB) + ({docs: vDocs, hys: vHys, epp: vEpp, maq: vMaq, senal: vSenal, dl: vDl})[TAB](); if (TAB === "senal") cargarSnImg(); }
+// ---------- señalización (6/11/2026) ----------
+const SN_URL = {};
+function vSenal(){
+  const s = X().senal;
+  if (!s) return `<h2>Señalización</h2><p class="x-intro">Todavía no hay una propuesta cargada.</p>`;
+  const h = s.hojas[SNH] || s.hojas[0];
+  return `<h2>Señalización</h2><p class="x-intro">${esc(s.intro)}</p>
+  <div class="x-note"><span style="flex:1;min-width:240px">Propuesta del ${esc(s.fecha)}: <b>${s.total} carteles</b> en las tres plantas.</span>${btnDl("senal", "Descargar la propuesta (PDF)")}${ADMIN && s.app ? `<a class="x-btn" href="${esc(s.app)}" target="_blank" rel="noopener">✏ Editar en la app</a>` : ""}</div>
+  <div class="sn-tabs">${s.hojas.map((x, i) => `<button type="button" data-snh="${i}" aria-pressed="${x === h}">${esc(x.t)}<i>${x.n}</i></button>`).join("")}</div>
+  <div class="sn-plano"><img data-snimg="${h.k}" alt="Plano de señalización · ${esc(h.t)}"><div class="x-m">Tocá el plano para verlo en grande. Cada recuadro bordó es un cartel; el código está en la tabla de abajo.</div></div>
+  <div class="x-box"><div class="x-bh">Qué carteles van<span>cantidades por planta</span></div><div class="x-mxw"><table class="x-mx sn-t">
+  <tr><th>Cód.</th><th style="text-align:left">Cartel</th><th>PB</th><th>EP dep.</th><th>EP adm.</th><th>Total</th><th style="text-align:left">Medida</th><th style="text-align:left">Cómo se coloca</th></tr>
+  ${s.tabla.map(r => `<tr><td><b class="sn-c">${esc(r.c)}</b></td><td style="text-align:left"><b>${esc(r.n)}</b></td>${r.q.map(v => `<td>${v || "—"}</td>`).join("")}<td><b>${r.t}</b></td><td style="text-align:left" class="x-m">${esc(r.m)}</td><td style="text-align:left" class="x-m">${esc(r.mo)}</td></tr>`).join("")}
+  </table></div></div>
+  ${s.notas && s.notas.length ? `<div class="x-box"><div class="x-bh">A tener en cuenta</div><ul class="sn-n">${s.notas.map(n => `<li>${esc(n)}</li>`).join("")}</ul></div>` : ""}`;
+}
+async function cargarSnImg(){
+  for (const im of document.querySelectorAll("img[data-snimg]")){
+    const k = im.dataset.snimg;
+    try {
+      if (!SN_URL[k]){ const a = X().archivos[k], b = CIFRADO ? await bajarCifrado("arch/" + k) : await (await fetch("arch/" + k)).arrayBuffer(); SN_URL[k] = URL.createObjectURL(new Blob([b], {type: a.tipo})); }
+      if (im.isConnected) im.src = SN_URL[k];
+    } catch(e){ im.alt = "No se pudo cargar el plano"; }
+  }
+}
+document.addEventListener("click", e => {
+  const p = e.target.closest("[data-pub]");
+  if (p){ const k = p.dataset.pub, on = !pubOn(k); PUB = PUB || {}; PUB[k] = on;
+    enviar({tipo: "publicar", seccion: k, on}).then(r => toast(r.ok ? (on ? "Sección publicada: La Madrileña ya la ve" : "Sección sacada de la publicación") : "No se pudo guardar"));
+    solapas(); if (!$("vExtra").hidden) renderExtra(); return; }
+  const h = e.target.closest("[data-snh]"); if (h){ SNH = +h.dataset.snh; renderExtra(); return; }
+  const im = e.target.closest("img[data-snimg]");
+  if (im && im.src){ $("velo").innerHTML = `<div class="caja sn-zoom" role="dialog" aria-modal="true"><div class="cab"><h3>${esc(im.alt)}</h3><button class="cerrar" type="button" data-cerrar>Cerrar ✕</button></div><div class="cpo"><img src="${im.src}" alt=""></div></div>`; $("velo").hidden = false; }
+});
 function abrirAviso(doc){
   $("velo").innerHTML = `<div class="caja" role="dialog" aria-modal="true" aria-labelledby="avT" style="width:min(560px,100%)"><div class="cab"><h3 id="avT">Avisar que se envió</h3><button class="cerrar" type="button" data-cerrar>Cerrar ✕</button></div><div class="cpo">
     <div class="form"><label>Documento</label><input type="text" value="${esc(doc)}" readonly id="avD"></div>
