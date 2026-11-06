@@ -438,9 +438,7 @@ body.extra .selbar{display:none!important}
 .plantas button[aria-pressed=true] span{color:#E3DAF2}
 .pl-aviso{display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:#fff;border:1px dashed #CFC3E3;border-radius:8px;padding:9px 12px;font-size:13px;color:#444;margin-bottom:14px}
 .pl-aviso span{flex:1;min-width:220px}
-/* sin marcas de nuevo/reincidencia ni prioridad: el informe de MIT no las lleva */
-.chip.nuevo,.chip.reinc{display:none!important}
-.campo:has(#fTipo){display:none!important}
+/* desde el 10-26 el informe de MIT lleva nota de reincidencia: se muestran los chips Nuevo/Reincidencia y el filtro Tipo (6/11/2026) */
 /* resumen de las dos plantas */
 .ig-bars{display:flex;flex-direction:column;gap:5px;margin:4px 0 12px}
 .ig-bars div{display:grid;grid-template-columns:minmax(120px,42%) 1fr 26px;gap:8px;align-items:center;font-size:12.5px}
@@ -476,7 +474,7 @@ body.extra .selbar{display:none!important}
 .mq-d .mq-pts{grid-column:1 / -1}
 @media (max-width:900px){.sap-k{grid-template-columns:1fr}.mq-d{grid-template-columns:1fr;padding-left:14px}.mq summary{grid-template-columns:46px 1fr}.mq summary em,.mq summary i{grid-column:2}.plantas button{min-width:140px}.x-cap{grid-template-columns:1fr}}
 
-.stat.r,.stat.n{display:none}
+/* .stat.r,.stat.n visibles desde el 10-26 (reincidencias) */
 .solapas button{padding:12px 11px;font-size:13px}
 .plantas .pl-vid{margin-left:auto;border-color:var(--celeste);min-width:150px}.plantas .pl-vid b{color:var(--celeste)}
 
@@ -784,7 +782,7 @@ function historia(m, p){
   return out;
 }
 const desde = (m, p) => { const h = historia(m, p); return h[h.length - 1].mes; };
-const ordenMes = c => { const [a, b] = c.split("-").map(Number); return b * 100 + a; };
+const ordenMes = c => { const [a, b] = c.split(" ")[0].split("-").map(Number); return b * 100 + a; };
 const filtrando = () => !!(st.soloSel || st.sector || st.tema || st.tipo !== "todos" || st.seg !== "todos" || st.ot || st.q.trim());
 function filtrar(){
   const m = M(), q = st.q.trim().toLowerCase();
@@ -800,7 +798,7 @@ function filtrar(){
   });
 }
 function chips(m, p){
-  let s = p.ref ? `<span class="chip reinc">Reincidencia · punto ${esc(p.ref)} del ${esc(m.anterior)}${desde(m, p) !== m.anterior ? " · desde el " + esc(desde(m, p)) : ""}</span>` : `<span class="chip nuevo">Nuevo</span>`;
+  let s = p.ref ? `<span class="chip reinc">Reincidencia · punto ${esc(p.ref)} del ${esc(m.anterior)}${desde(m, p).split(" ")[0] !== m.anterior ? " · desde el " + esc(desde(m, p).split(" ")[0]) : ""}</span>` : `<span class="chip nuevo">Nuevo</span>`;
   if (p.prio) s += `<span class="chip prio prio-${p.prio.toLowerCase()}">Prioridad ${p.prio.toLowerCase()}</span>`;
   const e = ultEstado(m, p); if (e) s += `<span class="chip est-${SLUG[e]}">${e}</span>`;
   otsDe(m, p).forEach(o => s += `<button type="button" class="chip ot" data-otf="${esc(o.numero)}" title="Ver los puntos de esta orden">${esc(o.numero)} · ${esc(o.area)}</button>`);
@@ -1196,7 +1194,7 @@ function vInfG(){
       <div class="ig-bars">${tm.map(([t, n]) => `<div><span>${esc(corto(t.nombre))}</span><i style="width:${100 * n / mx}%"></i><b>${n}</b></div>`).join("")}</div>
       <div class="g-sel"><button type="button" class="g-btn" data-pl="${pl}">Ver los puntos de ${esc(X().plantas[pl].nombre)}</button></div></div>`;
   };
-  return `<h2>Informe de visita 9-26 · las dos plantas</h2><p class="x-intro">Cada planta tiene su lista de puntos, numerada desde 1 como en el informe. Elegí una planta para ver los puntos con sus fotos, cargar el seguimiento y armar órdenes de trabajo.</p>
+  return `<h2>Informe de visita ${esc(mesesPl("P1")[0].etq)} · las dos plantas</h2><p class="x-intro">Cada planta tiene su lista de puntos, numerada desde 1 como en el informe. Elegí una planta para ver los puntos con sus fotos, cargar el seguimiento y armar órdenes de trabajo.</p>
   <div class="g-row">${card("P1")}${card("P2")}</div><div class="g-row">${grupoInf()}${grupoEsg()}</div>`;
 }
 
@@ -1222,7 +1220,7 @@ function vSap(){
 // ---------- estudios ----------
 function grupoInf(){
   return `<div class="g-box" style="--c:var(--brand)"><h3>Informes de visita</h3><span class="x-m">${plTag("G")} Un solo informe por visita, con las dos plantas</span>
-  <div class="g-sel"><select id="sel-inf">${["9-26", "8-26", "4-26", "3-26", "1-26", "12-25"].map(k => `<option value="${k}">Informe ${k}</option>`).join("")}</select><button type="button" class="g-btn" data-dlsel="inf">Descargar</button></div></div>`;
+  <div class="g-sel"><select id="sel-inf">${["10-26", "9-26", "8-26", "4-26", "3-26", "1-26", "12-25"].map(k => `<option value="${k}">Informe ${k}</option>`).join("")}</select><button type="button" class="g-btn" data-dlsel="inf">Descargar</button></div></div>`;
 }
 function grupoEsg(){
   return `<div class="g-box" style="--c:#222529"><h3>Estado de situación general</h3><span class="x-m">Se genera en el momento, con lo último cargado en el portal</span>
@@ -1332,7 +1330,7 @@ function vEpp(){
 // ---------- máquinas ----------
 const li = xs => xs.map(x => `<li>${esc(x)}</li>`).join("");
 const liE = (p, xs) => xs.map((x, i) => `<li>${E(p + "." + i)}</li>`).join("");
-const ptsChips = q => (q.pts || []).map(([c, n]) => `<button type="button" class="chip ot" data-irpt="${esc(c)}|${n}">Punto ${n} · ${esc(c.split(" ")[1] === "P1" ? "Planta 1" : "Planta 2")} · informe 9-26</button>`).join(" ");
+const ptsChips = q => (q.pts || []).map(([c, n]) => `<button type="button" class="chip ot" data-irpt="${esc(c)}|${n}">Punto ${n} · ${esc(c.split(" ")[1] === "P1" ? "Planta 1" : "Planta 2")} · informe ${esc(c.split(" ")[0])}</button>`).join(" ");
 function vMaq(){
   const L = X().listado.filter(enPl), T = X().tipos, ds = X().destacadas.filter(enPl), d = ds.find(x => x.c === MAQ) || ds[0];
   const det = d ? (() => { const t = T[d.t], q = X().listado.find(x => x.c === d.c) || {};
@@ -1457,9 +1455,9 @@ function esgDoc(gen, cual){
   <div class="esg-bar">1. SISTEMA DE AUTOPROTECCIÓN</div>
   <table class="esg-t"><thead><tr><th>Planta</th><th>Expediente</th><th>Estado</th><th>Próximo simulacro</th><th>Vencimiento anual</th></tr></thead><tbody>
   ${pls.map(pl => { const s = x.sap[pl], pr = s.hitos.find(h => !h.ok && h.sim); return `<tr><td><b>${esc(x.plantas[pl].nombre)}</b><small>${esc(s.grupo)}</small></td><td>${esc(s.exp)}<small>${esc(s.disp)} del ${esc(s.disp_fecha)}</small></td><td>${stl(s.estado)}</td><td>${pr ? fISO(pr.f) + "<small>" + esc(pr.t) + "</small>" : "Se fijan al renovar"}</td><td>${fISO(s.vig_anual)}<small>${falta(s.vig_anual)}</small></td></tr>`; }).join("")}</tbody></table>
-  <div class="esg-bar">2. PUNTOS DEL INFORME DE VISITA 9-26 POR TEMA</div>
+  <div class="esg-bar">2. PUNTOS DEL INFORME DE VISITA ${esc(mesesPl("P1")[0].etq)} POR TEMA</div>
   ${pls.map(tabla).join('<div style="height:6px"></div>')}
-  <p class="esg-n">El detalle de cada punto, con sus fotos y la acción a realizar, está en el informe de visita 9-26 y en el portal. El avance es el cargado en el portal al momento de generar este informe.</p>
+  <p class="esg-n">El detalle de cada punto, con sus fotos y la acción a realizar, está en el informe de visita ${esc(mesesPl("P1")[0].etq)} y en el portal. El avance es el cargado en el portal al momento de generar este informe.</p>
   <div class="esg-bar">3. ESTUDIOS DE HIGIENE Y SEGURIDAD</div>
   <table class="esg-t"><thead><tr><th style="width:44%">Estudio</th><th style="width:18%">Fecha</th><th style="width:18%">Vigencia</th><th>Estado</th></tr></thead><tbody>
   ${ests.map(s => { const i = x.estudios.indexOf(s), [st, ve] = estEst(s); return `<tr><td><b>${esc(T("estudios." + i + ".estudio"))}</b><small>${esc(T("estudios." + i + ".norma"))}</small></td><td>${esc(T("estudios." + i + ".fecha"))}</td><td>${esc(T("estudios." + i + ".vigencia"))}</td><td>${stl(st, st === "EN CURSO" ? "EN PREPARACIÓN" : st)}${ve ? "<small>" + ve + "</small>" : ""}</td></tr>`; }).join("")}</tbody></table>
