@@ -403,13 +403,13 @@ function pintarCap() {
     else if (x.error) c = '<div class="aviso">No se pudo leer la planilla de la capacitación. Probá «Actualizar»; si sigue, avisame.</div>';
     else {
       const k = p => V.filter(v => p.v[v.id]).length, todos = P.filter(p => k(p) === V.length).length, nada = P.filter(p => !k(p)).length;
-      const fil = CAPF[q.id] || 'faltan';
+      const fil = CAPF[q.id] || '';
       const L = P.filter(p => fil === 'todos' || k(p) < V.length).sort((a, b) => k(a) - k(b) || a.n.localeCompare(b.n));
       c = `<div class="cvs">${V.map((v, i) => { const n = P.filter(p => p.v[v.id]).length;
           return `<div class="cv"><div class="t"><b>${i + 1}. ${esc(v.titulo)}</b><span>${n}/${N}</span></div><div class="bv"><span style="width:${N ? n / N * 100 : 0}%"></span></div></div>`; }).join('')}</div>
         <div class="cres"><span><b>${todos}</b> de ${N} vieron todo</span>·<span><b>${nada}</b> no vieron ninguno</span>
-          <span class="fil"><button class="${fil === 'faltan' ? 'on' : ''}" onclick="CAPF['${q.id}']='faltan';pintarCap()">A quién le falta (${N - todos})</button><button class="${fil === 'todos' ? 'on' : ''}" onclick="CAPF['${q.id}']='todos';pintarCap()">Todos</button></span></div>
-        ${L.length ? `<table class="ctab"><tr><th>Persona</th>${V.map((v, i) => `<th title="${esc(v.titulo)}">Video ${i + 1}</th>`).join('')}</tr>
+          <span class="fil"><button class="${fil === 'faltan' ? 'on' : ''}" onclick="CAPF['${q.id}']=CAPF['${q.id}']==='faltan'?'':'faltan';pintarCap()">A quién le falta (${N - todos}) ${fil === 'faltan' ? '▴' : '▾'}</button><button class="${fil === 'todos' ? 'on' : ''}" onclick="CAPF['${q.id}']=CAPF['${q.id}']==='todos'?'':'todos';pintarCap()">Todos (${N}) ${fil === 'todos' ? '▴' : '▾'}</button></span></div>
+        ${!fil ? '<div style="height:6px"></div>' : L.length ? `<table class="ctab"><tr><th>Persona</th>${V.map((v, i) => `<th title="${esc(v.titulo)}">Video ${i + 1}</th>`).join('')}</tr>
           ${L.map(p => `<tr class="${k(p) === V.length ? 'ok' : ''}"><td>${esc(p.n)}</td>${V.map(v => p.v[v.id] ? `<td class="si">✓<small>${esc(p.v[v.id])}</small></td>` : '<td class="no">—</td>').join('')}</tr>`).join('')}</table>`
           : '<div class="cargando">✓ Todo el personal vio todos los videos</div>'}`;
     }
