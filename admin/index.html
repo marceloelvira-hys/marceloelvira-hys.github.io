@@ -152,6 +152,28 @@ code{font:600 13.5px ui-monospace,Consolas,monospace;background:#fff;border:1px 
 .alta input{border:1px solid var(--line);border-radius:7px;padding:6px 8px;font:inherit;font-size:14px;width:160px}
 .unota{font-size:12.5px;color:var(--muted);padding:6px 0 2px}
 @media (max-width:640px){.ur{grid-template-columns:1fr}}
+/* capacitaciones con videos */
+.cap .top .chip{background:#fff;border-radius:8px;padding:3px 8px;display:flex;align-items:center}
+.cap .top .chip img{height:30px}
+.cvs{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;padding:14px 16px 4px}
+.cv{background:#F7F5F2;border-radius:10px;padding:10px 12px}
+.cv .t{display:flex;justify-content:space-between;gap:8px;align-items:baseline;font-size:14px}
+.cv .t span{font:700 20px "Barlow Condensed",sans-serif;white-space:nowrap}
+.cv .bv{height:10px;border-radius:5px;background:#E3DFD9;margin-top:6px;overflow:hidden}
+.cv .bv span{display:block;height:100%;background:var(--ok)}
+.cres{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px 16px 0;font-size:14px}
+.cres b{font:700 20px "Barlow Condensed",sans-serif}
+.cres .fil{margin-left:auto;display:flex;gap:4px}
+.cres .fil button{border:1px solid var(--line);background:#fff;border-radius:20px;padding:4px 10px;font-size:13px;font-weight:600}
+.cres .fil button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.ctab{width:calc(100% - 32px);margin:8px 16px 0;border-collapse:collapse;font-size:14px}
+.ctab th{font:600 13px Barlow,sans-serif;color:var(--muted);text-align:center;padding:4px;border-bottom:1px solid var(--line)}
+.ctab th:first-child,.ctab td:first-child{text-align:left}
+.ctab td{padding:6px 4px;border-bottom:1px solid #F3F1EE;text-align:center}
+.ctab .si{color:var(--ok);font-weight:700}
+.ctab .si small{display:block;font-weight:400;color:var(--muted);font-size:11.5px}
+.ctab .no{color:#B9BEC4}
+.ctab tr.ok td:first-child::after{content:" ✓";color:var(--ok)}
 footer{color:var(--muted);font-size:12.5px;padding:10px 0 30px}
 
 @media (max-width:640px){
@@ -263,7 +285,7 @@ async function actualizar() {
   document.getElementById('hora').textContent = 'Actualizando…';
   CFG.portales.forEach(p => VIVO[p.id] = VIVO[p.id] || {cargando: true});
   pintar();
-  await Promise.all(CFG.portales.map(leer));
+  await Promise.all([...CFG.portales.map(leer), ...(CFG.capacitaciones || []).map(q => leerCap(q).then(pintarCap))]);
   document.getElementById('hora').textContent = 'Actualizado ' + new Date().toLocaleTimeString('es-AR', {hour: '2-digit', minute: '2-digit'});
   pintar();
 }
@@ -352,6 +374,60 @@ async function alta(id, b) {
   try { await enviar(p, {accion: 'cuenta', op: 'alta', usuario: u, nombre: n}); await leer(p); pintar(); }
   catch (e) { alertar(id, e && e.error === 'existe' ? 'Ese usuario ya existe.' : 'No se pudo agregar el usuario.'); b.disabled = false; }
 }
+/* ---------- capacitaciones con videos (Bloomfield) ---------- */
+let CAP = {}, CAPF = {}, CAPU = {};
+async function leerCap(q) {
+  try {
+    const r = await (await fetch(q.api + '?accion=estado&token=' + encodeURIComponent(q.token), {cache: 'no-store'})).json();
+    if (!r.ok) throw 0;
+    CAP[q.id] = {personal: (r.personal || []).filter(x => !ES_MIO(x.n))};
+  } catch (e) { CAP[q.id] = {error: true}; }
+}
+const fechaN = f => { const m = String(f || '').match(/(\d+)\/(\d+)\/(\d+)/); return m ? new Date(+m[3] < 100 ? 2000 + +m[3] : +m[3], m[2] - 1, +m[1]).getTime() : 0; };
+function pintarCap() {
+  const el = document.getElementById('cap'); if (!el) return;
+  el.innerHTML = (CFG.capacitaciones || []).map(q => {
+    const x = CAP[q.id] || {cargando: true}, P = x.personal || [], N = P.length, V = q.videos;
+    let ult = 0; P.forEach(p => Object.values(p.v).forEach(f => ult = Math.max(ult, fechaN(f))));
+    const top = `<div class="top" style="background:${q.color}">
+      ${q.logo ? `<span class="chip"><img src="${q.logo}" alt="${esc(q.nombre)}"></span>` : ''}
+      <div class="tx"><h3>${esc(q.nombre)}</h3><div class="det">${esc(q.detalle)}</div></div>
+      ${ult ? `<div class="act">Último «lo vi» ${new Date(ult).toLocaleDateString('es-AR', {day: '2-digit', month: '2-digit'})}</div>` : ''}</div>`;
+    const pie = (CAPU[q.id] ? panelCap(q) : '') + `<div class="acc">
+      <a class="pri" href="${q.url}" target="_blank">Entrar al portal ↗</a>
+      ${btnCopiar(BASE + q.url.replace('../', ''))}
+      <button onclick="CAPU['${q.id}']=!CAPU['${q.id}'];pintarCap()">🔑 Usuarios y claves</button>
+      <span class="nota">${esc(q.admin_entrada)} · la página de emergencias es pública, los videos piden usuario</span></div>`;
+    let c;
+    if (x.cargando) c = '<div class="cargando">Leyendo la planilla…</div>';
+    else if (x.error) c = '<div class="aviso">No se pudo leer la planilla de la capacitación. Probá «Actualizar»; si sigue, avisame.</div>';
+    else {
+      const k = p => V.filter(v => p.v[v.id]).length, todos = P.filter(p => k(p) === V.length).length, nada = P.filter(p => !k(p)).length;
+      const fil = CAPF[q.id] || 'faltan';
+      const L = P.filter(p => fil === 'todos' || k(p) < V.length).sort((a, b) => k(a) - k(b) || a.n.localeCompare(b.n));
+      c = `<div class="cvs">${V.map((v, i) => { const n = P.filter(p => p.v[v.id]).length;
+          return `<div class="cv"><div class="t"><b>${i + 1}. ${esc(v.titulo)}</b><span>${n}/${N}</span></div><div class="bv"><span style="width:${N ? n / N * 100 : 0}%"></span></div></div>`; }).join('')}</div>
+        <div class="cres"><span><b>${todos}</b> de ${N} vieron todo</span>·<span><b>${nada}</b> no vieron ninguno</span>
+          <span class="fil"><button class="${fil === 'faltan' ? 'on' : ''}" onclick="CAPF['${q.id}']='faltan';pintarCap()">A quién le falta (${N - todos})</button><button class="${fil === 'todos' ? 'on' : ''}" onclick="CAPF['${q.id}']='todos';pintarCap()">Todos</button></span></div>
+        ${L.length ? `<table class="ctab"><tr><th>Persona</th>${V.map((v, i) => `<th title="${esc(v.titulo)}">Video ${i + 1}</th>`).join('')}</tr>
+          ${L.map(p => `<tr class="${k(p) === V.length ? 'ok' : ''}"><td>${esc(p.n)}</td>${V.map(v => p.v[v.id] ? `<td class="si">✓<small>${esc(p.v[v.id])}</small></td>` : '<td class="no">—</td>').join('')}</tr>`).join('')}</table>`
+          : '<div class="cargando">✓ Todo el personal vio todos los videos</div>'}`;
+    }
+    return `<div class="card cap" id="c_${q.id}">${top}${c}${pie}</div>`;
+  }).join('');
+}
+function panelCap(q) {
+  const A = q.acceso, url = BASE + q.url.replace('../', '');
+  const txt = (u, cl) => `Videos de capacitación · ${q.nombre}\n${url}\nUsuario: ${u}\nClave: ${cl}`;
+  const fila = u => `<div class="ur"><div class="un"><b>${esc(u.nombre)}</b><small>Usuario: ${esc(u.usuario)} · ${esc(u.cargo || u.rol)}</small></div>
+      <div>${u.clave ? clave(u.clave) : '<span class="uc">Sin clave asignada (entra con 123 y elige la suya)</span>'}${/admin/i.test(u.rol) ? '<small class="uc">Tu usuario: ves todo y no figurás en la lista</small>' : u.usuario === 'prueba' ? '<small class="uc">Usuario de prueba: ve lo mismo que la directora</small>' : /directora/i.test(u.rol) ? '<small class="uc">Ve quién vio cada video y la documentación</small>' : ''}</div>
+      <div>${u.clave ? btnCopiar(txt(u.usuario, u.clave), '📋 Copiar acceso') : ''}</div></div>`;
+  return `<div class="usr"><h4>🔑 Usuarios y claves <small>${A.usuarios.length}</small></h4>
+    ${A.soporte ? `<div class="ur"><div class="un"><b>Clave de emergencia</b><small>Entra con cualquier usuario menos el de admin</small></div><div>${clave(A.soporte)}</div><div></div></div>` : ''}
+    ${A.usuarios.map(fila).join('')}
+    <div class="unota">Las claves las reparte la Dirección. Para dar de baja a alguien: «Activo» = NO en la pestaña Personal de la planilla. Para sumar a alguien o cambiar una clave, pedímelo.</div></div>`;
+}
+
 /* ---------- pantalla ---------- */
 function iniciar() {
   document.getElementById('login').remove();
@@ -365,12 +441,13 @@ function iniciar() {
   <main class="wrap">
     <section><h2>Dónde poner el foco</h2><div class="tiles" id="tiles"></div><div class="ranking" id="ranking"></div></section>
     <section><h2>Portales de clientes <small>informes, seguimiento y órdenes de trabajo</small></h2><div class="grid" id="grid"></div></section>
+    ${(CFG.capacitaciones || []).length ? `<section><h2>Capacitaciones con videos <small>quién vio cada video · se lee en vivo de la planilla</small></h2><div class="grid" id="cap"></div></section>` : ''}
     <section><h2>Páginas informativas <small>QR y aplicaciones, sin seguimiento · tocá el cliente para elegir</small></h2><div class="pags" id="pags"></div></section>
     <section><h2>Clientes sin portal todavía <small>${CFG.sin_portal.length}</small></h2><div class="chips" id="chips"></div></section>
     <footer>«Nuevo» = todavía no lo marcaste como visto. Lo visto sigue en la lista hasta que lo marques «Ya lo trabajé». Los puntos para verificar quedan hasta que se marcan Resueltos. Las marcas quedan guardadas en la planilla de cada portal: son las mismas en la compu y en el celular. Lo que cargás vos no cuenta como nuevo.</footer>
   </main>`;
   document.getElementById('act').onclick = actualizar;
-  pintarPags();
+  pintarPags(); pintarCap();
   document.getElementById('chips').innerHTML = CFG.sin_portal.map(n => `<span>${esc(n)}</span>`).join('');
   actualizar();
 }
