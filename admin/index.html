@@ -217,7 +217,7 @@ document.getElementById('fl').onsubmit = async e => {
 
 /* ---------- datos vivos ---------- */
 const VER = 'Listo para verificar', RES = 'Resuelto', DIA = 864e5;
-const ES_MIO = q => /marcelo elvira/i.test(q || '');
+const ES_MIO = q => /marcelo elvira|^prueba/i.test(q || '');   // lo que cargan el admin y el usuario «prueba» no cuenta como pendiente
 const hace = ts => { const d = Math.floor((Date.now() - ts) / DIA); return d <= 0 ? 'hoy' : d === 1 ? 'hace 1 día' : `hace ${d} días`; };
 function aFecha(f) { const [d, m, a] = String(f || '').split('/'); return a ? +new Date(+a, m - 1, +d, 12) : 0; }
 function desdeEstado(r) {           // por si el script todavía no tiene la versión nueva
@@ -326,6 +326,7 @@ function panelUsuarios(p, x) {
     else if (u.propia === null) c = `<span class="uc">Inicial ${esc(u.inicial)} · no se sabe si ya la cambió</span>`;
     else if (u.propia && u.clave) c = `${clave(u.clave)}<small class="uc">La eligió ${esc(u.fecha)}</small>`;
     else if (u.propia) c = `<span class="uc">Ya eligió la suya (te llegó por mail)</span>`;
+    else if (u.usuario === 'prueba') c = `<code>${esc(u.inicial)}</code><small class="uc">Usuario de prueba: clave fija, vista de cliente</small>`;
     else c = `<code>${esc(u.inicial)}</code><small class="uc">Inicial: la cambia al entrar</small>`;
     if (!u.admin) {
       acc += btnCopiar(accesoTxt(p, u.usuario, u.propia ? (u.clave || 'la que elegiste') : `${u.inicial} (la primera vez te pide elegir una nueva)`), '📋 Copiar acceso');
