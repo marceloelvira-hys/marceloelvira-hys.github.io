@@ -1,0 +1,6 @@
+BEGIN:VCARD
+VERSION:3.0
+FN:Emergencias 911
+N:Emergencias 911;;;;
+TEL;TYPE=VOICE:911
+END:VCARD
