@@ -449,6 +449,11 @@ a.x-btn{color:inherit;text-decoration:none;display:inline-flex;align-items:cente
 .sn-carga{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#fff;color:var(--muted);font-weight:600}
 .sn-carga[hidden]{display:none}
 
+/* video tutorial (6/11/2026) */
+.vidb{border-color:var(--brand,#CF3339)!important;color:var(--brand,#CF3339)!important}
+.vidcaja{width:min(1100px,100%)}
+.vidcaja video{display:block;width:100%;background:#000;aspect-ratio:16/9}
+
 </style>
 </head>
 <body>
@@ -1252,6 +1257,29 @@ async function imprimirEsg(){
   window.print(); document.body.classList.remove("imprimiendo-esg"); document.title = t0;
 }
 document.addEventListener("click", e => { if (e.target.closest("[data-esg]")) imprimirEsg(); });
+
+// ---------- video tutorial «Cómo se usa» (6/11/2026, como GALVASA) ----------
+let VIDEO_URL = null;
+(function(){
+  const b = $("bCsv"); if (!b || $("bVid")) return;
+  b.insertAdjacentHTML("afterend", `<button class="btn vidb" id="bVid" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M10 8.5v7l6-3.5z" fill="currentColor"/></svg>Cómo se usa (video)</button>`);
+})();
+document.addEventListener("click", e => {
+  const t = e.target; if (!t || !t.closest) return;
+  if (t.id === "velo" || t.closest("[data-cerrar]")) $("velo").querySelectorAll("video").forEach(v => v.pause());
+  if (t.closest("#bVid")) verVideo();
+}, true);
+async function verVideo(){
+  $("velo").innerHTML = `<div class="caja vidcaja" role="dialog" aria-modal="true" aria-labelledby="vT"><div class="cab"><h3 id="vT">Cómo se usa el portal</h3><button class="cerrar" type="button" data-cerrar>Cerrar ✕</button></div><video id="vid" controls playsinline preload="auto"></video></div>`;
+  $("velo").hidden = false;
+  try {
+    if (!VIDEO_URL){
+      if (!CIFRADO) VIDEO_URL = "video/tutorial.mp4";
+      else { toast("Cargando el video…"); VIDEO_URL = URL.createObjectURL(new Blob([await bajarCifrado("video/tutorial.mp4")], {type: "video/mp4"})); }
+    }
+    const v = $("vid"); if (!v) return; v.src = VIDEO_URL; v.play().catch(() => {});
+  } catch(e){ toast("No se pudo cargar el video"); }
+}
 
 window.PORTAL = {st, SEL, render, abrir, abrirOT, abrirSug, otDoc, imprimirOT, cargarTodas, verOT, M, selPuntos, get ORDENES(){ return ORDENES; }};
 iniciar();
