@@ -216,7 +216,7 @@ header select{background:#3A3E45;color:#fff;border:0;border-radius:8px;padding:7
 .mos.r{background:var(--ver-soft);border-color:transparent}.mos.r::before{background:var(--ver)}
 .mos.a{background:var(--amb-soft);border-color:transparent}.mos.a::before{background:var(--amb)}
 .mos.g::before{background:var(--ok)}
-.mos b{font:600 16px "Barlow Condensed",sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mos>b{font:600 16px "Barlow Condensed",sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mos .por{font-size:12.5px;color:var(--muted);min-height:16px}
 .mos .sen{display:flex;gap:3px;height:6px;margin-top:3px}
 .mos .sen i{flex:1;border-radius:3px;background:var(--nada)}
@@ -504,6 +504,28 @@ header img.leon{background:none;padding:0;height:46px;border-radius:0}
 .nota .c1 b{color:var(--ink)}
 .nota .tx{white-space:pre-wrap;margin-top:4px}
 .medida .k{display:block;font:600 12px Barlow,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+
+/* ----- cuadros de la página de Lula ----- */
+.vl-nada{font-size:12.5px;color:var(--muted)}
+.vl-cuenta{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;align-items:center;margin-top:2px}
+.vl-cuenta .cn{display:flex;flex-direction:column;align-items:center;line-height:1;color:var(--tc)}
+.vl-cuenta .cn b{font:700 34px "Barlow Condensed",sans-serif}
+.vl-cuenta .cn i{font:600 11px Barlow,sans-serif;font-style:normal;text-transform:uppercase;letter-spacing:.06em}
+.vl-cuenta .ct{min-width:0;overflow-wrap:anywhere;font-size:13px;font-weight:600;line-height:1.2}
+.vl-cuenta .ct small{display:block;font-weight:500;color:var(--muted);font-size:12px}
+.vl-cuenta .cb{grid-column:1/-1;height:7px;border-radius:4px;background:var(--nada);overflow:hidden;margin-top:4px}
+.vl-cuenta .cb i{display:block;height:100%;background:var(--tc);border-radius:4px}
+.vl-hoja{display:flex;gap:10px;align-items:center;margin-top:2px}
+.vl-hoja .hj{flex:none;width:52px;border-radius:9px;overflow:hidden;border:2px solid var(--tc);background:var(--card);text-align:center;line-height:1}
+.vl-hoja .hj b{display:block;font:700 24px "Barlow Condensed",sans-serif;padding:4px 0 2px;color:var(--ink)}
+.vl-hoja .hj i{display:block;font:700 11px Barlow,sans-serif;font-style:normal;text-transform:uppercase;letter-spacing:.06em;background:var(--tc);color:#fff;padding:2px 0}
+.vl-hoja .ht{min-width:0}.vl-hoja .ht b{display:block;font-size:13px;line-height:1.2;overflow-wrap:anywhere}
+.vl-hoja .ht small{color:var(--muted);font-size:12px}
+.vl-pista{display:flex;flex-direction:column;gap:3px;margin-top:6px}
+.vl-pista .pt{display:block;position:relative;height:16px;border-radius:8px;background:linear-gradient(90deg,color-mix(in srgb,#E03131 18%,var(--card)) 0 15.5%,color-mix(in srgb,#F08C00 16%,var(--card)) 15.5% 33.3%,var(--nada) 33.3%)}
+.vl-pista .pt i{position:absolute;top:50%;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;background:var(--tc);border:2px solid var(--card);box-shadow:0 0 0 1px var(--tc)}
+.vl-pista .pe{display:flex;justify-content:space-between;font-size:10px;color:var(--muted)}
+.vl-pista small{font-size:12px;color:var(--muted);overflow-wrap:anywhere}.vl-pista .pt em{position:absolute;inset:0;display:grid;place-items:center;font:600 10.5px Barlow,sans-serif;font-style:normal;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -834,10 +856,28 @@ function vTorre() {
     : `${kpi('k1', T.v, 'Para verificar', '#bandeja')}${kpi('k2', T.o, 'Órdenes de trabajo', '#bandeja')}${kpi('k3', T.a, 'Avances y comentarios', '#bandeja')}${kpi('k4', v30, 'Vencen en 30 días', '#agenda')}`;
   return `<section><div class="kpis">${kp}</div>
     <div class="filtros">${fb('todos', `Todos (${S.length})`)}${LECT() ? '' : fb('pend', 'Con pendientes')}${fb('vence', 'Vence en 30 días')}${fb('con', 'Con portal')}${fb('sin', 'Sin portal')}${LECT() ? '' : fb('lula', 'Cartera Lula') + fb('sforza', 'Con Franco')}</div>
-    <div class="mosaico">${lista.map(({c, s}) => `<button class="mos ${s.est}" onclick="location.hash='c-${c.id}'"><b>${esc(c.nombre)}</b><span class="por">${esc(s.por)}</span>${sen(s)}
+    ${LECT() ? `<div class="filtros"><span class="k" style="margin-right:4px">Ver las fechas como</span>${[['cuenta', '⏱ Cuenta regresiva'], ['hoja', '📅 Hoja de calendario'], ['pista', '⟶ Próximos 90 días']].map(([k, t]) => `<button class="${MOSL === k ? 'on' : ''}" onclick="MOSL='${k}';LSset('lula_mos','${k}');pintar()">${t}</button>`).join('')}</div>` : ''}
+    <div class="mosaico${LECT() ? ' ml-' + MOSL : ''}">${lista.map(({c, s}) => `<button class="mos ${s.est}" onclick="location.hash='c-${c.id}'"><b>${esc(c.nombre)}</b>${LECT() ? venceLula(c, s) : `<span class="por">${esc(s.por)}</span>${sen(s)}`}
       <span class="et">${tienePortal(c) ? '<span>portal</span>' : (LECT() ? '<span>sin portal</span>' : `<span>sin portal · ${c.prioridad}.º en la fila</span>`)}${c.sedes.length > 1 ? `<span>${c.sedes.length} sedes</span>` : ''}</span></button>`).join('') || '<div class="vacio2">Ningún cliente con ese filtro.</div>'}</div>
-    <div class="ley2" style="margin-top:10px">${LECT() ? '<span>Bordó: vence algo en 14 días · Ámbar: vence en 30 días · la última barrita es la fecha más cercana</span>' : '<span>Barritas: para verificar · órdenes · avances · vencimientos</span><span>Bordó: verificar o vence en 14 días · Ámbar: pendientes o vence en 30</span>'}</div></section>
+    <div class="ley2" style="margin-top:10px">${LECT() ? `<span>Bordó: vence algo en 14 días · Ámbar: vence en 30 días</span><span>Colores de la fecha: <b style="color:#FF6B35">simulacro</b> · <b style="color:#12B886">abre la ventana</b> · <b style="color:#E8467C">renovación anual</b> · <b style="color:#7950F2">vence (SAP nuevo)</b></span>` : '<span>Barritas: para verificar · órdenes · avances · vencimientos</span><span>Bordó: verificar o vence en 14 días · Ámbar: pendientes o vence en 30</span>'}</div></section>
     ${LECT() ? '' : `<section><h2>Próximos portales <small>orden de armado · tocá un cliente para ver qué tendría</small></h2><div class="cola">${cola.map(c => `<div onclick="location.hash='c-${c.id}'"><b>${c.prioridad}</b>${esc(c.nombre)} <span class="chipc">${esc((CFG.modulos.plantillas[c.plantilla] || {}).nombre || '')}</span></div>`).join('')}</div></section>${tarjetaLula()}`}`;
+}
+
+
+/* ----- página de Lula: tres formas de mostrar la fecha en cada cuadro ----- */
+let MOSL = LS('lula_mos') || 'cuenta';
+function venceLula(c, s) {
+  const ag = agendaDe(c.id).filter(a => diasA(a.fecha) >= 0), a = ag[0];
+  if (!a) return '<span class="vl-nada">Sin fechas próximas en el Control SAP</span>';
+  const n = diasA(a.fecha), d = fd(a.fecha), col = TIPOS_AG[a.tipo][1], tit = esc(a.titulo.split(' (')[0]);
+  if (MOSL === 'hoja') return `<span class="vl-hoja" style="--tc:${col}"><span class="hj"><b>${d.getDate()}</b><i>${MESES[d.getMonth()].slice(0, 3)}</i></span><span class="ht"><b>${tit}</b><small>${cdTxt(n)}${a.hora ? ' · ' + esc(a.hora) + ' h' : ''}</small></span></span>`;
+  if (MOSL === 'pista') {
+    const prox = ag.filter(x => diasA(x.fecha) <= 90);
+    return `<span class="vl-pista"><span class="pt">${prox.length ? '' : '<em>nada en los próximos 90 días</em>'}${prox.map(x => `<i style="left:${Math.min(100, diasA(x.fecha) / 90 * 100)}%;--tc:${TIPOS_AG[x.tipo][1]}" title="${fd(x.fecha).toLocaleDateString('es-AR')} · ${esc(x.titulo)}"></i>`).join('')}</span><span class="pe"><span>hoy</span><span>30</span><span>60</span><span>90 días</span></span>
+      <small><b style="color:${col}">${tit}</b> ${cdTxt(n)}${prox.length > 1 ? ` · y ${prox.length - 1} más` : ''}</small></span>`;
+  }
+  const lleno = Math.max(4, 100 - Math.min(n, 90) / 90 * 100);
+  return `<span class="vl-cuenta" style="--tc:${col}"><span class="cn"><b>${n === 0 ? 'HOY' : n}</b>${n === 0 ? '' : `<i>día${n === 1 ? '' : 's'}</i>`}</span><span class="ct">${tit}<small>${d.toLocaleDateString('es-AR', {day: '2-digit', month: '2-digit', year: '2-digit'})}${a.hora ? ' · ' + esc(a.hora) + ' h' : ''}</small></span><span class="cb"><i style="width:${lleno}%"></i></span></span>`;
 }
 
 /* ----- Bandeja ----- */
