@@ -526,6 +526,8 @@ header img.leon{background:none;padding:0;height:46px;border-radius:0}
 .vl-pista .pt i{position:absolute;top:50%;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;background:var(--tc);border:2px solid var(--card);box-shadow:0 0 0 1px var(--tc)}
 .vl-pista .pe{display:flex;justify-content:space-between;font-size:10px;color:var(--muted)}
 .vl-pista small{font-size:12px;color:var(--muted);overflow-wrap:anywhere}.vl-pista .pt em{position:absolute;inset:0;display:grid;place-items:center;font:600 10.5px Barlow,sans-serif;font-style:normal;color:var(--muted)}
+.docsap{display:flex;gap:4px 12px;align-items:center;flex-wrap:wrap;text-decoration:none;color:var(--ink);background:var(--card);border:1px solid var(--line);border-left:6px solid var(--ok);border-radius:14px;padding:12px 16px;margin:0 0 14px}
+.docsap b{font-size:16px}.docsap span{color:var(--muted);font-size:13px;flex:1;min-width:200px}.docsap i{font-style:normal;font-size:20px;color:var(--ok)}
 </style>
 </head>
 <body>
@@ -574,10 +576,11 @@ document.getElementById('fl').onsubmit = async e => {
     const raw = await llave(document.getElementById('pw').value);
     CFG = await abrir(raw);
     if (document.getElementById('rec').checked) LSset('tab_k', ub64(raw));
+    try { sessionStorage.setItem('tab_k', ub64(raw)); } catch (e) {}
     iniciar();
   } catch (x) { err.textContent = 'La clave no es correcta.'; }
 };
-(async () => { const k = LS('tab_k'); if (!k) return; try { CFG = await abrir(b64(k)); iniciar(); } catch (e) { LSset('tab_k', null); } })();
+(async () => { let k = LS('tab_k'); try { k = k || sessionStorage.getItem('tab_k'); } catch (e) {} if (!k) return; try { CFG = await abrir(b64(k)); iniciar(); } catch (e) { LSset('tab_k', null); } })();
 
 /* ---------- datos vivos ---------- */
 const VER = 'Listo para verificar', RES = 'Resuelto', DIA = 864e5;
@@ -779,7 +782,7 @@ const cli = id => CL().find(c => c.id === id);
 const portalDe = id => CFG.portales.find(p => p.id === id);
 const capDe = id => (CFG.capacitaciones || []).find(q => q.id === id);
 const pagsDe = c => (CFG.paginas || []).find(g => g.cliente === c.nombre);
-const tienePortal = c => !!(portalDe(c.id) || capDe(c.id) || pagsDe(c) || ((CFG.enlaces || {})[c.id] || []).length);
+const tienePortal = c => !!(portalDe(c.id) || capDe(c.id) || pagsDe(c) || ((CFG.enlaces || {})[c.id] || []).length || (CFG.docs_sap || {})[c.id]);
 const agendaDe = id => (CFG.agenda || []).filter(a => a.cliente === id);
 const HOYD = () => { const d = new Date(); d.setHours(12, 0, 0, 0); return d; };
 const fd = s => { const [a, m, d] = s.split('-'); return new Date(+a, m - 1, +d, 12); };
@@ -1261,7 +1264,9 @@ function vLegajoLectura() {
   else {
     const links = [...(g ? g.paginas.map(x => ({titulo: x.titulo, detalle: x.detalle, url: x.url})) : []), ...en];
     cuerpo += links.length ? `<div class="pags"><div class="pag" style="border-color:${c.color}"><div class="cab"><div><b>Páginas del colegio</b><span>${links.length}</span></div></div><div class="op">${links.map(x => `<div class="o"><div class="t">${esc(x.titulo)}<small>${esc(x.detalle || '')}</small></div><a href="../${x.url}" target="_blank">Abrir ↗</a>${btnCopiar(BASE + x.url)}</div>`).join('')}</div></div></div>`
-      : '<div class="nop"><h3>Todavía sin portal</h3><p style="margin:0">Marcelo lo va armando por orden; cuando esté, aparece acá.</p></div>';
+      : ((CFG.docs_sap || {})[c.id] ? '' : '<div class="nop"><h3>Todavía sin portal</h3><p style="margin:0">Marcelo lo va armando por orden; cuando esté, aparece acá.</p></div>');
+    const ds = (CFG.docs_sap || {})[c.id];
+    if (ds) cuerpo = `<a class="docsap" href="../${ds}"><b>📄 Documentos del SAP</b><span>Último SAP presentado, incorporaciones y planos de evacuación · para ver y descargar</span><i>→</i></a>` + cuerpo;
     cuerpo += `<h2 style="margin-top:18px">Próximas fechas</h2>${ag.length ? `<div class="ag2">${ag.slice(0, 5).map(agLinea).join('')}</div>` : '<div class="vacio2">Sin fechas en el Control SAP.</div>'}`;
     cuerpo += `<h2 style="margin-top:18px">Qué tiene (o va a tener) su portal</h2>${modsLectura(c)}`;
   }
@@ -1297,6 +1302,8 @@ function vLegajo() {
   if (SOLAPA === 'modulos') cuerpo = editorModulos(c);
   else if (SOLAPA === 'agenda') cuerpo = ag.length ? `<div class="ag">${ag.map(a => { const n = diasA(a.fecha), d = fd(a.fecha); return `<div class="al tipo-${a.tipo}"><div class="f">${d.toLocaleDateString('es-AR', {day: '2-digit', month: '2-digit'})}<small>${d.getFullYear()}</small></div><div class="d"><span>${esc(a.titulo)}${a.hora ? ' · ' + esc(a.hora) + ' h' : ''}${a.sede ? ' · ' + esc(a.sede) : ''}</span><small>${esc(a.exp)}${a.nota ? ' · ' + esc(a.nota) : ''}</small></div><span class="cd ${cdCl(n)}">${cdTxt(n)}</span></div>`; }).join('')}</div>` : '<div class="nop">No hay fechas de este cliente en el Control SAP.</div>';
   else {
+    const ds = (CFG.docs_sap || {})[c.id];
+    if (ds) cuerpo += `<a class="docsap" href="../${ds}"><b>📄 Portal · Sistema de Autoprotección</b><span>Último SAP, incorporaciones y planos · entrás directo como admin · usuarios: marcelo, lula, prueba</span><i>→</i></a>`;
     if (p) cuerpo += `<div class="grid">${tarjeta(p)}</div>`;
     if (q) cuerpo += `<div class="grid" id="cap"></div>`;
     if (g) cuerpo += `<div class="pags" style="margin-top:12px"><div class="pag" style="border-color:${g.color}"><div class="cab"><div class="lg" style="background:${g.color}">${g.logo ? `<img src="${g.logo}" alt="">` : `<b style="color:#fff">${esc(g.cliente[0])}</b>`}</div><div><b>Páginas</b><span>${g.paginas.length}</span></div></div><div class="op">${g.paginas.map(x => `<div class="o"><div class="t">${esc(x.titulo)}<small>${esc(x.detalle || '')}</small></div><a href="../${x.url}" target="_blank">Abrir ↗</a>${btnCopiar(BASE + x.url)}</div>`).join('')}</div></div></div>`;
