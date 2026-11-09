@@ -475,6 +475,29 @@ header img.leon{background:none;padding:0;height:46px;border-radius:0}
 .tel-sec span{font-size:10.5px;background:#F4F3F0;border-radius:6px;padding:1px 5px;color:#444}
 .selcli{border:1px solid var(--line);border-radius:8px;padding:6px 10px;font:600 14px Barlow,sans-serif;background:var(--btn);color:var(--ink);min-width:240px}
 @media (max-width:900px){.cons{grid-template-columns:1fr}.cons-pv{position:static}.tel{height:460px;max-width:320px}}
+
+/* ----- agenda: riel de semanas ----- */
+.riel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:10px 12px 8px;margin:4px 0 12px;position:relative}
+.rmeses,.rsems,.rpista{display:grid;grid-template-columns:repeat(13,minmax(0,1fr));gap:6px}
+.rm{font:700 11.5px Barlow,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);background:color-mix(in srgb,#FF6B35 12%,var(--card));border-radius:8px;padding:3px 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rm.par{background:color-mix(in srgb,#7950F2 12%,var(--card))}
+.rsems{margin-top:6px;align-items:end}
+.rs{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;padding:16px 2px 4px;border-radius:12px;min-height:120px;justify-content:flex-end}
+.rs.hoy{background:color-mix(in srgb,#12B886 12%,var(--card));box-shadow:inset 0 0 0 2px #12B886}
+.rs .pin{position:absolute;top:3px;left:50%;transform:translateX(-50%);font:800 9.5px Barlow,sans-serif;letter-spacing:.12em;background:#12B886;color:#fff;border-radius:6px;padding:1px 5px}
+.rs .rn{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font:700 16px "Barlow Condensed",sans-serif;background:var(--soft);color:var(--ink);border:2px solid var(--line)}
+.rs .rn.urg{border-color:#E8467C;color:#E8467C;background:color-mix(in srgb,#E8467C 10%,var(--card))}
+.rs.libre .rn{color:var(--muted);border-style:dashed;background:transparent}
+.rs .rl{display:flex;flex-direction:column-reverse;gap:3px;width:78%;min-height:46px;justify-content:flex-start;align-items:stretch}
+.rs .rl i{display:block;height:5px;border-radius:3px;background:var(--tc);box-shadow:0 1px 0 color-mix(in srgb,var(--tc) 40%,transparent)}
+.rs .rl em{font:700 10.5px Barlow,sans-serif;color:var(--muted);text-align:center;font-style:normal}
+.rs .rd{font:600 11px Barlow,sans-serif;color:var(--muted);white-space:nowrap}
+.rpista{margin-top:2px;position:relative}
+.rpista::before{content:"";position:absolute;left:0;right:0;top:50%;height:2px;background:var(--line);border-radius:2px}
+.rpista i{position:relative;justify-self:center;width:8px;height:8px;border-radius:50%;background:var(--card);border:2px solid var(--line)}
+.rpista i.con{background:var(--ink);border-color:var(--ink)}
+.rpista i.hoy{background:#12B886;border-color:#12B886;width:12px;height:12px}
+@media (max-width:760px){.rmeses,.rsems,.rpista{grid-template-columns:repeat(7,minmax(0,1fr))}.rsems .rs:nth-child(n+8),.rpista i:nth-child(n+8){display:none}.rmeses{display:none}}
 </style>
 </head>
 <body>
@@ -840,7 +863,7 @@ function vBandeja() {
 
 /* ----- Agenda (v2: lista / calendario / línea de tiempo, configurable) ----- */
 const TIPOS_AG = {sim: ['Simulacro', '#FF6B35', '🔥'], ventana: ['Abre la ventana', '#12B886', '🟢'], anual: ['Renovación anual', '#E8467C', '📋'], bianual: ['Vence (SAP nuevo)', '#7950F2', '⏳']};
-const AG_DEF = {vista: 'lista', tipos: {sim: true, ventana: true, anual: true, bianual: true}, rango: 120, agrupar: 'semana', detalle: true, etiqueta: '', q: '', mes: 0, sel: ''};
+const AG_DEF = {semanas: 'riel', vista: 'lista', tipos: {sim: true, ventana: true, anual: true, bianual: true}, rango: 120, agrupar: 'semana', detalle: true, etiqueta: '', q: '', mes: 0, sel: ''};
 let AG = (() => { try { return {...AG_DEF, ...JSON.parse(LS('tab_ag') || '{}'), q: '', sel: ''}; } catch (e) { return {...AG_DEF}; } })();
 function agSet(k, v) { AG[k] = v; LSset('tab_ag', JSON.stringify({...AG, q: '', sel: ''})); pintar(); }
 function agTipo(t) { AG.tipos = {...AG.tipos, [t]: !AG.tipos[t]}; agSet('tipos', AG.tipos); }
@@ -913,12 +936,29 @@ function agLinea2(L) {
     ${(() => { const k = window.__ltsel || '', a = L.find(x => `${x.cliente}|${x.fecha}|${x.tipo}` === k); return a ? `<div class="ag2" style="margin-top:10px">${agLinea(a)}</div>` : ''; })()}
     <div class="ley2">Tocá un punto para ver el detalle. Hoy está a la izquierda · círculo: simulacro · rombo: vencimiento · punto chico: abre la ventana.</div>`;
 }
+function agRiel() {
+  const A = agFiltrada(false), lunes = HOYD(); lunes.setDate(lunes.getDate() - ((lunes.getDay() + 6) % 7));
+  const S = [...Array(13)].map((_, i) => { const d0 = new Date(+lunes + i * 7 * DIA), d1 = new Date(+d0 + 6 * DIA);
+    return {d0, d1, l: A.filter(a => fd(a.fecha) >= d0 && fd(a.fecha) < new Date(+d0 + 7 * DIA)).sort((x, y) => x.fecha > y.fecha ? 1 : -1)}; });
+  const tramos = []; S.forEach(s => { const m = s.d0.getMonth(); if (!tramos.length || tramos[tramos.length - 1].m !== m) tramos.push({m, y: s.d0.getFullYear(), n: 1}); else tramos[tramos.length - 1].n++; });
+  const MAXL = 6;
+  return `<div class="riel" role="list" aria-label="Próximas 13 semanas">
+    <div class="rmeses">${tramos.map((t, i) => `<span class="rm${i % 2 ? ' par' : ''}" style="grid-column:span ${t.n}">${MESES[t.m]}${t.m === 0 || i === 0 ? ' ' + t.y : ''}</span>`).join('')}</div>
+    <div class="rsems">${S.map((s, i) => { const urg = s.l.some(a => a.tipo !== 'sim' && a.tipo !== 'ventana'), n = s.l.length;
+      const tit = s.l.map(a => `${fd(a.fecha).toLocaleDateString('es-AR', {day: '2-digit', month: '2-digit'})} · ${(cli(a.cliente) || {}).nombre} · ${TIPOS_AG[a.tipo][0]}`).join('\n') || 'Semana libre';
+      return `<div class="rs${i === 0 ? ' hoy' : ''}${n ? '' : ' libre'}" role="listitem" title="${esc(tit)}">
+        ${i === 0 ? '<span class="pin">HOY</span>' : ''}
+        <span class="rn${urg ? ' urg' : ''}">${n || '·'}</span>
+        <span class="rl">${s.l.slice(0, MAXL).map(a => `<i style="--tc:${TIPOS_AG[a.tipo][1]}"></i>`).join('')}${n > MAXL ? `<em>+${n - MAXL}</em>` : ''}</span>
+        <span class="rd">${s.d0.getDate()}–${s.d1.getDate()}</span></div>`; }).join('')}</div>
+    <div class="rpista" aria-hidden="true">${S.map((s, i) => `<i class="${s.l.length ? 'con' : ''}${i === 0 ? ' hoy' : ''}"></i>`).join('')}</div></div>`;
+}
 function vAgenda() {
   const L = agFiltrada();
   const op = (k, v, t) => `<button class="${AG[k] === v ? 'on' : ''}" onclick="agSet('${k}',${typeof v === 'string' ? `'${v}'` : v})">${t}</button>`;
   const cuenta = t => agFiltrada().filter(a => a.tipo === t).length;
   return `<section><h2>Agenda de vencimientos <small>del Control SAP de tu laptop, leído el ${fd(CFG.hoy).toLocaleDateString('es-AR')}</small></h2>
-    ${agCinta()}
+    ${AG.semanas === 'tarjetas' ? agCinta() : agRiel()}
     <div class="agbar">
       <div class="seg" role="group" aria-label="Vista">${op('vista', 'lista', '☰ Lista')}${op('vista', 'calendario', '▦ Calendario')}${op('vista', 'linea', '⟶ Línea de tiempo')}</div>
       <div class="tipos2">${Object.entries(TIPOS_AG).map(([k, [t, col]]) => `<button class="tp2${AG.tipos[k] ? ' on' : ''}" style="--tc:${col}" onclick="agTipo('${k}')" aria-pressed="${!!AG.tipos[k]}"><i></i>${t} <b>${cuenta(k)}</b></button>`).join('')}</div>
@@ -927,6 +967,7 @@ function vAgenda() {
       <div><span class="k">Hasta</span><div class="seg">${op('rango', 30, '30 días')}${op('rango', 90, '90')}${op('rango', 120, '120')}${op('rango', 365, '1 año')}${op('rango', 0, 'Todo')}</div></div>
       <div><span class="k">Agrupar la lista por</span><div class="seg">${op('agrupar', 'semana', 'Cercanía')}${op('agrupar', 'mes', 'Mes')}${op('agrupar', 'cliente', 'Cliente')}${op('agrupar', 'tipo', 'Tipo')}</div></div>
       <div><span class="k">Clientes</span><div class="seg">${op('etiqueta', '', 'Todos')}${op('etiqueta', 'lula', 'Cartera Lula')}${op('etiqueta', 'sforza', 'Con Franco')}${op('etiqueta', 'portal', 'Con portal')}${op('etiqueta', 'sinportal', 'Sin portal')}</div></div>
+      <div><span class="k">Semanas de arriba</span><div class="seg">${op('semanas', 'riel', 'Riel')}${op('semanas', 'tarjetas', 'Tarjetas')}</div></div>
       <div><span class="k">Detalle</span><div class="seg">${op('detalle', true, 'Con expediente y notas')}${op('detalle', false, 'Compacto')}</div></div>
       <div><span class="k">Buscar</span><input id="fa_q" placeholder="Cliente, sede o expediente" value="${esc(AG.q)}" oninput="AG.q=this.value;clearTimeout(window.__fq);window.__fq=setTimeout(()=>{pintar();const i=document.getElementById('fa_q');if(i){i.focus();i.setSelectionRange(i.value.length,i.value.length)}},250)"></div>
     </div><div class="ley2">Lo que elijas queda guardado en este equipo.</div></details>
