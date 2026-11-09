@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Instituto San José · Higiene y Seguridad</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#6E1E2E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{--c:#6E1E2E;--bg:#F5F3EF;--card:#fff;--ink:#1E2124;--muted:#6B6F75;--line:#E3DFD8;--soft:#F0EDE7;
+--sim:#FF6B35;--sub:#7950F2;--ren:#E8467C;--proc:#12B886;--nota:#868E96;--ok:#2B8A3E}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17191C;--card:#202328;--ink:#ECEDEF;--muted:#A0A5AD;--line:#33373D;--soft:#2A2E34}}
+:root[data-theme="dark"]{--bg:#17191C;--card:#202328;--ink:#ECEDEF;--muted:#A0A5AD;--line:#33373D;--soft:#2A2E34}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 Barlow,system-ui,sans-serif}
+button{font:inherit;cursor:pointer}
+a{color:inherit}
+.wrap{max-width:980px;margin:0 auto;padding:0 16px}
+/* ingreso */
+#login{min-height:100vh;display:grid;place-items:center;padding:24px 16px}
+.lcard{width:100%;max-width:380px;background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.06)}
+.lcard .top{background:var(--c);color:#fff;padding:22px 22px 18px}
+.lcard .top small{display:block;opacity:.85;font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-size:11.5px}
+.lcard .top h1{margin:6px 0 0;font:700 28px/1.05 "Barlow Condensed",sans-serif}
+.lcard form{padding:18px 22px 22px;display:grid;gap:10px}
+.lcard label{font-size:13px;font-weight:600;color:var(--muted)}
+.lcard input[type=text],.lcard input[type=password]{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit}
+.lcard .rec{display:flex;gap:8px;align-items:center;font-size:13.5px;color:var(--muted)}
+.lcard button{background:var(--c);color:#fff;border:0;border-radius:10px;padding:12px;font-weight:700}
+#err{min-height:18px;font-size:13px;color:#C92A2A}
+.firma{font-size:12.5px;color:var(--muted);text-align:center;margin-top:12px}
+/* portal */
+#app{display:none}
+header{background:var(--c);color:#fff}
+header .wrap{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;padding-top:18px;padding-bottom:20px;flex-wrap:wrap}
+header small{display:block;opacity:.85;font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-size:11.5px}
+header h1{margin:4px 0 6px;font:700 32px/1.05 "Barlow Condensed",sans-serif}
+header .exp{display:inline-block;background:rgba(255,255,255,.16);border-radius:999px;padding:3px 10px;font-size:13px;font-weight:600}
+header .der{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:13.5px}
+header .der a,header .der button{background:rgba(255,255,255,.16);border:0;color:#fff;border-radius:999px;padding:6px 12px;text-decoration:none;font-weight:600}
+header .lic{font-size:12.5px;opacity:.85;margin-top:8px}
+.fechas{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 4px}
+.fe{display:flex;gap:10px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 12px}
+.fe .d{width:44px;text-align:center;border-radius:8px;overflow:hidden;border:2px solid var(--tc);line-height:1;flex:none}
+.fe .d b{display:block;font:700 19px "Barlow Condensed",sans-serif;padding:3px 0 2px}
+.fe .d i{display:block;font:700 10px Barlow,sans-serif;font-style:normal;text-transform:uppercase;background:var(--tc);color:#fff;padding:2px 0}
+.fe span{font-size:13.5px;line-height:1.25}.fe span em{display:block;font-style:normal;color:var(--muted);font-size:12.5px}
+h2{font:700 22px "Barlow Condensed",sans-serif;margin:26px 0 10px;display:flex;align-items:baseline;gap:2px 10px;flex-wrap:wrap}
+h2 small{font:500 13px Barlow,sans-serif;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:10px}
+.doc{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;gap:12px;align-items:flex-start;min-width:0}
+.doc .ic{flex:none;width:42px;height:50px;border-radius:7px;background:var(--soft);position:relative;display:grid;place-items:end center;padding-bottom:6px;font:700 10px Barlow,sans-serif;color:var(--muted)}
+.doc .ic::before{content:"";position:absolute;left:0;right:0;top:0;height:7px;border-radius:7px 7px 0 0;background:var(--tc,var(--c))}
+.doc .tx{flex:1;min-width:0}
+.doc .tx b{display:block;font-size:15px;line-height:1.25;overflow-wrap:anywhere}
+.doc .tx .m{font-size:12.5px;color:var(--muted);margin-top:2px}
+.doc .bt{display:flex;gap:6px;margin-top:9px;flex-wrap:wrap}
+.doc .bt button{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:6px 11px;font-size:13.5px;font-weight:600}
+.doc .bt button.p{background:var(--c);border-color:var(--c);color:#fff}
+.doc.grande{border-top:4px solid var(--c)}
+.k{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#fff;background:var(--tc);border-radius:5px;padding:1px 6px;margin-bottom:4px}
+.lin{position:relative;display:grid;gap:8px;padding-left:20px;max-width:760px}
+.lin .doc{padding:10px 14px}.lin .doc .ic{width:34px;height:42px}
+@media (min-width:700px){.lin .doc .tx{display:grid;grid-template-columns:1fr auto;column-gap:14px;align-items:center}.lin .doc .tx .k,.lin .doc .tx b,.lin .doc .tx .m{grid-column:1}.lin .doc .tx .k{justify-self:start}.lin .doc .bt{grid-column:2;grid-row:1/4;margin:0}}
+.lin::before{content:"";position:absolute;left:6px;top:8px;bottom:8px;width:2px;background:var(--line);border-radius:2px}
+.lin .doc{position:relative}
+.lin .doc::before{content:"";position:absolute;left:-19px;top:50%;margin-top:-6px;width:12px;height:12px;border-radius:50%;background:var(--tc);border:2px solid var(--bg)}
+.vacio{background:var(--card);border:1px dashed var(--line);border-radius:14px;padding:16px;color:var(--muted)}
+footer{margin:34px 0 26px;font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px;display:flex;gap:6px 18px;flex-wrap:wrap}
+.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 14px;border-radius:10px;font-size:14px;display:none;z-index:9}
+@media (max-width:560px){header h1{font-size:27px}.grid{grid-template-columns:1fr}h2 small{flex-basis:100%}}
+</style>
+</head>
+<body>
+<div id="login">
+  <div>
+    <div class="lcard">
+      <div class="top"><small>Sistema de Autoprotección</small><h1>Instituto San José</h1></div>
+      <form id="fl" autocomplete="on">
+        <label for="us">Usuario</label><input id="us" type="text" autocomplete="username" autocapitalize="none" required>
+        <label for="pw">Clave</label><input id="pw" type="password" autocomplete="current-password" required>
+        <label class="rec"><input type="checkbox" id="rec"> Recordar en este equipo</label>
+        <button>Entrar</button><div id="err"></div>
+      </form>
+    </div>
+    <div class="firma">Lic. Marcelo Elvira · Lic. en Higiene y Seguridad</div>
+  </div>
+</div>
+<div id="app"></div>
+<div class="toast" id="toast"></div>
+<script>
+const ID = 'sanjose', ITER = 310000, W = [{"u": "marcelo", "s": "q3mVt0rJb1cZ8kq2yW4n6A==", "w": "PFHdotttjl2Wly86vgERnluOSlQzoAJvoib6TdAlTYjssqp+Rz1R/WWyjGSyQe93ZCkmmyoszklbV3K/", "via": "tab"}, {"u": "lula", "s": "Btc7uXgibAe88AeB8WBWFg==", "w": "tXETg82o0tQTffoCn3JO08gsy+JwOz8AIImycwNl9oTQp/s+1tsQL00HAPQKgTyG5FnqFU3SLsjitOYy", "via": "lula"}, {"u": "prueba", "s": "HYQdLmNE2ncr53LwxBIVKQ==", "w": "r1jzxpmzTCm3FJ06ak1q1u0vSY6toQsTmwpGnO50zeq+XpN+cK6bQ45mTua+eagpKnIwQJ+oBP9SABNo"}, {"u": "prueba", "s": "Btc7uXgibAe88AeB8WBWFg==", "w": "+ujMX3WiMCcOtftyJNrcSnBpxbwYEqQGyi63GsgE087JxGj0u5kmaC/z1WM9jpem8GmLDSKGlZjuzcql", "via": "lula", "auto": 1}];
+const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+const ub64 = u => btoa(String.fromCharCode(...u));
+const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]));
+const st = (o, k, v) => { try { v === undefined ? (v = o.getItem(k)) : (v === null ? o.removeItem(k) : o.setItem(k, v)); return v; } catch (e) { return null; } };
+let DK = null, D = null, U = null;
+async function derivar(clave, sal) {
+  const m = await crypto.subtle.importKey('raw', new TextEncoder().encode(clave.trim().toLowerCase()), 'PBKDF2', false, ['deriveBits']);
+  return new Uint8Array(await crypto.subtle.deriveBits({name: 'PBKDF2', hash: 'SHA-256', salt: b64(sal), iterations: ITER}, m, 256));
+}
+async function desenvolver(raw, w) {
+  const k = await crypto.subtle.importKey('raw', raw, 'AES-GCM', false, ['decrypt']);
+  const e = b64(w.w);
+  return new Uint8Array(await crypto.subtle.decrypt({name: 'AES-GCM', iv: e.slice(0, 12)}, k, e.slice(12)));
+}
+async function descifrar(buf) {
+  const e = new Uint8Array(buf);
+  return crypto.subtle.decrypt({name: 'AES-GCM', iv: e.slice(0, 12)}, DK, e.slice(12));
+}
+async function entrar(dk, u) {
+  DK = await crypto.subtle.importKey('raw', dk, 'AES-GCM', false, ['decrypt']);
+  const r = await fetch('d.enc', {cache: 'no-store'});
+  D = JSON.parse(new TextDecoder().decode(await descifrar(await r.arrayBuffer())));
+  U = u; pintar();
+}
+document.getElementById('fl').onsubmit = async e => {
+  e.preventDefault();
+  const err = document.getElementById('err'); err.textContent = 'Abriendo…';
+  const us = document.getElementById('us').value.trim().toLowerCase(), pw = document.getElementById('pw').value;
+  const cand = W.filter(w => w.u === us && !w.auto);
+  for (const w of cand) {
+    try {
+      const raw = await derivar(pw, w.s), dk = await desenvolver(raw, w);
+      const v = JSON.stringify({u: w.u, s: w.s, r: ub64(raw)});
+      st(sessionStorage, 'col_raw', v); if (document.getElementById('rec').checked) st(localStorage, 'col_raw', v);
+      await entrar(dk, w.u); return;
+    } catch (x) {}
+  }
+  err.textContent = 'El usuario o la clave no son correctos.';
+};
+(async () => {   // ingreso automático: misma sesión, la página de Colegios (Lula) o el tablero
+  const prob = [];
+  for (const o of [sessionStorage, localStorage]) {
+    const c = st(o, 'col_raw'); if (c) { try { const j = JSON.parse(c); prob.push([b64(j.r), W.filter(w => w.u === j.u && w.s === j.s)]); } catch (e) {} }
+    const l = st(o, 'lula_k'); if (l) prob.push([b64(l), W.filter(w => w.via === 'lula')]);
+    const t = st(o, 'tab_k'); if (t) prob.push([b64(t), W.filter(w => w.via === 'tab')]);
+  }
+  for (const [raw, ws] of prob) for (const w of ws) { try { await entrar(await desenvolver(raw, w), w.u); return; } catch (e) {} }
+})();
+function salir() { st(sessionStorage, 'col_raw', null); st(localStorage, 'col_raw', null); location.reload(); }
+
+const MES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+const fd = s => { const [a, m, d] = s.split('-'); return new Date(+a, m - 1, +d); };
+const ff = s => s ? fd(s).toLocaleDateString('es-AR', {day: '2-digit', month: '2-digit', year: 'numeric'}) : '';
+const hoy = () => { const d = new Date(); d.setHours(0, 0, 0, 0); return d; };
+const dias = s => Math.round((fd(s) - hoy()) / 864e5);
+const kb = n => n > 1048576 ? (n / 1048576).toFixed(1).replace('.', ',') + ' MB' : Math.max(1, Math.round(n / 1024)) + ' KB';
+const KC = {'Subsanación': 'var(--sub)', 'Simulacro': 'var(--sim)', 'Renovación': 'var(--ren)', 'Procedimiento': 'var(--proc)', 'Nota': 'var(--nota)'};
+const TF = {sim: ['#FF6B35', 'Simulacro'], anual: ['#E8467C', 'Vence la vigencia anual'], bianual: ['#7950F2', 'Vence la vigencia bianual'], ventana: ['#12B886', 'Abre la ventana de renovación']};
+
+function tarjeta(x, cls) {
+  return `<div class="doc ${cls || ''}" style="--tc:${x.k ? KC[x.k] || 'var(--c)' : 'var(--c)'}"><div class="ic">PDF</div><div class="tx">
+    ${x.k ? `<span class="k">${esc(x.k)}</span>` : ''}<b>${esc(x.t)}</b><div class="m">${ff(x.f)} · ${kb(x.n)}${x.hojas > 1 ? ' · ' + x.hojas + ' hojas' : ''}</div>
+    <div class="bt"><button class="p" onclick="bajar('${x.id}',this,1)">Ver</button><button onclick="bajar('${x.id}',this)">⬇ Descargar</button></div></div></div>`;
+}
+function pintar() {
+  document.getElementById('login').style.display = 'none';
+  const app = document.getElementById('app'); app.style.display = 'block';
+  const sap = D.docs.filter(x => x.g === 'sap'), inc = D.docs.filter(x => x.g === 'inc').sort((a, b) => b.f.localeCompare(a.f)), pla = D.docs.filter(x => x.g === 'pla');
+  const fechas = (D.agenda || []).filter(a => dias(a.fecha) >= 0 && (U === 'marcelo' || a.tipo !== 'ventana')).slice(0, 4);
+  const volver = U === 'lula' || (U === 'prueba' && st(sessionStorage, 'lula_k')) ? '<a href="../lula/">← Colegios</a>' : U === 'marcelo' ? '<a href="../admin/#c-' + D.id + '">← Tablero</a>' : '';
+  app.innerHTML = `<header><div class="wrap"><div><small>Higiene y Seguridad · Sistema de Autoprotección</small><h1>${esc(D.nombre)}</h1>
+      <span class="exp">Expediente ${esc(D.exp)}</span><div class="lic">Lic. Marcelo Elvira · Lic. en Higiene y Seguridad</div></div>
+      <div class="der">${volver}<span>${esc(D.quien[U] || U)}</span><button onclick="salir()">Salir</button></div></div></header>
+    <main class="wrap">
+      ${fechas.length ? `<div class="fechas">${fechas.map(a => { const d = fd(a.fecha), t = TF[a.tipo] || ['#868E96', a.titulo]; return `<div class="fe" style="--tc:${t[0]}"><div class="d"><b>${d.getDate()}</b><i>${MES[d.getMonth()]}</i></div><span>${esc(t[1])}${a.hora ? ' · ' + esc(a.hora) + ' h' : ''}<em>${d.getFullYear() !== new Date().getFullYear() ? d.getFullYear() + ' · ' : ''}${dias(a.fecha) === 0 ? 'hoy' : dias(a.fecha) === 1 ? 'mañana' : 'en ' + dias(a.fecha) + ' días'}${D.sedes > 1 && a.sede ? ' · ' + esc(a.sede) : ''}</em></span></div>`; }).join('')}</div>` : ''}
+      <h2>Sistema de Autoprotección presentado <small>la última presentación ante Defensa Civil</small></h2>
+      ${sap.length ? `<div class="grid">${sap.map(x => tarjeta(x, 'grande')).join('')}</div>` : '<div class="vacio">Todavía no hay documentos.</div>'}
+      <h2>Incorporaciones al expediente <small>lo presentado después, de lo más nuevo a lo más viejo</small></h2>
+      ${inc.length ? `<div class="lin">${inc.map(x => tarjeta(x)).join('')}</div>` : '<div class="vacio">No hay incorporaciones desde la última presentación.</div>'}
+      <h2>Planos de evacuación</h2>
+      ${pla.length ? `<div class="grid">${pla.map(x => tarjeta(x, 'grande')).join('')}</div>` : '<div class="vacio">Todavía no hay planos cargados.</div>'}
+      <footer><span>Lic. Marcelo Elvira · Lic. en Higiene y Seguridad · M.P. 0656 C.P.I.I.</span><span>Cel. 15-4564-6462</span><span>marcelo.a.elvira@gmail.com</span><span>Actualizado el ${ff(D.act)}</span></footer>
+    </main>`;
+}
+function aviso(t) { const e = document.getElementById('toast'); e.textContent = t; e.style.display = 'block'; clearTimeout(aviso.t); aviso.t = setTimeout(() => e.style.display = 'none', 2600); }
+async function bajar(id, btn, ver) {
+  const x = D.docs.find(d => d.id === id); const txt = btn.textContent; btn.disabled = true; btn.textContent = 'Abriendo…';
+  const win = ver ? window.open('', '_blank') : null;
+  try {
+    const r = await fetch('doc/' + id + '.enc'); if (!r.ok) throw 0;
+    const url = URL.createObjectURL(new Blob([await descifrar(await r.arrayBuffer())], {type: 'application/pdf'}));
+    if (win) win.location = url;
+    else { const a = document.createElement('a'); a.href = url; a.download = x.nombre; document.body.appendChild(a); a.click(); a.remove(); }
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
+  } catch (e) { if (win) win.close(); aviso('No se pudo abrir el documento. Probá de nuevo.'); }
+  btn.disabled = false; btn.textContent = txt;
+}
+</script>
+</body>
+</html>
