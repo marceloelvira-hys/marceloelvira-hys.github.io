@@ -498,6 +498,12 @@ header img.leon{background:none;padding:0;height:46px;border-radius:0}
 .rpista i.con{background:var(--ink);border-color:var(--ink)}
 .rpista i.hoy{background:#12B886;border-color:#12B886;width:12px;height:12px}
 @media (max-width:760px){.rmeses,.rsems,.rpista{grid-template-columns:repeat(7,minmax(0,1fr))}.rsems .rs:nth-child(n+8),.rpista i:nth-child(n+8){display:none}.rmeses{display:none}}
+.tj.nota{border-left-color:#E8467C}
+.nota{background:var(--card);border:1px solid var(--line);border-left:5px solid #E8467C;border-radius:10px;padding:9px 12px;margin-bottom:8px}
+.nota .c1{display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:12.5px;color:var(--muted)}
+.nota .c1 b{color:var(--ink)}
+.nota .tx{white-space:pre-wrap;margin-top:4px}
+.medida .k{display:block;font:600 12px Barlow,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
 </style>
 </head>
 <body>
@@ -745,7 +751,7 @@ const cli = id => CL().find(c => c.id === id);
 const portalDe = id => CFG.portales.find(p => p.id === id);
 const capDe = id => (CFG.capacitaciones || []).find(q => q.id === id);
 const pagsDe = c => (CFG.paginas || []).find(g => g.cliente === c.nombre);
-const tienePortal = c => !!(portalDe(c.id) || capDe(c.id) || pagsDe(c));
+const tienePortal = c => !!(portalDe(c.id) || capDe(c.id) || pagsDe(c) || ((CFG.enlaces || {})[c.id] || []).length);
 const agendaDe = id => (CFG.agenda || []).filter(a => a.cliente === id);
 const HOYD = () => { const d = new Date(); d.setHours(12, 0, 0, 0); return d; };
 const fd = s => { const [a, m, d] = s.split('-'); return new Date(+a, m - 1, +d, 12); };
@@ -763,8 +769,8 @@ function iniciar() {
   <header><div class="wrap">
     <img src="logo_jea.png" alt="JEA">
     <img class="leon" src="data:image/svg+xml;base64,${LEON}" alt="">
-    <div><h1>Tablero de clientes</h1><div class="sub">Lic. Marcelo Elvira · Higiene y Seguridad</div></div>
-    <nav class="tabs" aria-label="Vistas"><a href="#torre" data-v="torre">Torre</a><a href="#bandeja" data-v="bandeja">Bandeja</a><a href="#agenda" data-v="agenda">Agenda</a><a href="#modulos" data-v="modulos">Módulos</a></nav>
+    <div><h1>${LECT() ? 'Colegios' : 'Tablero de clientes'}</h1><div class="sub">${LECT() ? 'Higiene y Seguridad · vista de Lula' : 'Lic. Marcelo Elvira · Higiene y Seguridad'}</div></div>
+    <nav class="tabs" aria-label="Vistas">${LECT() ? '<a href="#torre" data-v="torre">Colegios</a><a href="#agenda" data-v="agenda">Agenda</a><a href="#notas" data-v="notas">Notas</a>' : '<a href="#torre" data-v="torre">Torre</a><a href="#bandeja" data-v="bandeja">Bandeja</a><a href="#agenda" data-v="agenda">Agenda</a><a href="#modulos" data-v="modulos">Módulos</a>'}</nav>
     <div class="der"><label class="sub" for="tema">Estilo</label><select id="tema">${TEMAS.map(t => `<option value="${t[0]}"${t[0] === tema ? ' selected' : ''}>${t[1]}</option>`).join('')}</select>
       <span id="hora"></span><button id="act">↻ Actualizar</button></div>
   </div></header>
@@ -772,21 +778,22 @@ function iniciar() {
   document.getElementById('act').onclick = actualizar;
   document.getElementById('tema').onchange = e => { document.body.dataset.tema = e.target.value; LSset('tab_tema', e.target.value); };
   window.addEventListener('hashchange', ruta); ruta();
-  actualizar(); leerConfs();
+  actualizar(); leerConfs(); leerNotas();
 }
 function ruta() {
   const h = (location.hash || '#torre').slice(1);
   if (h.startsWith('c-') && cli(h.slice(2))) { VISTA = 'legajo'; if (LEG !== h.slice(2)) SOLAPA = 'resumen'; LEG = h.slice(2); }
-  else { VISTA = ['torre', 'bandeja', 'agenda', 'modulos'].includes(h) ? h : 'torre'; LEG = null; }
+  else { VISTA = (LECT() ? ['torre', 'agenda', 'notas'] : ['torre', 'bandeja', 'agenda', 'modulos']).includes(h) ? h : 'torre'; LEG = null; }
   document.querySelectorAll('header .tabs a').forEach(a => a.classList.toggle('on', a.dataset.v === VISTA));
   pintar(); window.scrollTo(0, 0);
 }
 function pintar() {
   const el = document.getElementById('vista'); if (!el) return;
   if (VISTA === 'bandeja') el.innerHTML = vBandeja();
+  else if (VISTA === 'notas') el.innerHTML = vNotas();
   else if (VISTA === 'agenda') el.innerHTML = vAgenda();
   else if (VISTA === 'modulos') el.innerHTML = vModulos();
-  else if (VISTA === 'legajo') { el.innerHTML = vLegajo(); if (SOLAPA === 'resumen' && capDe(LEG)) pintarCap(); }
+  else if (VISTA === 'legajo') { el.innerHTML = LECT() ? vLegajoLectura() : vLegajo(); if (SOLAPA === 'resumen' && capDe(LEG)) pintarCap(); }
   else el.innerHTML = vTorre();
   montarSort();
 }
@@ -816,12 +823,15 @@ function vTorre() {
   const lista = S.filter(F[FT]).sort((a, b) => b.s.peso - a.s.peso || a.c.prioridad - b.c.prioridad);
   const sen = s => `<div class="sen"><i class="${s.k.v ? 'v' : ''}"></i><i class="${s.k.o ? 'o' : ''}"></i><i class="${s.k.a ? 'a' : ''}"></i><i class="${s.d <= 30 ? 'f' : s.prox ? 'g' : ''}"></i></div>`;
   const cola = CL().filter(c => !tienePortal(c)).sort((a, b) => a.prioridad - b.prioridad);
-  return `<section><div class="kpis">${kpi('k1', T.v, 'Para verificar', '#bandeja')}${kpi('k2', T.o, 'Órdenes de trabajo', '#bandeja')}${kpi('k3', T.a, 'Avances y comentarios', '#bandeja')}${kpi('k4', v30, 'Vencen en 30 días', '#agenda')}</div>
-    <div class="filtros">${fb('todos', `Todos (${S.length})`)}${fb('pend', 'Con pendientes')}${fb('vence', 'Vence en 30 días')}${fb('con', 'Con portal')}${fb('sin', 'Sin portal')}${fb('lula', 'Cartera Lula')}${fb('sforza', 'Con Franco')}</div>
+  const AGL = CFG.agenda || [], en = (t, d) => AGL.filter(a => a.tipo === t && diasA(a.fecha) >= 0 && diasA(a.fecha) <= d).length;
+  const kp = LECT() ? `${kpi('k1', en('anual', 60) + en('bianual', 60), 'Renovaciones en 60 días', '#agenda')}${kpi('k2', en('sim', 30), 'Simulacros en 30 días', '#agenda')}${kpi('k3', (NOTAS || []).filter(n => !n.estado).length, 'Notas sin ver por Marcelo', '#notas')}${kpi('k4', v30, 'Vencen en 30 días', '#agenda')}`
+    : `${kpi('k1', T.v, 'Para verificar', '#bandeja')}${kpi('k2', T.o, 'Órdenes de trabajo', '#bandeja')}${kpi('k3', T.a, 'Avances y comentarios', '#bandeja')}${kpi('k4', v30, 'Vencen en 30 días', '#agenda')}`;
+  return `<section><div class="kpis">${kp}</div>
+    <div class="filtros">${fb('todos', `Todos (${S.length})`)}${LECT() ? '' : fb('pend', 'Con pendientes')}${fb('vence', 'Vence en 30 días')}${fb('con', 'Con portal')}${fb('sin', 'Sin portal')}${LECT() ? '' : fb('lula', 'Cartera Lula') + fb('sforza', 'Con Franco')}</div>
     <div class="mosaico">${lista.map(({c, s}) => `<button class="mos ${s.est}" onclick="location.hash='c-${c.id}'"><b>${esc(c.nombre)}</b><span class="por">${esc(s.por)}</span>${sen(s)}
-      <span class="et">${tienePortal(c) ? '<span>portal</span>' : `<span>sin portal · ${c.prioridad}.º en la fila</span>`}${c.sedes.length > 1 ? `<span>${c.sedes.length} sedes</span>` : ''}</span></button>`).join('') || '<div class="vacio2">Ningún cliente con ese filtro.</div>'}</div>
-    <div class="ley2" style="margin-top:10px"><span>Barritas: para verificar · órdenes · avances · vencimientos</span><span>Bordó: verificar o vence en 14 días · Ámbar: pendientes o vence en 30</span></div></section>
-    <section><h2>Próximos portales <small>orden de armado · tocá un cliente para ver qué tendría</small></h2><div class="cola">${cola.map(c => `<div onclick="location.hash='c-${c.id}'"><b>${c.prioridad}</b>${esc(c.nombre)} <span class="chipc">${esc((CFG.modulos.plantillas[c.plantilla] || {}).nombre || '')}</span></div>`).join('')}</div></section>`;
+      <span class="et">${tienePortal(c) ? '<span>portal</span>' : (LECT() ? '<span>sin portal</span>' : `<span>sin portal · ${c.prioridad}.º en la fila</span>`)}${c.sedes.length > 1 ? `<span>${c.sedes.length} sedes</span>` : ''}</span></button>`).join('') || '<div class="vacio2">Ningún cliente con ese filtro.</div>'}</div>
+    <div class="ley2" style="margin-top:10px">${LECT() ? '<span>Bordó: vence algo en 14 días · Ámbar: vence en 30 días · la última barrita es la fecha más cercana</span>' : '<span>Barritas: para verificar · órdenes · avances · vencimientos</span><span>Bordó: verificar o vence en 14 días · Ámbar: pendientes o vence en 30</span>'}</div></section>
+    ${LECT() ? '' : `<section><h2>Próximos portales <small>orden de armado · tocá un cliente para ver qué tendría</small></h2><div class="cola">${cola.map(c => `<div onclick="location.hash='c-${c.id}'"><b>${c.prioridad}</b>${esc(c.nombre)} <span class="chipc">${esc((CFG.modulos.plantillas[c.plantilla] || {}).nombre || '')}</span></div>`).join('')}</div></section>${tarjetaLula()}`}`;
 }
 
 /* ----- Bandeja ----- */
@@ -829,9 +839,13 @@ function itemsBandeja() {
   const r = [];
   CFG.portales.forEach(p => { const a = (VIVO[p.id] || {}).a; if (!a) return;
     [['ver', a.verificar], ['ot', a.ots], ['av', a.avances]].forEach(([t, l]) => l.forEach(i => r.push({p, t, i, ts: (i.s || i.o).ts}))); });
+  (NOTAS || []).forEach(n => r.push({t: 'nota', n, i: {m: n.estado}, ts: aFecha(n.fecha.split(' ')[0]) + (parseInt((n.fecha.split(' ')[1] || '0').replace(':', '')) || 0) * 6e4}));
   return r.sort((a, b) => b.ts - a.ts);
 }
 function tarjetaB(x) {
+  if (x.t === 'nota') { const n = x.n, c = cli(n.cliente) || {nombre: 'General', color: '#888'};
+    const b = !n.estado ? `<button onclick="notaMarca('${n.id}','visto')">👁 Visto</button><button class="tb" onclick="notaMarca('${n.id}','trabajado')">✓ Ya lo trabajé</button>` : n.estado === 'visto' ? `<button class="tb" onclick="notaMarca('${n.id}','trabajado')">✓ Ya lo trabajé</button>` : `<button onclick="notaMarca('${n.id}','visto')">↺ A pendiente</button>`;
+    return `<div class="tj nota"><div class="c1"><span class="dot" style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${c.color}"></span>${n.cliente ? `<span class="cl" onclick="location.hash='c-${n.cliente}'">${esc(c.nombre)}</span>` : '<b>General</b>'}<span>Nota de Lula</span><span>· ${esc(n.fecha)}</span></div><div class="tx">${esc(n.texto)}</div><div class="bts">${b}</div></div>`; }
   const {p, t, i} = x, s = i.s, o = i.o, c = cli(p.id) || {color: p.color}, viejo = (p && VIVO[p.id] && VIVO[p.id].a && VIVO[p.id].a.viejo);
   const tipo = {ver: 'Para verificar', ot: 'Orden de trabajo', av: 'Avance'}[t];
   const tit = o ? `${esc(o.numero)} · ${esc(o.area || 'sin área')}` : `Punto ${esc(s.punto)} · ${esc(i.info[0])}`;
@@ -848,14 +862,14 @@ function tarjetaB(x) {
     <div class="c1" style="margin-top:4px">${esc((s || o).quien || '')}${s && s.fotos ? ` · 📷 ${s.fotos}` : ''}</div>${b.length ? `<div class="bts">${b.join('')}</div>` : ''}</div>`;
 }
 function vBandeja() {
-  const L = itemsBandeja().filter(x => (!FB.cli || x.p.id === FB.cli) && (!FB.tipo || x.t === FB.tipo));
+  const L = itemsBandeja().filter(x => (!FB.cli || (x.p && x.p.id === FB.cli)) && (!FB.tipo || x.t === FB.tipo));
   const col = (titulo, f, max) => { const l = L.filter(f); return `<div class="colk"><h3>${titulo}<span>${l.length}</span></h3>${l.slice(0, max).map(tarjetaB).join('') || '<div class="vacio2">Nada por acá.</div>'}${l.length > max ? `<div class="vacio2">y ${l.length - max} más</div>` : ''}</div>`; };
   const fc = (k, t) => `<button class="${FB.cli === k ? 'on' : ''}" onclick="FB.cli='${k}';pintar()">${t}</button>`;
   const ft = (k, t) => `<button class="${FB.tipo === k ? 'on' : ''}" onclick="FB.tipo='${k}';pintar()">${t}</button>`;
   const cargando = CFG.portales.some(p => (VIVO[p.id] || {}).cargando);
   return `<section><h2>Bandeja de trabajo <small>todo lo que cargan los clientes en los portales, por estado</small></h2>
     <div class="filtros">${fc('', 'Todos los portales')}${CFG.portales.map(p => fc(p.id, esc(p.nombre))).join('')}</div>
-    <div class="filtros">${ft('', 'Todo')}${ft('ver', 'Para verificar')}${ft('ot', 'Órdenes')}${ft('av', 'Avances')}</div>
+    <div class="filtros">${ft('', 'Todo')}${ft('ver', 'Para verificar')}${ft('ot', 'Órdenes')}${ft('av', 'Avances')}${ft('nota', 'Notas de Lula')}</div>
     ${cargando ? '<div class="aviso2">Leyendo las planillas…</div>' : ''}
     <div class="fila-cols">${col('Nuevo', x => !x.i.m, 40)}${col('Visto', x => x.i.m === 'visto', 40)}${col('Ya lo trabajé', x => x.i.m === 'trabajado', 15)}</div>
     <footer>Los puntos «Para verificar» salen de la bandeja cuando los marcás Resueltos (también los marco yo en lote al cerrar el informe del mes). Lo que cargás vos o el usuario «prueba» no aparece. Las marcas se guardan en la planilla de cada portal.</footer></section>`;
@@ -1144,6 +1158,85 @@ function vModulos() {
     ${cuerpo}
     <h2 style="margin-top:22px">Por armar <small>${pend.length} · lo que prendiste en un portal y todavía no está hecho</small></h2>
     <div class="cola">${pend.map(x => `<div onclick="SOLAPA='modulos';location.hash='c-${x.c.id}'"><b>·</b>${esc(x.c.nombre)} · ${esc(x.m.nombre)} <span class="chipc">${esc(x.t)}</span></div>`).join('') || '<div class="vacio2">Nada pendiente.</div>'}</div></section>`;
+}
+
+/* ----- Página de Lula (lectura) y notas ----- */
+const LECT = () => !!CFG.lectura;
+let NOTAS = null, NOTA_MSG = {};
+async function leerNotas() {
+  if (!CFG.config_api) return;
+  let q = '';
+  if (LECT()) q = 'l=' + encodeURIComponent(CFG.lula_t);
+  else { let t = LS('cfg_t'); if (!t && CLAVE_ESCRITA) { try { t = await tokenConf(); } catch (e) {} } if (!t) return; q = 't=' + encodeURIComponent(t); }
+  try { const r = await (await fetch(CFG.config_api + '?accion=notas&' + q, {cache: 'no-store'})).json(); if (r.ok) { NOTAS = r.notas || []; if (!LECT()) sincronizarAgenda(); pintar(); } } catch (e) {}
+}
+async function mandarNota(cid, btn) {
+  const ta = document.getElementById('nt_' + cid), texto = ta.value.trim(); if (!texto) return;
+  btn.disabled = true; btn.textContent = 'Enviando…';
+  try {
+    const r = await (await fetch(CFG.config_api, {method: 'POST', headers: {'Content-Type': 'text/plain'}, body: JSON.stringify({tipo: 'nota', l: CFG.lula_t, cliente: cid, nombre: (cli(cid) || {}).nombre || 'General', texto})})).json();
+    if (!r.ok) throw r; NOTA_MSG[cid] = '✓ Enviada. Le llega a Marcelo por mail y al tablero.'; await leerNotas();
+  } catch (e) { NOTA_MSG[cid] = 'No se pudo enviar. Probá de nuevo en un rato.'; pintar(); }
+}
+async function notaMarca(id, estado) {
+  const n = (NOTAS || []).find(x => x.id === id); if (n) { n.estado = estado; n.marcado = 'recién'; pintar(); }
+  try { const t = await tokenConf(); await fetch(CFG.config_api, {method: 'POST', headers: {'Content-Type': 'text/plain'}, body: JSON.stringify({tipo: 'nota-marca', t, id, estado})}); } catch (e) { alert2('No se pudo guardar la marca de la nota.'); }
+}
+const ESTN = {'': ['Recibida', 'a'], visto: ['Marcelo la vio', 'g'], trabajado: ['Resuelta', 'g']};
+function listaNotas(cid) {
+  const l = (NOTAS || []).filter(n => !cid || n.cliente === cid).slice().reverse();
+  if (NOTAS === null) return '<div class="vacio2">Leyendo notas…</div>';
+  if (!l.length) return '<div class="vacio2">Todavía no hay notas.</div>';
+  return l.map(n => `<div class="nota"><div class="c1"><b>${esc((cli(n.cliente) || {nombre: 'General'}).nombre)}</b><span>${esc(n.fecha)}</span><span class="cd2 ${ESTN[n.estado] ? ESTN[n.estado][1] : 'a'}">${(ESTN[n.estado] || ESTN[''])[0]}</span></div><div class="tx">${esc(n.texto)}</div></div>`).join('');
+}
+function formNota(cid) {
+  return `<div class="medida"><label for="nt_${cid}" class="k">Dejale una nota a Marcelo${cid ? ' sobre ' + esc((cli(cid) || {}).nombre || '') : ''}</label>
+    <textarea id="nt_${cid}" placeholder="Ej.: llamaron del colegio para cambiar la fecha del simulacro…"></textarea>
+    <div class="row"><button class="mini2 ok" onclick="mandarNota('${cid}',this)">✉ Enviar nota</button>${NOTA_MSG[cid] ? `<span class="sub3">${esc(NOTA_MSG[cid])}</span>` : ''}</div></div>`;
+}
+function vNotas() {
+  return `<section><h2>Notas para Marcelo <small>lo que escribas le llega por mail y al tablero</small></h2>${formNota('')}<div style="margin-top:12px">${listaNotas('')}</div></section>`;
+}
+function modsLectura(c) {
+  const O = ordenDe(c.id);
+  const g = O.grupos.map(gid => { const ms = O.mods[gid].filter(m => modOn(c, m)); if (!ms.length) return '';
+    return `<div class="mg"><h3><i style="background:${COLG[grupoDef(gid).color]}"></i>${esc(grupoDef(gid).nombre)}</h3><div class="et">${ms.map(m => `<span>${esc(modDef(m).nombre)}${tienePortal(c) && !hecho(c, m) ? ' · en preparación' : ''}</span>`).join('')}</div></div>`; }).join('');
+  return g || '<div class="vacio2">Sin secciones definidas todavía.</div>';
+}
+function vLegajoLectura() {
+  const c = cli(LEG), g = pagsDe(c), en = (CFG.enlaces || {})[c.id] || [], ag = agendaDe(c.id);
+  const sol = (k, t) => `<button class="${SOLAPA === k ? 'on' : ''}" onclick="SOLAPA='${k}';pintar()">${t}</button>`;
+  const nN = (NOTAS || []).filter(n => n.cliente === c.id).length;
+  let cuerpo = '';
+  if (SOLAPA === 'agenda') cuerpo = ag.length ? `<div class="ag2">${ag.map(agLinea).join('')}</div>` : '<div class="nop">No hay fechas de este colegio en el Control SAP.</div>';
+  else if (SOLAPA === 'notas') cuerpo = formNota(c.id) + `<div style="margin-top:12px">${listaNotas(c.id)}</div>`;
+  else {
+    const links = [...(g ? g.paginas.map(x => ({titulo: x.titulo, detalle: x.detalle, url: x.url})) : []), ...en];
+    cuerpo += links.length ? `<div class="pags"><div class="pag" style="border-color:${c.color}"><div class="cab"><div><b>Páginas del colegio</b><span>${links.length}</span></div></div><div class="op">${links.map(x => `<div class="o"><div class="t">${esc(x.titulo)}<small>${esc(x.detalle || '')}</small></div><a href="../${x.url}" target="_blank">Abrir ↗</a>${btnCopiar(BASE + x.url)}</div>`).join('')}</div></div></div>`
+      : '<div class="nop"><h3>Todavía sin portal</h3><p style="margin:0">Marcelo lo va armando por orden; cuando esté, aparece acá.</p></div>';
+    cuerpo += `<h2 style="margin-top:18px">Próximas fechas</h2>${ag.length ? `<div class="ag2">${ag.slice(0, 5).map(agLinea).join('')}</div>` : '<div class="vacio2">Sin fechas en el Control SAP.</div>'}`;
+    cuerpo += `<h2 style="margin-top:18px">Qué tiene (o va a tener) su portal</h2>${modsLectura(c)}`;
+  }
+  return `<div class="leg-cab" style="background:${c.color}"><div><h2>${esc(c.nombre)}</h2><div class="sub2">${c.sedes.length > 1 ? c.sedes.map(s => esc(s.nombre)).join(' / ') : 'Colegio'}</div></div><div class="der2"><a href="#torre">← Colegios</a></div></div>
+    <div class="sol">${sol('resumen', 'Resumen')}${sol('agenda', `Fechas (${ag.length})`)}${sol('notas', `Notas${nN ? ' (' + nN + ')' : ''}`)}</div>${cuerpo}`;
+}
+async function sincronizarAgenda() {
+  if (!CFG.lula || !CFG.config_api) return;
+  const ids = CFG.lula.ids, items = (CFG.agenda || []).filter(a => ids.includes(a.cliente) && diasA(a.fecha) >= 0 && diasA(a.fecha) <= 60)
+    .map(a => ({fecha: a.fecha, nombre: (cli(a.cliente) || {}).nombre, sede: a.sede, titulo: a.titulo, hora: a.hora || ''}));
+  const firma = CFG.hoy + '|' + items.length + '|' + (items[0] || {}).fecha;
+  if (LS('ag_sync') === firma) return;
+  try { const t = LS('cfg_t'); if (!t) return;
+    const r = await (await fetch(CFG.config_api, {method: 'POST', headers: {'Content-Type': 'text/plain'}, body: JSON.stringify({tipo: 'agenda', t, items})})).json();
+    if (r.ok) LSset('ag_sync', firma); } catch (e) {}
+}
+function tarjetaLula() {
+  const L = CFG.lula; if (!L) return '';
+  const txt = `Hola cuña! Esta es la página de los colegios para que veas todo:\n${L.url}\nClave: ${L.clave}\n(La primera vez marcá «Recordar en este equipo».)`;
+  const pend = (NOTAS || []).filter(n => !n.estado).length;
+  return `<section><h2>Página de Lula <small>colegios en modo lectura · ${L.ids.length} clientes</small></h2><div class="nop" style="display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center">
+    <a class="mini2" href="../lula/" target="_blank">Abrir como la ve Lula ↗</a><span>Clave: ${clave(L.clave)}</span>${btnCopiar(txt, '📋 Copiar acceso para mandarle')}
+    <span class="sub3">Notas: ${NOTAS === null ? 'tocá Bandeja para verlas' : pend ? `<b>${pend} nueva${pend > 1 ? 's' : ''}</b> en la Bandeja` : 'ninguna nueva'} · Resumen por mail los lunes 8 h a ${esc(L.mail)}</span></div></section>`;
 }
 
 /* ----- Legajo ----- */
