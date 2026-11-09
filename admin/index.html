@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <title>Tablero de clientes</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.2/Sortable.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap">
 <style>
@@ -319,20 +320,161 @@ body[data-tema="tecnico"]{--bg:#1C3044;--card:#22394F;--ink:#E7EFF7;--muted:#9DB
 body[data-tema="tecnico"] h1,body[data-tema="tecnico"] h2,body[data-tema="tecnico"] h3{letter-spacing:.02em}
 body[data-tema="noche"]{--bg:#121417;--card:#1C1F24;--ink:#ECEDEE;--muted:#9AA1A9;--line:#30343B;--line2:#272A30;--head:#090A0C;--btn:#24282E;--soft:#22262B;
   --ver:#D9707F;--ver-soft:#3A2227;--ot:#5FB5BE;--ot-soft:#1B3236;--av:#E39062;--av-soft:#3A2A20;--ok:#6CC48E;--ok-soft:#1C3326;--amb:#E2B055;--amb-soft:#3A3020;--curso:#B9825F;--nada:#3E434A;--tilefg:#0E0F11;color-scheme:dark}
-body[data-tema="river"]{--bg:#F3F3F3;--card:#FFFFFF;--ink:#111111;--muted:#5A5A5A;--line:#DDDDDD;--line2:#EEEEEE;--head:#FFFFFF;--headink:#111111;--btn:#FFFFFF;--soft:#F7F7F7;
-  --ver:#E30613;--ver-soft:#FDE5E7;--ot:#1A1A1A;--ot-soft:#EAEAEA;--av:#9E1B26;--av-soft:#F6E3E5;--ok:#2E7D4F;--ok-soft:#E3F1E8;--amb:#C9323D;--amb-soft:#FBE9EA;--curso:#E88A91;--nada:#D6D6D6}
-body[data-tema="river"] header{position:relative;overflow:hidden;border-bottom:3px solid #111}
-body[data-tema="river"] header::before{content:"";position:absolute;top:-10px;bottom:-10px;left:-24px;width:64px;background:#E30613;transform:skewX(-24deg)}
-body[data-tema="river"] header .wrap{position:relative;padding-left:max(64px,env(safe-area-inset-left,0px))}
-body[data-tema="river"] header .tabs a.on{background:#111;color:#fff;opacity:1}
+/* ----- River: rojo y blanco, banda diagonal por todos lados ----- */
+body[data-tema="river"]{--bg:#F6F6F6;--card:#FFFFFF;--ink:#111111;--muted:#555555;--line:#DADADA;--line2:#EEEEEE;--head:#FFFFFF;--headink:#111111;--btn:#FFFFFF;--soft:#F7F7F7;
+  --ver:#E30613;--ver-soft:#FDE4E6;--ot:#111111;--ot-soft:#ECECEC;--av:#B00012;--av-soft:#F8E1E3;--ok:#2E7D4F;--ok-soft:#E3F1E8;--amb:#E30613;--amb-soft:#FDECEE;--curso:#F08A92;--nada:#D9D9D9;
+  background-image:repeating-linear-gradient(115deg,transparent 0 46px,rgba(227,6,19,.035) 46px 70px)}
+body[data-tema="river"] header{position:relative;overflow:hidden;border-bottom:4px solid #111}
+body[data-tema="river"] header::before{content:"";position:absolute;top:-20px;bottom:-20px;left:-34px;width:96px;background:#E30613;transform:skewX(-26deg)}
+body[data-tema="river"] header .wrap{position:relative;padding-left:max(88px,env(safe-area-inset-left,0px))}
+body[data-tema="river"] header h1::after{content:" ★ ★ ★ ★";color:#E30613;font-size:14px;letter-spacing:2px;vertical-align:4px}
+body[data-tema="river"] header .wrap>div>div.sub::after{content:" · Planta Monumental";color:#E30613;font-weight:600}
+body[data-tema="river"] header .tabs a.on{background:#E30613;color:#fff;opacity:1}
 body[data-tema="river"] header select,body[data-tema="river"] header button{background:#111;color:#fff}
 body[data-tema="river"] header .der{color:#111}
-body[data-tema="rasta"]{--bg:#141414;--card:#1E1E1E;--ink:#F2F0E6;--muted:#B5B2A3;--line:#343434;--line2:#2A2A2A;--head:#0A0A0A;--btn:#262626;--soft:#232323;
-  --ver:#E2333C;--ver-soft:#3A1E1F;--ot:#2BAA5C;--ot-soft:#1B3324;--av:#F6C700;--av-soft:#3A3417;--ok:#2BAA5C;--ok-soft:#1B3324;--amb:#F6C700;--amb-soft:#3A3417;--curso:#C9A21A;--nada:#3A3A3A;--tilefg:#111111;color-scheme:dark}
-body[data-tema="rasta"] header{border-bottom:0;box-shadow:0 4px 0 #E2333C,0 8px 0 #F6C700,0 12px 0 #2BAA5C;margin-bottom:12px}
-body[data-tema="rasta"] .kpi.k1,body[data-tema="rasta"] .tile.ver{color:#fff}
-body[data-tema="noche"] .nuevo,body[data-tema="tecnico"] .nuevo,body[data-tema="rasta"] .nuevo{background:var(--ink);color:var(--bg)}
-body[data-tema="noche"] .acc a.pri,body[data-tema="tecnico"] .acc a.pri,body[data-tema="rasta"] .acc a.pri,body[data-tema="noche"] .bts button.tb,body[data-tema="tecnico"] .bts button.tb,body[data-tema="rasta"] .bts button.tb{color:var(--bg)}
+body[data-tema="river"] .kpi{position:relative;overflow:hidden;background:#fff;color:#111;border:2px solid #111}
+body[data-tema="river"] .kpi::after{content:"";position:absolute;top:-30px;bottom:-30px;right:18px;width:26px;background:#E30613;transform:skewX(-26deg);opacity:.9}
+body[data-tema="river"] .kpi.k1 .n,body[data-tema="river"] .kpi.k4 .n{color:#E30613}
+body[data-tema="river"] .mos{overflow:hidden}
+body[data-tema="river"] .mos::after{content:"";position:absolute;top:-14px;right:10px;width:12px;height:200%;background:#E30613;transform:skewX(-26deg);opacity:.85}
+body[data-tema="river"] .mos.g::after{opacity:.35}
+body[data-tema="river"] .mos::before{background:#111}
+body[data-tema="river"] .mos.r::before{background:#E30613}
+body[data-tema="river"] .leg-cab{position:relative;overflow:hidden;background:#fff!important;color:#111;border:2px solid #111}
+body[data-tema="river"] .leg-cab h2{color:#111}
+body[data-tema="river"] .leg-cab::before{content:"";position:absolute;top:-40px;bottom:-40px;right:30%;width:70px;background:#E30613;transform:skewX(-26deg)}
+body[data-tema="river"] .leg-cab>*{position:relative}
+body[data-tema="river"] .leg-cab a,body[data-tema="river"] .leg-cab button{background:#111;color:#fff}
+body[data-tema="river"] h2{border-bottom:3px solid #E30613;padding-bottom:4px;display:inline-flex}
+body[data-tema="river"] .card .top{position:relative;overflow:hidden}
+body[data-tema="river"] .card .top::after{content:"";position:absolute;top:-30px;bottom:-30px;right:60px;width:22px;background:rgba(255,255,255,.55);transform:skewX(-26deg)}
+body[data-tema="river"] .filtros button.on,body[data-tema="river"] .sol button.on{background:#E30613;border-color:#E30613;color:#fff}
+body[data-tema="river"] .guardar{background:#111;border-left:10px solid #E30613}
+body[data-tema="river"] footer::after{content:"Rojo y blanco, el más grande.";display:block;margin-top:6px;color:#E30613;font-weight:700;letter-spacing:.04em}
+
+/* ----- Eerie: verde, amarillo y rojo sobre fondo claro, con el león ----- */
+body[data-tema="eerie"]{--bg:#FFFBEB;--card:#FFFFFF;--ink:#1F2A1C;--muted:#5C6650;--line:#E7DFBF;--line2:#F1EBD2;--head:#1E8E3E;--headink:#FFFFFF;--btn:#FFFFFF;--soft:#FFF6D6;
+  --ver:#D62828;--ver-soft:#FDE2E0;--ot:#1E8E3E;--ot-soft:#DDF3E2;--av:#E89F00;--av-soft:#FFF0C7;--ok:#1E8E3E;--ok-soft:#DDF3E2;--amb:#F2A900;--amb-soft:#FFF1C9;--curso:#F4C046;--nada:#E6DFC4;--tilefg:#FFFFFF;
+  background-image:linear-gradient(180deg,rgba(30,142,62,.06),transparent 260px)}
+body[data-tema="eerie"] header{position:relative;background:linear-gradient(100deg,#1E8E3E 0%,#2BA84A 70%,#1E8E3E 100%);box-shadow:0 5px 0 #F2C200,0 10px 0 #D62828;margin-bottom:14px}
+body[data-tema="eerie"] header .tabs a.on{background:#F2C200;color:#1F2A1C;opacity:1}
+body[data-tema="eerie"] header select,body[data-tema="eerie"] header button{background:#145E2A;color:#fff}
+body[data-tema="eerie"] header .leon{display:block}
+body[data-tema="eerie"] .kpi.k3,body[data-tema="eerie"] .kpi.k4{color:#1F2A1C}
+body[data-tema="eerie"] .mos{border-width:2px}
+body[data-tema="eerie"] .mos.g{border-color:#BFE3C8}
+body[data-tema="eerie"] .leg-cab{box-shadow:0 5px 0 #F2C200,0 10px 0 #D62828;margin-bottom:12px}
+body[data-tema="eerie"] .filtros button.on,body[data-tema="eerie"] .sol button.on{background:#1E8E3E;border-color:#1E8E3E;color:#fff}
+body[data-tema="eerie"] main::after{content:"";position:fixed;right:-30px;bottom:-30px;width:220px;height:220px;background:var(--leon) center/contain no-repeat;opacity:.13;pointer-events:none;z-index:0}
+header .leon{display:none;width:46px;height:46px;flex:none}
+@media (max-width:640px){header #hora{display:none}body[data-tema="river"] header .wrap{padding-left:56px}body[data-tema="river"] header::before{width:60px}}
+body[data-tema="noche"] .nuevo,body[data-tema="tecnico"] .nuevo{background:var(--ink);color:var(--bg)}
+body[data-tema="noche"] .acc a.pri,body[data-tema="tecnico"] .acc a.pri,body[data-tema="noche"] .bts button.tb,body[data-tema="tecnico"] .bts button.tb{color:var(--bg)}
+
+/* ----- agenda v2 ----- */
+header img.leon{background:none;padding:0;height:46px;border-radius:0}
+.cinta{display:grid;grid-template-columns:repeat(13,minmax(0,1fr));gap:6px;margin:4px 0 12px;align-items:end}
+.sem{display:flex;flex-direction:column;align-items:center;gap:3px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px 4px 6px;min-height:96px;justify-content:flex-end}
+.sem.hoy{border:2px solid var(--ink);box-shadow:0 3px 0 var(--ink)}
+.sem .mes{font:700 11px Barlow,sans-serif;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);min-height:13px}
+.sem .n{font:700 20px/1 "Barlow Condensed",sans-serif;min-height:20px}
+.sem .bar{display:flex;flex-direction:column-reverse;width:70%;border-radius:6px;overflow:hidden;background:var(--line2)}
+.sem .bar i{display:block;min-height:3px}
+.sem .fe{font-size:11px;color:var(--muted)}
+.agbar{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin-bottom:8px}
+.seg{display:inline-flex;flex-wrap:wrap;gap:4px}
+.seg button{border:1px solid var(--line);background:var(--btn);color:var(--ink);border-radius:20px;padding:5px 12px;font:600 13px Barlow,sans-serif;cursor:pointer}
+.seg button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tipos2{display:flex;flex-wrap:wrap;gap:6px}
+.tp2{display:inline-flex;align-items:center;gap:6px;border:2px solid var(--tc);background:var(--btn);color:var(--ink);border-radius:20px;padding:4px 11px;font:600 13px Barlow,sans-serif;cursor:pointer;opacity:.55}
+.tp2 i{width:10px;height:10px;border-radius:50%;background:var(--tc)}
+.tp2 b{background:var(--tc);color:#fff;border-radius:10px;padding:0 6px;font-size:12px}
+.tp2.on{opacity:1;background:color-mix(in srgb,var(--tc) 14%,var(--card))}
+.agopt{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 12px;margin-bottom:12px}
+.agopt summary{cursor:pointer;font-weight:600}
+.optg{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;margin-top:8px}
+.optg .k{display:block;font:600 11.5px Barlow,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.optg input{border:1px solid var(--line);border-radius:8px;padding:6px 10px;font:14px Barlow,sans-serif;width:100%;background:var(--btn);color:var(--ink)}
+.ag2{background:var(--card);border-radius:14px;border:1px solid var(--line);padding:4px 14px 6px;margin-bottom:12px}
+.ag2 h3{margin:10px 0 6px;font:600 19px "Barlow Condensed",sans-serif;display:flex;gap:8px;align-items:baseline}
+.ag2 h3 small{font:500 13px Barlow,sans-serif;color:var(--muted)}
+.al2{display:grid;grid-template-columns:62px 1fr auto;gap:12px;align-items:center;padding:8px 0;border-top:1px solid var(--line2)}
+.al2 .f{display:flex;flex-direction:column;align-items:center;border-radius:12px;padding:5px 0;background:color-mix(in srgb,var(--tc) 13%,var(--card));border:2px solid var(--tc);line-height:1}
+.al2 .f .dd{font:700 24px "Barlow Condensed",sans-serif;color:var(--tc)}
+.al2 .f .mm{font:700 11px Barlow,sans-serif;text-transform:uppercase;letter-spacing:.06em}
+.al2 .f .ds{font-size:10.5px;color:var(--muted);margin-top:2px}
+.al2 .l1{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center}
+.al2 .l1 b{cursor:pointer;font-size:15px}
+.al2 .dot,.ltf .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:1px}
+.agp{background:var(--tc);color:#fff;border-radius:12px;padding:1px 9px;font:600 12px Barlow,sans-serif}
+.hr{font-size:13px;color:var(--muted)}
+.sub3{font-size:12.5px;color:var(--muted);margin-top:2px}
+.sub3 .nt{font-style:italic}
+.cd2{font:700 13px "Barlow Condensed",sans-serif;border-radius:14px;padding:4px 10px;white-space:nowrap;color:#fff}
+.cd2.r{background:#E03131}.cd2.a{background:#F08C00}.cd2.g{background:#2F9E44}
+.calnav{display:flex;gap:6px;margin-bottom:8px}
+.calnav button{border:1px solid var(--line);background:var(--btn);color:var(--ink);border-radius:8px;padding:5px 12px;font:600 13px Barlow,sans-serif;cursor:pointer}
+.cals{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px;margin-bottom:12px}
+.cal{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px}
+.cal h3{margin:0 0 8px;font:600 18px "Barlow Condensed",sans-serif}
+.cg{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px}
+.cg .dh{font:600 11px Barlow,sans-serif;color:var(--muted);text-align:center;text-transform:uppercase}
+.dc{min-height:58px;border:1px solid var(--line2);border-radius:8px;background:var(--card);color:var(--ink);padding:3px;display:flex;flex-direction:column;gap:2px;align-items:stretch;text-align:left;font:inherit;min-width:0}
+.dc.fin{background:var(--soft)}
+.dc .nd{font:600 12px Barlow,sans-serif;color:var(--muted)}
+.dc.con{cursor:pointer;border-color:var(--line)}
+.dc.hoy{border:2px solid var(--ink)}.dc.hoy .nd{color:var(--ink);font-weight:800}
+.dc.sel{outline:3px solid var(--ot);outline-offset:1px}
+.cp{display:block;font-style:normal;font:600 10.5px Barlow,sans-serif;background:var(--tc);color:#fff;border-radius:4px;padding:0 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cp.mas{background:var(--muted)}
+.lt{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px;overflow-x:auto}
+.ltc,.ltf{display:grid;grid-template-columns:190px minmax(520px,1fr);gap:10px;align-items:center}
+.ltx,.ltr{position:relative;height:26px}
+.ltx span{position:absolute;top:4px;font:600 11.5px Barlow,sans-serif;color:var(--muted);text-transform:uppercase;transform:translateX(3px)}
+.ltf{border-top:1px solid var(--line2);padding:3px 0}
+.ltf b{font-size:13.5px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ltr .gl{position:absolute;top:0;bottom:0;width:1px;background:var(--line2)}
+.ltm{position:absolute;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:var(--tc);border:2px solid var(--card);box-shadow:0 0 0 1px var(--tc);cursor:help}
+.ltm.anual,.ltm.bianual{border-radius:3px;transform:rotate(45deg)}
+.ltm.ventana{width:10px;height:10px;margin:-5px 0 0 -5px}
+@media (max-width:760px){.cinta{grid-template-columns:repeat(7,minmax(0,1fr))}.cinta .sem:nth-child(n+8){display:none}.al2{grid-template-columns:54px 1fr}.al2 .cd2{grid-column:2;justify-self:start}}
+
+/* ----- módulos v2: áreas, constructor, vista previa ----- */
+.ha,.hm{cursor:grab;user-select:none;color:var(--muted);font-weight:700;padding:0 4px;touch-action:none}
+.ha{font-size:18px}.hm{font-size:13px;letter-spacing:-2px}
+.fantasma{opacity:.35}
+.areas{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;align-items:start}
+.area{background:var(--card);border:1px solid var(--line);border-top:6px solid var(--gc);border-radius:14px;padding:8px 10px 10px}
+.ah{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.ah b{font:600 19px "Barlow Condensed",sans-serif;flex:1}
+.ah small{color:var(--muted);font-size:12px}
+.ml{display:grid;gap:5px}
+.mi{background:var(--soft);border-radius:10px;padding:5px 8px}
+.mr{display:flex;align-items:center;gap:6px}
+.mn{flex:1;text-align:left;background:none;border:0;color:var(--ink);font:600 14px Barlow,sans-serif;cursor:pointer;padding:3px 0}
+.cnt2{min-width:24px;text-align:center;background:var(--gc);color:#fff;border-radius:10px;font:700 12px Barlow,sans-serif;padding:1px 6px}
+.mcl{display:grid;gap:3px;margin-top:6px;padding-top:6px;border-top:1px solid var(--line);max-height:280px;overflow:auto}
+.mcl label{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointer}
+.mcl small{color:var(--muted);font-size:11.5px;margin-left:auto}
+.mg h3 .ha{font-size:16px}
+.md .t .hm{margin-left:-4px}
+.cons{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px;align-items:start}
+.cons-pv{position:sticky;top:12px}
+.cons-pv .k{font:600 11.5px Barlow,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.tel{border:10px solid #1B1D21;border-radius:34px;background:#F4F3F0;overflow:hidden;height:600px;display:flex;flex-direction:column;box-shadow:0 10px 30px rgba(0,0,0,.18)}
+.tel-cab{background:var(--cc);color:#fff;padding:18px 14px 10px}
+.tel-cab b{display:block;font:600 18px "Barlow Condensed",sans-serif}
+.tel-cab small{opacity:.85;font-size:11.5px}
+.tel-tabs{display:flex;gap:4px;overflow-x:auto;background:#fff;padding:6px 8px;border-bottom:1px solid #E3E0DA}
+.tel-tabs span{font:600 11.5px Barlow,sans-serif;background:#F0EEEA;color:#333;border-radius:10px;padding:2px 8px;white-space:nowrap}
+.tel-body{padding:8px;overflow-y:auto;display:grid;gap:6px;align-content:start;flex:1}
+.tel-sec{background:#fff;border-radius:10px;border-left:4px solid var(--gc);padding:6px 8px;color:#222}
+.tel-sec b{font:600 13px Barlow,sans-serif}
+.tel-sec em{font-style:normal;font-size:10.5px;color:#9B5A00}
+.tel-sec div{display:flex;flex-wrap:wrap;gap:3px;margin-top:3px}
+.tel-sec span{font-size:10.5px;background:#F4F3F0;border-radius:6px;padding:1px 5px;color:#444}
+.selcli{border:1px solid var(--line);border-radius:8px;padding:6px 10px;font:600 14px Barlow,sans-serif;background:var(--btn);color:var(--ink);min-width:240px}
+@media (max-width:900px){.cons{grid-template-columns:1fr}.cons-pv{position:static}.tel{height:460px;max-width:320px}}
 </style>
 </head>
 <body>
@@ -572,7 +714,8 @@ function panelCap(q) {
 }
 
 /* ---------- pantalla (tablero 2: Torre + Bandeja + Agenda + legajo + Módulos) ---------- */
-const TEMAS = [['planta', 'Planta'], ['tecnico', 'Plano técnico'], ['noche', 'Noche de guardia'], ['river', 'River'], ['rasta', 'Rasta']];
+const LEON = 'PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg1MCA1MikiPjxnIGZpbGw9IiNENjI4MjgiPjxwYXRoIGQ9Ik0wLTQ2IDktMzAtOS0zMFoiIHRyYW5zZm9ybT0icm90YXRlKDApIi8+PHBhdGggZD0iTTAtNDYgOS0zMC05LTMwWiIgdHJhbnNmb3JtPSJyb3RhdGUoMzApIi8+PHBhdGggZD0iTTAtNDYgOS0zMC05LTMwWiIgdHJhbnNmb3JtPSJyb3RhdGUoNjApIi8+PHBhdGggZD0iTTAtNDYgOS0zMC05LTMwWiIgdHJhbnNmb3JtPSJyb3RhdGUoOTApIi8+PHBhdGggZD0iTTAtNDYgOS0zMC05LTMwWiIgdHJhbnNmb3JtPSJyb3RhdGUoMTIwKSIvPjxwYXRoIGQ9Ik0wLTQ2IDktMzAtOS0zMFoiIHRyYW5zZm9ybT0icm90YXRlKDE1MCkiLz48cGF0aCBkPSJNMC00NiA5LTMwLTktMzBaIiB0cmFuc2Zvcm09InJvdGF0ZSgxODApIi8+PHBhdGggZD0iTTAtNDYgOS0zMC05LTMwWiIgdHJhbnNmb3JtPSJyb3RhdGUoMjEwKSIvPjxwYXRoIGQ9Ik0wLTQ2IDktMzAtOS0zMFoiIHRyYW5zZm9ybT0icm90YXRlKDI0MCkiLz48cGF0aCBkPSJNMC00NiA5LTMwLTktMzBaIiB0cmFuc2Zvcm09InJvdGF0ZSgyNzApIi8+PHBhdGggZD0iTTAtNDYgOS0zMC05LTMwWiIgdHJhbnNmb3JtPSJyb3RhdGUoMzAwKSIvPjxwYXRoIGQ9Ik0wLTQ2IDktMzAtOS0zMFoiIHRyYW5zZm9ybT0icm90YXRlKDMzMCkiLz48L2c+PGNpcmNsZSByPSIzMyIgZmlsbD0iI0YyQzIwMCIvPjxjaXJjbGUgcj0iMjciIGZpbGw9IiMxRThFM0UiLz48Y2lyY2xlIGN4PSItMTUiIGN5PSItMTYiIHI9IjYiIGZpbGw9IiNFOEE1NEEiLz48Y2lyY2xlIGN4PSIxNSIgY3k9Ii0xNiIgcj0iNiIgZmlsbD0iI0U4QTU0QSIvPjxjaXJjbGUgcj0iMjAiIGZpbGw9IiNGMEIzNUIiLz48ZWxsaXBzZSBjeT0iOSIgcng9IjExIiByeT0iOCIgZmlsbD0iI0Y4RDlBMCIvPjxjaXJjbGUgY3g9Ii03IiBjeT0iLTQiIHI9IjIuNiIgZmlsbD0iIzJBMUEwRSIvPjxjaXJjbGUgY3g9IjciIGN5PSItNCIgcj0iMi42IiBmaWxsPSIjMkExQTBFIi8+PHBhdGggZD0iTS00IDNoOGwtNCA0WiIgZmlsbD0iIzZCM0ExRSIvPjxwYXRoIGQ9Ik0wIDd2M00tNSAxMnE1IDMgMTAgMCIgc3Ryb2tlPSIjNkIzQTFFIiBzdHJva2Utd2lkdGg9IjEuNiIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PC9nPjwvc3ZnPg==';
+const TEMAS = [['planta', 'Planta'], ['tecnico', 'Plano técnico'], ['noche', 'Noche de guardia'], ['river', 'River'], ['eerie', 'Eerie']];
 let VISTA = 'torre', LEG = null, SOLAPA = 'resumen', FT = 'todos', FB = {cli: '', tipo: ''}, FA = {tipo: '', q: '', mas: false}, CLAVE_ESCRITA = '';
 const CL = () => CFG.cartera || [];
 const cli = id => CL().find(c => c.id === id);
@@ -591,10 +734,12 @@ const cdCl = n => n <= 7 ? 'r' : n <= 30 ? 'a' : 'g';
 function iniciar() {
   document.getElementById('login').remove();
   const app = document.getElementById('app'); app.hidden = false;
-  const tema = LS('tab_tema') || 'planta'; document.body.dataset.tema = tema;
+  const tema = (LS('tab_tema') || 'planta').replace('rasta', 'eerie');
+  document.body.style.setProperty('--leon', `url("data:image/svg+xml;base64,${LEON}")`); document.body.dataset.tema = tema;
   app.innerHTML = `
   <header><div class="wrap">
     <img src="logo_jea.png" alt="JEA">
+    <img class="leon" src="data:image/svg+xml;base64,${LEON}" alt="">
     <div><h1>Tablero de clientes</h1><div class="sub">Lic. Marcelo Elvira · Higiene y Seguridad</div></div>
     <nav class="tabs" aria-label="Vistas"><a href="#torre" data-v="torre">Torre</a><a href="#bandeja" data-v="bandeja">Bandeja</a><a href="#agenda" data-v="agenda">Agenda</a><a href="#modulos" data-v="modulos">Módulos</a></nav>
     <div class="der"><label class="sub" for="tema">Estilo</label><select id="tema">${TEMAS.map(t => `<option value="${t[0]}"${t[0] === tema ? ' selected' : ''}>${t[1]}</option>`).join('')}</select>
@@ -620,6 +765,7 @@ function pintar() {
   else if (VISTA === 'modulos') el.innerHTML = vModulos();
   else if (VISTA === 'legajo') { el.innerHTML = vLegajo(); if (SOLAPA === 'resumen' && capDe(LEG)) pintarCap(); }
   else el.innerHTML = vTorre();
+  montarSort();
 }
 const cuenta = id => { const x = VIVO[id]; return x && x.a ? {v: pend(x.a.verificar).length, o: pend(x.a.ots).length, a: pend(x.a.avances).length} : {v: 0, o: 0, a: 0}; };
 function senales(c) {
@@ -692,26 +838,99 @@ function vBandeja() {
     <footer>Los puntos «Para verificar» salen de la bandeja cuando los marcás Resueltos (también los marco yo en lote al cerrar el informe del mes). Lo que cargás vos o el usuario «prueba» no aparece. Las marcas se guardan en la planilla de cada portal.</footer></section>`;
 }
 
-/* ----- Agenda ----- */
+/* ----- Agenda (v2: lista / calendario / línea de tiempo, configurable) ----- */
+const TIPOS_AG = {sim: ['Simulacro', '#FF6B35', '🔥'], ventana: ['Abre la ventana', '#12B886', '🟢'], anual: ['Renovación anual', '#E8467C', '📋'], bianual: ['Vence (SAP nuevo)', '#7950F2', '⏳']};
+const AG_DEF = {vista: 'lista', tipos: {sim: true, ventana: true, anual: true, bianual: true}, rango: 120, agrupar: 'semana', detalle: true, etiqueta: '', q: '', mes: 0, sel: ''};
+let AG = (() => { try { return {...AG_DEF, ...JSON.parse(LS('tab_ag') || '{}'), q: '', sel: ''}; } catch (e) { return {...AG_DEF}; } })();
+function agSet(k, v) { AG[k] = v; LSset('tab_ag', JSON.stringify({...AG, q: '', sel: ''})); pintar(); }
+function agTipo(t) { AG.tipos = {...AG.tipos, [t]: !AG.tipos[t]}; agSet('tipos', AG.tipos); }
+const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+const iso = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+function agFiltrada(conRango = true) {
+  const q = AG.q.toLowerCase();
+  return (CFG.agenda || []).filter(a => {
+    const c = cli(a.cliente) || {nombre: a.cliente, etiquetas: []}, n = diasA(a.fecha);
+    if (n < 0 || !AG.tipos[a.tipo]) return false;
+    if (conRango && AG.rango && n > AG.rango) return false;
+    if (q && !(c.nombre + ' ' + a.sede + ' ' + a.exp).toLowerCase().includes(q)) return false;
+    if (AG.etiqueta === 'lula' && !c.etiquetas.includes('lula')) return false;
+    if (AG.etiqueta === 'sforza' && !c.etiquetas.includes('sforza')) return false;
+    if (AG.etiqueta === 'portal' && !tienePortal(c)) return false;
+    if (AG.etiqueta === 'sinportal' && tienePortal(c)) return false;
+    return true;
+  });
+}
+function agPill(a, corto) { const [t, col] = TIPOS_AG[a.tipo]; return `<span class="agp" style="--tc:${col}">${corto ? t.split(' ')[0] : esc(a.titulo.split(' (')[0])}</span>`; }
+function agLinea(a) {
+  const c = cli(a.cliente) || {nombre: a.cliente, color: '#888'}, n = diasA(a.fecha), d = fd(a.fecha), col = TIPOS_AG[a.tipo][1];
+  return `<div class="al2" style="--tc:${col}"><div class="f"><span class="dd">${d.getDate()}</span><span class="mm">${MESES[d.getMonth()].slice(0, 3)}${d.getFullYear() !== HOYD().getFullYear() ? ' ' + String(d.getFullYear()).slice(2) : ''}</span><span class="ds">${DSEM[d.getDay()].slice(0, 3)}</span></div>
+    <div class="d"><div class="l1"><b onclick="location.hash='c-${a.cliente}'"><i class="dot" style="background:${c.color}"></i>${esc(c.nombre)}${a.sede ? ' · ' + esc(a.sede) : ''}</b>${agPill(a)}${a.hora ? `<span class="hr">🕒 ${esc(a.hora)} h</span>` : ''}</div>
+      ${AG.detalle ? `<div class="sub3">${esc(a.exp)}${a.nota ? ` · <span class="nt">${esc(a.nota)}</span>` : ''}</div>` : ''}</div>
+    <span class="cd2 ${cdCl(n)}">${cdTxt(n)}</span></div>`;
+}
+function agCinta() {
+  const A = agFiltrada(false), lunes = HOYD(); lunes.setDate(lunes.getDate() - ((lunes.getDay() + 6) % 7));
+  const S = [...Array(13)].map((_, i) => { const d0 = new Date(+lunes + i * 7 * DIA), d1 = new Date(+d0 + 7 * DIA); return {d0, l: A.filter(a => fd(a.fecha) >= d0 && fd(a.fecha) < d1)}; });
+  const max = Math.max(3, ...S.map(s => s.l.length));
+  return `<div class="cinta" role="list" aria-label="Próximas 13 semanas">${S.map((s, i) => { const m = i === 0 || s.d0.getMonth() !== S[i - 1].d0.getMonth();
+    const seg = Object.keys(TIPOS_AG).map(t => { const n = s.l.filter(a => a.tipo === t).length; return n ? `<i style="flex:${n};background:${TIPOS_AG[t][1]}"></i>` : ''; }).join('');
+    return `<div class="sem${i === 0 ? ' hoy' : ''}" role="listitem" title="${s.l.map(a => `${fd(a.fecha).toLocaleDateString('es-AR', {day: '2-digit', month: '2-digit'})} ${(cli(a.cliente) || {}).nombre} · ${TIPOS_AG[a.tipo][0]}`).join('\n') || 'Sin fechas'}">
+      <span class="mes">${m ? MESES[s.d0.getMonth()].slice(0, 3) : ''}</span><span class="n">${s.l.length || ''}</span>
+      <span class="bar" style="height:${s.l.length ? 10 + s.l.length / max * 34 : 4}px">${seg}</span><span class="fe">${i === 0 ? 'esta' : s.d0.getDate() + '/' + (s.d0.getMonth() + 1)}</span></div>`; }).join('')}</div>`;
+}
+function agLista(L) {
+  if (!L.length) return '<div class="nop">No hay fechas con estos filtros.</div>';
+  const key = a => { const n = diasA(a.fecha), d = fd(a.fecha);
+    if (AG.agrupar === 'mes') return [d.getFullYear() * 100 + d.getMonth(), `${MESES[d.getMonth()][0].toUpperCase() + MESES[d.getMonth()].slice(1)} ${d.getFullYear()}`];
+    if (AG.agrupar === 'cliente') { const c = cli(a.cliente) || {nombre: a.cliente}; return [c.nombre, c.nombre]; }
+    if (AG.agrupar === 'tipo') return [Object.keys(TIPOS_AG).indexOf(a.tipo), TIPOS_AG[a.tipo][0]];
+    return n <= 7 ? [0, 'Esta semana'] : n <= 30 ? [1, 'Próximas 4 semanas'] : n <= 90 ? [2, 'Hasta 90 días'] : [3, 'Más adelante']; };
+  const G = new Map(); L.forEach(a => { const [k, t] = key(a); if (!G.has(k)) G.set(k, {t, l: []}); G.get(k).l.push(a); });
+  return [...G.entries()].sort((a, b) => a[0] > b[0] ? 1 : -1).map(([, g]) => `<div class="ag2"><h3>${esc(g.t)} <small>${g.l.length}</small></h3>${g.l.map(agLinea).join('')}</div>`).join('');
+}
+function agCalendario(L) {
+  const base = HOYD(); base.setDate(1); base.setMonth(base.getMonth() + AG.mes);
+  const meses = [0, 1, 2].map(k => new Date(base.getFullYear(), base.getMonth() + k, 1, 12));
+  const porDia = {}; L.forEach(a => (porDia[a.fecha] = porDia[a.fecha] || []).push(a));
+  const hoy = iso(HOYD());
+  const mesH = m => { const pri = (m.getDay() + 6) % 7, dias = new Date(m.getFullYear(), m.getMonth() + 1, 0).getDate();
+    let h = `<div class="cal"><h3>${MESES[m.getMonth()][0].toUpperCase() + MESES[m.getMonth()].slice(1)} ${m.getFullYear()}</h3><div class="cg">${['lu', 'ma', 'mi', 'ju', 'vi', 'sá', 'do'].map(x => `<span class="dh">${x}</span>`).join('')}`;
+    for (let i = 0; i < pri; i++) h += '<span class="dv"></span>';
+    for (let d = 1; d <= dias; d++) { const k = iso(new Date(m.getFullYear(), m.getMonth(), d, 12)), l = porDia[k] || [], fin = [5, 6].includes((pri + d - 1) % 7);
+      h += `<button class="dc${k === hoy ? ' hoy' : ''}${l.length ? ' con' : ''}${fin ? ' fin' : ''}${AG.sel === k ? ' sel' : ''}" ${l.length ? `onclick="AG.sel=AG.sel==='${k}'?'':'${k}';pintar()"` : 'tabindex="-1"'} title="${l.map(a => `${(cli(a.cliente) || {}).nombre} · ${TIPOS_AG[a.tipo][0]}${a.hora ? ' ' + a.hora : ''}`).join('\n')}"><span class="nd">${d}</span>${l.slice(0, 3).map(a => `<i class="cp" style="--tc:${TIPOS_AG[a.tipo][1]}">${esc(((cli(a.cliente) || {}).nombre || '').split(/[ (]/)[0])}</i>`).join('')}${l.length > 3 ? `<i class="cp mas">+${l.length - 3}</i>` : ''}</button>`; }
+    return h + '</div></div>'; };
+  const sel = AG.sel && porDia[AG.sel] ? `<div class="ag2"><h3>${fd(AG.sel).toLocaleDateString('es-AR', {weekday: 'long', day: 'numeric', month: 'long'})}</h3>${porDia[AG.sel].map(agLinea).join('')}</div>` : '<div class="ley2">Tocá un día con fechas para ver el detalle.</div>';
+  return `<div class="calnav"><button onclick="agSet('mes',AG.mes-3)">◀ Anteriores</button><button onclick="agSet('mes',0)">Hoy</button><button onclick="agSet('mes',AG.mes+3)">Siguientes ▶</button></div><div class="cals">${meses.map(mesH).join('')}</div>${sel}`;
+}
+function agLinea2(L) {
+  const dias = Math.max(60, AG.rango || 365), ini = HOYD(), fin = new Date(+ini + dias * DIA);
+  const ids = [...new Set(L.map(a => a.cliente))].sort((a, b) => (L.find(x => x.cliente === a).fecha > L.find(x => x.cliente === b).fecha ? 1 : -1));
+  if (!ids.length) return '<div class="nop">No hay fechas con estos filtros.</div>';
+  const pos = f => (fd(f) - ini) / (fin - ini) * 100;
+  const marcas = []; for (let d = new Date(ini.getFullYear(), ini.getMonth() + 1, 1, 12); d < fin; d = new Date(d.getFullYear(), d.getMonth() + 1, 1, 12)) marcas.push(d);
+  return `<div class="lt"><div class="ltc"><span></span><div class="ltx">${marcas.map(d => `<span style="left:${(d - ini) / (fin - ini) * 100}%">${MESES[d.getMonth()].slice(0, 3)}${d.getMonth() === 0 ? ' ' + d.getFullYear() : ''}</span>`).join('')}</div></div>
+    ${ids.map(id => { const c = cli(id) || {nombre: id, color: '#888'}; return `<div class="ltf"><b onclick="location.hash='c-${id}'"><i class="dot" style="background:${c.color}"></i>${esc(c.nombre)}</b><div class="ltr">${marcas.map(d => `<i class="gl" style="left:${(d - ini) / (fin - ini) * 100}%"></i>`).join('')}${L.filter(a => a.cliente === id && fd(a.fecha) <= fin).map(a => `<span class="ltm ${a.tipo}" role="button" tabindex="0" onclick="window.__ltsel='${a.cliente}|${a.fecha}|${a.tipo}';pintar()" style="left:${pos(a.fecha)}%;--tc:${TIPOS_AG[a.tipo][1]}" title="${fd(a.fecha).toLocaleDateString('es-AR')} · ${esc(a.titulo)}${a.hora ? ' · ' + esc(a.hora) + ' h' : ''}${a.sede ? ' · ' + esc(a.sede) : ''} · ${cdTxt(diasA(a.fecha))}"></span>`).join('')}</div></div>`; }).join('')}</div>
+    ${(() => { const k = window.__ltsel || '', a = L.find(x => `${x.cliente}|${x.fecha}|${x.tipo}` === k); return a ? `<div class="ag2" style="margin-top:10px">${agLinea(a)}</div>` : ''; })()}
+    <div class="ley2">Tocá un punto para ver el detalle. Hoy está a la izquierda · círculo: simulacro · rombo: vencimiento · punto chico: abre la ventana.</div>`;
+}
 function vAgenda() {
-  const A = (CFG.agenda || []).filter(a => diasA(a.fecha) >= 0);
-  const lunes = HOYD(); lunes.setDate(lunes.getDate() - ((lunes.getDay() + 6) % 7));
-  const sem = [...Array(13)].map((_, i) => { const d0 = new Date(+lunes + i * 7 * DIA), d1 = new Date(+d0 + 7 * DIA);
-    const l = A.filter(a => fd(a.fecha) >= d0 && fd(a.fecha) < d1); return {d0, n: l.length, v: l.some(a => a.tipo !== 'sim')}; });
-  const franja = `<div class="franja" aria-label="Carga de las próximas 13 semanas">${sem.map(s => `<div class="${s.n >= 3 ? 'h3' : s.n === 2 ? 'h2' : s.n ? 'h1' : ''}${s.v ? ' hv' : ''}" title="Semana del ${s.d0.toLocaleDateString('es-AR', {day: '2-digit', month: '2-digit'})}: ${s.n} fecha${s.n === 1 ? '' : 's'}">${s.d0.toLocaleDateString('es-AR', {day: '2-digit', month: '2-digit'})}</div>`).join('')}</div>`;
-  const tipos = {sim: 'Simulacros', anual: 'Renovaciones', ventana: 'Ventanas', bianual: 'Vencen (SAP nuevo)'};
-  const ft = (k, t) => `<button class="${FA.tipo === k ? 'on' : ''}" onclick="FA.tipo='${k}';pintar()">${t}</button>`;
-  const q = FA.q.toLowerCase();
-  const L = A.filter(a => (!FA.tipo || a.tipo === FA.tipo) && (!q || (cli(a.cliente) || {nombre: ''}).nombre.toLowerCase().includes(q)));
-  const linea = a => { const c = cli(a.cliente) || {nombre: a.cliente, color: '#888'}, n = diasA(a.fecha), d = fd(a.fecha);
-    return `<div class="al tipo-${a.tipo}"><div class="f">${d.toLocaleDateString('es-AR', {day: '2-digit', month: '2-digit'})}<small>${d.getFullYear() !== HOYD().getFullYear() ? d.getFullYear() : DSEM[d.getDay()]}</small></div>
-      <div class="d"><b onclick="location.hash='c-${a.cliente}'"><i class="dot" style="background:${c.color}"></i>${esc(c.nombre)}${a.sede ? ' · ' + esc(a.sede) : ''}</b><span>${esc(a.titulo)}${a.hora ? ' · ' + esc(a.hora) + ' h' : ''}</span><small>${esc(a.exp)}${a.nota ? ' · ' + esc(a.nota) : ''}</small></div>
-      <span class="cd ${cdCl(n)}">${cdTxt(n)}</span></div>`; };
-  const grupo = (t, f, abierto = true) => { const l = L.filter(f); if (!l.length) return ''; return `<div class="ag"><h3>${t} <small>${l.length}</small></h3>${abierto ? l.map(linea).join('') : `<div class="vacio2"><a href="javascript:void(0)" onclick="FA.mas=true;pintar()">Ver las ${l.length} fechas</a></div>`}</div>`; };
+  const L = agFiltrada();
+  const op = (k, v, t) => `<button class="${AG[k] === v ? 'on' : ''}" onclick="agSet('${k}',${typeof v === 'string' ? `'${v}'` : v})">${t}</button>`;
+  const cuenta = t => agFiltrada().filter(a => a.tipo === t).length;
   return `<section><h2>Agenda de vencimientos <small>del Control SAP de tu laptop, leído el ${fd(CFG.hoy).toLocaleDateString('es-AR')}</small></h2>
-    ${franja}<div class="ley2"><span>Cada cuadro es una semana: más oscuro, más fechas · línea bordó: hay renovación o vencimiento</span></div>
-    <div class="filtros">${ft('', 'Todo')}${Object.entries(tipos).map(([k, t]) => ft(k, t)).join('')}<input id="fa_q" placeholder="Buscar cliente" value="${esc(FA.q)}" oninput="FA.q=this.value;clearTimeout(window.__fq);window.__fq=setTimeout(()=>{pintar();const i=document.getElementById('fa_q');i.focus();i.setSelectionRange(i.value.length,i.value.length)},250)"></div>
-    ${grupo('Esta semana', a => diasA(a.fecha) <= 7)}${grupo('Próximas 4 semanas', a => diasA(a.fecha) > 7 && diasA(a.fecha) <= 30)}${grupo('Hasta 90 días', a => diasA(a.fecha) > 30 && diasA(a.fecha) <= 90)}${grupo('Más adelante', a => diasA(a.fecha) > 90, FA.mas)}
+    ${agCinta()}
+    <div class="agbar">
+      <div class="seg" role="group" aria-label="Vista">${op('vista', 'lista', '☰ Lista')}${op('vista', 'calendario', '▦ Calendario')}${op('vista', 'linea', '⟶ Línea de tiempo')}</div>
+      <div class="tipos2">${Object.entries(TIPOS_AG).map(([k, [t, col]]) => `<button class="tp2${AG.tipos[k] ? ' on' : ''}" style="--tc:${col}" onclick="agTipo('${k}')" aria-pressed="${!!AG.tipos[k]}"><i></i>${t} <b>${cuenta(k)}</b></button>`).join('')}</div>
+    </div>
+    <details class="agopt"${window.__agopt ? ' open' : ''} ontoggle="window.__agopt=this.open"><summary>⚙ Personalizar</summary><div class="optg">
+      <div><span class="k">Hasta</span><div class="seg">${op('rango', 30, '30 días')}${op('rango', 90, '90')}${op('rango', 120, '120')}${op('rango', 365, '1 año')}${op('rango', 0, 'Todo')}</div></div>
+      <div><span class="k">Agrupar la lista por</span><div class="seg">${op('agrupar', 'semana', 'Cercanía')}${op('agrupar', 'mes', 'Mes')}${op('agrupar', 'cliente', 'Cliente')}${op('agrupar', 'tipo', 'Tipo')}</div></div>
+      <div><span class="k">Clientes</span><div class="seg">${op('etiqueta', '', 'Todos')}${op('etiqueta', 'lula', 'Cartera Lula')}${op('etiqueta', 'sforza', 'Con Franco')}${op('etiqueta', 'portal', 'Con portal')}${op('etiqueta', 'sinportal', 'Sin portal')}</div></div>
+      <div><span class="k">Detalle</span><div class="seg">${op('detalle', true, 'Con expediente y notas')}${op('detalle', false, 'Compacto')}</div></div>
+      <div><span class="k">Buscar</span><input id="fa_q" placeholder="Cliente, sede o expediente" value="${esc(AG.q)}" oninput="AG.q=this.value;clearTimeout(window.__fq);window.__fq=setTimeout(()=>{pintar();const i=document.getElementById('fa_q');if(i){i.focus();i.setSelectionRange(i.value.length,i.value.length)}},250)"></div>
+    </div><div class="ley2">Lo que elijas queda guardado en este equipo.</div></details>
+    ${AG.vista === 'calendario' ? agCalendario(L) : AG.vista === 'linea' ? agLinea2(L) : agLista(L)}
     <footer>La ventana de renovación se calcula 10 días hábiles antes del vencimiento anual, sin contar feriados: confirmala con el calendario. Para que la agenda tome cambios del Control SAP, pedime que rearme el tablero.</footer></section>`;
 }
 
@@ -779,27 +998,6 @@ async function guardarConf(cid, btn) {
   } catch (e) { btn.disabled = false; btn.textContent = 'Guardar'; if (e !== 'cancelado') alert2('No se pudo guardar. Probá de nuevo; si sigue, avisame.'); }
 }
 function alert2(t) { const v = document.getElementById('vista'); v.insertAdjacentHTML('afterbegin', `<div class="aviso">${esc(t)}</div>`); window.scrollTo(0, 0); }
-function editorModulos(c) {
-  const cf = confDe(c.id), G = CFG.modulos.grupos, col = {ver: 'var(--ver)', ot: 'var(--ot)', av: 'var(--av)', ok: 'var(--ok)', amb: 'var(--amb)'};
-  const abierto = window.__mabre = window.__mabre || {};
-  const md = m => { const on = modOn(c, m.id), [k, t] = estadoMod(c, m.id), ab = abierto[c.id + m.id];
-    const nIt = m.items.filter(([i]) => itemOn(c, m.id, i)).length;
-    return `<div class="md${on ? '' : ' off'}"><div class="t"><b>${esc(m.nombre)}</b><span class="st ${k}">${t}</span>
-      <input type="checkbox" class="sw" id="m_${c.id}_${m.id}" aria-label="${esc(m.nombre)}"${on ? ' checked' : ''} onchange="tocar('${c.id}','${m.id}','',this.checked)"></div>
-      <button class="mas" onclick="window.__mabre['${c.id + m.id}']=!window.__mabre['${c.id + m.id}'];pintar()">${ab ? '▴ Ocultar ítems' : `▾ Ítems (${nIt} de ${m.items.length})`}</button>
-      ${ab ? `<div class="its">${m.items.map(([i, n]) => `<label><input type="checkbox" class="sw chico" id="i_${c.id}_${m.id}_${i}"${itemOn(c, m.id, i) ? ' checked' : ''} onchange="tocar('${c.id}','${m.id}','${i}',this.checked)"> ${esc(n)}${on && itemOn(c, m.id, i) && tienePortal(c) && !hecho(c, m.id, i) ? ' <span class="st falta">por armar</span>' : ''}</label>`).join('')}</div>` : ''}</div>`; };
-  const extra = (cf.extra || []);
-  return `${CONF_OK === false ? `<div class="aviso2">${CFG.config_api ? 'No se pudo leer «Portales · Configuración». ' : 'Falta publicar el script «Portales · Configuración». '}Podés ver la configuración, pero los cambios no se guardan todavía.</div>` : ''}
-    <p class="sub" style="color:var(--muted);margin-top:0">${tienePortal(c) ? 'Lo que ya tiene el portal queda prendido. Lo que prendas y no esté armado queda marcado «falta armarlo» y lo hago yo.' : `Este cliente todavía no tiene portal (${c.prioridad}.º en la fila). Arranca con la plantilla «${esc((CFG.modulos.plantillas[c.plantilla] || {}).nombre || c.plantilla)}»: ajustala antes de armarlo.`} El cliente no ve estos controles.</p>
-    ${G.map(g => `<div class="mg"><h3><i style="background:${col[g.color]}"></i>${esc(g.nombre)}</h3><div class="mods2">${MODS().filter(m => m.grupo === g.id).map(md).join('')}</div></div>`).join('')}
-    <div class="mg"><h3><i style="background:var(--ink)"></i>A medida para ${esc(c.nombre)}</h3><div class="medida">
-      ${extra.map((x, k) => `<div class="md" style="margin-bottom:6px"><div class="t"><b>${esc(x.titulo)}</b><span class="st med">a medida</span><input type="checkbox" class="sw" id="x_${c.id}_${k}"${x.on ? ' checked' : ''} onchange="medida('${c.id}',${k},this.checked)"></div><div class="sub" style="color:var(--muted);font-size:13px">${esc(x.desc || '')}</div></div>`).join('') || '<div class="vacio2">Sin secciones a medida todavía.</div>'}
-      <div class="row"><input id="xt_${c.id}" placeholder="Nombre de la sección (ej. Control de autoelevadores)"><input id="xd_${c.id}" placeholder="Qué necesita el cliente"><button class="mini2 ok" onclick="medida('${c.id}',-1)">＋ Agregar</button></div>
-      <label class="sub" for="nota_${c.id}" style="display:block;margin-top:10px;color:var(--muted)">Notas para adaptar el portal a este cliente</label>
-      <textarea id="nota_${c.id}" onchange="nota('${c.id}',this.value)">${esc(cf.nota || '')}</textarea></div></div>
-    ${CAMBIOS[c.id] ? `<div class="guardar"><b>Hay cambios sin guardar</b><input id="cm_${c.id}" placeholder="Qué cambiaste (queda en el historial)"><button onclick="guardarConf('${c.id}',this)">Guardar</button><button class="sec" onclick="delete CAMBIOS['${c.id}'];pintar()">Descartar</button></div>`
-      : (CONFS[c.id] && CONFS[c.id]._act ? `<div class="ley2">Última modificación: ${esc(CONFS[c.id]._act)}</div>` : '')}`;
-}
 function medida(cid, k, val) {
   const cf = JSON.parse(JSON.stringify(confDe(cid))); cf.extra = cf.extra || [];
   if (k < 0) { const t = document.getElementById('xt_' + cid).value.trim(); if (!t) return; cf.extra.push({id: 'x' + Date.now().toString(36), titulo: t, desc: document.getElementById('xd_' + cid).value.trim(), on: true}); }
@@ -808,22 +1006,101 @@ function medida(cid, k, val) {
 }
 function nota(cid, v) { const cf = JSON.parse(JSON.stringify(confDe(cid))); cf.nota = v; CAMBIOS[cid] = cf; pintar(); }
 
-/* ----- Módulos: panel general ----- */
+/* ----- Módulos: orden de áreas y módulos (general y por cliente) ----- */
+let MV = LS('tab_mv') || 'areas';
+function ordenBaseDef() { const G = CFG.modulos.grupos; return {grupos: G.map(g => g.id), mods: Object.fromEntries(G.map(g => [g.id, MODS().filter(m => m.grupo === g.id).map(m => m.id)]))}; }
+function completar(o, base) {
+  const r = {grupos: (o && o.grupos || []).filter(g => base.grupos.includes(g)), mods: {}};
+  base.grupos.forEach(g => { if (!r.grupos.includes(g)) r.grupos.push(g); });
+  r.grupos.forEach(g => { const b = base.mods[g] || [], l = ((o && o.mods || {})[g] || []).filter(m => b.includes(m)); b.forEach(m => { if (!l.includes(m)) l.push(m); }); r.mods[g] = l; });
+  return r;
+}
+const ordenGeneral = () => completar(confDe('_orden').orden, ordenBaseDef());
+const ordenDe = cid => cid === '_orden' ? ordenGeneral() : completar(confDe(cid).orden, ordenGeneral());
+const grupoDef = id => CFG.modulos.grupos.find(g => g.id === id);
+function reordenar(scope, kind, a, b) {
+  const cf = JSON.parse(JSON.stringify(confDe(scope))); cf.orden = ordenDe(scope);
+  if (kind === 'grupos') cf.orden.grupos = a; else cf.orden.mods[a] = b;
+  CAMBIOS[scope] = cf; pintar();
+}
+function usarOrdenGeneral(cid) { const cf = JSON.parse(JSON.stringify(confDe(cid))); delete cf.orden; CAMBIOS[cid] = cf; pintar(); }
+function montarSort() {
+  if (!window.Sortable) return;
+  document.querySelectorAll('[data-sort-grupos]').forEach(el => Sortable.create(el, {handle: '.ha', animation: 160, ghostClass: 'fantasma',
+    onEnd: () => reordenar(el.dataset.sortGrupos, 'grupos', [...el.children].map(x => x.dataset.id))}));
+  document.querySelectorAll('[data-sort-mods]').forEach(el => Sortable.create(el, {handle: '.hm', animation: 160, ghostClass: 'fantasma',
+    onEnd: () => reordenar(el.dataset.sortMods, 'mods', el.dataset.grupo, [...el.children].map(x => x.dataset.id))}));
+}
+const COLG = {ver: 'var(--ver)', ot: 'var(--ot)', av: 'var(--av)', ok: 'var(--ok)', amb: 'var(--amb)'};
+const EST_CAT = {ya: ['en', 'ya existe'], facil: ['med', 'fácil'], nuevo: ['falta', 'nuevo']};
+const nomScope = id => id === '_orden' ? 'Orden general' : (cli(id) || {nombre: id}).nombre;
+function barraGuardar(ids) {
+  ids = ids.filter(id => CAMBIOS[id]); if (!ids.length) return '';
+  return `<div class="guardar"><b>Cambios sin guardar: ${ids.map(id => esc(nomScope(id))).join(', ')}</b>${ids.length === 1 ? `<input id="cm_${ids[0]}" placeholder="Qué cambiaste (queda en el historial)">` : ''}${ids.map(id => `<button onclick="guardarConf('${id}',this)">Guardar${ids.length > 1 ? ' ' + esc(nomScope(id)) : ''}</button>`).join('')}<button class="sec" onclick="${ids.map(id => `delete CAMBIOS['${id}']`).join(';')};pintar()">Descartar</button></div>`;
+}
+
+/* ----- Opción 1: Áreas (arrastrar y prender por cliente) ----- */
+function vAreas() {
+  const O = ordenGeneral(), ab = window.__aab = window.__aab || {};
+  const conCuantos = mid => CL().filter(c => modOn(c, mid)).length;
+  return `<p class="sub" style="color:var(--muted);margin:0 0 10px">Arrastrá las áreas desde ⠿ y los módulos desde ⋮⋮ para ordenarlos a tu gusto: ese orden se usa en el tablero y es el que arrancan los portales nuevos. Tocá un módulo para ver a qué clientes se lo prendiste.</p>
+    <div class="areas" data-sort-grupos="_orden">${O.grupos.map(gid => { const g = grupoDef(gid);
+      return `<div class="area" data-id="${gid}" style="--gc:${COLG[g.color]}"><div class="ah"><span class="ha" title="Arrastrar área" aria-label="Arrastrar área">⠿</span><b>${esc(g.nombre)}</b><small>${O.mods[gid].length} módulos</small></div>
+        <div class="ml" data-sort-mods="_orden" data-grupo="${gid}">${O.mods[gid].map(mid => { const m = modDef(mid), [ek, et] = EST_CAT[m.estado], n = conCuantos(mid), open = ab[mid];
+          return `<div class="mi" data-id="${mid}"><div class="mr"><span class="hm" title="Arrastrar módulo" aria-label="Arrastrar módulo">⋮⋮</span><button class="mn" onclick="window.__aab['${mid}']=!window.__aab['${mid}'];pintar()">${esc(m.nombre)}</button><span class="st ${ek}">${et}</span><span class="cnt2" title="Clientes con este módulo prendido">${n}</span></div>
+            ${open ? `<div class="mcl">${CL().map(c => `<label><input type="checkbox" class="sw chico" id="a_${mid}_${c.id}"${modOn(c, mid) ? ' checked' : ''} onchange="tocar('${c.id}','${mid}','',this.checked)"> ${esc(c.nombre)} <small>${estadoMod(c, mid)[1]}</small></label>`).join('')}</div>` : ''}</div>`; }).join('')}</div></div>`; }).join('')}</div>
+    ${barraGuardar(['_orden', ...Object.keys(CAMBIOS).filter(k => k !== '_orden')])}`;
+}
+
+/* ----- Opción 2: Constructor del portal (por cliente, con vista previa) ----- */
+function constructor(c) {
+  const O = ordenDe(c.id), cf = confDe(c.id), ab = window.__mabre = window.__mabre || {}, propio = !!cf.orden;
+  const md = m => { const on = modOn(c, m.id), [k, t] = estadoMod(c, m.id), op = ab[c.id + m.id], nIt = m.items.filter(([i]) => itemOn(c, m.id, i)).length;
+    return `<div class="md${on ? '' : ' off'}" data-id="${m.id}"><div class="t"><span class="hm" title="Arrastrar" aria-label="Arrastrar">⋮⋮</span><b>${esc(m.nombre)}</b><span class="st ${k}">${t}</span>
+      <input type="checkbox" class="sw" id="m_${c.id}_${m.id}" aria-label="${esc(m.nombre)}"${on ? ' checked' : ''} onchange="tocar('${c.id}','${m.id}','',this.checked)"></div>
+      <button class="mas" onclick="window.__mabre['${c.id + m.id}']=!window.__mabre['${c.id + m.id}'];pintar()">${op ? '▴ Ocultar ítems' : `▾ Ítems (${nIt} de ${m.items.length})`}</button>
+      ${op ? `<div class="its">${m.items.map(([i, n]) => `<label><input type="checkbox" class="sw chico" id="i_${c.id}_${m.id}_${i}"${itemOn(c, m.id, i) ? ' checked' : ''} onchange="tocar('${c.id}','${m.id}','${i}',this.checked)"> ${esc(n)}${on && itemOn(c, m.id, i) && tienePortal(c) && !hecho(c, m.id, i) ? ' <span class="st falta">por armar</span>' : ''}</label>`).join('')}</div>` : ''}</div>`; };
+  const extra = cf.extra || [];
+  const editor = `<div data-sort-grupos="${c.id}">${O.grupos.map(gid => { const g = grupoDef(gid);
+      return `<div class="mg" data-id="${gid}"><h3><span class="ha" title="Arrastrar área" aria-label="Arrastrar área">⠿</span><i style="background:${COLG[g.color]}"></i>${esc(g.nombre)}</h3><div class="mods2" data-sort-mods="${c.id}" data-grupo="${gid}">${O.mods[gid].map(mid => md(modDef(mid))).join('')}</div></div>`; }).join('')}</div>
+    <div class="mg"><h3><i style="background:var(--ink)"></i>A medida para ${esc(c.nombre)}</h3><div class="medida">
+      ${extra.map((x, k) => `<div class="md" style="margin-bottom:6px"><div class="t"><b>${esc(x.titulo)}</b><span class="st med">a medida</span><input type="checkbox" class="sw" id="x_${c.id}_${k}"${x.on ? ' checked' : ''} onchange="medida('${c.id}',${k},this.checked)"></div><div class="sub" style="color:var(--muted);font-size:13px">${esc(x.desc || '')}</div></div>`).join('') || '<div class="vacio2">Sin secciones a medida todavía.</div>'}
+      <div class="row"><input id="xt_${c.id}" placeholder="Nombre de la sección (ej. Control de autoelevadores)"><input id="xd_${c.id}" placeholder="Qué necesita el cliente"><button class="mini2 ok" onclick="medida('${c.id}',-1)">＋ Agregar</button></div>
+      <label class="sub" for="nota_${c.id}" style="display:block;margin-top:10px;color:var(--muted)">Notas para adaptar el portal a este cliente</label>
+      <textarea id="nota_${c.id}" onchange="nota('${c.id}',this.value)">${esc(cf.nota || '')}</textarea></div></div>`;
+  const prev = `<div class="tel" style="--cc:${c.color}"><div class="tel-cab"><b>${esc(c.nombre)}</b><small>Portal de Higiene y Seguridad</small></div>
+    <div class="tel-tabs">${O.grupos.filter(g => O.mods[g].some(m => modOn(c, m))).map(g => `<span>${esc(grupoDef(g).nombre.split(/[ ,]/)[0])}</span>`).join('')}</div>
+    <div class="tel-body">${O.grupos.map(g => O.mods[g].filter(m => modOn(c, m)).map(mid => { const m = modDef(mid), its = m.items.filter(([i]) => itemOn(c, mid, i));
+      return `<div class="tel-sec" style="--gc:${COLG[grupoDef(g).color]}"><b>${esc(m.nombre)}${tienePortal(c) && !hecho(c, mid) ? ' <em>🚧</em>' : ''}</b><div>${its.map(([, n]) => `<span>${esc(n)}</span>`).join('')}</div></div>`; }).join('')).join('')}
+      ${extra.filter(x => x.on).map(x => `<div class="tel-sec" style="--gc:var(--ink)"><b>${esc(x.titulo)} <em>a medida</em></b><div><span>${esc(x.desc || '')}</span></div></div>`).join('')}</div></div>`;
+  return `${CONF_OK === false ? `<div class="aviso2">${CFG.config_api ? 'No se pudo leer «Portales · Configuración». ' : 'Falta publicar el script «Portales · Configuración». '}Podés ver la configuración, pero los cambios no se guardan todavía.</div>` : ''}
+    <p class="sub" style="color:var(--muted);margin-top:0">${tienePortal(c) ? 'Lo que ya tiene el portal queda prendido; lo que prendas y no esté armado queda «por armar» (lo hago yo).' : `Todavía sin portal (${c.prioridad}.º en la fila): arranca con la plantilla «${esc((CFG.modulos.plantillas[c.plantilla] || {}).nombre || c.plantilla)}».`} Arrastrá ⠿ y ⋮⋮ para cambiar el orden sólo en este cliente${propio ? ` · <a href="javascript:void(0)" onclick="usarOrdenGeneral('${c.id}')">volver al orden general</a>` : ''}. El cliente no ve estos controles.</p>
+    <div class="cons"><div class="cons-ed">${editor}</div><div class="cons-pv"><div class="k">Así lo vería el cliente</div>${prev}</div></div>
+    ${barraGuardar([c.id])}${!CAMBIOS[c.id] && CONFS[c.id] && CONFS[c.id]._act ? `<div class="ley2">Última modificación: ${esc(CONFS[c.id]._act)}</div>` : ''}`;
+}
+const editorModulos = constructor;
+
+/* ----- Panel Módulos con las tres vistas ----- */
 function vModulos() {
-  const G = CFG.modulos.grupos, M = MODS(), P = CFG.modulos.plantillas;
+  const M = MODS(), P = CFG.modulos.plantillas, O = ordenGeneral(), MO = O.grupos.flatMap(g => O.mods[g].map(modDef));
   const pend = []; CL().forEach(c => { if (!tienePortal(c)) return; M.forEach(m => { const [k, t] = estadoMod(c, m.id); if (k === 'falta') pend.push({c, m, t}); }); (confDe(c.id).extra || []).forEach(x => x.on && pend.push({c, m: {nombre: x.titulo}, t: 'A medida'})); });
-  const orden = Object.keys(P); let filas = '';
-  orden.forEach(pl => { const cs = CL().filter(c => c.plantilla === pl).sort((a, b) => a.prioridad - b.prioridad); if (!cs.length) return;
-    filas += `<tr class="tp"><td colspan="${M.length + 1}">${esc(P[pl].nombre)}</td></tr>` + cs.map(c => `<tr><td><a onclick="SOLAPA='modulos';location.hash='c-${c.id}'">${esc(c.nombre)}</a><small>${tienePortal(c) ? 'con portal' : `sin portal · ${c.prioridad}.º`}${CAMBIOS[c.id] ? ' · sin guardar' : ''}</small></td>${M.map(m => {
-      const [k] = estadoMod(c, m.id), cls = k === 'en' ? 'en' : k === 'falta' || k === 'med' ? 'falta' : '';
-      return `<td><button class="cel ${cls}" title="${esc(m.nombre)} · ${esc(c.nombre)}: ${esc(estadoMod(c, m.id)[1])}" aria-label="${esc(m.nombre)} para ${esc(c.nombre)}" onclick="tocar('${c.id}','${m.id}','',!modOn(cli('${c.id}'),'${m.id}'))"></button></td>`; }).join('')}</tr>`).join(''); });
-  const sinG = Object.keys(CAMBIOS);
-  return `<section><h2>Módulos por cliente <small>tocá un cuadro para prender o apagar · tocá el cliente para elegir ítem por ítem</small></h2>
+  const vb = (k, t, d) => `<button class="${MV === k ? 'on' : ''}" onclick="MV='${k}';LSset('tab_mv','${k}');pintar()" title="${d}">${t}</button>`;
+  let cuerpo = '';
+  if (MV === 'constructor') { const sel = window.__ccli || CL()[0].id, c = cli(sel);
+    cuerpo = `<div class="filtros"><label for="ccli" class="k" style="margin-right:6px">Cliente</label><select id="ccli" class="selcli" onchange="window.__ccli=this.value;pintar()">${CL().map(x => `<option value="${x.id}"${x.id === sel ? ' selected' : ''}>${esc(x.nombre)}${tienePortal(x) ? '' : ' (sin portal)'}</option>`).join('')}</select></div>${constructor(c)}`; }
+  else if (MV === 'cuadro') {
+    let filas = ''; Object.keys(P).forEach(pl => { const cs = CL().filter(c => c.plantilla === pl).sort((a, b) => a.prioridad - b.prioridad); if (!cs.length) return;
+      filas += `<tr class="tp"><td colspan="${M.length + 1}">${esc(P[pl].nombre)}</td></tr>` + cs.map(c => `<tr><td><a onclick="SOLAPA='modulos';location.hash='c-${c.id}'">${esc(c.nombre)}</a><small>${tienePortal(c) ? 'con portal' : `sin portal · ${c.prioridad}.º`}${CAMBIOS[c.id] ? ' · sin guardar' : ''}</small></td>${MO.map(m => {
+        const [k, t] = estadoMod(c, m.id), cls = k === 'en' ? 'en' : k === 'falta' || k === 'med' ? 'falta' : '';
+        return `<td><button class="cel ${cls}" title="${esc(m.nombre)} · ${esc(c.nombre)}: ${esc(t)}" aria-label="${esc(m.nombre)} para ${esc(c.nombre)}" onclick="tocar('${c.id}','${m.id}','',!modOn(cli('${c.id}'),'${m.id}'))"></button></td>`; }).join('')}</tr>`).join(''); });
+    cuerpo = `<div class="ley2"><span><span class="cel en"></span> en el portal</span><span><span class="cel falta"></span> prendido, falta armarlo</span><span><span class="cel"></span> apagado</span><span>Las columnas siguen el orden de la vista Áreas.</span></div>
+      <div class="matwrap"><table class="mat"><thead><tr class="gr"><th></th>${O.grupos.map(g => `<th colspan="${O.mods[g].length}">${esc(grupoDef(g).nombre)}</th>`).join('')}</tr>
+        <tr><th>Cliente</th>${MO.map(m => `<th title="${esc(m.nombre)}"><span>${esc(m.nombre)}</span></th>`).join('')}</tr></thead><tbody>${filas}</tbody></table></div>${barraGuardar(Object.keys(CAMBIOS))}`;
+  } else cuerpo = vAreas();
+  return `<section><h2>Módulos por cliente</h2>
     ${CONF_OK === false ? '<div class="aviso2">Falta publicar (o no responde) el script «Portales · Configuración»: podés mirar, pero los cambios todavía no se guardan.</div>' : ''}
-    <div class="ley2"><span><span class="cel en"></span> en el portal</span><span><span class="cel falta"></span> prendido, falta armarlo</span><span><span class="cel"></span> apagado</span></div>
-    <div class="matwrap"><table class="mat"><thead><tr class="gr"><th></th>${G.map(g => { const n = M.filter(m => m.grupo === g.id).length; return `<th colspan="${n}">${esc(g.nombre)}</th>`; }).join('')}</tr>
-      <tr><th>Cliente</th>${M.map(m => `<th title="${esc(m.nombre)}"><span>${esc(m.nombre)}</span></th>`).join('')}</tr></thead><tbody>${filas}</tbody></table></div>
-    ${sinG.length ? `<div class="guardar"><b>Cambios sin guardar en ${sinG.map(id => esc(cli(id).nombre)).join(', ')}</b>${sinG.map(id => `<button onclick="guardarConf('${id}',this)">Guardar ${esc(cli(id).nombre)}</button>`).join('')}<button class="sec" onclick="CAMBIOS={};pintar()">Descartar</button></div>` : ''}
+    <div class="filtros"><span class="k" style="margin-right:4px">Vista</span>${vb('areas', '🧩 Áreas', 'Ordenar arrastrando y prender por cliente')}${vb('constructor', '📱 Constructor', 'Un cliente con vista previa de su portal')}${vb('cuadro', '▦ Cuadro', 'Todos los clientes y módulos de una')}</div>
+    ${cuerpo}
     <h2 style="margin-top:22px">Por armar <small>${pend.length} · lo que prendiste en un portal y todavía no está hecho</small></h2>
     <div class="cola">${pend.map(x => `<div onclick="SOLAPA='modulos';location.hash='c-${x.c.id}'"><b>·</b>${esc(x.c.nombre)} · ${esc(x.m.nombre)} <span class="chipc">${esc(x.t)}</span></div>`).join('') || '<div class="vacio2">Nada pendiente.</div>'}</div></section>`;
 }
