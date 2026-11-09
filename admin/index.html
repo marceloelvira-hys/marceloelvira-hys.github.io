@@ -533,10 +533,16 @@ async function llave(clave) {
   return crypto.subtle.deriveBits({name: 'PBKDF2', salt: b64(SAL), iterations: ITER, hash: 'SHA-256'}, k, 256);
 }
 async function abrir(raw) {
-  const enc = new Uint8Array(await (await fetch('d.enc', {cache: 'no-store'})).arrayBuffer());
   const k = await crypto.subtle.importKey('raw', raw, 'AES-GCM', false, ['decrypt']);
-  const pt = await crypto.subtle.decrypt({name: 'AES-GCM', iv: enc.slice(0, 12)}, k, enc.slice(12));
-  return JSON.parse(new TextDecoder().decode(pt));
+  for (const f of ['d.enc', 'p.enc']) {            // p.enc = usuario de prueba (sólo en la página de Lula)
+    try {
+      const r = await fetch(f, {cache: 'no-store'}); if (!r.ok) continue;
+      const enc = new Uint8Array(await r.arrayBuffer());
+      const pt = await crypto.subtle.decrypt({name: 'AES-GCM', iv: enc.slice(0, 12)}, k, enc.slice(12));
+      return JSON.parse(new TextDecoder().decode(pt));
+    } catch (e) {}
+  }
+  throw new Error('clave');
 }
 document.getElementById('fl').onsubmit = async e => {
   e.preventDefault();
@@ -769,7 +775,7 @@ function iniciar() {
   <header><div class="wrap">
     <img src="logo_jea.png" alt="JEA">
     <img class="leon" src="data:image/svg+xml;base64,${LEON}" alt="">
-    <div><h1>${LECT() ? 'Colegios' : 'Tablero de clientes'}</h1><div class="sub">${LECT() ? 'Higiene y Seguridad · vista de Lula' : 'Lic. Marcelo Elvira · Higiene y Seguridad'}</div></div>
+    <div><h1>${LECT() ? 'Colegios' : 'Tablero de clientes'}</h1><div class="sub">${LECT() ? (CFG.prueba ? 'Usuario de prueba · ve lo mismo que Lula' : 'Higiene y Seguridad · vista de Lula') : 'Lic. Marcelo Elvira · Higiene y Seguridad'}</div></div>
     <nav class="tabs" aria-label="Vistas">${LECT() ? '<a href="#torre" data-v="torre">Colegios</a><a href="#agenda" data-v="agenda">Agenda</a><a href="#notas" data-v="notas">Notas</a>' : '<a href="#torre" data-v="torre">Torre</a><a href="#bandeja" data-v="bandeja">Bandeja</a><a href="#agenda" data-v="agenda">Agenda</a><a href="#modulos" data-v="modulos">Módulos</a>'}</nav>
     <div class="der"><label class="sub" for="tema">Estilo</label><select id="tema">${TEMAS.map(t => `<option value="${t[0]}"${t[0] === tema ? ' selected' : ''}>${t[1]}</option>`).join('')}</select>
       <span id="hora"></span><button id="act">↻ Actualizar</button></div>
@@ -1166,12 +1172,14 @@ let NOTAS = null, NOTA_MSG = {};
 async function leerNotas() {
   if (!CFG.config_api) return;
   let q = '';
+  if (CFG.prueba) { NOTAS = []; return; }
   if (LECT()) q = 'l=' + encodeURIComponent(CFG.lula_t);
   else { let t = LS('cfg_t'); if (!t && CLAVE_ESCRITA) { try { t = await tokenConf(); } catch (e) {} } if (!t) return; q = 't=' + encodeURIComponent(t); }
   try { const r = await (await fetch(CFG.config_api + '?accion=notas&' + q, {cache: 'no-store'})).json(); if (r.ok) { NOTAS = r.notas || []; if (!LECT()) sincronizarAgenda(); pintar(); } } catch (e) {}
 }
 async function mandarNota(cid, btn) {
   const ta = document.getElementById('nt_' + cid), texto = ta.value.trim(); if (!texto) return;
+  if (CFG.prueba) { NOTA_MSG[cid] = 'Estás con el usuario de prueba: las notas no se envían.'; pintar(); return; }
   btn.disabled = true; btn.textContent = 'Enviando…';
   try {
     const r = await (await fetch(CFG.config_api, {method: 'POST', headers: {'Content-Type': 'text/plain'}, body: JSON.stringify({tipo: 'nota', l: CFG.lula_t, cliente: cid, nombre: (cli(cid) || {}).nombre || 'General', texto})})).json();
@@ -1236,7 +1244,7 @@ function tarjetaLula() {
   const pend = (NOTAS || []).filter(n => !n.estado).length;
   return `<section><h2>Página de Lula <small>colegios en modo lectura · ${L.ids.length} clientes</small></h2><div class="nop" style="display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center">
     <a class="mini2" href="../lula/" target="_blank">Abrir como la ve Lula ↗</a><span>Clave: ${clave(L.clave)}</span>${btnCopiar(txt, '📋 Copiar acceso para mandarle')}
-    <span class="sub3">Notas: ${NOTAS === null ? 'tocá Bandeja para verlas' : pend ? `<b>${pend} nueva${pend > 1 ? 's' : ''}</b> en la Bandeja` : 'ninguna nueva'} · Resumen por mail los lunes 8 h a ${esc(L.mail)}</span></div></section>`;
+    <span class="sub3">Usuario de prueba: clave «prueba» (ve lo mismo que Lula; sus notas no se envían)</span><span class="sub3">Notas: ${NOTAS === null ? 'tocá Bandeja para verlas' : pend ? `<b>${pend} nueva${pend > 1 ? 's' : ''}</b> en la Bandeja` : 'ninguna nueva'} · Resumen por mail los lunes 8 h a ${esc(L.mail)}</span></div></section>`;
 }
 
 /* ----- Legajo ----- */
