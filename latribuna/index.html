@@ -651,7 +651,7 @@ body{background:#F4F1EA}
 const CIFRADO = true;
 const SAL = "vo0eGRusTLrEJuWxs8RDjA==", ITER = 310000;
 // Cada persona tiene su clave: con ella se abre su llave (la de los datos + su nombre + su clave para la planilla).
-const API_PUBLICA = "";   // el ingreso lo valida la planilla de Marcelo
+const API_PUBLICA = "https://script.google.com/macros/s/AKfycbzDqdTrxkgNPAef6aqEmW4Qbcu-ZRHQDqT9XGBV0kVZ8nmllO1AL3C3K7iUFE4a9Y3P/exec";   // el ingreso lo valida la planilla de Marcelo
 let USUARIO = CIFRADO ? null : {nombre: "Vista previa", admin: /(^|[#&])lic=/.test(location.hash)};
 let ADMIN = false;
 let DATA = null;
