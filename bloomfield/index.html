@@ -1,0 +1,1054 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Emergencias · Bloomfield Kindergarten</title>
+<meta name="description" content="Bloomfield Kindergarten: teléfonos de emergencia, roles, cómo se sale de cada nivel, recorrido al punto de reunión, alertas del SMN y qué hacer en cada nivel.">
+<meta name="theme-color" content="#B3202C">
+<style>
+:root{--bordo:#B3202C;--bordo-os:#6E1E2E;--bordo-cl:#F7E4E6;--bordo-li:#E8BCC1;
+--grafito:#3F444A;--gris:#666B70;--tinta:#1B221E;--linea:#DCE3DE;--fondo:#F4F7F5;--blanco:#fff;
+--ok:#1D6B44;--am:#F2C230;--na:#E8822A;--ro:#C62E2E;--cp:#3F444A}
+*{box-sizing:border-box}
+body{margin:0;background:var(--fondo);color:var(--tinta);font-family:-apple-system,"Segoe UI",Roboto,Calibri,Arial,sans-serif;font-size:17px;line-height:1.45}
+header{background:var(--bordo);color:#fff;padding:18px 16px 20px}
+.hd{max-width:640px;margin:0 auto;display:flex;align-items:center;gap:14px}
+.logo{flex:0 0 auto}
+.logo img{display:block;width:118px;height:auto}
+header small{display:block;letter-spacing:.1em;font-size:11.5px;font-weight:700;opacity:.85;text-transform:uppercase}
+header h1{margin:4px 0 3px;font-size:24px;line-height:1.15}
+header p{margin:0;opacity:.9;font-size:14.5px}
+main{max-width:640px;margin:0 auto;padding:12px 16px 36px}
+nav{display:flex;gap:8px;overflow-x:auto;padding:4px 0 8px}
+nav a{flex:0 0 auto;text-decoration:none;color:var(--bordo);background:var(--blanco);border:1px solid var(--bordo-li);border-radius:20px;padding:7px 13px;font-size:14px;font-weight:700}
+section{background:var(--blanco);border:1px solid var(--linea);border-radius:12px;padding:16px;margin:12px 0}
+h2{margin:0 0 10px;font-size:20px;color:var(--bordo)}
+h3{margin:14px 0 6px;font-size:16px}
+ol,ul{margin:6px 0 0;padding-left:22px}
+li{margin:5px 0}
+.btn{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;width:100%;padding:14px 16px;margin:8px 0;border-radius:10px;text-decoration:none;font-weight:700;font-size:17px;color:#fff;background:var(--bordo);border:0}
+.btn.sec{background:var(--grafito)}
+.btn.tuyo{background:var(--ok);outline:3px solid var(--ok);outline-offset:3px}
+.tag{display:inline-block;font-size:12px;font-weight:700;padding:2px 8px;border-radius:10px;background:#fff;color:var(--ok)}
+.nota{font-size:14px;color:var(--gris);margin:8px 0 0}
+
+/* Ficha de la app */
+.app{display:flex;gap:12px;align-items:center;border:1px solid var(--linea);border-radius:12px;padding:12px;margin:4px 0 10px;background:#FBFAFA}
+.app img{width:64px;height:64px;border-radius:15px;box-shadow:0 1px 4px rgba(0,0,0,.18);flex:0 0 auto}
+.app b{display:block;font-size:17px;line-height:1.2}
+.app span{display:block;font-size:13.5px;color:var(--gris)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.chip{font-size:12px;font-weight:700;padding:2px 8px;border-radius:10px;background:var(--bordo-cl);color:var(--bordo)}
+.chip.of{background:#E3F2E9;color:var(--ok)}
+.ofi{list-style:none;padding:0;margin:4px 0 6px;font-size:15px}
+.ofi li{display:flex;gap:8px;margin:5px 0}
+.ofi li::before{content:"✓";color:var(--ok);font-weight:800;flex:0 0 auto}
+
+/* Niveles */
+.primero{display:flex;gap:10px;align-items:center;background:var(--bordo);color:#fff;border-radius:10px;padding:10px 12px;margin:0 0 10px;font-size:15.5px}
+.primero b{font-size:16px}
+.primero i{font-style:normal;font-size:22px;line-height:1}
+.lvl{border:1px solid var(--linea);border-radius:12px;overflow:hidden;margin:10px 0}
+.lvl-h{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px;padding:9px 13px;color:#fff}
+.lvl-h b{font-size:17px}
+.lvl-h em{font-style:normal;font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.06em;padding:2px 8px;border-radius:10px;background:rgba(255,255,255,.22)}
+.lvl-b{padding:8px 13px 10px;border-left:6px solid}
+.que{margin:0 0 4px;font-size:14.5px;color:var(--gris)}
+.que strong{color:var(--tinta)}
+.acc{list-style:none;padding:0;margin:0}
+.acc li{position:relative;padding-left:24px;margin:5px 0;font-size:16px}
+.acc li::before{content:"";position:absolute;left:4px;top:.5em;width:10px;height:10px;border-radius:3px;background:currentColor;opacity:.9}
+.lvl.am .lvl-h{background:var(--am);color:#3A2E00}.lvl.am .lvl-h em{background:rgba(0,0,0,.1)}.lvl.am .lvl-b{border-color:var(--am);background:#FFFBEC}.lvl.am .acc li::before{background:#C99A0E}
+.lvl.na .lvl-h{background:var(--na)}.lvl.na .lvl-b{border-color:var(--na);background:#FEF3EA}.lvl.na .acc li::before{background:var(--na)}
+.lvl.ro .lvl-h{background:var(--ro)}.lvl.ro .lvl-b{border-color:var(--ro);background:#FCEDED}.lvl.ro .acc li::before{background:var(--ro)}
+.lvl.cp .lvl-h{background:var(--cp)}.lvl.cp .lvl-b{border-color:var(--cp);background:#F1F2F3}.lvl.cp .acc li::before{background:var(--cp)}
+.duda{display:block;text-align:center;text-decoration:none;font-weight:700;color:var(--bordo);background:var(--bordo-cl);border-radius:10px;padding:11px;margin-top:10px}
+
+/* Teléfonos */
+.sub{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gris);margin:14px 0 6px}
+.tels{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tel{display:flex;flex-direction:column;justify-content:space-between;color:#fff;background:var(--bordo);border-radius:10px;padding:11px 12px 10px}
+.tel.dc{background:var(--grafito)}
+.tel .llamar{display:block;text-decoration:none;color:#fff}
+.tel strong{display:block;font-size:30px;line-height:1.05}
+.tel span{font-size:14px}
+.ag{display:inline-block;align-self:flex-start;margin-top:8px;text-decoration:none;font-weight:700;font-size:14px;padding:6px 11px;border-radius:16px;background:#fff;color:var(--bordo)}
+.tel.dc .ag{color:var(--grafito)}
+.svs{border:2px solid var(--bordo-li);border-radius:10px;overflow:hidden}
+.sv{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;background:var(--blanco)}
+.sv+.sv{border-top:1px solid var(--bordo-li)}
+.sv b{display:block;font-size:16px}
+.sv small{display:block;font-size:13px;color:var(--gris)}
+.sv .der{display:flex;flex-direction:column;align-items:flex-end;gap:5px}
+.sv .num{font-size:18px;font-weight:700;color:var(--bordo);white-space:nowrap;text-decoration:none}
+.sv .ag{margin-top:0;background:var(--bordo);color:#fff;font-size:13px;padding:5px 10px}
+
+/* Recorrido */
+.cap{margin:8px 0 0;min-height:44px;padding:9px 12px;border-radius:10px;background:#F1F2F3;font-size:15px;line-height:1.35;transition:background .3s}
+.cap.cr{background:#FCEBDD}
+.cap.ok{background:#E3F2E9}
+.prog{height:5px;background:var(--linea);border-radius:3px;margin:8px 0 0;overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:var(--bordo)}
+.ctl{display:flex;gap:8px}
+.ctl .ver{flex:1}
+.ctl .rei{flex:0 0 58px;font-size:22px}
+#croquis .grp{stroke:#fff;stroke-width:1.6}
+#croquis .alarma{fill:none;stroke:#C62E2E;stroke-width:4;opacity:0}
+
+.niv{display:flex;gap:6px;margin:4px 0 10px}
+.niv button{flex:1;padding:10px 6px;border-radius:10px;border:2px solid var(--linea);background:#fff;font:inherit;font-size:15px;font-weight:700;color:var(--tinta)}
+.niv button.on[data-n=ambos]{background:var(--bordo);border-color:var(--bordo);color:#fff}
+.niv button.on[data-n=prim]{background:#3C9A68;border-color:#3C9A68;color:#fff}
+.niv button.on[data-n=sec]{background:#1F5FA8;border-color:#1F5FA8;color:#fff}
+#croquis{border:1px solid var(--linea);border-radius:12px;overflow:hidden;background:#D3DAD5;touch-action:pan-y}
+#croquis svg{display:block;width:100%;height:auto}
+#croquis [data-id=leyenda]{display:none}
+#croquis .fade{opacity:.13;transition:opacity .3s}
+#croquis g,#croquis polyline{transition:opacity .3s}
+#croquis .ring{fill:rgba(232,130,42,.25);stroke:#E8822A;stroke-width:3;opacity:0}
+#croquis .ring.on{animation:pulso 1.2s ease-out 3}
+@keyframes pulso{0%{opacity:1;r:9}100%{opacity:0;r:26}}
+#croquis .dot{opacity:0}
+.ver{margin-top:10px}
+.ley{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--gris);margin:8px 0 2px}
+.ley i{display:inline-block;width:18px;height:5px;border-radius:3px;vertical-align:middle;margin-right:5px}
+.pasos2{list-style:none;padding:0;margin:10px 0 0}
+.pasos2 li{position:relative;margin:0;padding:0 0 10px 26px}
+.pasos2 li::before{content:"";position:absolute;left:8px;top:14px;bottom:-2px;width:3px;background:var(--linea)}
+.pasos2 li:last-child::before{display:none}
+.pasos2 .pt{position:absolute;left:2px;top:6px;width:15px;height:15px;border-radius:50%;background:#fff;border:3px solid var(--c)}
+.pasos2 .tx{display:block;font-weight:700}
+.pasos2 li.cr .pt{background:#E8822A;border-color:#E8822A}
+.pasos2 li.cr button{display:block;width:100%;text-align:left;font:inherit;border:0;border-radius:10px;padding:8px 11px;background:#E8822A;color:#fff}
+.pasos2 li.cr button b{display:block}
+.pasos2 li.cr button small{font-size:13px;opacity:.95}
+.pasos2 li.fin .tx{color:var(--c)}
+.hint{font-size:14px;color:var(--gris);margin:10px 0 0}
+.pasos{background:#FBFAFA;border:1px dashed var(--bordo-li);border-radius:10px;padding:8px 12px 10px;margin-top:4px;font-size:15px}
+.pasos p{margin:4px 0}
+footer{text-align:center;font-size:13px;color:var(--gris);padding:6px 16px 26px}
+
+/* Menú inicial */
+.menu{display:block;padding:4px 0 2px}
+.grp{font-size:12.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--gris);margin:12px 2px 6px}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tiles.t3{grid-template-columns:1fr 1fr 1fr}
+.tile{display:flex;flex-direction:column;gap:6px;text-decoration:none;color:var(--tinta);background:var(--blanco);border:1px solid var(--bordo-li);border-radius:14px;padding:12px;min-height:96px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.tile .ic{width:34px;height:34px;padding:7px;border-radius:10px;background:var(--bordo-cl);color:var(--bordo);flex:0 0 auto}
+.tile b{display:block;font-size:15.5px;line-height:1.2}
+.tile small{display:block;font-size:12.5px;color:var(--gris);line-height:1.25;margin-top:2px}
+.tile.big{flex-direction:row;align-items:center;gap:12px;background:var(--bordo);color:#fff;border-color:var(--bordo);min-height:0;margin-bottom:8px;padding:14px}
+.tile.big .ic{width:46px;height:46px;padding:10px;background:rgba(255,255,255,.18);color:#fff}
+.tile.big b{font-size:18px}.tile.big small{color:#DCE3F0;font-size:13.5px}
+.tile:active{transform:scale(.98)}
+.bigrp{font-size:12.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--gris);margin:22px 2px -4px}
+.sh{display:flex;align-items:center;gap:10px;margin:0 0 10px}
+.sh h2{margin:0;flex:1}
+.ic.sm{width:32px;height:32px;padding:6px;border-radius:9px;background:var(--bordo-cl);color:var(--bordo);flex:0 0 auto}
+.up{font-size:12.5px;font-weight:700;color:var(--gris);text-decoration:none;white-space:nowrap}
+/* Roles */
+.rol{border:1px solid var(--linea);border-radius:12px;padding:10px 12px;margin:0 0 8px;background:#FBFAFA}
+.rol.co{background:var(--bordo-cl);border-color:var(--bordo-li)}
+.rol .rh{display:flex;flex-direction:column}
+.rol .rt{font-size:12.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--bordo)}
+.rol b{font-size:18px}
+.rol p{margin:4px 0 0;font-size:15px}
+.turnos{display:flex;gap:6px;margin:6px 0 8px}
+.turnos button{flex:1;padding:9px 6px;border-radius:10px;border:2px solid var(--linea);background:#fff;font:inherit;font-size:14.5px;font-weight:700;color:var(--tinta)}
+.turnos button.on{background:var(--bordo);border-color:var(--bordo);color:#fff}
+.pi{display:grid;grid-template-columns:86px 1fr;gap:8px;align-items:start;padding:8px 0;border-top:1px solid var(--linea)}
+.pi>b{font-size:15px;color:var(--bordo);padding-top:4px}
+.pi>div{display:flex;flex-wrap:wrap;gap:5px}
+.pi i{flex:0 0 100%;font-style:normal;font-size:12px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--gris);margin-top:2px}
+.nm{display:inline-block;font-size:14.5px;padding:4px 10px;border-radius:14px;background:var(--fondo);border:1px solid var(--linea)}
+.cortes{display:grid;gap:8px}
+.cg{border-radius:12px;padding:8px 10px;border:2px solid}
+.cg.p{border-color:#3C9A68}.cg.s{border-color:#1F5FA8}
+.cg .lb{display:inline-block;font-size:12.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#fff;padding:2px 10px;border-radius:10px;margin-bottom:4px}
+.cg.p .lb{background:#3C9A68}.cg.s .lb{background:#1F5FA8}
+.ct{display:grid;grid-template-columns:28px 1fr;column-gap:8px;padding:5px 0}
+.ct+.ct{border-top:1px dashed var(--linea)}
+.ct em{grid-row:1/3;width:26px;height:26px;border-radius:50%;background:#E8822A;color:#fff;font-style:normal;font-weight:800;display:flex;align-items:center;justify-content:center;align-self:center}
+.ct span{font-size:13.5px;color:var(--gris)}
+.ct b{font-size:16px}
+.vest{display:flex;gap:10px;align-items:center;margin-top:12px;padding:10px 12px;border-radius:10px;background:#FEF3EA;font-size:14.5px}
+.vest .ic.sm{background:#E8822A;color:#fff}
+@media (max-width:380px){.tiles.t3{grid-template-columns:1fr 1fr}}
+
+.anim{border-radius:12px;overflow:hidden;border:1px solid var(--linea);background:#fff}
+.anim iframe{display:block;width:100%;aspect-ratio:1080/2560;border:0}
+.vid{border-radius:12px;overflow:hidden;background:#000;border:1px solid var(--linea)}
+.vid video{display:block;width:100%;height:auto;aspect-ratio:16/9;background:#000}
+#cap,.prog,.ctl{display:none!important}
+.duda{display:block;text-decoration:none;margin-top:16px;padding:14px;border-radius:12px;text-align:center;background:repeating-linear-gradient(45deg,#111 0 14px,#C62E2E 14px 28px)}
+.duda span{display:block;background:#C62E2E;border-radius:8px;padding:16px 12px;color:#FFD400;font-size:26px;line-height:1.2;font-weight:900;text-shadow:0 2px 0 rgba(0,0,0,.35)}
+.duda span b{display:block;font-size:48px;line-height:1.05;letter-spacing:.02em;margin-top:6px}
+.duda span b small{display:block;font-size:30px;letter-spacing:0}
+
+.rol2{border:1px solid var(--linea);border-radius:14px;margin:0 0 10px;overflow:hidden;background:#fff}
+.rol2>.rh2{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--fondo)}
+.rol2.co>.rh2{background:var(--bordo);color:#fff}
+.rh2 .av{flex:0 0 40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--bordo-cl);color:var(--bordo)}
+.rol2.co .rh2 .av{background:rgba(255,255,255,.2);color:#fff}
+.rh2 .av svg{width:22px;height:22px}
+.rh2 small{display:block;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;opacity:.85}
+.rh2 b{display:block;font-size:17.5px;line-height:1.2}
+.its{padding:6px 12px 10px}
+.it{display:grid;grid-template-columns:30px 1fr;gap:8px;align-items:center;padding:5px 0;font-size:15px;line-height:1.3}
+.it+.it{border-top:1px dashed var(--linea)}
+.ii{width:30px;height:30px;padding:6px;border-radius:9px;background:var(--bordo-cl);color:var(--bordo)}
+.rol2 h4{margin:4px 12px 0;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--gris)}
+.lp{padding:4px 12px 10px}
+.lp .fl2{display:grid;grid-template-columns:78px 1fr;gap:6px;padding:7px 0;border-top:1px solid var(--linea);align-items:start}
+.lp .fl2:first-child{border-top:0}
+.lp .fl2>b{font-size:15px;color:var(--bordo);padding-top:3px}
+.lp .nm2{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin:2px 0}
+.lp .nm2 i{font-style:normal;font-size:11.5px;font-weight:800;color:var(--gris);text-transform:uppercase;letter-spacing:.04em;min-width:58px}
+.lp .nm2 span.n{font-weight:700;font-size:15px}
+.ch{font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#fff;padding:2px 7px;border-radius:9px}
+.ch.p{background:#3C9A68}.ch.s{background:#1F5FA8}
+.esq{margin:4px 0 10px;border:1px solid var(--linea);border-radius:12px;background:#FBFAFA;padding:6px}
+.esq svg{display:block;width:100%;height:auto}
+.nv{font-size:12.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#fff;padding:3px 9px;border-radius:10px;white-space:nowrap}
+.nv.p{background:#3C9A68}.nv.s{background:#1F5FA8}
+.regla{display:grid;grid-template-columns:124px 20px 1fr;align-items:center;gap:8px;margin:8px 0;padding:10px 12px;border-radius:12px;background:var(--fondo);font-size:17.5px}
+.regla .nv{font-size:14.5px;padding:6px 0;border-radius:14px;text-align:center}.regla b{white-space:nowrap}
+.regla .fl{font-size:24px;font-weight:800;color:var(--gris)}
+.tp{display:flex;gap:6px;margin:6px 0 8px}.tp button{flex:1;padding:8px 4px;border-radius:10px;border:2px solid var(--linea);background:#fff;font:inherit;font-size:14px;font-weight:700;color:var(--tinta);line-height:1.2}.tp button small{display:block;font-size:11.5px;font-weight:600;opacity:.85}.tp button.on{background:var(--bordo);border-color:var(--bordo);color:#fff}
+.anw{position:relative;border:1px solid var(--linea);border-radius:12px;overflow:hidden;background:#fff}
+.anw iframe{display:block;width:100%;border:0}
+.anw .play{position:absolute;left:50%;top:150px;transform:translateX(-50%);padding:12px 20px;border-radius:30px;border:0;background:var(--bordo);color:#fff;font:inherit;font-weight:800;font-size:16px;box-shadow:0 4px 14px rgba(0,0,0,.25);white-space:nowrap}
+.arriba{position:fixed;right:14px;bottom:16px;z-index:50;display:flex;align-items:center;gap:6px;padding:11px 15px;border-radius:26px;background:var(--bordo);color:#fff;text-decoration:none;font-weight:800;font-size:15px;box-shadow:0 4px 14px rgba(0,0,0,.28);}
+.arriba.ver{opacity:1;pointer-events:auto}
+
+.tg{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;padding:8px 10px 10px}
+.tg.c2{grid-template-columns:1fr 1fr}
+.tk{display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;padding:8px 4px;border-radius:10px;background:var(--ac-cl,var(--bordo-cl));font-size:13px;font-weight:700;line-height:1.2;color:var(--tinta)}
+.tk .ti{width:26px;height:26px;color:var(--ac,var(--bordo))}
+.rol2{--ac:var(--bordo);--ac-cl:var(--bordo-cl);border-left:6px solid var(--ac)}
+.rol2.r-sup{--ac:#3F444A;--ac-cl:#ECEEF0}.rol2.r-lid{--ac:#E8822A;--ac-cl:#FDEEE2}.rol2.r-doc{--ac:#3C9A68;--ac-cl:#E3F2E9}.rol2.r-nd{--ac:#6E1E2E;--ac-cl:#F3E3E6}
+.rol2>.rh2{background:#fff;padding:8px 12px 2px}
+.rh2 .av{flex:0 0 36px;height:36px;background:var(--ac);color:#fff}
+.rol2.co>.rh2{background:#fff;color:var(--tinta)}.rol2.co .rh2 .av{background:var(--ac);color:#fff}
+.rh2 small{color:var(--ac)}
+
+.ch.pa{background:#6E1E2E}.ch.pb{background:#C2662D}.ch.ni{background:#1D6B44}
+.nv.pa{background:#6E1E2E}.nv.pb{background:#C2662D}.nv.ni{background:#1D6B44}.nv.ab{background:#6E1E2E}.nv.ne{background:#4B4F54}
+.regla{grid-template-columns:150px 20px 1fr}
+.logo .esc{display:flex;align-items:center;justify-content:center;width:62px;height:62px;border-radius:14px;background:#fff;color:var(--bordo)}
+.logo .esc svg{width:34px;height:34px}
+.anw .play{top:42%}
+.arriba{opacity:0;pointer-events:none;transition:opacity .25s}
+.pc{display:grid;gap:8px;margin:10px 0 0}
+.pt2{border-radius:12px;padding:10px 12px;border:2px solid var(--c);background:#fff}
+.pt2 b{display:block;font-size:16px;color:var(--c)}
+.pt2 span{font-size:14.5px}
+.regla{grid-template-columns:132px 16px minmax(0,1fr)!important}.regla b{min-width:0;white-space:normal!important}
+.fig{width:100%;border-radius:12px;display:block;margin:6px 0 4px;border:1px solid var(--linea)}
+.fotos{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}.fotos figure{margin:0}.fotos img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:10px}.fotos figcaption{font-size:13px;color:var(--gris)}
+.cad{counter-reset:c;list-style:none;padding:0;margin:8px 0}.cad li{counter-increment:c;display:flex;gap:10px;align-items:flex-start;margin:0 0 7px}.cad li:before{content:counter(c);flex:0 0 28px;height:28px;border-radius:50%;background:#B85C38;color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center}
+
+/* ---- Bloomfield: logo, corte y portal de videos ---- */
+.logo .esc2{display:flex;width:68px;height:68px;border-radius:50%;background:#fff;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.18)}
+.logo .esc2 img{width:64px;height:64px;display:block}
+.corte{width:100%;height:auto;display:block;margin:8px 0 6px;border:1px solid var(--linea);border-radius:12px;background:#fff}
+.tile.vid{background:#1D6B44;border-color:#1D6B44;color:#fff}
+.tile.vid .ic{background:rgba(255,255,255,.18);color:#fff}
+.tile.vid small{color:#E3F2E9}
+.tile.vid b{color:#fff}
+.tile .bdg{display:inline-block;margin-left:6px;background:#fff;color:#B3202C;border-radius:10px;padding:1px 8px;font-size:12px;font-weight:800;vertical-align:2px}
+.tile .bdg:empty{display:none}
+#videos .ing{border:1px solid var(--linea);border-radius:12px;padding:14px;background:#FBFAFA}
+#videos label{display:block;font-size:14px;font-weight:700;margin:10px 0 4px;color:var(--grafito)}
+#videos input[type=text],#videos input[type=password]{width:100%;font-size:18px;padding:11px 12px;border:1.5px solid #C9D1CC;border-radius:10px;background:#fff}
+#videos input:focus{outline:none;border-color:#1D6B44;box-shadow:0 0 0 3px #E3F2E9}
+#videos .rec{display:flex;align-items:center;gap:8px;font-weight:600;font-size:14.5px;margin:12px 0 2px;color:var(--grafito)}
+#videos .rec input{width:20px;height:20px;accent-color:#1D6B44}
+.bt{display:block;width:100%;border:0;border-radius:12px;padding:14px;margin-top:14px;font-size:17px;font-weight:800;background:#1D6B44;color:#fff;cursor:pointer}
+.bt:disabled{opacity:.55}
+.bt.sec{background:#fff;color:#1D6B44;border:1.5px solid #1D6B44}
+.msg{margin:10px 0 0;font-size:14.5px;font-weight:600;color:#B3202C;min-height:1px}
+.msg.ok{color:#1D6B44}
+.quien{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#E3F2E9;border-radius:12px;padding:10px 12px;margin:0 0 12px}
+.quien b{display:block;font-size:16.5px}
+.quien small{color:#4B4F54;font-size:13px}
+.quien button{border:0;background:none;color:#1D6B44;font-weight:800;font-size:14px;text-decoration:underline;cursor:pointer;padding:6px}
+.avance{margin:0 0 12px}
+.avance .bar{height:10px;border-radius:6px;background:#E6EAE7;overflow:hidden}
+.avance .bar i{display:block;height:100%;background:#1D6B44;border-radius:6px;transition:width .4s}
+.avance p{margin:6px 0 0;font-size:14px;color:var(--grafito);font-weight:600}
+.vcard{border:1px solid var(--linea);border-radius:14px;overflow:hidden;margin:0 0 14px;background:#fff}
+.vcard.visto{border-color:#9FCDB3}
+.vhead{display:flex;gap:12px;align-items:center;padding:12px}
+.vnum{flex:0 0 auto;width:42px;height:42px;border-radius:12px;background:#B3202C;color:#fff;font-weight:800;font-size:19px;display:flex;align-items:center;justify-content:center}
+.vcard.visto .vnum{background:#1D6B44}
+.vhead b{display:block;font-size:17px;line-height:1.2}
+.vhead small{color:var(--gris);font-size:13.5px}
+.nuevo[hidden],.vcarga[hidden]{display:none!important}
+.nuevo{display:inline-block;background:#B3202C;color:#fff;font-size:11px;font-weight:800;letter-spacing:.06em;border-radius:6px;padding:2px 6px;margin-left:6px;vertical-align:2px}
+.vplay{position:relative;background:#121212;aspect-ratio:16/9}
+.vplay video{width:100%;height:100%;display:block;background:#000}
+.vposter{position:absolute;inset:0;border:0;width:100%;cursor:pointer;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+  background:linear-gradient(135deg,#B3202C 0%,#6E1E2E 60%,#3B1018 100%)}
+.vposter .pl{width:66px;height:66px;border-radius:50%;background:rgba(255,255,255,.95);display:flex;align-items:center;justify-content:center}
+.vposter .pl svg{width:30px;height:30px;margin-left:5px;fill:#B3202C}
+.vposter span{font-weight:800;font-size:15px;text-shadow:0 1px 2px rgba(0,0,0,.4)}
+.vposter img{position:absolute;top:10px;left:10px;width:40px;height:40px;border-radius:50%;background:#fff;padding:1px}
+.vcarga{position:absolute;left:16%;right:16%;bottom:22px;height:6px;border-radius:4px;background:rgba(255,255,255,.3);overflow:hidden}
+.vcarga i{display:block;height:100%;width:0;background:#fff}
+.vfoot{padding:10px 12px 12px}
+.vprog{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--grafito);font-weight:600;margin:0 0 8px}
+.vprog .bar{flex:1;height:7px;border-radius:5px;background:#E6EAE7;overflow:hidden}
+.vprog .bar i{display:block;height:100%;background:#C2662D}
+.vprog.ok .bar i{background:#1D6B44}
+.tilde{display:flex;align-items:center;gap:12px;width:100%;border:2px solid #C9D1CC;background:#fff;border-radius:12px;padding:11px 12px;font-size:16px;font-weight:700;color:var(--tinta);cursor:pointer;text-align:left}
+.tilde .cb{flex:0 0 auto;width:28px;height:28px;border-radius:8px;border:2.5px solid #9AA39E;display:flex;align-items:center;justify-content:center;background:#fff}
+.tilde .cb svg{width:18px;height:18px;stroke:#fff;stroke-width:3.5;fill:none;opacity:0}
+.tilde small{display:block;font-weight:500;font-size:12.5px;color:var(--gris)}
+.tilde.on{border-color:#1D6B44;background:#E3F2E9}
+.tilde.on .cb{background:#1D6B44;border-color:#1D6B44}
+.tilde.on .cb svg{opacity:1}
+.tilde:disabled{cursor:not-allowed;opacity:.65;background:#F4F5F4}
+.tilde.guardando{opacity:.6}
+.dir{border:1px solid var(--linea);border-radius:12px;padding:12px;margin:16px 0 0;background:#FBFAFA}
+.dir h3{margin:0 0 4px;font-size:16.5px;color:#6E1E2E}
+.dir .sub2{margin:0 0 10px;font-size:13.5px;color:var(--gris)}
+.dir .res{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 12px}
+.dir .res div{background:#fff;border:1px solid var(--linea);border-radius:10px;padding:8px 10px}
+.dir .res b{display:block;font-size:13px;line-height:1.2;min-height:32px}
+.dir .res span{font-size:22px;font-weight:800;color:#1D6B44}
+.dir .res small{font-size:13px;color:var(--gris)}
+.dir table{width:100%;border-collapse:collapse;font-size:14.5px}
+.dir th{font-size:12px;text-align:center;color:var(--grafito);padding:4px 2px;border-bottom:1.5px solid var(--linea)}
+.dir th:first-child{text-align:left}
+.dir td{padding:7px 2px;border-bottom:1px solid #ECEEF0;text-align:center}
+.dir td:first-child{text-align:left;font-weight:600}
+.dir .si{display:inline-flex;width:24px;height:24px;border-radius:50%;background:#1D6B44;color:#fff;align-items:center;justify-content:center;font-weight:800;font-size:14px}
+.dir .no{display:inline-block;width:24px;height:24px;border-radius:50%;border:2px dashed #C9D1CC}
+.dir .fe{display:block;font-size:10.5px;color:var(--gris);font-weight:600}
+.modal{position:fixed;inset:0;background:rgba(20,20,20,.55);display:flex;align-items:flex-end;justify-content:center;z-index:50;padding:16px}
+.modal[hidden]{display:none}
+.modal .cj{background:#fff;border-radius:18px;max-width:440px;width:100%;padding:20px 18px 18px;box-shadow:0 10px 40px rgba(0,0,0,.3);animation:sube .35s cubic-bezier(.2,.8,.2,1)}
+@keyframes sube{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+.modal .ico{width:54px;height:54px;border-radius:16px;background:#1D6B44;display:flex;align-items:center;justify-content:center;margin:0 0 10px}
+.modal .ico svg{width:30px;height:30px;stroke:#fff}
+.modal h3{margin:0 0 6px;font-size:21px;color:var(--tinta)}
+.modal p{margin:0 0 4px;color:var(--grafito)}
+.modal ul{margin:8px 0 0;padding-left:20px}
+.modal li{font-weight:700}
+@media (min-width:600px){.modal{align-items:center}}
+/* ---- v7: sección de capacitación ---- */
+.cap-hero{background:linear-gradient(135deg,#1D6B44 0%,#14502F 100%);color:#fff;border-radius:16px;padding:16px 16px 14px;margin:0 0 14px;box-shadow:0 6px 18px rgba(20,80,47,.22)}
+.cap-hero .cap-k{margin:0;font-size:12.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#BFE3CD}
+.cap-hero h3{margin:2px 0 12px;font-size:21px;line-height:1.2;color:#fff}
+.cap-hero .cpasos{list-style:none;counter-reset:none;margin:0;padding:0;display:grid;gap:8px}
+.cap-hero .cpasos li{color:#fff;border:0;box-shadow:none;margin:0;display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.12);border-radius:12px;padding:9px 12px}
+.cpasos .pn{flex:0 0 auto;width:34px;height:34px;border-radius:50%;background:#fff;color:#1D6B44;font-weight:900;font-size:17px;display:flex;align-items:center;justify-content:center}
+.cpasos b{display:block;font-size:16.5px;color:#fff}
+.cpasos small{display:block;font-size:13.5px;color:#D9EFE1}
+@media (min-width:640px){.cpasos{grid-template-columns:repeat(3,1fr)}.cpasos li{flex-direction:column;align-items:flex-start}}
+.vprev{display:grid;gap:10px;margin:0 0 14px}
+@media (min-width:640px){.vprev{grid-template-columns:repeat(3,1fr)}}
+.vp{display:flex;gap:12px;align-items:center;border:1px solid var(--linea);border-radius:12px;background:#fff;padding:8px}
+@media (min-width:640px){.vp{flex-direction:column;align-items:stretch}}
+.vp-img{position:relative;flex:0 0 132px;aspect-ratio:16/9;border-radius:9px;overflow:hidden;background:#222}
+.vp-img img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.9)}
+.vp-n{position:absolute;left:6px;top:6px;width:26px;height:26px;border-radius:8px;background:#B3202C;color:#fff;font-weight:900;font-size:14px;display:flex;align-items:center;justify-content:center}
+.vp-l{position:absolute;right:6px;bottom:6px;width:28px;height:28px;border-radius:50%;background:rgba(20,20,20,.65);color:#fff;display:flex;align-items:center;justify-content:center}
+.vp-l svg{width:15px;height:15px}
+.vp-t b{display:block;font-size:15.5px;line-height:1.2}
+.vp-t small{color:var(--gris);font-size:13px}
+.ing-t{display:flex;align-items:center;gap:8px;margin:0 0 4px;font-size:17px;color:#1D6B44}
+.ing-t svg{width:22px;height:22px}
+.vposter{padding:0;overflow:hidden}
+.vposter .pimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:0;background:none;padding:0;top:0;left:0}
+.vposter .sombra{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.05) 30%,rgba(0,0,0,.55) 100%)}
+.vposter .pl,.vposter .ptx,.vposter .vcarga{position:relative;z-index:1}
+.vposter .ptx{position:absolute;bottom:14px;left:0;right:0;text-align:center}
+.vposter .pl{box-shadow:0 6px 20px rgba(0,0,0,.35);transition:transform .2s}
+.vposter:hover .pl{transform:scale(1.06)}
+.vtt{flex:1}
+.est{flex:0 0 auto;font-size:12.5px;font-weight:800;border-radius:20px;padding:4px 10px;white-space:nowrap}
+.est:empty{display:none}
+.e-pen{background:#F7E4E6;color:#B3202C}.e-cur{background:#FCEBDD;color:#A4521F}.e-mar{background:#FFF3C4;color:#6E5300}.e-ok{background:#E3F2E9;color:#1D6B44}
+.tilde.bloq{border-style:dashed;background:#FAFAFA;color:#5E6368}
+.tilde.bloq .cb{border-color:#C9D1CC}
+.tilde.listo{border-color:#1D6B44;box-shadow:0 0 0 4px #E3F2E9;animation:late 1.6s ease-in-out infinite}
+@keyframes late{0%,100%{box-shadow:0 0 0 3px #E3F2E9}50%{box-shadow:0 0 0 7px #CFE8D9}}
+.avance{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--linea);border-radius:14px;padding:12px;margin:0 0 14px}
+.anillo{position:relative;flex:0 0 64px;width:64px;height:64px}
+.anillo svg{width:64px;height:64px;transform:rotate(-90deg)}
+.anillo circle{fill:none;stroke:#E6EAE7;stroke-width:4}
+.anillo #avAro{stroke:#1D6B44;stroke-linecap:round;transition:stroke-dasharray .5s}
+.anillo b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:17px;color:#1D6B44}
+.av-t{margin:0;font-size:16.5px;font-weight:800;color:var(--tinta)}
+.av-s{margin:2px 0 0;font-size:14px;color:var(--grafito)}
+.tabs{display:flex;gap:6px;overflow-x:auto;margin:0 0 12px;padding-bottom:2px}
+.tabs[hidden]{display:none}
+.tab{flex:0 0 auto;border:1.5px solid #C9D1CC;background:#fff;border-radius:20px;padding:8px 14px;font-weight:800;font-size:14px;color:var(--grafito);cursor:pointer}
+.tab.on{background:#6E1E2E;border-color:#6E1E2E;color:#fff}
+.sapc{border-radius:14px;background:#fff;border:1px solid var(--linea);padding:12px;margin:0 0 14px}
+.sap-h{display:flex;gap:12px;align-items:center;margin:0 0 10px}
+.sap-e{flex:0 0 auto;background:#1D6B44;color:#fff;border-radius:10px;padding:6px 10px;font-weight:900;font-size:13px;letter-spacing:.04em}
+.sap-h b{display:block;font-size:16.5px}
+.sap-h small{color:var(--gris);font-size:12.5px}
+.hitos{display:grid;gap:6px}
+.hito{display:flex;align-items:center;gap:10px;border-radius:10px;background:#F7F3F3;padding:8px 10px;font-size:14px}
+.hito b{flex:1}
+.hito span{font-weight:700}
+.hito em{font-style:normal;font-weight:800;font-size:12.5px;color:#B3202C;background:#fff;border-radius:12px;padding:2px 8px}
+.hito.ok em{color:#1D6B44}
+.dgrp{border-left:6px solid var(--gc);border-radius:12px;background:#fff;border-top:1px solid var(--linea);border-right:1px solid var(--linea);border-bottom:1px solid var(--linea);padding:10px 12px;margin:0 0 12px}
+.dgrp h3{margin:0 0 8px;font-size:15.5px;color:var(--gc)}
+.doc{display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:1px solid #ECEEF0;background:#FBFAFA;border-radius:10px;padding:9px 10px;margin:0 0 6px;cursor:pointer;font:inherit;color:var(--tinta)}
+.doc .di{flex:0 0 auto;width:34px;height:34px;border-radius:9px;background:var(--gc);color:#fff;display:flex;align-items:center;justify-content:center}
+.doc .di svg{width:19px;height:19px}
+.doc b{display:block;font-size:14.5px;line-height:1.2}
+.doc small{color:var(--gris);font-size:12.5px}
+.doc>span:nth-child(2){flex:1}
+.dbaj{flex:0 0 auto;font-weight:800;font-size:13px;color:var(--gc)}
+.mc-bar{height:10px;border-radius:6px;background:#E6EAE7;overflow:hidden;margin:10px 0 2px}
+.mc-bar i{display:block;height:100%;background:#C2662D}
+#mdComp .ico{background:#C2662D}
+
+.tel.dc .llamar,.tel.dc{background:#6E1E2E}
+</style>
+</head>
+<body>
+<header id="top">
+  <div class="hd">
+    <div class="logo"><span class="esc2"><img src="img/logo.png" alt="Bloomfield Kindergarten"></span></div>
+    <div>
+      <small>Sistema de Autoprotección</small>
+      <h1>Alertas y emergencias</h1>
+      <p>Bloomfield Kindergarten · Echeverría 3024</p>
+    </div>
+  </div>
+</header>
+<main>
+<nav class="menu" aria-label="Menú">
+  <div class="grp">Ante una emergencia en el jardín</div>
+  <a class="tile big" href="#telefonos"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg><span><b>Teléfonos de emergencia</b><small>Llamar o agendar: 911, 100, 107, 103 y servicios</small></span></a>
+  <div class="tiles t3">
+    <a class="tile" href="#roles"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span><b>Quién es quién</b><small>Roles del Sistema de Autoprotección</small></span></a>
+    <a class="tile" href="#salidas"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 4h3a2 2 0 0 1 2 2v14"/><path d="M2 20h3"/><path d="M13 20h9"/><path d="M10 12v.01"/><path d="M13 4.56v16.88a.5.5 0 0 1-.6.49L5 20V5.56a1 1 0 0 1 .8-.98l6.6-1.3a.5.5 0 0 1 .6.49z"/></svg><span><b>Por dónde se sale</b><small>Cada nivel y los bebés</small></span></a>
+    <a class="tile" href="#recorrido"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg><span><b>Recorrido</b><small>A Echeverría y Zapiola</small></span></a>
+  </div>
+  <div class="grp">Tormentas y alertas</div>
+  <div class="tiles t3">
+    <a class="tile" href="#alertas"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 16.33A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 .5 8.97"/><path d="m13 12-3 5h4l-3 5"/></svg><span><b>Alertas del SMN</b><small>Consultar hoy</small></span></a>
+    <a class="tile" href="#app"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2.5"/><path d="M12 18h.01"/><path d="M9.5 9.5a2.5 2.5 0 0 1 5 0c0 2.2 1 3 1 3h-7s1-.8 1-3"/><path d="M11.3 14.5a.9.9 0 0 0 1.4 0"/></svg><span><b>App oficial</b><small>Recibir avisos</small></span></a>
+    <a class="tile" href="#niveles"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="3"/><circle cx="12" cy="7" r="1.6" fill="currentColor"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/><circle cx="12" cy="17" r="1.6" fill="currentColor"/></svg><span><b>Qué hacer</b><small>En cada nivel</small></span></a>
+  </div>
+  <div class="grp">Capacitación del personal</div>
+  <a class="tile big vid" href="#videos"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="15" height="14" rx="2.5"/><path d="m17 10 5-3v10l-5-3"/></svg><span><b>Videos de capacitación<span class="bdg" id="bdgV"></span></b><small>Para todo el personal · ingreso con usuario</small></span></a>
+  <a class="tile" href="#videos"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg><span><b>Documentación del jardín</b><small>Sólo Dirección · ingreso con usuario</small></span></a>
+</nav>
+
+<div class="bigrp">Ante una emergencia en el jardín</div>
+<section id="telefonos">
+  <div class="sh"><svg class="ic sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg><h2>1. Teléfonos de emergencia</h2><a class="up" href="#top" aria-label="Volver al menú">Menú ↑</a></div>
+  <p class="nota" style="margin:0 0 8px">Tocar el número para <b>llamar</b>. Tocar <b>+ Agendar</b> para guardarlo en Contactos.</p>
+  <div class="tels">
+    <div class="tel"><a class="llamar" href="tel:911"><strong>911</strong><span>Emergencias y Policía</span></a><a class="ag" href="agendar-911.vcf">+ Agendar</a></div>
+    <div class="tel"><a class="llamar" href="tel:100"><strong>100</strong><span>Bomberos</span></a><a class="ag" href="agendar-100.vcf">+ Agendar</a></div>
+    <div class="tel"><a class="llamar" href="tel:107"><strong>107</strong><span>SAME · emergencias médicas</span></a><a class="ag" href="agendar-107.vcf">+ Agendar</a></div>
+    <div class="tel dc"><a class="llamar" href="tel:103"><strong>103</strong><span>Defensa Civil</span></a><a class="ag" href="agendar-103.vcf">+ Agendar</a></div>
+  </div>
+  <div class="sub">Servicios y ART</div>
+  <div class="svs">
+    <div class="sv"><span><b>Metrogas</b><small>Escape de gas · 24 h</small></span><span class="der"><a class="num" href="tel:1143091050">4309-1050</a><a class="ag" href="agendar-metrogas.vcf">+ Agendar</a></span></div>
+    <div class="sv"><span><b>AySA</b><small>Agua y cloacas</small></span><span class="der"><a class="num" href="tel:08003212482">0800-321-2482</a><a class="ag" href="agendar-aysa.vcf">+ Agendar</a></span></div>
+    <div class="sv"><span><b>Edenor</b><small>Falta de luz y emergencias</small></span><span class="der"><a class="num" href="tel:08006661000">0800-666-1000</a><a class="ag" href="agendar-edenor.vcf">+ Agendar</a></span></div>
+    <div class="sv"><span><b>Prevención ART</b><small>Emergencias</small></span><span class="der"><a class="num" href="tel:08004444278">0800-4444-278</a><a class="ag" href="agendar-art.vcf">+ Agendar</a></span></div>
+  </div>
+  <div class="pasos">
+    <p id="pIphone"><b>iPhone:</b> al tocar <b>+ Agendar</b> se abre la ficha; tocar <b>Crear contacto nuevo</b>.</p>
+    <p id="pAndroid"><b>Android:</b> al tocar <b>+ Agendar</b> se descarga la ficha; abrirla (desde la notificación o Descargas) con <b>Contactos</b> y guardar.</p>
+  </div>
+  <p class="nota">Al llamar, indicar: Echeverría 3024, entre Zapiola y Conesa; qué ocurre, cuántas personas hay y cuántos bebés.</p>
+</section>
+
+<section id="roles">
+  <div class="sh"><svg class="ic sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><h2>2. Quién es quién</h2><a class="up" href="#top" aria-label="Volver al menú">Menú ↑</a></div>
+  <div class="rol2 co"><div class="rh2"><span class="av"><svg class="" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><span><small>Coordinadora de Autoprotección</small><b>Natalia Gliemann</b></span></div>
+    <div class="tg">
+      <div class="tk"><svg class="ti" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span>Orden de evacuar y alarma</span></div>
+      <div class="tk"><svg class="ti" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg><span>Desde la puerta de entrada</span></div>
+      <div class="tk"><svg class="ti" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg><span>Corte de luz y gas</span></div>
+      <div class="tk"><svg class="ti" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg><span>Llamado al 911</span></div>
+      <div class="tk"><svg class="ti" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h16M4 15h16M10 3 8 21M16 3l-2 18"/></svg><span>Recibe el parte de cada nivel</span></div>
+      <div class="tk"><svg class="ti" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>Informa a los servicios de emergencia</span></div>
+    </div></div>
+  <div class="rol2 r-sup"><div class="rh2"><span class="av"><svg class="" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></svg></span><span><small>Suplente</small><b>Gabriela Fente</b></span></div>
+    <div class="tg c2">
+      <div class="tk"><svg class="ti" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></svg><span>La reemplaza si no está</span></div>
+      <div class="tk"><svg class="ti" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>La asiste en todas las tareas</span></div>
+    </div></div>
+  <div class="rol2 r-lid"><div class="rh2"><span class="av"><svg class="" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg></span><span><small>Líderes de evacuación</small><b>Por nivel y por turno</b></span></div>
+    <div class="tg">
+      <div class="tk"><svg class="ti" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg><span>Avisan que se evacúa</span></div>
+      <div class="tk"><svg class="ti" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><span>Revisan salas, baños y depósitos</span></div>
+      <div class="tk"><svg class="ti" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h16M4 15h16M10 3 8 21M16 3l-2 18"/></svg><span>Dan el parte a la Coordinadora</span></div>
+    </div>
+    <div class="lp"><div class="fl2"><b>Planta alta</b><div><div class="nm2"><span class="n">Karina Salgado</span><span class="ch pa">Mañana</span></div><div class="nm2"><span class="n">Agustina Grasso</span><span class="ch pa">Mañana</span></div><div class="nm2"><span class="n">Pilar Seró</span><span class="ch pa">Tarde</span></div><div class="nm2"><span class="n">Valentina Tula</span><span class="ch pa">Tarde</span></div></div></div><div class="fl2"><b>Planta baja</b><div><div class="nm2"><span class="n">Alicia Díaz</span><span class="ch pb">Mañana</span></div><div class="nm2"><span class="n">Silvia Echegaray</span><span class="ch pb">Tarde</span></div></div></div><div class="fl2"><b>Nivel inferior</b><div><div class="nm2"><span class="n">Aldana Luna</span><span class="ch ni">Mañana</span></div><div class="nm2"><span class="n">Tatiana Schonfeld</span><span class="ch ni">Mañana</span></div><div class="nm2"><span class="n">Belén Palacios</span><span class="ch ni">Tarde</span></div></div></div></div></div>
+  <div class="rol2 r-doc"><div class="rh2"><span class="av"><svg class="" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="5" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="18" cy="5" r="2"/><path d="M4 21v-6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v6"/></svg></span><span><small>Docentes y auxiliares</small><b>Con su grupo en todo momento</b></span></div>
+    <div class="tg">
+      <div class="tk"><svg class="ti" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="5" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="18" cy="5" r="2"/><path d="M4 21v-6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v6"/></svg><span>Preparan a su grupo en fila, en "tren"</span></div>
+      <div class="tk"><svg class="ti" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg><span>Lactantes y 1 año: su puesto en la cadena</span></div>
+      <div class="tk"><svg class="ti" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h16M4 15h16M10 3 8 21M16 3l-2 18"/></svg><span>Recuento en el punto de reunión</span></div>
+    </div></div>
+  <div class="rol2 r-nd"><div class="rh2"><span class="av"><svg class="" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 4h3a2 2 0 0 1 2 2v14"/><path d="M2 20h3"/><path d="M13 20h9"/><path d="M10 12v.01"/><path d="M13 4.56v16.88a.5.5 0 0 1-.6.49L5 20V5.56a1 1 0 0 1 .8-.98l6.6-1.3a.5.5 0 0 1 .6.49z"/></svg></span><span><small>Persona designada del patio y personal</small><b>Portón, practicunas y servicios</b></span></div>
+    <div class="tg">
+      <div class="tk"><svg class="ti" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 4h3a2 2 0 0 1 2 2v14"/><path d="M2 20h3"/><path d="M13 20h9"/><path d="M10 12v.01"/><path d="M13 4.56v16.88a.5.5 0 0 1-.6.49L5 20V5.56a1 1 0 0 1 .8-.98l6.6-1.3a.5.5 0 0 1 .6.49z"/></svg><span>Abre y traba el portón de la calle</span></div>
+      <div class="tk"><svg class="ti" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/></svg><span>Destapa las practicunas y deja las cadenas</span></div>
+      <div class="tk"><svg class="ti" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 11V6a2 2 0 0 0-4 0v5"/><path d="M14 10V4a2 2 0 0 0-4 0v6"/><path d="M10 10.5V6a2 2 0 0 0-4 0v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></svg><span>Gas y luz, por orden de la Coordinadora</span></div>
+    </div></div>
+  <div class="vest"><svg class="ic sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3 5 5v15a1 1 0 0 0 1 1h4v-7h4v7h4a1 1 0 0 0 1-1V5l-3-2-2 4h-4z"/><path d="M5 12h5M14 12h5"/></svg><span>La alarma son los <b>silbatos</b>: se avisa en voz alta o yendo a buscar a la Coordinadora. Los roles se cubren con quien esté presente: cualquier persona capacitada puede asumir el rol que se necesite.</span></div>
+</section>
+
+<section id="salidas">
+  <div class="sh"><svg class="ic sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 4h3a2 2 0 0 1 2 2v14"/><path d="M2 20h3"/><path d="M13 20h9"/><path d="M10 12v.01"/><path d="M13 4.56v16.88a.5.5 0 0 1-.6.49L5 20V5.56a1 1 0 0 1 .8-.98l6.6-1.3a.5.5 0 0 1 .6.49z"/></svg><h2>3. Por dónde se sale</h2><a class="up" href="#top" aria-label="Volver al menú">Menú ↑</a></div>
+  <div class="regla"><span class="nv pa">Planta alta</span><span class="fl">→</span><b>Escalera interna (de madera)</b></div>
+  <div class="regla"><span class="nv pb">Planta baja</span><span class="fl">→</span><b>Escalera de mármol</b></div>
+  <div class="regla"><span class="nv ni">Nivel inferior</span><span class="fl">→</span><b>Puerta al patio</b></div>
+  <svg class="corte" viewBox="0 0 400 284" role="img" aria-label="Corte del edificio: planta alta con las salas de 2, 3, 4 y 5 años baja por la escalera interna de madera a planta baja; planta baja con lactantes y una sala de 1 año baja por la escalera de mármol al patio de ingreso; nivel inferior con una sala de 1 año y el SUM sale por su puerta propia al patio de ingreso." font-family="-apple-system,Segoe UI,Roboto,Arial,sans-serif">
+  <defs><marker id="fl-ni" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#1D6B44"/></marker>
+  <marker id="fl-pa" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#6E1E2E"/></marker></defs>
+  <rect x="0" y="205" width="400" height="79" fill="#EEF1EF"/>
+  <line x1="0" y1="205" x2="400" y2="205" stroke="#9AA39E" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <text x="396" y="222" text-anchor="end" font-size="11.5" fill="#666B70">vereda · Echeverría →</text>
+  <!-- planta alta -->
+  <rect x="6" y="12" width="236" height="68" rx="8" fill="#fff" stroke="#6E1E2E" stroke-width="2.5"/>
+  <rect x="6" y="12" width="9" height="68" rx="3" fill="#6E1E2E"/>
+  <text x="24" y="40" font-size="18" font-weight="800" fill="#6E1E2E">Planta alta <tspan font-size="12" font-weight="700" fill="#666B70">+5,50 m</tspan></text>
+  <text x="24" y="64" font-size="14.5" fill="#1B221E">Salas de 2, 3, 4 y 5 años</text>
+  <!-- planta baja -->
+  <rect x="6" y="94" width="236" height="68" rx="8" fill="#fff" stroke="#C2662D" stroke-width="2.5"/>
+  <rect x="6" y="94" width="9" height="68" rx="3" fill="#C2662D"/>
+  <text x="24" y="122" font-size="18" font-weight="800" fill="#C2662D">Planta baja <tspan font-size="12" font-weight="700" fill="#666B70">+1,85 m</tspan></text>
+  <text x="24" y="146" font-size="14.5" fill="#1B221E">Lactantes y sala de 1 año</text>
+  <!-- nivel inferior -->
+  <rect x="6" y="176" width="236" height="68" rx="8" fill="#fff" stroke="#1D6B44" stroke-width="2.5"/>
+  <rect x="6" y="176" width="9" height="68" rx="3" fill="#1D6B44"/>
+  <text x="24" y="204" font-size="18" font-weight="800" fill="#1D6B44">Nivel inferior <tspan font-size="12" font-weight="700" fill="#666B70">−1,00 m</tspan></text>
+  <text x="24" y="228" font-size="14.5" fill="#1B221E">Sala de 1 año y SUM</text>
+  <!-- escalera interna PA→PB (de madera) -->
+  <path d="M196 74 h9 v7 h9 v7 h9 v7 h9" fill="none" stroke="#6E1E2E" stroke-width="4.5" stroke-linejoin="round"/>
+  <path d="M252 46 C276 46 276 80 236 86" fill="none" stroke="#6E1E2E" stroke-width="2" marker-end="url(#fl-pa)"/>
+  <text x="258" y="30" font-size="13" font-weight="800" fill="#6E1E2E">Escalera interna</text>
+  <text x="258" y="45" font-size="12" font-weight="700" fill="#6E1E2E">(de madera)</text>
+  <!-- escalera de mármol PB→patio -->
+  <path d="M242 128 h9 v9 h9 v9 h9 v9 h9 v9 h12" fill="none" stroke="#C2662D" stroke-width="4.5" stroke-linejoin="round"/>
+  <text x="298" y="112" font-size="13" font-weight="800" fill="#C2662D">Escalera</text>
+  <text x="298" y="127" font-size="13" font-weight="800" fill="#C2662D">de mármol</text>
+  <!-- patio de ingreso -->
+  <rect x="270" y="157" width="124" height="48" rx="8" fill="#E3F2E9" stroke="#1D6B44" stroke-width="2"/>
+  <text x="332" y="177" text-anchor="middle" font-size="13.5" font-weight="800" fill="#1D6B44">Patio de ingreso</text>
+  <text x="332" y="194" text-anchor="middle" font-size="11" fill="#4B4F54">a nivel de vereda</text>
+  <!-- puerta propia NI→patio -->
+  <path d="M232 226 C252 226 256 210 268 200" fill="none" stroke="#1D6B44" stroke-width="4" marker-end="url(#fl-ni)"/>
+  <text x="6" y="272" font-size="12.5" font-weight="800" fill="#1D6B44">Nivel inferior → puerta propia al patio de ingreso</text>
+</svg>
+  <p class="nota" style="margin:0 0 8px">El SUM y el patio del fondo salen directamente desde abajo, por la puerta del nivel inferior. Al llegar al patio, los grupos se toman de las cadenas o sogas.</p>
+  <h3>Así bajan los bebés: pasamanos formado por una cadena humana</h3>
+  <ol class="cad"><li>La maestra de la sala entrega de a un bebé.</li><li>La Coordinadora lo recibe en la puerta de entrada, sobre el descanso de la escalera de mármol.</li><li>Auxiliar 1, en el primer escalón, y auxiliar 2, a mitad de la escalera, del lado izquierdo.</li><li>Al pie de la escalera lo recibe la maestra o la persona designada.</li><li>Va a una practicuna del patio: hasta 5 niños en cada una.</li></ol>
+  <div class="fotos"><figure><img src="img/f_puerta.jpg" alt="Puerta de entrada"><figcaption>Puerta de entrada</figcaption></figure><figure><img src="img/f_practicuna.jpg" alt="Practicuna"><figcaption>Practicuna en el patio</figcaption></figure></div>
+  <p class="nota">Se entrega y se recibe siempre con los dos brazos. Nadie recorre la escalera con un bebé en brazos.</p>
+</section>
+
+<section id="recorrido">
+  <div class="sh"><svg class="ic sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg><h2>4. Cómo es el recorrido</h2><a class="up" href="#top" aria-label="Volver al menú">Menú ↑</a></div>
+  <p style="margin:0 0 8px">El punto de reunión es la <b>ochava techada de Echeverría y Zapiola</b>. Todo el jardín sale por el portón de Echeverría 3024 y va por la vereda: <b>nadie cruza la calle</b>.</p>
+  <img class="fig" src="img/croquis.png" alt="Croquis del recorrido al punto de reunión"><div class="fotos"><figure><img src="img/f_vereda.jpg" alt="Fila por la vereda"><figcaption>En fila, por la vereda</figcaption></figure><figure><img src="img/f_vereda2.jpg" alt="Practicunas en la vereda"><figcaption>Los bebés, en las practicunas</figcaption></figure></div>
+  <div class="pc">
+    <div class="pt2" style="--c:#B3202C"><b>Todo el jardín · Echeverría 3024</b><span>En fila, por la vereda de Echeverría hasta la esquina de Zapiola. Los bebés, en las practicunas.</span></div>
+    <div class="pt2" style="--c:#6E1E2E"><b>Con lluvia o temporal: punto cubierto</b><span>Hall de entrada de Zapiola 1989: por la vereda de Zapiola, en la misma manzana, sin cruzar calles.</span></div>
+  </div>
+</section>
+
+<div class="bigrp">Tormentas y alertas</div>
+<section id="alertas">
+  <div class="sh"><svg class="ic sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 16.33A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 .5 8.97"/><path d="m13 12-3 5h4l-3 5"/></svg><h2>5. Consultar las alertas del SMN</h2><a class="up" href="#top" aria-label="Volver al menú">Menú ↑</a></div>
+  <a class="btn" href="https://www.smn.gob.ar/alertas">Abrir las alertas del SMN</a>
+  <ol>
+    <li>Buscar la zona <b>Ciudad de Buenos Aires</b>.</li>
+    <li>Mirar el <b>color</b> de la alerta, el <b>fenómeno</b> (lluvia, tormenta o viento) y el <b>horario</b> en que rige.</li>
+    <li>Las alertas se actualizan todos los días a las <b>6 y a las 18 h</b>, y cada vez que cambian las condiciones.</li>
+  </ol>
+  <p class="nota">Puede haber más de una alerta a la vez (por ejemplo, viento y lluvia): se responde a la de mayor nivel.</p>
+</section>
+
+<section id="app">
+  <div class="sh"><svg class="ic sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2.5"/><path d="M12 18h.01"/><path d="M9.5 9.5a2.5 2.5 0 0 1 5 0c0 2.2 1 3 1 3h-7s1-.8 1-3"/><path d="M11.3 14.5a.9.9 0 0 0 1.4 0"/></svg><h2>6. Instalar la app oficial</h2><a class="up" href="#top" aria-label="Volver al menú">Menú ↑</a></div>
+  <div class="app">
+    <img src="data:image/png;base64,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" alt="Ícono de la app SMN">
+    <div>
+      <b>SMN: Tiempo y Pronóstico</b>
+      <span>Presidencia de la Nación Argentina</span>
+      <div class="chips"><span class="chip of">App oficial</span><span class="chip">Gratis</span><span class="chip">Android y iPhone</span></div>
+    </div>
+  </div>
+  <ul class="ofi">
+    <li><span>Es la app del <b>Servicio Meteorológico Nacional</b>, el organismo del Estado que emite las alertas oficiales.</span></li>
+    <li><span>En las tiendas figura como desarrollador <b>Presidencia de la Nación Argentina</b>, con soporte en <b>appsmn@smn.gob.ar</b> y sitio <b>smn.gob.ar</b>.</span></li>
+    <li><span>Antes de instalar, verificar el nombre y el ícono: hay otras apps del clima que <b>no</b> son oficiales.</span></li>
+  </ul>
+  <a class="btn" id="bAndroid" href="https://play.google.com/store/apps/details?id=ar.gob.smn">Descargar para Android</a>
+  <a class="btn sec" id="bIphone" href="https://apps.apple.com/ar/app/smn-tiempo-y-pron%C3%B3stico/id6443508769">Descargar para iPhone</a>
+  <h3>Para recibir los avisos</h3>
+  <ol>
+    <li>Instalar la app y abrirla.</li>
+    <li>Cuando pida permiso para enviar <b>notificaciones</b>, tocar <b>Permitir</b>.</li>
+    <li>Elegir <b>Ciudad de Buenos Aires</b> como ubicación.</li>
+    <li>Revisar en la configuración de la app que las <b>alertas</b> estén activadas.</li>
+  </ol>
+  <p class="nota">Si las notificaciones quedaron desactivadas, se activan desde los Ajustes del teléfono, en la sección de la app del SMN.</p>
+</section>
+
+<section id="niveles">
+  <div class="sh"><svg class="ic sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="3"/><circle cx="12" cy="7" r="1.6" fill="currentColor"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/><circle cx="12" cy="17" r="1.6" fill="currentColor"/></svg><h2>7. Qué hacer en cada nivel</h2><a class="up" href="#top" aria-label="Volver al menú">Menú ↑</a></div>
+  <div class="primero"><i>!</i><span><b>Siempre primero:</b> avisar a la Coordinadora de Autoprotección.</span></div>
+  <div class="lvl am">
+    <div class="lvl-h"><b>Alerta amarilla</b><em>Informarse y prevenir</em></div>
+    <div class="lvl-b">
+      <p class="que"><strong>Qué es:</strong> fenómenos que pueden causar daños e interrumpir actividades por momentos.</p>
+      <ul class="acc">
+        <li>Se informa al personal.</li>
+        <li>Se revisan rejillas y desagües, sobre todo los del patio de ingreso.</li>
+        <li>Se asegura lo que el viento pueda desprender.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="lvl na">
+    <div class="lvl-h"><b>Alerta naranja</b><em>Prepararse</em></div>
+    <div class="lvl-b">
+      <p class="que"><strong>Qué es:</strong> fenómenos peligrosos.</p>
+      <ul class="acc">
+        <li>Sin actividades en el patio de ingreso ni en el patio posterior.</li>
+        <li>Agua, botiquín, linternas, radio e insumos de los bebés, listos en planta baja.</li>
+        <li>La Dirección evalúa la suspensión de actividades y el retiro anticipado.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="lvl ro">
+    <div class="lvl-h"><b>Alerta roja</b><em>Seguir instrucciones oficiales</em></div>
+    <div class="lvl-b">
+      <p class="que"><strong>Qué es:</strong> fenómenos excepcionales.</p>
+      <ul class="acc">
+        <li>Se suspenden las actividades. No se usan los patios ni el nivel inferior.</li>
+        <li>Se procede según dispongan el Ministerio de Educación y Defensa Civil.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="lvl ro" style="--x:0">
+    <div class="lvl-h" style="background:#6E1E2E"><b>Aviso a muy corto plazo</b><em>Actuar de inmediato</em></div>
+    <div class="lvl-b">
+      <p class="que"><strong>Tormenta fuerte en las próximas horas:</strong> todos adentro.</p>
+      <ul class="acc">
+        <li>Se cierran ventanas y puertas exteriores.</li>
+        <li>La sala del nivel inferior sube a planta baja; sin salidas ni retiros hasta que pase.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="lvl cp">
+    <div class="lvl-h"><b>Si hay agua en la calle o en el patio</b><em>El nivel inferior sube</em></div>
+    <div class="lvl-b">
+      <p class="que"><strong>No se sale:</strong> la sala de 1 año del nivel inferior sube a planta baja por la escalera interna, sin esperar a que el agua aumente.</p>
+      <ul class="acc">
+        <li>Va a la sala de espera de planta baja, con su docente y sus auxiliares.</li>
+        <li>Los bebés y los niños que no caminan se quedan en sus salas: la planta baja está 1,85 m por encima de la vereda.</li>
+        <li>Nadie baja al nivel inferior: ahí están el tablero y el gas. Si no se llega en seco, el corte se pide a Edenor (0800-666-1000).</li>
+        <li>Cada docente cuenta a su grupo antes y después de subir.</li>
+      </ul>
+    </div>
+  </div>
+    <div class="lvl na" style="--x:0">
+    <div class="lvl-h" style="background:#C2662D"><b>Calor extremo</b><em>Alerta del SMN</em></div>
+    <div class="lvl-b">
+      <p class="que"><strong>Cuidar a los más chicos:</strong> agua disponible en cada nivel.</p>
+      <ul class="acc">
+        <li>Sin actividades en los patios entre las 10 y las 16 h.</li>
+        <li>Bebés y niños más chicos en los ambientes más frescos.</li>
+        <li>Si hay mareo, decaimiento o piel caliente y seca: a un lugar fresco y llamar al SAME 107.</li>
+      </ul>
+    </div>
+  </div>
+  <a class="duda" href="tel:103"><span>Si dudás de qué hacer, llamá desde acá a<b><small>Defensa Civil</small>103</b></span></a>
+</section>
+<div class="bigrp">Capacitación del personal</div>
+<section id="videos">
+  <div class="sh"><svg class="ic sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="15" height="14" rx="2.5"/><path d="m17 10 5-3v10l-5-3"/></svg><h2>8. Capacitación del personal</h2><a class="up" href="#top" aria-label="Volver al menú">Menú ↑</a></div>
+  <div class="cap-hero">
+    <p class="cap-k">Para todo el personal del jardín</p>
+    <h3>3 videos cortos del Sistema de Autoprotección</h3>
+    <ol class="cpasos">
+      <li><span class="pn">1</span><span><b>Ingresar</b><small>con el usuario y la clave personal</small></span></li>
+      <li><span class="pn">2</span><span><b>Ver cada video completo</b><small>de principio a fin, sin adelantar</small></span></li>
+      <li><span class="pn">3</span><span><b>Marcar «Lo vi»</b><small>al terminar cada video</small></span></li>
+    </ol>
+  </div>
+  <div id="vIng">
+    <div id="vPrev" class="vprev"></div>
+    <div class="ing">
+      <h3 class="ing-t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Ingresar para ver los videos</h3>
+      <form id="fIng"><div id="pas1">
+        <label for="iUsr">Usuario</label><input id="iUsr" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="Nombre de pila">
+        <label for="iCla">Clave</label><input id="iCla" type="password" autocomplete="current-password">
+        <label class="rec"><input id="iRec" type="checkbox" checked> Recordar en este equipo</label>
+        <button class="bt" id="bEnt" type="submit">Ingresar</button>
+        <p class="msg" id="mIng" role="alert"></p>
+        <p class="nota" style="margin:8px 0 0">El usuario y la clave los entrega la Dirección. El resto de esta página se puede consultar siempre, sin ingresar.</p>
+      </div></form>
+      <form id="fCam"><div id="pas2" hidden>
+        <p style="margin:0 0 4px"><b>Bienvenida/o, <span id="nomNuevo"></span>.</b></p>
+        <p class="nota" style="margin:0">Es el primer ingreso: elegir una clave propia, de al menos 6 caracteres.</p>
+        <label for="iN1">Clave nueva</label><input id="iN1" type="password" autocomplete="new-password">
+        <label for="iN2">Repetir la clave nueva</label><input id="iN2" type="password" autocomplete="new-password">
+        <button class="bt" id="bCam" type="submit">Guardar y entrar</button>
+        <p class="msg" id="mCam" role="alert"></p>
+      </div></form>
+    </div>
+  </div>
+  <div id="vLista" hidden>
+    <div class="quien"><span><b id="qNom"></b><small id="qRol"></small></span><button id="bSal" type="button">Salir</button></div>
+    <div class="tabs" id="tabs" hidden><button type="button" class="tab on" data-t="tVid">Videos</button><button type="button" class="tab" data-t="tDoc">Documentación</button><button type="button" class="tab" data-t="tDir">Quién vio</button></div>
+    <div id="tVid">
+      <div class="avance"><div class="anillo"><svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="15.5"/><circle id="avAro" cx="18" cy="18" r="15.5" pathLength="100" stroke-dasharray="0 100"/></svg><b id="avNum">0/3</b></div><div><p id="avTxt" class="av-t">Cargando…</p><p id="avSub" class="av-s"></p></div></div>
+      <div id="lista"></div>
+      <p class="msg" id="mLis" role="alert"></p>
+    </div>
+    <div id="tDoc" hidden></div>
+    <div id="tDir" hidden>
+      <div class="dir" id="dir">
+        <h3>Quién vio cada video</h3>
+        <p class="sub2">Sólo lo ve la Dirección. Se actualiza cada vez que alguien marca un video.</p>
+        <div class="res" id="dirRes"></div>
+        <table id="dirTab"></table>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="modal" id="modal" hidden role="dialog" aria-modal="true" aria-labelledby="mdTit"><div class="cj"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="15" height="14" rx="2.5"/><path d="m17 10 5-3v10l-5-3"/></svg></div><h3 id="mdTit"></h3><p>Videos del Sistema de Autoprotección para el personal:</p><ul id="mdLista"></ul><button class="bt" id="mdIr" type="button">Ir a los videos</button><button class="bt sec" id="mdLuego" type="button">Más tarde</button></div></div>
+<div class="modal" id="mdComp" hidden role="dialog" aria-modal="true" aria-labelledby="mcTit"><div class="cj"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><h3 id="mcTit">Primero hay que ver el video completo</h3><p id="mcTxt"></p><div class="mc-bar"><i id="mcBar"></i></div><button class="bt" id="mcVer" type="button">Seguir viendo el video</button><button class="bt sec" id="mcCer" type="button">Cerrar</button></div></div>
+</main>
+<footer>Bloomfield Kindergarten · Capacitación del Sistema de Autoprotección 2026<br>Lic. Marcelo Elvira · M.P. 0656 C.P.I.I.</footer>
+<a class="arriba" id="arriba" href="#top" aria-label="Volver al inicio">↑ Inicio</a>
+<script>
+(function(){
+  var ua = navigator.userAgent || '';
+  var esIphone = /iPhone|iPad|iPod/i.test(ua) || (/Macintosh/i.test(ua) && 'ontouchend' in document), esAndroid = /Android/i.test(ua);
+  var b = esIphone ? document.getElementById('bIphone') : (esAndroid ? document.getElementById('bAndroid') : null);
+  if (b) { b.classList.add('tuyo'); b.insertAdjacentHTML('beforeend', '<span class="tag">tu teléfono</span>'); b.parentNode.insertBefore(b, document.getElementById('bAndroid')); }
+  if (esIphone) document.getElementById('pAndroid').style.display = 'none';
+  if (esAndroid) document.getElementById('pIphone').style.display = 'none';
+  document.querySelectorAll('.play').forEach(function(pl){ pl.addEventListener('click', function(){ var fr = document.getElementById(pl.dataset.f); fr.contentWindow.postMessage('play', '*'); pl.hidden = true; }); });
+  var up = document.getElementById('arriba');
+  window.addEventListener('scroll', function(){ up.classList.toggle('ver', window.scrollY > 500); }, {passive: true});
+})();
+</script>
+<script>window.BL_PORTAL={"api": "https://script.google.com/macros/s/AKfycbwhqHHj7u2CfJfg_0MnDWQTmIsCwbFJ9QmXKHdncOBxQp8gdYeXS7dUdkJhvxjz3DDA/exec", "cifrado": true, "docs": "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", "videos": [{"id": "v1-sap-2026", "n": 1, "titulo": "El Sistema de Autoprotección", "desc": "Roles, alarma y evacuación", "dur": "4:07", "poster": "img/v1.jpg", "src": "video/v1-sap-2026.mp4.enc"}, {"id": "v2-tormentas-2026", "n": 2, "titulo": "Tormentas y El Niño", "desc": "Alertas y qué hacer en cada nivel", "dur": "4:28", "poster": "img/v2.jpg", "src": "video/v2-tormentas-2026.mp4.enc"}, {"id": "v3-fuego-2026", "n": 3, "titulo": "Fuego y matafuegos", "desc": "Aviso previo y uso del matafuego", "dur": "2:05", "poster": "img/v3.jpg", "src": "video/v3-fuego-2026.mp4.enc"}]};</script>
+<script>/* ---- Portal de videos de capacitación · Bloomfield Kindergarten ---- */
+(function () {
+  var CFG = window.BL_PORTAL;            // {api, cifrado, videos:[{id,n,titulo,dur,src,desc}]}
+  var UMBRAL = 95, KS = 'bl_portal_s', $ = function (id) { return document.getElementById(id); };
+  var ses = null, estado = null, objURL = {};
+
+  function leerSes() { try { return JSON.parse(localStorage.getItem(KS) || sessionStorage.getItem(KS) || 'null'); } catch (e) { return null; } }
+  function guardarSes(s, recordar) {
+    try { sessionStorage.setItem(KS, JSON.stringify(s)); if (recordar) localStorage.setItem(KS, JSON.stringify(s)); } catch (e) {}
+  }
+  function borrarSes() { try { localStorage.removeItem(KS); sessionStorage.removeItem(KS); } catch (e) {} }
+  var esc = function (t) { return String(t == null ? '' : t).replace(/[<>&"]/g, function (c) { return {'<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;'}[c]; }); };
+
+  // ---------- API (script de Google; en la vista previa, simulada en el equipo) ----------
+  function post(o) {
+    if (!CFG.api) return Promise.resolve(window.BL_MOCK.post(o));
+    return fetch(CFG.api, {method: 'POST', headers: {'Content-Type': 'text/plain;charset=utf-8'}, body: JSON.stringify(o)}).then(function (r) { return r.json(); });
+  }
+  function get(q) {
+    if (!CFG.api) return Promise.resolve(window.BL_MOCK.get(q));
+    var u = CFG.api + '?' + Object.keys(q).map(function (k) { return k + '=' + encodeURIComponent(q[k]); }).join('&');
+    return fetch(u, {cache: 'no-store'}).then(function (r) { return r.json(); });
+  }
+
+  // ---------- cobertura de cada video (segundos realmente vistos) ----------
+  function kCov(id) { return 'bl_cov_' + (ses ? ses.u : '') + '_' + id; }
+  function leerCov(id) { try { return localStorage.getItem(kCov(id)) || ''; } catch (e) { return ''; } }
+  function pct(id, dur) {
+    var c = leerCov(id); if (!dur) return 0;
+    var n = 0; for (var i = 0; i < c.length; i++) if (c[i] === '1') n++;
+    return Math.min(100, Math.round(100 * n / Math.max(1, Math.floor(dur))));
+  }
+  function marcarSeg(id, s, dur) {
+    var c = leerCov(id), L = Math.max(c.length, Math.floor(dur) || 0, s + 1);
+    while (c.length < L) c += '0';
+    if (c[s] !== '1') { c = c.slice(0, s) + '1' + c.slice(s + 1); try { localStorage.setItem(kCov(id), c); } catch (e) {} }
+  }
+
+  // ---------- ingreso ----------
+  var paso = 1, ultUsuario = '', ultClave = '';
+  function vistaIngreso() {
+    $('vIng').hidden = false; $('vLista').hidden = true;
+    $('pas1').hidden = paso !== 1; $('pas2').hidden = paso !== 2;
+  }
+  function errTxt(e) {
+    return {usuario: 'No hay ningún usuario con ese nombre. Se escribe el nombre de pila, por ejemplo: natalia.',
+      clave: 'La clave no es correcta.', bloqueado: 'Demasiados intentos. Probar de nuevo en 15 minutos.',
+      corta: 'La clave nueva tiene que tener al menos 6 caracteres y ser distinta de la inicial.',
+      distintas: 'Las dos claves nuevas no coinciden.'}[e] || 'No se pudo conectar. Revisar la conexión y probar de nuevo.';
+  }
+  function entrar(ev) {
+    ev.preventDefault();
+    var u = $('iUsr').value.trim(), c = $('iCla').value.trim(); if (!u || !c) return;
+    $('bEnt').disabled = true; $('mIng').textContent = ''; $('mIng').className = 'msg';
+    post({tipo: 'login', usuario: u, clave: c}).then(function (r) {
+      $('bEnt').disabled = false;
+      if (!r.ok) { $('mIng').textContent = errTxt(r.error); return; }
+      if (r.cambiar) { paso = 2; ultUsuario = u; ultClave = c; $('nomNuevo').textContent = r.nombre; vistaIngreso(); $('iN1').focus(); return; }
+      inicio(r.s, $('iRec').checked);
+    }).catch(function () { $('bEnt').disabled = false; $('mIng').textContent = errTxt(); });
+  }
+  function cambiar(ev) {
+    ev.preventDefault();
+    var a = $('iN1').value.trim(), b = $('iN2').value.trim();
+    if (a !== b) { $('mCam').textContent = errTxt('distintas'); return; }
+    $('bCam').disabled = true; $('mCam').textContent = '';
+    post({tipo: 'cambiar-clave', usuario: ultUsuario, clave: ultClave, nueva: a}).then(function (r) {
+      $('bCam').disabled = false;
+      if (!r.ok) { $('mCam').textContent = errTxt(r.error); return; }
+      paso = 1; inicio(r.s, $('iRec').checked);
+    }).catch(function () { $('bCam').disabled = false; $('mCam').textContent = errTxt(); });
+  }
+  function salir() {
+    borrarSes(); ses = null; estado = null; paso = 1;
+    Object.keys(objURL).forEach(function (k) { URL.revokeObjectURL(objURL[k]); }); objURL = {};
+    $('iCla').value = ''; $('lista').innerHTML = ''; $('tDoc').innerHTML = ''; $('tabs').hidden = true; tab('tVid'); vistaIngreso(); badge();
+  }
+  function inicio(s, recordar) { ses = s; guardarSes(s, recordar); cargarEstado(true); }
+
+  // ---------- estado y dibujo ----------
+  function cargarEstado(primeraVez) {
+    $('vIng').hidden = true; $('vLista').hidden = false;
+    $('qNom').textContent = ses.n; $('qRol').textContent = ses.d ? 'Dirección · videos, documentación y quién vio cada video' : (ses.a ? 'Administrador' : 'Personal del jardín');
+    $('tabs').hidden = !(ses.d || ses.a);
+    if (primeraVez || !$('lista').children.length) { dibujar(); if (ses.d || ses.a) docs(); }
+    return get({accion: 'estado', token: ses.t}).then(function (r) {
+      if (!r.ok) { if (r.error === 'token') salir(); return; }
+      estado = r; actualizar(); return r;
+    }).catch(function () {});
+  }
+  function visto(id) { return !!(estado && estado.vistos && estado.vistos[id]); }
+  function nuevos() { return CFG.videos.filter(function (v) { return !visto(v.id); }); }
+  function badge() {
+    var b = $('bdgV'); if (!b) return;
+    b.textContent = ses && estado ? (nuevos().length ? nuevos().length + ' sin ver' : '✓ al día') : '';
+  }
+  var PLAY = '<svg viewBox="0 0 24 24"><path d="M6 4l15 8-15 8z"/></svg>';
+  var CHK = '<svg viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></svg>';
+  var LOCK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>';
+  function previa() {
+    var el = $('vPrev'); if (!el) return;
+    el.innerHTML = CFG.videos.map(function (v) {
+      return '<div class="vp"><div class="vp-img"><img src="' + esc(v.poster) + '" alt="" loading="lazy"><span class="vp-n">' + v.n + '</span><span class="vp-l">' + LOCK + '</span></div>' +
+        '<div class="vp-t"><b>' + esc(v.titulo) + '</b><small>' + esc(v.desc) + ' · ' + esc(v.dur) + ' min</small></div></div>';
+    }).join('');
+  }
+  function dibujar() {
+    $('lista').innerHTML = CFG.videos.map(function (v) {
+      return '<article class="vcard" id="vc-' + v.id + '">' +
+        '<div class="vhead"><span class="vnum">' + v.n + '</span><span class="vtt"><b>' + esc(v.titulo) + '</b><small>' + esc(v.desc) + ' · ' + esc(v.dur) + ' min</small></span><span class="est"></span></div>' +
+        '<div class="vplay"><button class="vposter" data-id="' + v.id + '" aria-label="Ver el video ' + v.n + '"><img class="pimg" src="' + esc(v.poster) + '" alt=""><span class="sombra"></span><span class="pl">' + PLAY + '</span><span class="ptx">Ver el video · ' + esc(v.dur) + ' min</span><span class="vcarga" hidden><i></i></span></button></div>' +
+        '<div class="vfoot"><div class="vprog"><span class="pt">Visto 0 %</span><span class="bar"><i style="width:0"></i></span></div>' +
+        '<button class="tilde" data-id="' + v.id + '"><span class="cb">' + CHK + '</span><span><span class="tl">Lo vi · ' + esc(ses.n) + '</span><small class="ts"></small></span></button></div></article>';
+    }).join('');
+    $('lista').querySelectorAll('.vposter').forEach(function (b) { b.addEventListener('click', function () { abrir(b.dataset.id); }); });
+    $('lista').querySelectorAll('.tilde').forEach(function (b) { b.addEventListener('click', function () { tildar(b); }); });
+    actualizar();
+  }
+  function durDe(v) { var p = String(v.dur).split(':'); return (+p[0]) * 60 + (+p[1] || 0); }
+  function actualizar() {
+    var n = 0, N = CFG.videos.length, sig = null;
+    CFG.videos.forEach(function (v) {
+      var card = $('vc-' + v.id); if (!card) return;
+      var p = pct(v.id, durDe(v)), ok = visto(v.id), puede = ok || p >= UMBRAL;
+      if (ok) n++; else if (!sig) sig = v;
+      card.classList.toggle('visto', ok);
+      var est = card.querySelector('.est');
+      est.className = 'est ' + (ok ? 'e-ok' : (p >= UMBRAL ? 'e-mar' : (p > 0 ? 'e-cur' : 'e-pen')));
+      est.textContent = !estado ? '' : ok ? '✓ Visto' : (p >= UMBRAL ? 'Falta marcar' : (p > 0 ? 'Viendo' : 'Pendiente'));
+      var vp = card.querySelector('.vprog'); vp.classList.toggle('ok', p >= UMBRAL || ok);
+      card.querySelector('.vprog .pt').textContent = ok && p < UMBRAL ? 'Marcado como visto' : 'Visto ' + p + ' %';
+      card.querySelector('.vprog .bar i').style.width = (ok && p < UMBRAL ? 100 : p) + '%';
+      var t = card.querySelector('.tilde');
+      t.classList.toggle('on', ok); t.classList.toggle('listo', !ok && puede); t.classList.toggle('bloq', !puede); t.disabled = !estado;
+      t.querySelector('.ts').textContent = ok ? 'Marcado el ' + estado.vistos[v.id] + ' · tocar para desmarcar' : (puede ? '¡Video completo! Tocar para marcar que lo viste' : 'Se puede marcar al terminar de ver el video completo');
+    });
+    var aro = $('avAro'); if (aro) aro.setAttribute('stroke-dasharray', Math.round(100 * n / N) + ' 100');
+    if ($('avNum')) $('avNum').textContent = n + '/' + N;
+    $('avTxt').textContent = !estado ? 'Cargando…' : (n === N ? '¡Listo! Viste los ' + N + ' videos.' : (n === 0 ? 'Todavía no marcaste ningún video.' : 'Viste ' + n + ' de ' + N + ' videos.'));
+    if ($('avSub')) $('avSub').textContent = !estado || n === N ? (n === N ? 'Muchas gracias. Cualquier consulta, hablar con la Coordinadora.' : '') : 'Sigue: Video ' + sig.n + ' · ' + sig.titulo;
+    badge(); directora();
+  }
+  function avisoCompleto(v, p) {
+    var m = $('mdComp');
+    $('mcTxt').textContent = 'Para marcar «Lo vi» hay que ver el video ' + v.n + ' completo, de principio a fin y sin adelantar. ' + (p > 0 ? 'Por ahora se vio el ' + p + ' %.' : 'Todavía no se empezó a ver.');
+    $('mcBar').style.width = p + '%';
+    m.dataset.id = v.id; m.hidden = false; $('mcVer').focus();
+  }
+  function tildar(b) {
+    var id = b.dataset.id, ok = !visto(id), v = CFG.videos.find(function (x) { return x.id === id; });
+    if (ok && pct(id, durDe(v)) < UMBRAL) { avisoCompleto(v, pct(id, durDe(v))); return; }
+    b.classList.add('guardando'); b.disabled = true;
+    post({tipo: 'visto', token: ses.t, video: id, valor: ok, pct: pct(id, durDe(v))}).then(function (r) {
+      b.classList.remove('guardando');
+      if (!r.ok) { alertaMsg('No se pudo guardar. Probar de nuevo.'); actualizar(); return; }
+      cargarEstado();
+    }).catch(function () { b.classList.remove('guardando'); alertaMsg('No se pudo guardar. Revisar la conexión.'); actualizar(); });
+  }
+  function alertaMsg(t) { $('mLis').textContent = t; setTimeout(function () { $('mLis').textContent = ''; }, 5000); }
+
+  // ---------- reproducción (el video se descifra en el equipo con la llave que entrega el ingreso) ----------
+  function b64(s) { var b = atob(s), a = new Uint8Array(b.length); for (var i = 0; i < b.length; i++) a[i] = b.charCodeAt(i); return a; }
+  function bajar(url, prog) {
+    return fetch(url).then(function (r) {
+      if (!r.ok) throw new Error('http');
+      var tot = +r.headers.get('Content-Length') || 0;
+      if (!r.body || !r.body.getReader || !tot) return r.arrayBuffer();
+      var rd = r.body.getReader(), partes = [], rec = 0;
+      return (function leer() {
+        return rd.read().then(function (x) {
+          if (x.done) { var a = new Uint8Array(rec), o = 0; partes.forEach(function (p) { a.set(p, o); o += p.length; }); return a.buffer; }
+          partes.push(x.value); rec += x.value.length; prog(rec / tot); return leer();
+        });
+      })();
+    });
+  }
+  function fuente(v, prog) {
+    if (objURL[v.id]) return Promise.resolve(objURL[v.id]);
+    if (!CFG.cifrado) return Promise.resolve(v.src);
+    return bajar(v.src, prog).then(function (buf) {
+      return crypto.subtle.importKey('raw', b64(ses.k), 'AES-GCM', false, ['decrypt']).then(function (key) {
+        return crypto.subtle.decrypt({name: 'AES-GCM', iv: new Uint8Array(buf, 0, 12)}, key, new Uint8Array(buf, 12));
+      });
+    }).then(function (plano) { return (objURL[v.id] = URL.createObjectURL(new Blob([plano], {type: 'video/mp4'}))); });
+  }
+  function abrir(id) {
+    var v = CFG.videos.find(function (x) { return x.id === id; }), card = $('vc-' + id), btn = card.querySelector('.vposter');
+    var bar = btn.querySelector('.vcarga'); bar.hidden = false; btn.querySelector('.ptx').textContent = 'Cargando el video…';
+    fuente(v, function (f) { bar.firstChild.style.width = Math.round(f * 100) + '%'; }).then(function (src) {
+      document.querySelectorAll('.vplay video').forEach(function (o) { o.pause(); });
+      var el = document.createElement('video');
+      el.controls = true; el.playsInline = true; el.setAttribute('playsinline', ''); el.preload = 'auto'; el.src = src;
+      var ult = -1;
+      el.addEventListener('timeupdate', function () {
+        var t = el.currentTime;
+        if (!el.paused && !el.seeking && ult >= 0 && t >= ult && t - ult < 2.5) { for (var s = Math.floor(ult); s <= Math.floor(t); s++) marcarSeg(id, s, el.duration || durDe(v)); }
+        ult = t; actualizar();
+      });
+      el.addEventListener('seeking', function () { ult = -1; });
+      el.addEventListener('playing', function () { ult = el.currentTime; });
+      el.addEventListener('ended', function () { var d = Math.floor(el.duration || 0); if (d) marcarSeg(id, d - 1, d); actualizar(); });
+      btn.replaceWith(el); el.play().catch(function () {});
+    }).catch(function () { bar.hidden = true; btn.querySelector('.ptx').textContent = 'No se pudo cargar. Tocar para reintentar.'; });
+  }
+
+  // ---------- vista de la Directora ----------
+  function directora() {
+    var box = $('dir');
+    if (!ses || !(ses.d || ses.a) || !estado || !estado.personal) { return; }
+    var P = estado.personal.slice().sort(function (a, b) { return a.n.localeCompare(b.n, 'es'); });
+    $('dirRes').innerHTML = CFG.videos.map(function (v) {
+      var c = P.filter(function (p) { return p.v[v.id]; }).length;
+      return '<div><b>Video ' + v.n + '<br><span style="font-weight:500;font-size:12px;color:#666B70">' + esc(v.titulo) + '</span></b><span>' + c + '</span><small> de ' + P.length + '</small></div>';
+    }).join('');
+    $('dirTab').innerHTML = '<thead><tr><th>Persona</th>' + CFG.videos.map(function (v) { return '<th>Video ' + v.n + '</th>'; }).join('') + '</tr></thead><tbody>' +
+      P.map(function (p) {
+        return '<tr><td>' + esc(p.n) + '</td>' + CFG.videos.map(function (v) {
+          var f = p.v[v.id]; return '<td>' + (f ? '<span class="si">✓</span><span class="fe">' + esc(String(f).slice(0, 5)) + '</span>' : '<span class="no" title="Todavía no"></span>') + '</td>';
+        }).join('') + '</tr>';
+      }).join('') + '</tbody>';
+  }
+
+  // ---------- pestañas (sólo Dirección) ----------
+  function tab(id) {
+    ['tVid', 'tDoc', 'tDir'].forEach(function (t) { $(t).hidden = t !== id; });
+    document.querySelectorAll('#tabs .tab').forEach(function (b) { b.classList.toggle('on', b.dataset.t === id); });
+  }
+  // ---------- documentación (sólo Dirección; se descifra con la llave que entrega el ingreso de la Directora) ----------
+  var DOCK = null;
+  function llaveDocs() {
+    if (DOCK) return Promise.resolve(DOCK);
+    return crypto.subtle.importKey('raw', b64(ses.kd), 'AES-GCM', false, ['decrypt']).then(function (k) { return (DOCK = k); });
+  }
+  function descifrar(buf) { return llaveDocs().then(function (k) { return crypto.subtle.decrypt({name: 'AES-GCM', iv: new Uint8Array(buf, 0, 12)}, k, new Uint8Array(buf, 12)); }); }
+  function datosDocs() {
+    if (!CFG.cifrado) return Promise.resolve(CFG.docs);
+    if (!ses.kd) return Promise.reject('sin llave');
+    var raw = b64(CFG.docs); return descifrar(raw.buffer).then(function (p) { return JSON.parse(new TextDecoder().decode(p)); });
+  }
+  function fechaD(s) { var p = s.split('/'); return new Date(+p[2], +p[1] - 1, +p[0]); }
+  function faltan(s) { var d = Math.round((fechaD(s) - new Date(new Date().toDateString())) / 864e5); return d > 1 ? 'faltan ' + d + ' días' : d === 1 ? 'mañana' : d === 0 ? 'hoy' : 'hecho'; }
+  var DOCI = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg>';
+  function docs() {
+    var box = $('tDoc'); box.innerHTML = '<p class="nota">Cargando la documentación…</p>';
+    datosDocs().then(function (D) {
+      var s = D.sap;
+      var sim = s.simulacros.map(function (x) {
+        var f = faltan(x.fecha);
+        return '<div class="hito' + (f === 'hecho' ? ' ok' : '') + '"><b>' + esc(x.t) + '</b><span>' + esc(x.fecha) + (x.hora ? ' · ' + esc(x.hora) : '') + '</span><em>' + (f === 'hecho' ? '✓ hecho' : f) + '</em></div>';
+      }).join('');
+      var html = '<div class="sapc"><div class="sap-h"><span class="sap-e">' + esc(s.estado) + '</span><div><b>Sistema de Autoprotección ' + esc(s.anio) + '</b><small>' + esc(s.expediente) + ' · ' + esc(s.disp) + '</small></div></div>' +
+        '<div class="hitos">' + sim + '</div><p class="nota" style="margin:8px 0 0">' + esc(s.nota) + '</p></div>';
+      html += D.grupos.map(function (g) {
+        return '<div class="dgrp" style="--gc:' + g.c + '"><h3>' + esc(g.t) + '</h3>' + g.items.map(function (it, i) {
+          return '<button type="button" class="doc" data-f="' + esc(it.f) + '" data-n="' + esc(it.nombre) + '"><span class="di">' + DOCI + '</span><span><b>' + esc(it.t) + '</b><small>' + esc(it.sub || '') + '</small></span><span class="dbaj">Abrir</span></button>';
+        }).join('') + '</div>';
+      }).join('');
+      html += '<p class="nota">Esta sección sólo la ve la Dirección. Los documentos se suman a medida que se presentan.</p>';
+      box.innerHTML = html;
+      box.querySelectorAll('.doc').forEach(function (b) { b.addEventListener('click', function () { abrirDoc(b); }); });
+    }).catch(function () { box.innerHTML = '<p class="msg">No se pudo abrir la documentación. Salir y volver a ingresar.</p>'; });
+  }
+  function abrirDoc(b) {
+    var et = b.querySelector('.dbaj'), w = window.open('', '_blank'); et.textContent = 'Abriendo…';
+    var p = CFG.cifrado ? fetch(b.dataset.f).then(function (r) { if (!r.ok) throw 0; return r.arrayBuffer(); }).then(descifrar) : fetch(b.dataset.f).then(function (r) { return r.arrayBuffer(); });
+    p.then(function (buf) {
+      var url = URL.createObjectURL(new Blob([buf], {type: 'application/pdf'}));
+      if (w) w.location = url; else { var a = document.createElement('a'); a.href = url; a.download = b.dataset.n; a.click(); }
+      et.textContent = 'Abrir';
+    }).catch(function () { if (w) w.close(); et.textContent = 'Error · reintentar'; });
+  }
+
+  // ---------- aviso al entrar ----------
+  function aviso() {
+    var nv = nuevos(); if (!nv.length) return;
+    try { if (sessionStorage.getItem('bl_aviso')) return; sessionStorage.setItem('bl_aviso', '1'); } catch (e) {}
+    $('mdLista').innerHTML = nv.map(function (v) { return '<li>Video ' + v.n + ' · ' + esc(v.titulo) + ' <small style="font-weight:500;color:#666B70">(' + esc(v.dur) + ')</small></li>'; }).join('');
+    $('mdTit').textContent = nv.length === 1 ? 'Hay un video nuevo para mirar' : 'Hay ' + nv.length + ' videos nuevos para mirar';
+    $('modal').hidden = false; $('mdIr').focus();
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    $('fIng').addEventListener('submit', entrar);
+    $('fCam').addEventListener('submit', cambiar);
+    $('bSal').addEventListener('click', salir);
+    document.querySelectorAll('#tabs .tab').forEach(function (b) { b.addEventListener('click', function () { tab(b.dataset.t); }); });
+    $('mcCer').addEventListener('click', function () { $('mdComp').hidden = true; });
+    $('mcVer').addEventListener('click', function () {
+      var id = $('mdComp').dataset.id, c = $('vc-' + id); $('mdComp').hidden = true; tab('tVid');
+      if (c) { c.scrollIntoView({behavior: 'smooth', block: 'center'}); var vid = c.querySelector('video'); if (vid) vid.play().catch(function () {}); else abrir(id); }
+    });
+    previa();
+    $('mdIr').addEventListener('click', function () { $('modal').hidden = true; location.hash = ''; $('videos').scrollIntoView(); });
+    $('mdLuego').addEventListener('click', function () { $('modal').hidden = true; });
+    ses = leerSes();
+    if (ses) cargarEstado(true).then(function () { if (estado) aviso(); });
+    else vistaIngreso();
+  });
+})();
+</script>
+</body>
+</html>
