@@ -2,7 +2,7 @@
 // Lo propio de cada cliente llega por CFG (definido en su index.html) y por CLI (lo completa su cliente.js).
 const CLI = {prios: ["alta", "media", "baja"],
   prioTxt: n => ` · prioridad alta ${n("alta")}, media ${n("media")} y baja ${n("baja")}`,
-  inicio(){}, estado(){}, subt: () => ""};
+  inicio(){}, estado(){}, subt: () => "", subtFin: () => ""};
 // ---------- configuración ----------
 // Versión publicada: los datos, las fotos y los PDF van cifrados (AES-256-GCM, clave derivada de la contraseña con PBKDF2).
 // Vista previa: DATA va en la página y no se envía nada a la planilla.
@@ -242,7 +242,7 @@ function otsGrupo(m, ps){
 // ---------- pantalla ----------
 function render(){
   const m = M(), lista = filtrar();
-  $("subt").textContent = `${CLI.subt()}Informe ${m.etq || m.clave}`;
+  $("subt").textContent = `${CLI.subt()}Informe ${m.etq || m.clave}${CLI.subtFin(m)}`;
   $("tbR").innerHTML = (ADMIN ? `<span class="admin-badge">Modo Lic. Marcelo Elvira</span> ` : "") + (USUARIO ? `Ingresaste como <b>${esc(USUARIO.nombre)}</b> ` : "") + (CIFRADO ? `· <button class="link salir" type="button" id="salir">Salir</button>` : "");
   $("mesbar").innerHTML = `<span class="lbl">Informe</span>` + DATA.meses.map((x, i) => `<button class="mes" type="button" data-mes="${x.clave}" aria-pressed="${x.clave === st.mes}">${x.etq || x.clave}${i === 0 ? '<span class="tag">último</span>' : ""}</button>`).join("")
     + `<select class="mes" id="fArch" aria-label="Informes anteriores en PDF"><option value="">Anteriores (PDF) ▾</option>${DATA.archivo.map(a => `<option value="${esc(a.clave)}">Informe ${a.clave}</option>`).join("")}</select>`;
