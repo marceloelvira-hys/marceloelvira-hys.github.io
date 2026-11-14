@@ -1,0 +1,3 @@
+/* GALVASA · lo propio del portal (los estilos comunes están en core/v1/portal.css) */
+.vidb{border-color:var(--brand)!important;color:var(--brand)!important}
+.vidcaja{width:min(1100px,100%)} .vidcaja video{display:block;width:100%;background:#000;aspect-ratio:16/9}
