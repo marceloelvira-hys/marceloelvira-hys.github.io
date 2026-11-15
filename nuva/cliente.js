@@ -2,46 +2,18 @@
 // Base: portal MIT sin selector de planta (un solo local). PL queda fijo para reusar el código del informe.
 // Lo común (textos editables, publicación por sección, descargas, subir constancia, proponer fecha, video) está en core/v1/modulos.js;
 // acá van las opciones de este cliente (MOD) y lo propio. Una función con el mismo nombre que una del módulo la pisa.
-Object.assign(MOD, {propHorario: "13:30 a 14:15, al cambio de turno", quien: "la empresa", sectorDe: "de la planta",
+Object.assign(MOD, {propHorario: "13:30 a 14:15, al cambio de turno", quien: "la empresa", delLugar: "de la planta",
   capTitulo: "Programa de capacitación 2026", capProg: ["prog", "Programa 2026 (PDF)"], capCuando: "Mes", capReg: false,
   capIntro: "Programa anual: se puede proponer la fecha y el horario de cada charla. Abajo, las constancias firmadas de las capacitaciones dadas; también se pueden subir desde acá.",
   esgAltas: ["Inmediata", "Alta"], esgAltasTxt: "Inmediata o alta"});
 MOD.esgCol.APROBADO = "#2E7D32";
 const TABS = [["informe", "Informe de visita"], ["sap", "Autoprotección"], ["hys", "Estudios y matafuegos"], ["cap", "Capacitación"], ["epp", "EPP"], ["maq", "Máquinas"], ["proc", "Procedimientos"], ["insp", "Ante una inspección"], ["dl", "Descargas"]];
-let TAB = "informe", PL = "P1", MFP = "";
+let TAB = "informe", PL = "P1";
 
-// ---------- SAP ----------
-function vSap(){
-  const s = X().sap, prox = s.hitos.find(h => !h.ok && h.sim);
-  return `<h2>Sistema de Autoprotección</h2><p class="x-intro">${E("ui.sap.intro", "Lo presentado y aprobado ante Defensa Civil, las fechas de los simulacros y del vencimiento anual, y la documentación para bajar.")}</p>
-  <div class="sap-c"><div class="sap-h"><div><b>NUVA · ${esc(X().local.dom)}</b><span>Sistema de Autoprotección · ${esc(s.grupo)}</span></div><span class="sap-ok">${esc(s.estado)}</span></div>
-  <div class="sap-k">
-    <div><span>Vencimiento anual</span><b>${fISO(s.vig_anual)}</b><em class="${dias(s.vig_anual) < 60 ? "pr" : ""}">${falta(s.vig_anual)}</em></div>
-    <div><span>Próximo simulacro</span>${prox ? `<b>${fISO(prox.f)}</b><em>${falta(prox.f)}</em>` : `<b>—</b><em>Se fijan al renovar</em>`}</div>
-    <div><span>Vigencia del SAP</span><b>${fISO(s.vig_bianual)}</b><em>${esc(s.disp)}</em></div>
-  </div>
-  <div class="sap-l">${s.hitos.map((h, i) => `<div class="${h.ok || dias(h.f) < 0 ? "ok" : "pe"}${h.venc ? " ve" : ""}"><i></i><b>${fISO(h.f)}</b><span>${E("sap.hitos." + i + ".t")}</span>${!h.ok && dias(h.f) >= 0 ? `<em>${falta(h.f)}</em>` : ""}</div>`).join("")}</div>
-  <p class="x-m" style="margin:10px 0">Expediente ${esc(s.exp)} · aprobado el ${esc(s.disp_fecha)}. ${E("sap.nota")}</p>
-  <div class="x-dl x-dlrow">${s.archivos.map(k => btnDl(k)).join("")}</div></div>`;
-}
-
-// ---------- estudios y matafuegos ----------
+// ---------- informes de visita para bajar ----------
 function grupoInf(){
   return `<div class="g-box" style="--c:var(--brand)"><h3>Informes de visita</h3><span class="x-m">El último y los anteriores, en PDF</span>
   <div class="g-sel"><select id="sel-inf">${[["9-26", "Informe 9-26"], ["inm", "Informe 9-26 · corrección inmediata"], ["3-26", "Informe 3-26"], ["1-26", "Informe 1-26"]].map(([k, t]) => `<option value="${k}">${t}</option>`).join("")}</select><button type="button" class="g-btn" data-dlsel="inf">Descargar</button></div></div>`;
-}
-function vHys(){
-  const e = X().estudios, mf = X().matafuegos, tot = mf.length, pisos = [...new Set(mf.map(m => m.piso))];
-  return `<h2>Estudios de higiene y seguridad</h2><p class="x-intro">${E("ui.hys.intro", "Mediciones y estudios de la planta, con su estado al " + X().fecha + ".")}</p>
-  <div class="g-row">${grupoInf()}${grupoEsg()}</div>
-  <div class="x-box" style="border-top:5px solid var(--brand)"><div class="x-row x-est h"><span>Estudio</span><span>Norma</span><span>Fecha</span><span>Vigencia</span><span>Estado</span><span>Documento</span></div>
-  ${e.map((s, i) => { const [st, ve] = estEst(s); return `<div class="x-row x-est"><div><div class="x-t">${E("estudios." + i + ".estudio")}</div><div class="x-m">${E("estudios." + i + ".sit")}</div></div><div class="x-m">${E("estudios." + i + ".norma")}</div><div class="x-m">${E("estudios." + i + ".fecha")}</div><div class="x-m">${E("estudios." + i + ".vigencia")}</div><div><span class="x-e ${st.replace(" ", "-")}">${st === "EN CURSO" ? "EN PREPARACIÓN" : st === "PENDIENTE" ? "A REALIZAR" : st}</span>${ve ? `<div class="x-m">${ve}</div>` : ""}</div><div class="x-dl">${s.archivos.map(k => btnDl(k, k === "cf-plan" ? "Planillas" : "Descargar")).join("") || `<span class="x-m">—</span>`}</div></div>`; }).join("")}</div>
-  <div class="g-sec">Matafuegos · ${tot} equipos · control del ${esc(X().mf_fecha)}</div>
-  <div class="lt-pisos">${pisos.map(p => `<button type="button" class="lt-piso${MFP === p ? " on" : ""}" data-mfp="${esc(p)}"><b>${mf.filter(m => m.piso === p).length}</b><span>${esc(p)}</span></button>`).join("")}<button type="button" class="lt-piso${!MFP ? " on" : ""}" data-mfp=""><b>${tot}</b><span>Todos</span></button></div>
-  <div class="x-box"><div class="x-row lt-mfr h"><span>N.º</span><span>Puesto</span><span>Piso</span><span>Equipo</span><span>Observación</span></div>
-  ${mf.filter(m => !MFP || m.piso === MFP).map(m => `<div class="x-row lt-mfr"><b>${m.n}</b><span>${esc(m.puesto)}</span><span class="x-m">${esc(m.piso)}</span><span class="x-m">${esc(m.agente)} · ${esc(m.cap)}${m.num ? " · n.º " + esc(m.num) : ""}</span><span class="x-m">${esc(m.obs)}</span></div>`).join("")}
-  <div class="x-row" style="background:var(--crema)">${btnDl("mf", "Control de extintores (PDF)")}</div></div>
-  <div class="x-note"><span style="flex:1;min-width:240px">${E("mf_nota")}</span></div>`;
 }
 
 // ---------- máquinas animadas ----------
@@ -73,7 +45,7 @@ function renderExtra(){
 
 document.addEventListener("click", e => {
   if (EDIT && e.target.closest("[data-ed]")) return;   // editando: el clic es para escribir
-  const t = e.target.closest("[data-tab],[data-dl],[data-dlsel],[data-mfp],[data-pub],[data-editar],[data-prop],[data-subir],[data-cdl],#ppEnv,#suEnv"); if (!t) return;
+  const t = e.target.closest("[data-tab],[data-dl],[data-dlsel],[data-pub],[data-editar],[data-prop],[data-subir],[data-cdl],#ppEnv,#suEnv"); if (!t) return;
   if (t.dataset.pub){ const k = t.dataset.pub, on = !pubOn(k); PUB = PUB || {}; PUB[k] = on; enviar({tipo: "publicar", seccion: k, on}).then(r => toast(r.ok ? (on ? "Sección publicada" : "Sección sacada de la publicación") : "No se pudo guardar")); solapas(); if (!$("vExtra").hidden) renderExtra(); return; }
   if (t.dataset.editar){ EDIT = !EDIT; document.body.classList.toggle("editando", EDIT); barra(); irA(TAB); toast(EDIT ? "Tocá cualquier texto con borde punteado y escribí. Se guarda al salir del texto." : "Edición terminada"); return; }
   if (t.dataset.prop){ abrirProp(+t.dataset.prop); return; }
@@ -81,17 +53,10 @@ document.addEventListener("click", e => {
   if (t.dataset.cdl !== undefined){ bajarSubida(t.dataset.cdl, t.dataset.cnom); return; }
   if (t.id === "ppEnv"){ enviarProp(+t.dataset.pi); return; }
   if (t.id === "suEnv"){ enviarSubir(t.dataset.modo); return; }
-  if (t.dataset.mfp !== undefined){ MFP = t.dataset.mfp; renderExtra(); return; }
   if (t.dataset.dlsel){ bajarArch($("sel-" + t.dataset.dlsel).value); return; }
   if (t.dataset.tab) irA(t.dataset.tab);
   else if (t.dataset.dl) bajarArch(t.dataset.dl);
 });
-
-// Estado de situación: cuadro del Sistema de Autoprotección (propio hasta el bloque 3 de módulos)
-function esgSap(s, stl){
-  return `<table class="esg-t"><thead><tr><th>Expediente</th><th>Estado</th><th>Próximo simulacro</th><th>Vencimiento anual</th></tr></thead><tbody>
-  <tr><td>${esc(s.exp)}<small>${esc(s.disp)} del ${esc(s.disp_fecha)}</small></td><td>${stl(s.estado)}</td><td>${(h => h ? fISO(h.f) + "<small>" + esc(h.t) + "</small>" : "—")(s.hitos.find(h => !h.ok && h.sim))}</td><td>${fISO(s.vig_anual)}<small>${falta(s.vig_anual)}</small></td></tr></tbody></table>`;
-}
 
 // ---- enganche con el núcleo (core/v1/portal.js) ----
 Object.assign(CLI, {inicio: modInicio, estado: modEstado, prios: ["inmediata", "alta", "media"],

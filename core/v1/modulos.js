@@ -1,17 +1,19 @@
-// Portales de clientes · módulos comunes (core/v1/modulos.js) · bloques 1 y 2, 15/11/2026
+// Portales de clientes · módulos comunes (core/v1/modulos.js) · bloques 1 a 3, 15/11/2026
 // Se carga después de portal.js y antes de cliente.js, en los portales con "modulos_js": true en su ficha.
 // Trae lo que es igual en todos: textos editables, publicación por sección, descargas, subir constancia, proponer fecha, avisos y video (bloque 1),
-// y las vistas Capacitación, EPP, «Ante una inspección» y el Estado de situación general, con sus textos como opciones (bloque 2).
+// y las vistas Capacitación, EPP, «Ante una inspección» y el Estado de situación general, con sus textos como opciones (bloque 2),
+// y Autoprotección (en trámite / vigente) y Estudios con matafuegos (tarjetas / tabla por piso), donde la variante sale del dato (bloque 3).
 // Lo propio de cada cliente:
 //   · MOD   → opciones; su cliente.js las completa con Object.assign(MOD, {...})
 //   · una function con el mismo nombre en cliente.js pisa la de acá (MIT lo hace con las que llevan el selector de planta).
 //     Sólo con function: un const o let repetido rompe la página entera.
-//   · cliente.js define TABS, TAB, PL, renderExtra() y esgSap(s, stl) (cuadro del SAP en el estado de situación), que acá se usan al ejecutar.
+//   · cliente.js define TABS, TAB, PL, renderExtra() y grupoInf() (informes para bajar), que acá se usan al ejecutar.
 const MOD = {
   archPref: null,                 // qué se le saca al nombre de un archivo para mostrarlo; por defecto «<nombre del cliente> - »
   propHorario: "16:00 a 16:45",   // ejemplo de horario al proponer la fecha de una capacitación
   quien: "la empresa",            // «Ante una inspección»: quién guarda los documentos («el local», «la empresa»)
-  sectorDe: "de la planta",       // EPP: «por sector del local / de la planta»
+  delLugar: "de la planta",       // «del local» / «de la planta», en EPP, Estudios y Autoprotección
+  sapEncuadre: "",                // Autoprotección en trámite: aclaración debajo del encuadre (por ejemplo «con el subsuelo en uso»)
   capTitulo: "Programa de capacitación", capProg: null,   // Capacitación: título del cuadro y, si hay, [clave del archivo, texto] del programa en PDF
   capCuando: "Mes",               // … encabezado de la primera columna
   capReg: false,                  // … nota final con la constancia SAP para completar
@@ -204,7 +206,7 @@ function vCap(){
 // ---------- EPP ----------
 function vEpp(){
   const ss = X().sect, es = X().epp;
-  return `<h2>Elementos de protección personal</h2><p class="x-intro">${E("ui.epp.intro", "Dónde hay que usar cada elemento, por sector " + MOD.sectorDe + ".")}</p>
+  return `<h2>Elementos de protección personal</h2><p class="x-intro">${E("ui.epp.intro", "Dónde hay que usar cada elemento, por sector " + MOD.delLugar + ".")}</p>
   <div class="x-box"><div class="x-bh">${esc(CFG.nombre)}<span>elemento por sector</span></div><div class="x-mxw"><table class="x-mx"><tr><th style="width:28%">Elemento</th>${ss.map(x => `<th>${esc(x)}</th>`).join("")}</tr>
   ${es.map((e, i) => `<tr><td><b>${E("epp." + i + ".elem")}</b><div class="x-m">${E("epp." + i + ".det")}</div></td>${ss.map((_, j) => e.s.includes(j) ? `<td><span class="x-dot" title="Se usa"></span></td>` : `<td class="x-no">—</td>`).join("")}</tr>`).join("")}</table></div></div>
   <div class="x-cards">${es.map((e, i) => `<div class="x-card"><b>${E("epp." + i + ".elem")}</b><span class="x-m">${E("epp." + i + ".cuando")}</span></div>`).join("")}</div>
@@ -272,3 +274,72 @@ async function imprimirEsg(){
   window.print(); document.body.classList.remove("imprimiendo-esg"); document.title = t0;
 }
 document.addEventListener("click", e => { if (e.target.closest("[data-esg]")) imprimirEsg(); });
+
+// ---------- Autoprotección ----------
+// La variante sale del dato: con fecha de vencimiento anual (sap.vig_anual) el SAP está vigente; sin ella, en trámite.
+function vSap(){ const s = X().sap; return s.vig_anual ? sapVigente(s) : sapTramite(s); }
+function sapTramite(s){   // SAP todavía sin aprobar: expediente, encuadre y lo que falta para presentar
+  return `<h2>Sistema de Autoprotección</h2><p class="x-intro">${E("ui.sap.intro", "En qué está el Sistema de Autoprotección " + MOD.delLugar + " ante Defensa Civil (Ley 5920/17), qué falta y quién lo hace.")}</p>
+  <div class="sap-c"><div class="sap-h"><div><b>${esc(CFG.nombre)} · ${esc(X().local.dom)}</b><span>Sistema de Autoprotección · ${esc(s.grupo)} · Ley 5920/17</span></div><span class="sap-ok pe">${esc(s.estado)}</span></div>
+  <div class="sap-k">
+    <div><span>Expediente</span><b style="font-size:14px">${esc(s.exp)}</b><em>caratulado el ${esc(s.caratulado)}</em></div>
+    <div><span>Encuadre</span><b>${esc(s.grupo)}</b><em>${esc(MOD.sapEncuadre)}</em></div>
+    <div><span>Pendientes</span><b>${s.pend.length}</b><em>para presentar el SAP</em></div>
+  </div>
+  <div class="sap-l">${s.hitos.map((h, i) => `<div class="ok"><i></i><b>${fISO(h.f)}</b><span>${E("sap.hitos." + i + ".t")}</span></div>`).join("")}</div>
+  <div class="g-sec">Lo que falta para presentar</div>
+  <div class="x-box">${s.pend.map((p, i) => `<div class="x-row lt-pend"><span class="lt-n">${i + 1}</span><div><div class="x-t">${E("sap.pend." + i + ".t")}</div><div class="x-m">${E("sap.pend." + i + ".q")}</div></div><div>${p.k ? btnDl(p.k, "Planilla (Excel)") : ""}</div></div>`).join("")}</div>
+  <p class="x-m" style="margin:12px 0">${E("sap.nota")}</p>
+  <div class="x-dl x-dlrow">${s.archivos.map(k => btnDl(k)).join("")}</div></div>`;
+}
+function sapVigente(s){   // SAP aprobado: vencimiento anual, próximo simulacro y vigencia
+  const prox = s.hitos.find(h => !h.ok && h.sim);
+  return `<h2>Sistema de Autoprotección</h2><p class="x-intro">${E("ui.sap.intro", "Lo presentado y aprobado ante Defensa Civil, las fechas de los simulacros y del vencimiento anual, y la documentación para bajar.")}</p>
+  <div class="sap-c"><div class="sap-h"><div><b>${esc(CFG.nombre)} · ${esc(X().local.dom)}</b><span>Sistema de Autoprotección · ${esc(s.grupo)}</span></div><span class="sap-ok">${esc(s.estado)}</span></div>
+  <div class="sap-k">
+    <div><span>Vencimiento anual</span><b>${fISO(s.vig_anual)}</b><em class="${dias(s.vig_anual) < 60 ? "pr" : ""}">${falta(s.vig_anual)}</em></div>
+    <div><span>Próximo simulacro</span>${prox ? `<b>${fISO(prox.f)}</b><em>${falta(prox.f)}</em>` : `<b>—</b><em>Se fijan al renovar</em>`}</div>
+    <div><span>Vigencia del SAP</span><b>${fISO(s.vig_bianual)}</b><em>${esc(s.disp)}</em></div>
+  </div>
+  <div class="sap-l">${s.hitos.map((h, i) => `<div class="${h.ok || dias(h.f) < 0 ? "ok" : "pe"}${h.venc ? " ve" : ""}"><i></i><b>${fISO(h.f)}</b><span>${E("sap.hitos." + i + ".t")}</span>${!h.ok && dias(h.f) >= 0 ? `<em>${falta(h.f)}</em>` : ""}</div>`).join("")}</div>
+  <p class="x-m" style="margin:10px 0">Expediente ${esc(s.exp)} · aprobado el ${esc(s.disp_fecha)}. ${E("sap.nota")}</p>
+  <div class="x-dl x-dlrow">${s.archivos.map(k => btnDl(k)).join("")}</div></div>`;
+}
+// cuadro del SAP dentro del estado de situación general
+function esgSap(s, stl){ return s.vig_anual ? esgSapVigente(s, stl) : esgSapTramite(s, stl); }
+function esgSapTramite(s, stl){
+  return `<table class="esg-t"><thead><tr><th style="width:30%">Expediente</th><th style="width:18%">Estado</th><th>Lo que falta para presentar</th></tr></thead><tbody>
+  <tr><td>${esc(s.exp)}<small>caratulado el ${esc(s.caratulado)} · ${esc(s.grupo)}</small></td><td>${stl(s.estado)}</td><td>${s.pend.map((p, i) => `${i + 1}. ${esc(T("sap.pend." + i + ".t"))} <small style="display:inline">(${esc(T("sap.pend." + i + ".q"))})</small>`).join("<br>")}</td></tr></tbody></table>`;
+}
+function esgSapVigente(s, stl){
+  return `<table class="esg-t"><thead><tr><th>Expediente</th><th>Estado</th><th>Próximo simulacro</th><th>Vencimiento anual</th></tr></thead><tbody>
+  <tr><td>${esc(s.exp)}<small>${esc(s.disp)} del ${esc(s.disp_fecha)}</small></td><td>${stl(s.estado)}</td><td>${(h => h ? fISO(h.f) + "<small>" + esc(h.t) + "</small>" : "—")(s.hitos.find(h => !h.ok && h.sim))}</td><td>${fISO(s.vig_anual)}<small>${falta(s.vig_anual)}</small></td></tr></tbody></table>`;
+}
+
+// ---------- Estudios y matafuegos ----------
+function vHys(){
+  const e = X().estudios;
+  return `<h2>Estudios de higiene y seguridad</h2><p class="x-intro">${E("ui.hys.intro", "Mediciones y estudios " + MOD.delLugar + ", con su estado al " + X().fecha + ".")}</p>
+  <div class="g-row">${grupoInf()}${grupoEsg()}</div>
+  <div class="x-box" style="border-top:5px solid var(--brand)"><div class="x-row x-est h"><span>Estudio</span><span>Norma</span><span>Fecha</span><span>Vigencia</span><span>Estado</span><span>Documento</span></div>
+  ${e.map((s, i) => { const [st, ve] = estEst(s); return `<div class="x-row x-est"><div><div class="x-t">${E("estudios." + i + ".estudio")}</div><div class="x-m">${E("estudios." + i + ".sit")}</div></div><div class="x-m">${E("estudios." + i + ".norma")}</div><div class="x-m">${E("estudios." + i + ".fecha")}</div><div class="x-m">${E("estudios." + i + ".vigencia")}</div><div><span class="x-e ${st.replace(" ", "-")}">${st === "EN CURSO" ? "EN PREPARACIÓN" : st === "PENDIENTE" ? "A REALIZAR" : st}</span>${ve ? `<div class="x-m">${ve}</div>` : ""}</div><div class="x-dl">${s.archivos.map(k => btnDl(k, k === "cf-plan" ? "Planillas" : "Descargar")).join("") || `<span class="x-m">—</span>`}</div></div>`; }).join("")}</div>
+  ${vMf()}
+  <div class="x-note"><span style="flex:1;min-width:240px">${E("mf_nota")}</span></div>`;
+}
+// La vista sale del dato: si cada matafuego trae su puesto, tabla con filtro por piso; si vienen agrupados por lugar (con cantidad), tarjetas.
+let MFP = "";   // piso elegido en la tabla
+function vMf(){
+  const mf = X().matafuegos;
+  if (!(mf.length && mf[0].puesto !== undefined)){
+    const tot = mf.reduce((a, m) => a + m.n, 0);
+    return `<div class="g-sec">Matafuegos · ${tot} equipos</div>
+  <div class="lt-mf">${mf.map((m, i) => `<div class="lt-mfc${/K/.test(m.tipo) ? " k" : ""}"><div class="lt-mfi"><svg viewBox="0 0 24 40" aria-hidden="true"><rect x="5" y="9" width="14" height="29" rx="5"/><rect x="9" y="3" width="6" height="7" rx="1"/><path d="M15 6h6v3" fill="none" stroke-width="2.4" stroke-linecap="round"/></svg><b>${m.n}</b></div><div><div class="x-t">${E("matafuegos." + i + ".tipo")}</div><div class="x-m"><b>${E("matafuegos." + i + ".lugar")}</b></div><div class="x-m">${E("matafuegos." + i + ".obs")}</div></div></div>`).join("")}</div>`;
+  }
+  const tot = mf.length, pisos = [...new Set(mf.map(m => m.piso))];
+  return `<div class="g-sec">Matafuegos · ${tot} equipos${X().mf_fecha ? " · control del " + esc(X().mf_fecha) : ""}</div>
+  <div class="lt-pisos">${pisos.map(p => `<button type="button" class="lt-piso${MFP === p ? " on" : ""}" data-mfp="${esc(p)}"><b>${mf.filter(m => m.piso === p).length}</b><span>${esc(p)}</span></button>`).join("")}<button type="button" class="lt-piso${!MFP ? " on" : ""}" data-mfp=""><b>${tot}</b><span>Todos</span></button></div>
+  <div class="x-box"><div class="x-row lt-mfr h"><span>N.º</span><span>Puesto</span><span>Piso</span><span>Equipo</span><span>Observación</span></div>
+  ${mf.filter(m => !MFP || m.piso === MFP).map(m => `<div class="x-row lt-mfr"><b>${m.n}</b><span>${esc(m.puesto)}</span><span class="x-m">${esc(m.piso)}</span><span class="x-m">${esc(m.agente)} · ${esc(m.cap)}${m.num ? " · n.º " + esc(m.num) : ""}</span><span class="x-m">${esc(m.obs)}</span></div>`).join("")}
+  ${X().archivos.mf ? `<div class="x-row" style="background:var(--crema)">${btnDl("mf", "Control de extintores (PDF)")}</div>` : ""}</div>`;
+}
+document.addEventListener("click", e => { const t = e.target.closest("[data-mfp]"); if (t){ MFP = t.dataset.mfp; renderExtra(); } });
