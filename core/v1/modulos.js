@@ -1,4 +1,4 @@
-// Portales de clientes · módulos comunes (core/v1/modulos.js) · bloques 1 a 4, 15/11/2026
+// Portales de clientes · módulos comunes (core/v1/modulos.js) · bloques 1 a 5, 15/11/2026
 // Se carga después de portal.js y antes de cliente.js, en los portales con "modulos_js": true en su ficha.
 // Trae lo que es igual en todos: textos editables, publicación por sección, descargas, subir constancia, proponer fecha, avisos y video (bloque 1),
 // y las vistas Capacitación, EPP, «Ante una inspección» y el Estado de situación general, con sus textos como opciones (bloque 2),
@@ -23,15 +23,20 @@ const MOD = {
   esgPieNombre: false,            // … pie con «(nombre del cliente)» después de la razón social
   informes: null,                 // Descargas: lista de informes [[clave, texto]…]; sin esto salen los archivos guardados en pdf/
   descargas: null,                // … cajas [{t, c, de}]; ver dlCajas()
+  pubDef: null,                   // qué solapas ve el cliente mientras el Lic. no publique otra cosa; por defecto {informe: true}
+  pubToast: "",                   // aviso al publicar una sección; por defecto «Sección publicada»
   vistas: null,                   // solapas propias del cliente: {clave: función que devuelve el HTML}
+  infNota: "",                    // … texto (HTML) debajo de «Informes de visita»; por defecto «El último y los anteriores, en PDF»
+  clicSel: "", clic: null,        // clics propios: selectores que se suman a los comunes y función clic(t) que devuelve true si lo atendió
+  alEditar: null,                 // qué redibujar al entrar o salir de «Editar textos» (por defecto, la barra y la solapa)
   esgCol: {FALTA: "#C0392B", TRAMITE: "#B7791F", LOCAL: "#555B66", PORTAL: "#2E7D32", EJECUTADO: "#2E7D32", VIGENTE: "#2E7D32", VENCIDO: "#C0392B", PENDIENTE: "#B7791F", "EN PREPARACIÓN": "#B7791F"}   // … color de cada estado
 };
 
 // ---------- Opciones y estado ----------
-const X = () => DATA.extra;
+function X(){ return DATA.extra; }   // function y no const: La Madrileña la pisa (oculta archivos)
 let TXT = {}, PUB = null, CONST_UP = [], PROPS = [], EDIT = false;
 const PUB_DEF = {informe: true};                       // hasta que el Lic. publique otras secciones, el cliente ve sólo el informe
-const pubOn = k => PUB && PUB[k] !== undefined ? PUB[k] : !!PUB_DEF[k];
+const pubOn = k => PUB && PUB[k] !== undefined ? PUB[k] : !!(MOD.pubDef || PUB_DEF)[k];
 const tabsVis = () => TABS.filter(([k]) => ADMIN || pubOn(k));
 const getP = path => path.split(".").reduce((o, k) => o == null ? o : o[k], DATA.extra);
 const T = (k, def) => TXT[k] !== undefined ? TXT[k] : (def !== undefined ? def : getP(k));
@@ -116,10 +121,10 @@ async function enviarProp(i){
   const f = [$("ppF1").value, $("ppF2").value].filter(Boolean).map(x => fISO(x)), h = $("ppH").value.trim();
   if (!f.length){ $("ppE").textContent = "Elegí al menos una fecha."; return; }
   $("ppEnv").disabled = true;
-  const ev = {tipo: "propuesta", cap: T("cap.prog." + i + ".tema"), planta: "G", fechas: f.join(" o "), horario: h, texto: $("ppC").value.trim(), quien: quien()};
+  const ev = {tipo: "propuesta", cap: T("cap.prog." + i + ".tema"), planta: ($("ppP") || {}).value || "G", fechas: f.join(" o "), horario: h, texto: $("ppC").value.trim(), quien: quien()};
   const r = await enviar(ev);
   if (!r.ok){ toast("No se pudo enviar. Probá de nuevo."); $("ppEnv").disabled = false; return; }
-  PROPS.push({tema: ev.cap, planta: "G", fechas: ev.fechas, horario: h, comentario: ev.texto, quien: ev.quien, estado: "Propuesta", cargada: fISO(new Date().toISOString().slice(0, 10))});
+  PROPS.push({tema: ev.cap, planta: ev.planta, fechas: ev.fechas, horario: h, comentario: ev.texto, quien: ev.quien, estado: "Propuesta", cargada: fISO(new Date().toISOString().slice(0, 10))});
   $("velo").hidden = true; toast("Propuesta enviada. Gracias."); renderExtra();
 }
 
@@ -352,7 +357,7 @@ document.addEventListener("click", e => { const t = e.target.closest("[data-mfp]
 // Informes para bajar: los de extra.informes o MOD.informes ([clave, texto]); si no hay, los archivos guardados en pdf/ («Informe <clave>»).
 function dlInformes(){ return X().informes || MOD.informes || Object.entries(X().archivos).filter(([k, a]) => /^pdf\//.test(a.ruta || "")).map(([k]) => [k, "Informe " + k]); }
 function grupoInf(){
-  return `<div class="g-box" style="--c:var(--brand)"><h3>Informes de visita</h3><span class="x-m">El último y los anteriores, en PDF</span>
+  return `<div class="g-box" style="--c:var(--brand)"><h3>Informes de visita</h3><span class="x-m">${MOD.infNota || "El último y los anteriores, en PDF"}</span>
   <div class="g-sel"><select id="sel-inf">${dlInformes().map(([k, t]) => `<option value="${esc(k)}">${esc(t)}</option>`).join("")}</select><button type="button" class="g-btn" data-dlsel="inf">Descargar</button></div></div>`;
 }
 // Cajas de Descargas: extra.descargas o MOD.descargas = [{t: título, c: color, de: [...]}]. Cada elemento de «de» es [clave] o [clave, texto],
@@ -380,3 +385,22 @@ function renderExtra(){
   $("vExtra").innerHTML = pubCtl(TAB) + Object.assign({sap: vSap, hys: vHys, cap: vCap, epp: vEpp, insp: vInsp, dl: vDl}, MOD.vistas)[TAB]();
   if (EDIT) $("vExtra").querySelectorAll("[data-ed]").forEach(e => e.contentEditable = "true");
 }
+
+// ---------- Clics (los propios de cada cliente entran por MOD.clicSel y MOD.clic) ----------
+document.addEventListener("click", e => {
+  if (EDIT && e.target.closest("[data-ed]")) return;   // editando: el clic es para escribir
+  const t = e.target.closest("[data-tab],[data-dl],[data-dlsel],[data-pub],[data-editar],[data-prop],[data-subir],[data-cdl],[data-aviso],#ppEnv,#suEnv,#avEnv" + (MOD.clicSel ? "," + MOD.clicSel : "")); if (!t) return;
+  if (t.dataset.pub){ const k = t.dataset.pub, on = !pubOn(k); PUB = PUB || {}; PUB[k] = on; enviar({tipo: "publicar", seccion: k, on}).then(r => toast(r.ok ? (on ? (MOD.pubToast || "Sección publicada") : "Sección sacada de la publicación") : "No se pudo guardar")); solapas(); if (!$("vExtra").hidden) renderExtra(); return; }
+  if (t.dataset.editar){ EDIT = !EDIT; document.body.classList.toggle("editando", EDIT); if (MOD.alEditar) MOD.alEditar(); else { barra(); irA(TAB); } toast(EDIT ? "Tocá cualquier texto con borde punteado y escribí. Se guarda al salir del texto." : "Edición terminada"); return; }
+  if (t.dataset.prop){ abrirProp(+t.dataset.prop); return; }
+  if (t.dataset.subir){ abrirSubir(t.dataset.subir); return; }
+  if (t.dataset.cdl !== undefined){ bajarSubida(t.dataset.cdl, t.dataset.cnom); return; }
+  if (t.id === "ppEnv"){ enviarProp(+t.dataset.pi); return; }
+  if (t.id === "suEnv"){ enviarSubir(t.dataset.modo); return; }
+  if (MOD.clic && MOD.clic(t)) return;   // lo propio del cliente
+  if (t.dataset.dlsel){ bajarArch($("sel-" + t.dataset.dlsel).value); return; }
+  if (t.dataset.tab) irA(t.dataset.tab);
+  else if (t.dataset.dl) bajarArch(t.dataset.dl);
+  else if (t.dataset.aviso) abrirAviso(t.dataset.aviso);
+  else if (t.id === "avEnv") enviarAviso();
+});

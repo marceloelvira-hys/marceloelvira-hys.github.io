@@ -81,10 +81,6 @@ function vSap(){
 }
 
 // ---------- estudios ----------
-function grupoInf(){
-  return `<div class="g-box" style="--c:var(--brand)"><h3>Informes de visita</h3><span class="x-m">${plTag("G")} Un solo informe por visita, con las dos plantas</span>
-  <div class="g-sel"><select id="sel-inf">${["10-26", "9-26", "8-26", "4-26", "3-26", "1-26", "12-25"].map(k => `<option value="${k}">Informe ${k}</option>`).join("")}</select><button type="button" class="g-btn" data-dlsel="inf">Descargar</button></div></div>`;
-}
 function grupoEsg(){
   return `<div class="g-box" style="--c:#222529"><h3>Estado de situación general</h3><span class="x-m">Se genera en el momento, con lo último cargado en el portal</span>
   <div class="g-sel"><select id="esgPl"><option value="P1"${PL === "P1" ? " selected" : ""}>Planta 1</option><option value="P2"${PL === "P2" ? " selected" : ""}>Planta 2</option><option value="AMBAS"${PL === "G" ? " selected" : ""}>Las dos plantas</option></select><button type="button" class="g-btn" data-esg="1">Generar e imprimir</button></div></div>`;
@@ -127,16 +123,6 @@ function abrirProp(i){
     <span class="aviso">Se guarda a nombre de <b>${esc(quien())}</b> y le llega al Lic. Marcelo Elvira para confirmarla.</span><span class="err" id="ppE"></span>
     <div style="display:flex;gap:10px"><button class="btn prim" type="button" id="ppEnv" data-pi="${i}">Enviar propuesta</button></div></div></div>`;
   $("velo").hidden = false;
-}
-async function enviarProp(i){
-  const f = [$("ppF1").value, $("ppF2").value].filter(Boolean).map(x => fISO(x)), h = $("ppH").value.trim();
-  if (!f.length){ $("ppE").textContent = "Elegí al menos una fecha."; return; }
-  $("ppEnv").disabled = true;
-  const ev = {tipo: "propuesta", cap: T("cap.prog." + i + ".tema"), planta: $("ppP").value, fechas: f.join(" o "), horario: h, texto: $("ppC").value.trim(), quien: quien()};
-  const r = await enviar(ev);
-  if (!r.ok){ toast("No se pudo enviar. Probá de nuevo."); $("ppEnv").disabled = false; return; }
-  PROPS.push({tema: ev.cap, planta: ev.planta, fechas: ev.fechas, horario: h, comentario: ev.texto, quien: ev.quien, estado: "Propuesta", cargada: fISO(new Date().toISOString().slice(0, 10))});
-  $("velo").hidden = true; toast("Propuesta enviada. Gracias."); renderExtra();
 }
 function abrirSubir(){
   const temas = X().cap.prog.map((p, i) => T("cap.prog." + i + ".tema"));
@@ -233,31 +219,7 @@ function vDl(){
   <div class="g-row">${grupoInf()}${grupoEsg()}</div>
   <div class="g-row">${box("Sistema de Autoprotección", "#16305A", sap)}${box("Estudios", "#0060B4", est)}${box("Capacitación", "#8A5A12", cap)}${box("Formularios para completar", "#2F7D4A", form)}${box("Normas y procedimientos", "#00A5FF", nor)}${box("Máquinas", "#6E1E2E", maq)}</div>`;
 }
-function renderExtra(){
-  $("vExtra").innerHTML = pubCtl(TAB) + ({informe: vInfG, sap: vSap, hys: vHys, cap: vCap, epp: vEpp, maq: vMaq, normas: vNormas, docs: vDocs, dl: vDl})[TAB]();
-  if (EDIT) $("vExtra").querySelectorAll("[data-ed]").forEach(e => e.contentEditable = "true");
-}
 
-document.addEventListener("click", e => {
-  if (EDIT && e.target.closest("[data-ed]")) return;   // editando: el clic es para escribir
-  const t = e.target.closest("[data-tab],[data-dl],[data-dlsel],[data-maq],[data-aviso],[data-pl],[data-mqs],[data-irpt],[data-pub],[data-editar],[data-prop],[data-subir],[data-cdl],#avEnv,#ppEnv,#suEnv"); if (!t) return;
-  if (t.dataset.pub){ const k = t.dataset.pub, on = !pubOn(k); PUB = PUB || {}; PUB[k] = on; enviar({tipo: "publicar", seccion: k, on}).then(r => toast(r.ok ? (on ? "Sección publicada" : "Sección sacada de la publicación") : "No se pudo guardar")); solapas(); if (!$("vExtra").hidden) renderExtra(); return; }
-  if (t.dataset.editar){ EDIT = !EDIT; document.body.classList.toggle("editando", EDIT); aplicarPlanta(); toast(EDIT ? "Tocá cualquier texto con borde punteado y escribí. Se guarda al salir del texto." : "Edición terminada"); return; }
-  if (t.dataset.prop){ abrirProp(+t.dataset.prop); return; }
-  if (t.dataset.subir){ abrirSubir(); return; }
-  if (t.dataset.cdl !== undefined){ bajarSubida(t.dataset.cdl, t.dataset.cnom); return; }
-  if (t.id === "ppEnv"){ enviarProp(+t.dataset.pi); return; }
-  if (t.id === "suEnv"){ enviarSubir(); return; }
-  if (t.dataset.pl !== undefined && t.dataset.pl){ if (t.dataset.pl !== PL){ PL = t.dataset.pl; if (TAB === "informe" && PL !== "G"){} aplicarPlanta(); } return; }
-  if (t.dataset.dlsel){ bajarArch($("sel-" + t.dataset.dlsel).value); return; }
-  if (t.dataset.tab) irA(t.dataset.tab);
-  else if (t.dataset.dl) bajarArch(t.dataset.dl);
-  else if (t.dataset.maq){ MAQ = t.dataset.maq; renderExtra(); }
-  else if (t.dataset.mqs !== undefined){ MQS = t.dataset.mqs; renderExtra(); }
-  else if (t.dataset.irpt){ const [c, n] = t.dataset.irpt.split("|"), pl = c.split(" ")[1]; if (pl !== PL){ PL = pl; TAB = "informe"; aplicarPlanta(); } else irA("informe"); setTimeout(() => abrir(Number(n)), 50); }
-  else if (t.dataset.aviso) abrirAviso(t.dataset.aviso);
-  else if (t.id === "avEnv") enviarAviso();
-});
 document.addEventListener("input", e => { if (e.target.id === "mqQ"){ MQQ = e.target.value; const p = e.target.selectionStart; renderExtra(); const q = $("mqQ"); q.focus(); q.setSelectionRange(p, p); } });
 
 // ---------- estado de situación general a demanda (por planta o las dos) ----------
@@ -309,6 +271,22 @@ async function imprimirEsg(){
   await new Promise(r => setTimeout(r, 200));
   window.print(); document.body.classList.remove("imprimiendo-esg"); document.title = t0;
 }
+
+// ---- opciones y clics propios para los módulos (core/v1/modulos.js) ----
+Object.assign(MOD, {
+  vistas: {informe: vInfG, maq: vMaq, normas: vNormas, docs: vDocs},
+  informes: ["10-26", "9-26", "8-26", "4-26", "3-26", "1-26", "12-25"].map(k => [k, "Informe " + k]),
+  infNota: plTag("G") + " Un solo informe por visita, con las dos plantas",
+  alEditar: () => aplicarPlanta(),
+  clicSel: "[data-maq],[data-pl],[data-mqs],[data-irpt]",
+  clic: t => {
+    if (t.dataset.pl !== undefined && t.dataset.pl){ if (t.dataset.pl !== PL){ PL = t.dataset.pl; aplicarPlanta(); } return true; }
+    if (t.dataset.dlsel || t.dataset.tab || t.dataset.dl) return false;
+    if (t.dataset.maq){ MAQ = t.dataset.maq; renderExtra(); return true; }
+    if (t.dataset.mqs !== undefined){ MQS = t.dataset.mqs; renderExtra(); return true; }
+    if (t.dataset.irpt){ const [c, n] = t.dataset.irpt.split("|"), pl = c.split(" ")[1]; if (pl !== PL){ PL = pl; TAB = "informe"; aplicarPlanta(); } else irA("informe"); setTimeout(() => abrir(Number(n)), 50); return true; }
+    return false;
+  }});
 
 // ---- enganche con el núcleo (core/v1/portal.js) ----
 Object.assign(CLI, {inicio: plantaInicial, estado: mitEstado, subt: () => PNOM() + " · "});

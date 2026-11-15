@@ -1,4 +1,11 @@
 // ---------- solapas de La Madrileña: documentación, HyS, EPP, máquinas, descargas ----------
+// Lo común (publicación por sección, bajar archivos, avisos, imprimir el estado de situación y los clics) está en core/v1/modulos.js;
+// acá van las opciones de este cliente (MOD) y sus vistas, que son propias. Una function con el mismo nombre que una del módulo la pisa.
+Object.assign(MOD, {
+  pubDef: {informe: true, docs: true, hys: true, epp: true, maq: true, dl: true, senal: false},   // lo que ya estaba a la vista sigue publicado; lo nuevo entra en revisión
+  pubToast: "Sección publicada: La Madrileña ya la ve",
+  clicSel: "[data-maq]",
+  clic: t => { if (t.dataset.dlsel || t.dataset.tab || t.dataset.dl || !t.dataset.maq) return false; MAQ = t.dataset.maq; renderExtra(); return true; }});
 const TABS = [["informe", "Informe de visita"], ["docs", "Documentación pedida"], ["hys", "Documentación de HyS"], ["epp", "EPP"], ["maq", "Máquinas"], ["senal", "Señalización"], ["dl", "Descargas"]];
 const DOCST = {FALTA: "Falta", PARCIAL: "Parcial", CONFIRMAR: "A confirmar", NUESTRO: "Lo hacemos nosotros", OK: "Presentado"};
 let TAB = "informe", MAQ = "embaladora";
@@ -6,18 +13,13 @@ let TAB = "informe", MAQ = "embaladora";
 const OCULTOS = ["ficha-emb"];
 let XF = null;
 // ---------- publicación por sección (6/11/2026, como MIT): el Lic. decide qué ve el cliente ----------
-let PUB = null;
-const PUB_DEF = {informe: true, docs: true, hys: true, epp: true, maq: true, dl: true, senal: false};   // lo que ya estaba a la vista sigue publicado; lo nuevo entra en revisión
-const pubOn = k => PUB && PUB[k] !== undefined ? PUB[k] : !!PUB_DEF[k];
-const tabsVis = () => TABS.filter(([k]) => ADMIN || pubOn(k));
-const pubCtl = k => ADMIN ? `<div class="pub ${pubOn(k) ? "on" : ""}"><span>${pubOn(k) ? "✔ Sección publicada: La Madrileña la ve" : "🚧 En revisión: La Madrileña todavía no la ve"}</span><button type="button" class="x-btn" data-pub="${k}">${pubOn(k) ? "Sacar de la publicación" : "Publicar esta sección"}</button></div>` : "";
 function lmEstado(j){
   PUB = j.publicacion || PUB || {};
   if (j.senal){ try { const n = JSON.parse(j.senal); if (!SN_EST || (n.ts || 0) >= (SN_EST.ts || 0)) SN_EST = n; } catch(e){} }
   solapas(); if (!tabsVis().some(t => t[0] === TAB)){ irA((tabsVis()[0] || ["informe"])[0]); return; }
   if (!$("vExtra").hidden) renderExtra();
 }
-const X = () => { const e = DATA.extra; if (e && XF !== e){ XF = e; e.maquinas.forEach(m => m.archivos = m.archivos.filter(k => !OCULTOS.includes(k))); e.grupos.forEach(g => g.items = g.items.filter(i => !OCULTOS.includes(i.k))); } return e; };
+function X(){ const e = DATA.extra; if (e && XF !== e){ XF = e; e.maquinas.forEach(m => m.archivos = m.archivos.filter(k => !OCULTOS.includes(k))); e.grupos.forEach(g => g.items = g.items.filter(i => !OCULTOS.includes(i.k))); } return e; }   // pisa la del módulo: saca de la vista los archivos de OCULTOS
 function solapas(){
   const pend = X().docs.filter(d => d.estado === "FALTA" || d.estado === "PARCIAL").length;
   $("solapasW").innerHTML = tabsVis().map(([k, t]) => `<button type="button" data-tab="${k}" aria-pressed="${k === TAB}"${ADMIN && !pubOn(k) ? ' class="wip" title="En revisión: La Madrileña no la ve"' : ""}>${ADMIN && !pubOn(k) ? "🚧 " : ""}${t}${k === "docs" && pend ? `<i>${pend}</i>` : ""}${k === "informe" ? `<i>${DATA.meses[0].puntos.length}</i>` : ""}</button>`).join("");
@@ -29,20 +31,7 @@ function irA(k){
   if (k !== "informe") renderExtra(); else render();
   scrollTo({top: 0});
 }
-async function bajarArch(clave){
-  const a = X().archivos[clave]; if (!a) return;
-  const html = a.tipo === "text/html", w = html ? window.open("", "_blank") : null;
-  toast(html ? "Abriendo…" : "Preparando el archivo…");
-  try {
-    const ruta = a.ruta || ("arch/" + clave);
-    const b = CIFRADO ? await bajarCifrado(ruta) : await (await fetch(ruta)).arrayBuffer();
-    const u = URL.createObjectURL(new Blob([b], {type: a.tipo}));
-    if (html && w){ w.location = u; return; }
-    const el = document.createElement("a"); el.href = u; el.download = a.nombre; document.body.appendChild(el); el.click(); el.remove();
-    setTimeout(() => URL.revokeObjectURL(u), 60000);
-  } catch(e){ if (w) w.close(); toast("No se pudo bajar el archivo"); }
-}
-const btnDl = (k, txt) => `<button type="button" class="x-btn" data-dl="${k}">↓ ${esc(txt || X().archivos[k].nombre.replace(/\.(pdf|html)$/, ""))}</button>`;
+function btnDl(k, txt){ return `<button type="button" class="x-btn" data-dl="${k}">↓ ${esc(txt || X().archivos[k].nombre.replace(/\.(pdf|html)$/, ""))}</button>`; }   // pisa la del módulo
 function vDocs(){
   const ds = X().docs, ord = {FALTA: 0, PARCIAL: 1, CONFIRMAR: 2, NUESTRO: 3, OK: 4}, c = k => ds.filter(d => d.estado === k).length;
   return `<h2>Documentación pedida a La Madrileña</h2><p class="x-intro">Lo que se pidió en el presupuesto del 24/8/2026 y en el informe 8-26, con su estado al ${esc(X().fecha)}. Cuando manden algo, avisen desde acá: queda registrado y le llega al Lic. Marcelo Elvira.</p>
@@ -126,41 +115,10 @@ window.addEventListener("message", async e => {
   else toast("No se pudo guardar la señalización");
   fr.contentWindow.postMessage({tipo: "senal-ok", ok: !!r.ok}, "*");
 });
-document.addEventListener("click", e => {
-  const p = e.target.closest("[data-pub]");
-  if (p){ const k = p.dataset.pub, on = !pubOn(k); PUB = PUB || {}; PUB[k] = on;
-    enviar({tipo: "publicar", seccion: k, on}).then(r => toast(r.ok ? (on ? "Sección publicada: La Madrileña ya la ve" : "Sección sacada de la publicación") : "No se pudo guardar"));
-    solapas(); if (!$("vExtra").hidden) renderExtra(); return; }
-});
-function abrirAviso(doc){
-  $("velo").innerHTML = `<div class="caja" role="dialog" aria-modal="true" aria-labelledby="avT" style="width:min(560px,100%)"><div class="cab"><h3 id="avT">Avisar que se envió</h3><button class="cerrar" type="button" data-cerrar>Cerrar ✕</button></div><div class="cpo">
-    <div class="form"><label>Documento</label><input type="text" value="${esc(doc)}" readonly id="avD"></div>
-    <div class="form"><label for="avC">Comentario (opcional)</label><textarea id="avC" rows="2" placeholder="Por dónde se mandó, si falta algo…"></textarea></div>
-    <span class="aviso">Se guarda a nombre de <b>${esc(quien())}</b>.</span>
-    <div style="display:flex;gap:10px"><button class="btn prim" type="button" id="avEnv">Avisar</button></div></div></div>`;
-  $("velo").hidden = false;
-}
-async function enviarAviso(){
-  const q = quien();
-  setQuien(q); $("avEnv").disabled = true;
-  const r = await enviar({tipo: "documento", sector: $("avD").value, texto: $("avC").value.trim(), quien: q});
-  if (!r.ok){ toast("No se pudo enviar. Probá de nuevo."); $("avEnv").disabled = false; return; }
-  $("velo").hidden = true; toast("Aviso enviado. Gracias.");
-}
-document.addEventListener("click", e => {
-  const t = e.target.closest("[data-tab],[data-dl],[data-dlsel],[data-maq],[data-aviso],#avEnv"); if (!t) return;
-  if (t.dataset.dlsel){ bajarArch($("sel-" + t.dataset.dlsel).value); return; }
-  if (t.dataset.tab) irA(t.dataset.tab);
-  else if (t.dataset.dl) bajarArch(t.dataset.dl);
-  else if (t.dataset.maq){ MAQ = t.dataset.maq; renderExtra(); }
-  else if (t.dataset.aviso) abrirAviso(t.dataset.aviso);
-  else if (t.id === "avEnv") enviarAviso();
-});
 
 // ---------- estado de situación general a demanda (5/11/2026) ----------
 const ESG_COL = {FALTA: "#C0392B", PARCIAL: "#B7791F", CONFIRMAR: "#555B66", NUESTRO: "#2E5FA3", OK: "#2E7D32", EJECUTADO: "#2E7D32", "EN CURSO": "#B7791F", "A PROGRAMAR": "#2E5FA3", "SIN FUENTES": "#777777", POSTERIOR: "#777777"};
 const ESG_LBL = {FALTA: "FALTA", PARCIAL: "PARCIAL", CONFIRMAR: "A CONFIRMAR", NUESTRO: "LO HACEMOS NOSOTROS", OK: "PRESENTADO"};
-let ESG_FIRMA = "";
 function esgDoc(gen){
   const x = X(), g = x.esg || {}, m = DATA.meses[0];
   const est = p => { const e = ultEstado(m, p); return e || "Pendiente"; };
@@ -192,21 +150,6 @@ function esgDoc(gen){
   <div class="esg-fi">${ESG_FIRMA ? `<img src="${ESG_FIRMA}" alt="">` : ""}<b>Lic. Marcelo Elvira</b><span>Lic. en Higiene y Seguridad en el Trabajo · M.P. 0656 C.P.I.I.</span></div>
   </td></tr></tbody><tfoot><tr><td><div class="esg-pie">Estado de situación general — ${esc(g.razon || DATA.cliente)} — ${esc(g.corto_dom || DATA.domicilio)}</div></td></tr></tfoot></table>`;
 }
-async function imprimirEsg(){
-  toast("Generando el estado de situación…");
-  try { await cargarEstado(); } catch(e){}
-  if (!ESG_FIRMA && X().archivos.firma){ try { const b = CIFRADO ? await bajarCifrado("arch/firma") : await (await fetch("arch/firma")).arrayBuffer(); ESG_FIRMA = URL.createObjectURL(new Blob([b], {type: X().archivos.firma.tipo})); } catch(e){} }
-  const a = new Date(), dd = n => String(n).padStart(2, "0");
-  const gen = `${dd(a.getDate())}/${dd(a.getMonth() + 1)}/${a.getFullYear()} a las ${dd(a.getHours())}:${dd(a.getMinutes())} h`;
-  let el = $("esg"); if (!el){ el = document.createElement("div"); el.id = "esg"; document.body.appendChild(el); }
-  el.innerHTML = esgDoc(gen);
-  const im = el.querySelector("img"); if (im){ try { await im.decode(); } catch(e){} }
-  const t0 = document.title; document.title = `Estado de situación general La Madrileña ${dd(a.getDate())}-${dd(a.getMonth() + 1)}-${String(a.getFullYear()).slice(2)}`;
-  document.body.classList.add("imprimiendo-esg");
-  await new Promise(r => setTimeout(r, 200));
-  window.print(); document.body.classList.remove("imprimiendo-esg"); document.title = t0;
-}
-document.addEventListener("click", e => { if (e.target.closest("[data-esg]")) imprimirEsg(); });
 
 // ---------- video tutorial «Cómo se usa» (6/11/2026, como GALVASA) ----------
 let VIDEO_URL = null;
