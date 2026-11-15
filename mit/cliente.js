@@ -1,27 +1,19 @@
 // ---------- Metalúrgica MIT: selector de planta + solapas (SAP, estudios, capacitación, EPP, máquinas, normas, documentación, descargas) ----------
+// Lo común (textos editables, publicación por sección, descargas, subir constancia, proponer fecha, video) está en core/v1/modulos.js;
+// acá van las opciones de este cliente (MOD) y lo propio. Una función con el mismo nombre que una del módulo la pisa.
+Object.assign(MOD, {archPref: /^MIT( Planta [12])? - /});
 const PLS = [["P1", "Planta 1", "Cnel. Ramón Lista 5076"], ["P2", "Planta 2", "Cnel. Ramón Lista 5158"], ["G", "General", "Lo común a las dos plantas"]];
 const TABS = [["informe", "Informe de visita"], ["sap", "Autoprotección"], ["hys", "Estudios"], ["cap", "Capacitación"], ["epp", "EPP"], ["maq", "Máquinas"], ["normas", "Normas y AST"], ["docs", "Documentación pedida"], ["dl", "Descargas"]];
 const DOCST = {FALTA: "Falta", PARCIAL: "Parcial", CONFIRMAR: "A confirmar", NUESTRO: "Lo hacemos nosotros", OK: "Presentado"};
 let TAB = "informe", PL = "P1", TODOS = null, MAQ = "", MQQ = "", MQS = "";
-const X = () => DATA.extra;
-let TXT = {}, PUB = null, CONST_UP = [], PROPS = [], EDIT = false;
-const PUB_DEF = {informe: true};                       // hasta que el Lic. publique otras secciones, el cliente ve sólo el informe
-const pubOn = k => PUB && PUB[k] !== undefined ? PUB[k] : !!PUB_DEF[k];
-const tabsVis = () => TABS.filter(([k]) => ADMIN || pubOn(k));
-const getP = path => path.split(".").reduce((o, k) => o == null ? o : o[k], DATA.extra);
-const T = (k, def) => TXT[k] !== undefined ? TXT[k] : (def !== undefined ? def : getP(k));
-const E = (k, def) => `<span data-ed="${esc(k)}">${esc(T(k, def) ?? "")}</span>`;   // texto que el Lic. puede editar desde la página
 const plTag = pl => `<i class="pl-tag pl-${pl}">${pl === "G" ? "P1 y P2" : pl}</i>`;
 function mitEstado(j){
   TXT = j.textos || TXT; PUB = j.publicacion || PUB || {}; CONST_UP = j.constancias || []; PROPS = j.propuestas || [];
   solapas(); if (!tabsVis().some(t => t[0] === TAB)){ irA(tabsVis()[0][0]); return; }
   if (!$("vExtra").hidden) renderExtra();
 }
-const PNOM = () => (PLS.find(p => p[0] === PL) || [])[1] || "";
+function PNOM(){ return (PLS.find(p => p[0] === PL) || [])[1] || ""; }   // pisa la del módulo: acá es el nombre de la planta
 const enPl = x => PL === "G" ? x.pl === "G" : x.pl === PL;
-const fISO = s => { const [a, m, d] = s.split("-"); return `${d}/${m}/${a}`; };
-const dias = s => Math.round((new Date(s + "T12:00:00") - new Date(new Date().toDateString() + " 12:00")) / 864e5);
-const falta = s => { const d = dias(s); return d > 1 ? `faltan ${d} días` : d === 1 ? "mañana" : d === 0 ? "hoy" : `hace ${-d} días`; };
 const mesesPl = pl => (TODOS || DATA.meses).filter(m => m.planta === pl);
 
 function plantaInicial(){
@@ -44,7 +36,6 @@ function solapas(){
   $("solapasW").innerHTML = tabsVis().map(([k, t]) => `<button type="button" data-tab="${k}" aria-pressed="${k === TAB}"${ADMIN && !pubOn(k) ? ' class="wip" title="En revisión: MIT no la ve"' : ""}>${ADMIN && !pubOn(k) ? "🚧 " : ""}${t}${k === "docs" && pend ? `<i>${pend}</i>` : ""}${k === "informe" ? `<i>${nPts}</i>` : ""}</button>`).join("");
   const pi = $("pubInf"); if (pi) pi.innerHTML = ADMIN ? pubCtl("informe") : "";
 }
-const pubCtl = k => ADMIN ? `<div class="pub ${pubOn(k) ? "on" : ""}"><span>${pubOn(k) ? "✔ Sección publicada: MIT la ve" : "🚧 En revisión: MIT todavía no la ve"}</span><button type="button" class="x-btn" data-pub="${k}">${pubOn(k) ? "Sacar de la publicación" : "Publicar esta sección"}</button></div>` : "";
 function irA(k){
   TAB = k; solapas();
   const extra = k !== "informe" || PL === "G";
@@ -53,21 +44,6 @@ function irA(k){
   if (extra){ renderExtra(); $("subt").textContent = PL === "G" ? "Plantas 1 y 2 · Cnel. Ramón Lista 5076 y 5158 · Villa Devoto" : cabPl(PL); } else render();
   scrollTo({top: 0});
 }
-async function bajarArch(clave){
-  const a = X().archivos[clave]; if (!a) return;
-  const html = a.tipo === "text/html", w = html ? window.open("", "_blank") : null;
-  toast(html ? "Abriendo…" : "Preparando el archivo…");
-  try {
-    const ruta = a.ruta || ("arch/" + clave);
-    const b = CIFRADO ? await bajarCifrado(ruta) : await (await fetch(ruta)).arrayBuffer();
-    const u = URL.createObjectURL(new Blob([b], {type: a.tipo}));
-    if (html && w){ w.location = u; return; }
-    const el = document.createElement("a"); el.href = u; el.download = a.nombre; document.body.appendChild(el); el.click(); el.remove();
-    setTimeout(() => URL.revokeObjectURL(u), 60000);
-  } catch(e){ if (w) w.close(); toast("No se pudo bajar el archivo"); }
-}
-const nomArch = k => X().archivos[k].nombre.replace(/^MIT( Planta [12])? - /, "").replace(/\.(pdf|html|xlsx?|jpg)$/, "");
-const btnDl = (k, txt) => `<button type="button" class="x-btn" data-dl="${k}">${X().archivos[k].tipo === "text/html" ? "▶" : "↓"} ${esc(txt || nomArch(k))}</button>`;
 const comun = qué => PL === "G" ? "" : `<div class="pl-aviso"><span>Estás viendo <b>${PNOM()}</b>. ${qué}</span><button type="button" class="x-btn" data-pl="G">Ver General</button></div>`;
 const cabPl = pl => { const p = X().plantas[pl]; return `${p.nombre} · ${p.dom}`; };
 
@@ -113,9 +89,6 @@ function grupoEsg(){
   return `<div class="g-box" style="--c:#222529"><h3>Estado de situación general</h3><span class="x-m">Se genera en el momento, con lo último cargado en el portal</span>
   <div class="g-sel"><select id="esgPl"><option value="P1"${PL === "P1" ? " selected" : ""}>Planta 1</option><option value="P2"${PL === "P2" ? " selected" : ""}>Planta 2</option><option value="AMBAS"${PL === "G" ? " selected" : ""}>Las dos plantas</option></select><button type="button" class="g-btn" data-esg="1">Generar e imprimir</button></div></div>`;
 }
-const estEst = s => { if (s.estado !== "EJECUTADO") return [s.estado, ""]; if (!s.meses || !s.iso) return ["VIGENTE", ""];
-  const d = new Date(s.iso + "T12:00:00"); d.setMonth(d.getMonth() + s.meses); const iso = d.toISOString().slice(0, 10);
-  return [dias(iso) < 0 ? "VENCIDO" : "VIGENTE", "vence el " + fISO(iso)]; };
 function vHys(){
   const e = X().estudios.filter(enPl);
   return `<h2>Estudios de higiene y seguridad · ${esc(PNOM())}</h2><p class="x-intro">Mediciones, protocolos y estudios${PL === "G" ? " comunes a las dos plantas" : " de la planta"}, con su estado al ${esc(X().fecha)}.</p>
@@ -188,16 +161,6 @@ async function enviarSubir(){
   if (!r.ok){ $("suE").textContent = "No se pudo subir. Probá de nuevo."; $("suEnv").disabled = false; return; }
   CONST_UP.push({id: r.id || "", planta: ev.planta, cap, fecha: ev.fecha, nombre: a.name, quien: ev.quien, subida: fISO(new Date().toISOString().slice(0, 10))});
   $("velo").hidden = true; toast("Constancia subida. Gracias."); renderExtra();
-}
-async function bajarSubida(id, nombre){
-  if (!API_URL || !id){ toast("Disponible al publicar el portal"); return; }
-  toast("Preparando el archivo…");
-  try {
-    const j = await (await fetch(API_URL + "?accion=archivo&id=" + encodeURIComponent(id) + "&token=" + encodeURIComponent(API_TOKEN))).json();
-    if (!j.ok) throw 0;
-    const b = Uint8Array.from(atob(j.b64), c => c.charCodeAt(0)), u = URL.createObjectURL(new Blob([b], {type: j.tipo}));
-    const el = document.createElement("a"); el.href = u; el.download = nombre || j.nombre; document.body.appendChild(el); el.click(); el.remove(); setTimeout(() => URL.revokeObjectURL(u), 60000);
-  } catch(e){ toast("No se pudo bajar el archivo"); }
 }
 
 // ---------- EPP ----------
@@ -275,20 +238,6 @@ function renderExtra(){
   if (EDIT) $("vExtra").querySelectorAll("[data-ed]").forEach(e => e.contentEditable = "true");
 }
 
-function abrirAviso(doc){
-  $("velo").innerHTML = `<div class="caja" role="dialog" aria-modal="true" aria-labelledby="avT" style="width:min(560px,100%)"><div class="cab"><h3 id="avT">Avisar que se envió</h3><button class="cerrar" type="button" data-cerrar>Cerrar ✕</button></div><div class="cpo">
-    <div class="form"><label>Documento</label><input type="text" value="${esc(doc)}" readonly id="avD"></div>
-    <div class="form"><label for="avC">Comentario (opcional)</label><textarea id="avC" rows="2" placeholder="Por dónde se mandó, si falta algo…"></textarea></div>
-    <span class="aviso">Se guarda a nombre de <b>${esc(quien())}</b>.</span>
-    <div style="display:flex;gap:10px"><button class="btn prim" type="button" id="avEnv">Avisar</button></div></div></div>`;
-  $("velo").hidden = false;
-}
-async function enviarAviso(){
-  const q = quien(); setQuien(q); $("avEnv").disabled = true;
-  const r = await enviar({tipo: "documento", sector: $("avD").value, texto: $("avC").value.trim(), quien: q});
-  if (!r.ok){ toast("No se pudo enviar. Probá de nuevo."); $("avEnv").disabled = false; return; }
-  $("velo").hidden = true; toast("Aviso enviado. Gracias.");
-}
 document.addEventListener("click", e => {
   if (EDIT && e.target.closest("[data-ed]")) return;   // editando: el clic es para escribir
   const t = e.target.closest("[data-tab],[data-dl],[data-dlsel],[data-maq],[data-aviso],[data-pl],[data-mqs],[data-irpt],[data-pub],[data-editar],[data-prop],[data-subir],[data-cdl],#avEnv,#ppEnv,#suEnv"); if (!t) return;
@@ -309,20 +258,11 @@ document.addEventListener("click", e => {
   else if (t.dataset.aviso) abrirAviso(t.dataset.aviso);
   else if (t.id === "avEnv") enviarAviso();
 });
-document.addEventListener("focusin", e => { const d = e.target.closest && e.target.closest("[data-ed]"); if (d) d.dataset.antes = d.innerText; });
-document.addEventListener("focusout", async e => {
-  const d = e.target.closest && e.target.closest("[data-ed]"); if (!d || !EDIT) return;
-  const v = d.innerText.replace(/\s+\n/g, "\n").trim(); if (v === (d.dataset.antes || "").trim()) return;
-  TXT[d.dataset.ed] = v; const r = await enviar({tipo: "textos", clave: d.dataset.ed, texto: v});
-  toast(r.ok ? "Texto guardado" : "No se pudo guardar el texto");
-});
-document.addEventListener("keydown", e => { if (EDIT && e.key === "Enter" && !e.shiftKey && e.target.closest && e.target.closest("[data-ed]")){ e.preventDefault(); e.target.blur(); } });
 document.addEventListener("input", e => { if (e.target.id === "mqQ"){ MQQ = e.target.value; const p = e.target.selectionStart; renderExtra(); const q = $("mqQ"); q.focus(); q.setSelectionRange(p, p); } });
 
 // ---------- estado de situación general a demanda (por planta o las dos) ----------
 const ESG_COL = {FALTA: "#C0392B", PARCIAL: "#B7791F", CONFIRMAR: "#555B66", NUESTRO: "#0060B4", OK: "#2E7D32", EJECUTADO: "#2E7D32", VIGENTE: "#2E7D32", VENCIDO: "#C0392B", "EN CURSO": "#B7791F", APROBADO: "#2E7D32"};
 const ESG_LBL = {FALTA: "FALTA", PARCIAL: "PARCIAL", CONFIRMAR: "A CONFIRMAR", NUESTRO: "LO HACEMOS NOSOTROS", OK: "PRESENTADO"};
-let ESG_FIRMA = "";
 function esgDoc(gen, cual){
   const x = X(), g = x.esg, pls = cual === "AMBAS" ? ["P1", "P2"] : [cual], d = v => v || "—";
   const stl = (s, l) => `<b style="color:${ESG_COL[s] || "#333"};font-size:8pt">${esc(l || s)}</b>`;
@@ -370,19 +310,6 @@ async function imprimirEsg(){
   window.print(); document.body.classList.remove("imprimiendo-esg"); document.title = t0;
 }
 document.addEventListener("click", e => { if (e.target.closest("[data-esg]")) imprimirEsg(); });
-
-// ---------- video tutorial ----------
-let VID_URL = "";
-async function verVideo(){
-  $("velo").innerHTML = `<div class="caja" role="dialog" aria-modal="true" aria-labelledby="vdT" style="width:min(1100px,100%)"><div class="cab"><h3 id="vdT">Cómo se usa el portal</h3><button class="cerrar" type="button" data-cerrar>Cerrar ✕</button></div><div class="cpo"><div id="vdC" class="x-m">Cargando el video…</div></div></div>`;
-  $("velo").hidden = false;
-  try {
-    if (!VID_URL){ const b = CIFRADO ? await bajarCifrado("arch/video") : await (await fetch("arch/video")).arrayBuffer(); VID_URL = URL.createObjectURL(new Blob([b], {type: "video/mp4"})); }
-    $("vdC").outerHTML = `<video id="vdV" src="${VID_URL}" controls autoplay playsinline style="width:100%;border-radius:6px;background:#000"></video>`;
-  } catch(e){ $("vdC").textContent = "No se pudo cargar el video."; }
-}
-new MutationObserver(() => { const v = document.getElementById("vdV"); if (v && $("velo").hidden) v.pause(); }).observe(document.getElementById("velo") || document.body, {attributes: true, attributeFilter: ["hidden"]});
-document.addEventListener("click", e => { if (e.target.closest("[data-video]")) verVideo(); });
 
 // ---- enganche con el núcleo (core/v1/portal.js) ----
 Object.assign(CLI, {inicio: plantaInicial, estado: mitEstado, subt: () => PNOM() + " · "});
