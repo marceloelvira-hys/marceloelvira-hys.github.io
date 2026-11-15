@@ -5,16 +5,17 @@
 Object.assign(MOD, {propHorario: "13:30 a 14:15, al cambio de turno", quien: "la empresa", delLugar: "de la planta",
   capTitulo: "Programa de capacitación 2026", capProg: ["prog", "Programa 2026 (PDF)"], capCuando: "Mes", capReg: false,
   capIntro: "Programa anual: se puede proponer la fecha y el horario de cada charla. Abajo, las constancias firmadas de las capacitaciones dadas; también se pueden subir desde acá.",
-  esgAltas: ["Inmediata", "Alta"], esgAltasTxt: "Inmediata o alta"});
+  esgAltas: ["Inmediata", "Alta"], esgAltasTxt: "Inmediata o alta",
+  vistas: {maq: vMaq, proc: vProc},
+  informes: [["9-26", "Informe 9-26"], ["inm", "Informe 9-26 · corrección inmediata"], ["3-26", "Informe 3-26"], ["1-26", "Informe 1-26"]],
+  descargas: [{t: "Habilitación y Autoprotección", c: "var(--brand)", de: [["habil"], "@sap"]},
+    {t: "Estudios", c: "var(--celeste-dk)", de: ["@estudios", "@mf"]},
+    {t: "Capacitación", c: "#8A5A12", de: [["prog"], "@constancias"]},
+    {t: "Procedimientos y AST", c: "#2F7D4A", de: ["@procs"]},
+    {t: "Documentación ante la ART", c: "#6E1E2E", de: [["rgrl"], ["rar"], ["epp299"]]}]});
 MOD.esgCol.APROBADO = "#2E7D32";
 const TABS = [["informe", "Informe de visita"], ["sap", "Autoprotección"], ["hys", "Estudios y matafuegos"], ["cap", "Capacitación"], ["epp", "EPP"], ["maq", "Máquinas"], ["proc", "Procedimientos"], ["insp", "Ante una inspección"], ["dl", "Descargas"]];
 let TAB = "informe", PL = "P1";
-
-// ---------- informes de visita para bajar ----------
-function grupoInf(){
-  return `<div class="g-box" style="--c:var(--brand)"><h3>Informes de visita</h3><span class="x-m">El último y los anteriores, en PDF</span>
-  <div class="g-sel"><select id="sel-inf">${[["9-26", "Informe 9-26"], ["inm", "Informe 9-26 · corrección inmediata"], ["3-26", "Informe 3-26"], ["1-26", "Informe 1-26"]].map(([k, t]) => `<option value="${k}">${t}</option>`).join("")}</select><button type="button" class="g-btn" data-dlsel="inf">Descargar</button></div></div>`;
-}
 
 // ---------- máquinas animadas ----------
 function vMaq(){
@@ -27,20 +28,6 @@ function vMaq(){
 function vProc(){
   return `<h2>Procedimientos de trabajo seguro</h2><p class="x-intro">${E("ui.proc.intro", "Procedimientos y análisis de seguridad de las tareas (AST) de NUVA, para tener a mano en el puesto y en las capacitaciones.")}</p>
   <div class="x-box" style="border-top:5px solid var(--brand)">${X().procs.map((p, i) => `<div class="x-row x-cot" style="grid-template-columns:1fr 220px"><div class="x-t">${E("procs." + i + ".t")}</div><div>${btnDl(p.k, "Descargar (PDF)")}</div></div>`).join("")}</div>`;
-}
-
-// ---------- descargas ----------
-function vDl(){
-  const x = X();
-  const box = (t, c, ks) => ks.length ? `<div class="g-box" style="--c:${c}"><h3>${t}</h3><div class="g-list">${ks.map(([k, tx]) => `<div class="g-it"><span>${esc(tx || nomArch(k))}</span><button type="button" class="g-btn" data-dl="${k}">Descargar</button></div>`).join("")}</div></div>` : "";
-  const est = x.estudios.flatMap((s, i) => s.archivos.map(k => [k, T("estudios." + i + ".estudio") + " · " + s.fecha]));
-  return `<h2>Descargas</h2><p class="x-intro">${E("ui.dl.intro", "Todo para bajar, agrupado por tipo.")}</p>
-  <div class="g-row">${grupoInf()}${grupoEsg()}</div>
-  <div class="g-row">${box("Habilitación y Autoprotección", "var(--brand)", [["habil"], ...x.sap.archivos.map(k => [k])])}${box("Estudios", "var(--celeste-dk)", est.concat([["mf", "Control de extintores · " + x.mf_fecha]]))}${box("Capacitación", "#8A5A12", [["prog"], ...x.cap.constancias.map(c => [c.k, c.t])])}${box("Procedimientos y AST", "#2F7D4A", x.procs.map(p => [p.k, p.t]))}${box("Documentación ante la ART", "#6E1E2E", [["rgrl"], ["rar"], ["epp299"]])}</div></div>`;
-}
-function renderExtra(){
-  $("vExtra").innerHTML = pubCtl(TAB) + ({sap: vSap, hys: vHys, cap: vCap, epp: vEpp, maq: vMaq, proc: vProc, insp: vInsp, dl: vDl})[TAB]();
-  if (EDIT) $("vExtra").querySelectorAll("[data-ed]").forEach(e => e.contentEditable = "true");
 }
 
 document.addEventListener("click", e => {

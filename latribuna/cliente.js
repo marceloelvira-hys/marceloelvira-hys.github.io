@@ -5,29 +5,13 @@
 Object.assign(MOD, {propHorario: "16:00 a 16:45, entre turnos", quien: "el local", delLugar: "del local", sapEncuadre: "con el subsuelo en uso",
   capTitulo: "Capacitaciones propuestas para el local", capCuando: "Cuándo", capReg: true,
   capIntro: "Las capacitaciones previstas para el personal: se puede proponer la fecha y el horario de cada una. Abajo, las constancias firmadas; también se pueden subir desde acá.",
-  esgPieNombre: true});
+  esgPieNombre: true,
+  descargas: [{t: "Habilitación y Autoprotección", c: "var(--brand)", de: [["oblea"], ["plano-hab"], ["sap-car"], ["ddjj"], ["planos-ev"]]},
+    {t: "Estudios", c: "var(--celeste-dk)", de: ["@estudios"]},
+    {t: "Formularios para completar", c: "#2F7D4A", de: [["dotacion"], ["cons-sap"], ["epp299"]]},
+    {t: "Actas de inspección", c: "#6E1E2E", de: [["acta1"], ["acta2"]]}]});
 const TABS = [["informe", "Informe de visita"], ["sap", "Autoprotección"], ["hys", "Estudios y matafuegos"], ["cap", "Capacitación"], ["epp", "EPP"], ["insp", "Ante una inspección"], ["dl", "Descargas"]];
 let TAB = "informe", PL = "P1";
-
-// ---------- informes de visita para bajar ----------
-function grupoInf(){
-  return `<div class="g-box" style="--c:var(--brand)"><h3>Informes de visita</h3><span class="x-m">El último y los anteriores, en PDF</span>
-  <div class="g-sel"><select id="sel-inf">${["9-26", "6-26"].map(k => `<option value="${k}">Informe ${k}</option>`).join("")}</select><button type="button" class="g-btn" data-dlsel="inf">Descargar</button></div></div>`;
-}
-
-// ---------- descargas ----------
-function vDl(){
-  const x = X();
-  const box = (t, c, ks) => ks.length ? `<div class="g-box" style="--c:${c}"><h3>${t}</h3><div class="g-list">${ks.map(([k, tx]) => `<div class="g-it"><span>${esc(tx || nomArch(k))}</span><button type="button" class="g-btn" data-dl="${k}">Descargar</button></div>`).join("")}</div></div>` : "";
-  const est = x.estudios.flatMap((s, i) => s.archivos.map(k => [k, (k === "cf-plan" ? "Planillas · " : "") + T("estudios." + i + ".estudio") + " · " + s.fecha]));
-  return `<h2>Descargas</h2><p class="x-intro">${E("ui.dl.intro", "Todo para bajar, agrupado por tipo.")}</p>
-  <div class="g-row">${grupoInf()}${grupoEsg()}</div>
-  <div class="g-row">${box("Habilitación y Autoprotección", "var(--brand)", [["oblea"], ["plano-hab"], ["sap-car"], ["ddjj"], ["planos-ev"]])}${box("Estudios", "var(--celeste-dk)", est)}${box("Formularios para completar", "#2F7D4A", [["dotacion"], ["cons-sap"], ["epp299"]])}${box("Actas de inspección", "#6E1E2E", [["acta1"], ["acta2"]])}</div>`;
-}
-function renderExtra(){
-  $("vExtra").innerHTML = pubCtl(TAB) + ({sap: vSap, hys: vHys, cap: vCap, epp: vEpp, insp: vInsp, dl: vDl})[TAB]();
-  if (EDIT) $("vExtra").querySelectorAll("[data-ed]").forEach(e => e.contentEditable = "true");
-}
 
 document.addEventListener("click", e => {
   if (EDIT && e.target.closest("[data-ed]")) return;   // editando: el clic es para escribir

@@ -1,13 +1,14 @@
-// Portales de clientes · módulos comunes (core/v1/modulos.js) · bloques 1 a 3, 15/11/2026
+// Portales de clientes · módulos comunes (core/v1/modulos.js) · bloques 1 a 4, 15/11/2026
 // Se carga después de portal.js y antes de cliente.js, en los portales con "modulos_js": true en su ficha.
 // Trae lo que es igual en todos: textos editables, publicación por sección, descargas, subir constancia, proponer fecha, avisos y video (bloque 1),
 // y las vistas Capacitación, EPP, «Ante una inspección» y el Estado de situación general, con sus textos como opciones (bloque 2),
-// y Autoprotección (en trámite / vigente) y Estudios con matafuegos (tarjetas / tabla por piso), donde la variante sale del dato (bloque 3).
+// y Autoprotección (en trámite / vigente) y Estudios con matafuegos (tarjetas / tabla por piso), donde la variante sale del dato (bloque 3),
+// y Descargas, con las cajas y la lista de informes como datos (bloque 4).
 // Lo propio de cada cliente:
 //   · MOD   → opciones; su cliente.js las completa con Object.assign(MOD, {...})
 //   · una function con el mismo nombre en cliente.js pisa la de acá (MIT lo hace con las que llevan el selector de planta).
 //     Sólo con function: un const o let repetido rompe la página entera.
-//   · cliente.js define TABS, TAB, PL, renderExtra() y grupoInf() (informes para bajar), que acá se usan al ejecutar.
+//   · cliente.js define TABS, TAB y PL, que acá se usan al ejecutar.
 const MOD = {
   archPref: null,                 // qué se le saca al nombre de un archivo para mostrarlo; por defecto «<nombre del cliente> - »
   propHorario: "16:00 a 16:45",   // ejemplo de horario al proponer la fecha de una capacitación
@@ -20,6 +21,9 @@ const MOD = {
   capIntro: "Programa anual: se puede proponer la fecha y el horario de cada charla. Abajo, las constancias firmadas; también se pueden subir desde acá.",
   esgAltas: ["Alta"], esgAltasTxt: "Prioridad alta",      // Estado de situación: qué prioridades cuenta la columna y cómo se llama
   esgPieNombre: false,            // … pie con «(nombre del cliente)» después de la razón social
+  informes: null,                 // Descargas: lista de informes [[clave, texto]…]; sin esto salen los archivos guardados en pdf/
+  descargas: null,                // … cajas [{t, c, de}]; ver dlCajas()
+  vistas: null,                   // solapas propias del cliente: {clave: función que devuelve el HTML}
   esgCol: {FALTA: "#C0392B", TRAMITE: "#B7791F", LOCAL: "#555B66", PORTAL: "#2E7D32", EJECUTADO: "#2E7D32", VIGENTE: "#2E7D32", VENCIDO: "#C0392B", PENDIENTE: "#B7791F", "EN PREPARACIÓN": "#B7791F"}   // … color de cada estado
 };
 
@@ -343,3 +347,36 @@ function vMf(){
   ${X().archivos.mf ? `<div class="x-row" style="background:var(--crema)">${btnDl("mf", "Control de extintores (PDF)")}</div>` : ""}</div>`;
 }
 document.addEventListener("click", e => { const t = e.target.closest("[data-mfp]"); if (t){ MFP = t.dataset.mfp; renderExtra(); } });
+
+// ---------- Descargas ----------
+// Informes para bajar: los de extra.informes o MOD.informes ([clave, texto]); si no hay, los archivos guardados en pdf/ («Informe <clave>»).
+function dlInformes(){ return X().informes || MOD.informes || Object.entries(X().archivos).filter(([k, a]) => /^pdf\//.test(a.ruta || "")).map(([k]) => [k, "Informe " + k]); }
+function grupoInf(){
+  return `<div class="g-box" style="--c:var(--brand)"><h3>Informes de visita</h3><span class="x-m">El último y los anteriores, en PDF</span>
+  <div class="g-sel"><select id="sel-inf">${dlInformes().map(([k, t]) => `<option value="${esc(k)}">${esc(t)}</option>`).join("")}</select><button type="button" class="g-btn" data-dlsel="inf">Descargar</button></div></div>`;
+}
+// Cajas de Descargas: extra.descargas o MOD.descargas = [{t: título, c: color, de: [...]}]. Cada elemento de «de» es [clave] o [clave, texto],
+// o una fuente que sale de los datos: "@sap" (archivos del SAP), "@estudios", "@mf" (control de extintores), "@constancias", "@procs".
+function dlCajas(){ return X().descargas || MOD.descargas || [{t: "Autoprotección", c: "var(--brand)", de: ["@sap"]}, {t: "Estudios", c: "var(--celeste-dk)", de: ["@estudios", "@mf"]}, {t: "Capacitación", c: "#8A5A12", de: ["@constancias"]}]; }
+function dlItems(d){
+  const x = X();
+  if (typeof d !== "string") return [d];
+  if (d === "@sap") return x.sap.archivos.map(k => [k]);
+  if (d === "@estudios") return x.estudios.flatMap((s, i) => s.archivos.map(k => [k, (k === "cf-plan" ? "Planillas · " : "") + T("estudios." + i + ".estudio") + " · " + s.fecha]));
+  if (d === "@mf") return x.archivos.mf ? [["mf", "Control de extintores" + (x.mf_fecha ? " · " + x.mf_fecha : "")]] : [];
+  if (d === "@constancias") return x.cap.constancias.map(c => [c.k, c.t]);
+  if (d === "@procs") return (x.procs || []).map(p => [p.k, p.t]);
+  return [];
+}
+function vDl(){
+  const x = X();
+  const box = (t, c, ks) => ks.length ? `<div class="g-box" style="--c:${c}"><h3>${t}</h3><div class="g-list">${ks.map(([k, tx]) => `<div class="g-it"><span>${esc(tx || nomArch(k))}</span><button type="button" class="g-btn" data-dl="${k}">Descargar</button></div>`).join("")}</div></div>` : "";
+  return `<h2>Descargas</h2><p class="x-intro">${E("ui.dl.intro", "Todo para bajar, agrupado por tipo.")}</p>
+  <div class="g-row">${grupoInf()}${grupoEsg()}</div>
+  <div class="g-row">${dlCajas().map(c => box(esc(c.t), c.c, c.de.flatMap(dlItems))).join("")}</div>`;
+}
+// Vista de cada solapa; las propias del cliente se suman con MOD.vistas = {clave: función}
+function renderExtra(){
+  $("vExtra").innerHTML = pubCtl(TAB) + Object.assign({sap: vSap, hys: vHys, cap: vCap, epp: vEpp, insp: vInsp, dl: vDl}, MOD.vistas)[TAB]();
+  if (EDIT) $("vExtra").querySelectorAll("[data-ed]").forEach(e => e.contentEditable = "true");
+}
