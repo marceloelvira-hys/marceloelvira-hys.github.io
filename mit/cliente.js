@@ -309,7 +309,6 @@ async function imprimirEsg(){
   await new Promise(r => setTimeout(r, 200));
   window.print(); document.body.classList.remove("imprimiendo-esg"); document.title = t0;
 }
-document.addEventListener("click", e => { if (e.target.closest("[data-esg]")) imprimirEsg(); });
 
 // ---- enganche con el núcleo (core/v1/portal.js) ----
 Object.assign(CLI, {inicio: plantaInicial, estado: mitEstado, subt: () => PNOM() + " · "});
