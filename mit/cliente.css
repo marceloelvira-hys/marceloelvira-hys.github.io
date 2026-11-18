@@ -1,3 +1,6 @@
 /* ---- Metalúrgica MIT: ajustes de identidad (base MIT) ---- */
 
 h1,h2,h3,.titulo h1,.solapas button,.plantas button b,.g-box h3,.x-bh{font-family:Rubik,"Open Sans",sans-serif}
+
+/* Orden de trabajo: el logo de MIT va con sus colores (la plantilla común lo invierte para logos blancos) */
+.otdoc .oth .g img{filter:none}
