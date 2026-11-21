@@ -138,6 +138,23 @@ body.cel .grande{padding:0 6px 6px}
 body.leer #lista,body.leer .kpis,body.leer .filtros,body.leer #dN{display:none}
 body.leer .grid{grid-template-columns:1fr}
 body.leer .volver{display:inline-flex}
+@media(min-width:1500px){body:not(.cel) .wrap,body:not(.cel) .top .f{max-width:min(1800px,96vw)}}
+/* pantalla ancha (PC, lectura de revision) */
+body.leer:not(.cel) .wrap,body.leer:not(.cel) .top .f{max-width:min(1900px,98vw);padding-left:10px;padding-right:10px}
+body.leer:not(.cel) .det{padding:10px}
+body.leer:not(.cel) .inf{max-width:none;font-size:18px;line-height:1.6}
+body.leer:not(.cel) .inf h1{font-size:38px;margin:20px 26px 6px}
+body.leer:not(.cel) .isub{margin:0 26px 16px}
+body.leer:not(.cel) .ikpis{grid-template-columns:repeat(4,minmax(0,1fr));margin:0 26px 16px}
+body.leer:not(.cel) .isec{margin:26px 26px 0;display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));column-gap:28px;align-items:start}
+body.leer:not(.cel) .isec>*{grid-column:1/-1}
+body.leer:not(.cel) .isec>.blq:has(>.dato){grid-column:auto}
+body.leer:not(.cel) .isec h2{font-size:23px}
+body.leer:not(.cel) .isec .dato{display:block}body.leer:not(.cel) .isec .dato .lab{margin-bottom:2px}
+body.leer:not(.cel) .inf figure img{width:auto;max-width:100%;max-height:74vh;margin:0 auto}
+body.leer:not(.cel) .inf .figc{text-align:center}
+body.leer:not(.cel) .ifirma{margin:34px 26px 0}
+body.leer:not(.cel) .maq iframe{height:80vh}
 .rtabs{display:flex;gap:6px;margin:12px 0 0;flex-wrap:wrap}
 .rtabs button{border:0;border-radius:12px 12px 0 0;padding:12px 18px;font-weight:800;background:var(--fondo);color:var(--gris);font-size:15px}
 .rtabs button.on{background:#1C262E;color:#fff}
