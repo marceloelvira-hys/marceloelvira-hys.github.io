@@ -115,7 +115,7 @@ video{display:block;width:100%;background:#000;max-height:520px}
 .volver{display:none}
 body.cel .wrap{padding:10px}
 body.cel .top{padding:10px 12px}body.cel .top h1{font-size:19px}body.cel .top p{display:none}
-body.cel .top .yo{width:100%;justify-content:space-between}body.cel .top .yo>span{display:none}
+body.cel .top .yo{width:100%;justify-content:space-between;flex-wrap:wrap;gap:6px}body.cel .top .yo>span{display:none}
 body.cel .tipos{grid-template-columns:repeat(4,minmax(0,1fr))}
 body.cel .grid{grid-template-columns:1fr}
 body.cel .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}body.cel .kpi .n{font-size:28px}
@@ -195,10 +195,11 @@ function pantallaLogin(paso){
   TOKEN=r.token;YO={nombre:r.nombre,rol:r.rol,u:r.token.split('.')[0]};const rec=$('#rec').checked;
   try{(rec?localStorage:sessionStorage).setItem('tqc-sesion',JSON.stringify({TOKEN,YO}))}catch(e){}
   if(r.cambiar)pantallaLogin('cambiar');else iniciar()}}
-function ponerModo(m){MODO=m;ls.set('modo',m);document.body.classList.toggle('cel',m==='cel');document.body.classList.toggle('abierto',m==='cel'&&ABIERTO);$$('[data-modo]').forEach(b=>b.classList.toggle('on',b.dataset.modo===m))}
+function detectar(){const ua=navigator.userAgent||'';return(/Mobi|Android|iPhone|iPod/i.test(ua)||(matchMedia('(pointer:coarse)').matches&&innerWidth<1024)||innerWidth<700)?'cel':'pc'}
+function ponerModo(m,elegido){MODO=m;if(elegido)ls.set('modo',m);const ma=$('#modoAuto');if(ma)ma.style.display=ls.get('modo')?'':'none';document.body.classList.toggle('cel',m==='cel');document.body.classList.toggle('abierto',m==='cel'&&ABIERTO);$$('[data-modo]').forEach(b=>b.classList.toggle('on',b.dataset.modo===m))}
 function salir(){try{localStorage.removeItem('tqc-sesion');sessionStorage.removeItem('tqc-sesion')}catch(e){}TOKEN=null;YO=null;pantallaLogin()}
-function iniciar(){PAR=otro();$('#raiz').innerHTML='<div class="top"><div class="f"><div><h1>'+(soyMarce()?'Consultas a Teque':'Consultas de Marce')+'</h1><p>Pedidos, material y observaciones</p></div><div class="yo"><span>'+esc(YO.nombre)+'</span><div class="modo" role="group" aria-label="Cómo lo estás viendo"><button data-modo="pc">🖥 Compu</button><button data-modo="cel">📱 Celular</button></div><button id="act">↻ Actualizar</button><button id="salir">Salir</button></div></div></div><div class="wrap'+(soyMarce()?'':' tq')+'" id="app"><div class="cargando">Cargando…</div></div>';
- $('#salir').onclick=salir;$$('[data-modo]').forEach(b=>b.onclick=()=>{ponerModo(b.dataset.modo);render()});ponerModo(MODO);$('#act').onclick=()=>{vaciarCola();cargar()};cargar();vaciarCola();}
+function iniciar(){PAR=otro();$('#raiz').innerHTML='<div class="top"><div class="f"><div><h1>'+(soyMarce()?'Consultas a Teque':'Consultas de Marce')+'</h1><p>Pedidos, material y observaciones</p></div><div class="yo"><span>'+esc(YO.nombre)+'</span><div class="modo" role="group" aria-label="Cómo lo estás viendo"><button data-modo="pc">🖥 Compu</button><button data-modo="cel">📱 Celular</button></div><button id="modoAuto" title="Volver a la vista automática" style="display:none">↺ Auto</button><button id="act">↻ Actualizar</button><button id="salir">Salir</button></div></div></div><div class="wrap'+(soyMarce()?'':' tq')+'" id="app"><div class="cargando">Cargando…</div></div>';
+ $('#salir').onclick=salir;$$('[data-modo]').forEach(b=>b.onclick=()=>{ponerModo(b.dataset.modo,true);render()});$('#modoAuto').onclick=()=>{ls.set('modo','');ponerModo(detectar());render();toast('Vista automática según el equipo')};ponerModo(MODO);$('#act').onclick=()=>{vaciarCola();cargar()};cargar();vaciarCola();}
 addEventListener('focus',()=>{if(TOKEN){vaciarCola();cargar(true)}});
 setInterval(()=>{if(TOKEN&&!document.hidden&&!document.activeElement.matches('textarea,input'))cargar(true)},120000);
 
@@ -384,7 +385,8 @@ function dibujo(x){
  est();pinta()}
 
 /* ---------- arranque ---------- */
-MODO=ls.get('modo')||(matchMedia('(max-width:820px)').matches?'cel':'pc');
+MODO=ls.get('modo')||detectar();
+addEventListener('resize',()=>{if(TOKEN&&!ls.get('modo')){const m=detectar();if(m!==MODO){ponerModo(m);render()}}});
 let s=null;try{s=JSON.parse(localStorage.getItem('tqc-sesion')||sessionStorage.getItem('tqc-sesion')||'null')}catch(e){}
 if(s&&s.TOKEN){TOKEN=s.TOKEN;YO=s.YO;iniciar()}else pantallaLogin();
 }
