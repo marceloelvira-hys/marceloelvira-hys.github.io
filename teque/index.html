@@ -135,6 +135,60 @@ body.cel .item h4,body.cel .obs .tx,body.cel .pedido{font-size:17px}
 body.cel .btn{min-height:50px;font-size:16px}
 body.cel .cierre .btn{flex:1 1 100%}
 body.cel .grande{padding:0 6px 6px}
+body.leer #lista,body.leer .kpis,body.leer .filtros,body.leer #dN{display:none}
+body.leer .grid{grid-template-columns:1fr}
+body.leer .volver{display:inline-flex}
+.rtabs{display:flex;gap:6px;margin:12px 0 0;flex-wrap:wrap}
+.rtabs button{border:0;border-radius:12px 12px 0 0;padding:12px 18px;font-weight:800;background:var(--fondo);color:var(--gris);font-size:15px}
+.rtabs button.on{background:#1C262E;color:#fff}
+.rpanel{border:2px solid #1C262E;border-radius:0 14px 14px 14px;overflow:hidden;background:#fff}
+.inf{max-width:900px;margin:0 auto;padding:0 0 24px;font-size:16px;line-height:1.55}
+.ihead{background:#1C262E;color:#fff;display:flex;align-items:center;gap:14px;padding:14px 18px;border-bottom:5px solid #ED6D2B;flex-wrap:wrap}
+.ihead img{height:40px}.ihead .lic{margin-left:auto;text-align:right;font-size:13px;color:#C9D2D8}.ihead .lic b{color:#fff;font-size:15px}
+.inf h1{font-size:34px;margin:18px 18px 4px;line-height:1.1}
+.isub{color:#5F6A73;margin:0 18px 14px}
+.ikpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:0 18px 14px}
+.ikpis div{background:#EDF0F2;border-top:4px solid;padding:8px 10px;border-radius:4px}.ikpis small{display:block;color:#5F6A73;font-size:11px;text-transform:uppercase}.ikpis b{font-size:15px}
+.inf figure{margin:0}.inf figure img{width:100%;display:block;border-radius:6px}
+.isec{margin:22px 18px 0}
+.isec h2{font-size:20px;margin:0 0 10px;display:flex;gap:10px;align-items:center;border-bottom:2px solid #EDF0F2;padding-bottom:6px}
+.isec h2 .num{background:#ED6D2B;color:#fff;border-radius:6px;min-width:34px;height:34px;display:grid;place-items:center;font-size:16px;flex:none}
+.ac{color:#6E1E2E;font-weight:700;background:#F3E3E6;border-radius:3px;padding:0 3px}
+.blq{position:relative;border-radius:10px;padding:6px 8px;margin:2px -8px 6px;border:2px solid transparent;transition:background .15s}
+.blq:hover{background:#FAF6F3}
+.blq.tiene{border-color:#F3D3C2}
+.blq.editando{border-color:#C0632D;background:#FFF8F3}
+.bx[contenteditable=true]{outline:none;background:#fff;border-radius:6px;padding:4px 6px;box-shadow:inset 0 0 0 2px #C0632D}
+.bt{display:none;gap:6px;justify-content:flex-end;margin-top:4px}
+.blq:hover .bt,.blq.activo .bt,.blq.editando .bt,.blq.tiene .bt{display:flex}
+.bt button{border:1px solid var(--linea);background:#fff;border-radius:999px;padding:5px 11px;font-size:13px;font-weight:700;min-height:34px}
+.bt .e{color:#C0632D;border-color:#C0632D}.bt .c{color:var(--pet);border-color:var(--pet)}
+.dato{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,2fr);gap:10px}.dato .lab{font-weight:700;color:#5F6A73}
+.grp{font-weight:800;color:#2A3640;margin:10px 0 4px;text-transform:uppercase;font-size:13px}
+.rec{display:flex;gap:12px}.rec .rn{font-size:30px;font-weight:900;color:#ED6D2B;line-height:1;min-width:30px}.rec .rt{font-weight:800}
+.chipr{color:#fff;font-size:11px;font-weight:800;padding:2px 8px;border-radius:4px;margin-left:6px;text-transform:uppercase}
+.cart{display:flex;gap:10px;align-items:center}.cart img{width:40px;height:40px}.ub{color:#5F6A73;font-size:14px}
+.figc{font-size:14px;color:#5F6A73;margin-top:4px}
+.fotos{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.ifirma{display:flex;justify-content:space-around;margin:30px 18px 0;text-align:center;flex-wrap:wrap;gap:16px}.ifirma img{height:110px}
+.iobs{margin-top:6px;display:flex;flex-direction:column;gap:6px}
+.io{border-radius:10px;padding:8px 10px;font-size:14.5px;border-left:5px solid;background:#fff;box-shadow:0 1px 0 rgba(0,0,0,.06);display:flex;gap:8px;align-items:flex-start}
+.io.hecha{opacity:.55}
+.io .who{font-size:12px;font-weight:800;margin-bottom:2px}
+.io input{width:22px;height:22px;accent-color:var(--verde);flex:none}
+.diff del{background:#F7D9DD;color:#6E1E2E;text-decoration:line-through}.diff ins{background:#DDF0E0;color:#1F5A2E;text-decoration:none;font-weight:600}
+.mini{background:var(--fondo);border-radius:10px;padding:8px;margin-top:6px}
+.mini textarea{min-height:60px}
+.mini .clases button{min-height:32px;padding:4px 10px}
+.maq iframe{display:block;width:100%;height:72vh;border:0;background:#d9d6cf}
+body.cel .maq iframe{height:62vh}
+.maqbar{display:flex;gap:8px;align-items:center;padding:10px;background:#1C262E;color:#fff;flex-wrap:wrap}
+.v3{display:flex;gap:10px;align-items:flex-start;border-radius:12px;border:1px solid var(--linea);padding:8px;margin:8px 10px;background:#fff}
+.v3 img{width:150px;border-radius:8px;flex:none;background:#eee;min-height:84px}
+.v3.hecha{opacity:.55}
+body.cel .v3{flex-direction:column}body.cel .v3 img{width:100%}
+body.cel .ikpis{grid-template-columns:repeat(2,minmax(0,1fr))}body.cel .dato{grid-template-columns:1fr;gap:0}body.cel .fotos{grid-template-columns:repeat(2,minmax(0,1fr))}body.cel .inf h1{font-size:26px}
+
 @media(prefers-reduced-motion:reduce){.toast{transition:none}}
 </style>
 </head>
@@ -156,7 +210,7 @@ const TIPOS={
  presentacion:{ic:'📊',n:'Corregir presentación',c:'#A0525F',ay:'Subí el PDF de la presentación para marcar por diapositiva y adjuntá el PowerPoint.',base:'application/pdf'}
 };
 const BASE_TXT={plano:'🗺️ Imagen del plano',dibujo:'🖼 Fondo (opcional)',informe:'📄 PDF del informe',video:'🎬 Video',presentacion:'📊 PDF de la presentación'};
-const CLASES={corregir:['Corregir','#6E1E2E'],sugerencia:['Sugerencia','#1F6F78'],duda:['Duda','#6B4E8C'],ok:['Está bien','#3F7D4E']};
+const CLASES={corregir:['Corregir','#6E1E2E'],sugerencia:['Sugerencia','#1F6F78'],duda:['Duda','#6B4E8C'],ok:['Está bien','#3F7D4E'],edicion:['Corrección de texto','#C0632D']};
 const URG={hoy:['Para hoy','#6E1E2E','#fff'],semana:['Esta semana','#F3E3E6','#6E1E2E'],tranqui:['Cuando puedas','#EEE','#555']};
 const PARA_DEF=['Marce','Teque','El cliente','Lula','Agus (planos)','Franco'];
 const NOMBRE={marcelo:'Marce',teque:'Teque'};
@@ -181,7 +235,7 @@ async function enviar(o,msgOk){
  try{const r=await post(o);if(r.error==='token'){salir();return null}if(r.error){toast('No se pudo: '+r.error);return null}if(msgOk)toast(msgOk);return r}
  catch(e){if(!o.archivos&&!o.archivo&&!o.base){c.push(o);ponerCola(c);toast('Sin conexión: quedó guardado y se manda solo')}else toast('Sin conexión: probá de nuevo (el borrador sigue guardado)');return null}}
 async function vaciarCola(){let c=cola();if(!c.length)return;const quedan=[];for(const o of c){try{o.token=TOKEN;const r=await post(o);if(r.error==='token')quedan.push(o)}catch(e){quedan.push(o)}}ponerCola(quedan);if(quedan.length<c.length)await cargar()}
-async function cargar(silencio){if(CARGANDO)return;CARGANDO=true;try{const r=await post({accion:'lista',token:TOKEN});if(r.error==='token'){salir();return}D=(r.pedidos||[]).sort((a,b)=>b.id-a.id);ls.set('copia',JSON.stringify(D))}catch(e){if(!silencio)toast('Sin conexión: muestro lo último guardado');try{D=JSON.parse(ls.get('copia')||'[]')}catch(_){}}CARGANDO=false;render()}
+async function cargar(silencio){if(CARGANDO)return;CARGANDO=true;try{const r=await post({accion:'lista',token:TOKEN});if(r.error==='token'){salir();return}const nuevo=JSON.stringify((r.pedidos||[]).sort((a,b)=>b.id-a.id));if(silencio&&nuevo===cargar.ult&&$('#det')){CARGANDO=false;return}cargar.ult=nuevo;D=JSON.parse(nuevo);ls.set('copia',nuevo)}catch(e){if(!silencio)toast('Sin conexión: muestro lo último guardado');try{D=JSON.parse(ls.get('copia')||'[]')}catch(_){}}CARGANDO=false;render()}
 async function archivo(a){
  if(CACHE[a.id])return CACHE[a.id];
  const r=await fetch(API+'?accion=archivo&id='+encodeURIComponent(a.id)+'&token='+encodeURIComponent(TOKEN));const j=await r.json();if(!j.ok)throw new Error(j.error);
@@ -203,7 +257,7 @@ function pantallaLogin(paso){
   if(r.cambiar)pantallaLogin('cambiar');else iniciar()}}
 function detectar(){const ua=navigator.userAgent||'';return(/Mobi|Android|iPhone|iPod/i.test(ua)||(matchMedia('(pointer:coarse)').matches&&innerWidth<1024)||innerWidth<700)?'cel':'pc'}
 function ponerModo(m,elegido){MODO=m;if(elegido)ls.set('modo',m);const ma=$('#modoAuto');if(ma)ma.style.display=ls.get('modo')?'':'none';document.body.classList.toggle('cel',m==='cel');document.body.classList.toggle('abierto',m==='cel'&&ABIERTO);$$('[data-modo]').forEach(b=>b.classList.toggle('on',b.dataset.modo===m))}
-function salir(){try{localStorage.removeItem('tqc-sesion');sessionStorage.removeItem('tqc-sesion')}catch(e){}TOKEN=null;YO=null;pantallaLogin()}
+function salir(){document.body.classList.remove('leer','abierto');ABIERTO=false;try{localStorage.removeItem('tqc-sesion');sessionStorage.removeItem('tqc-sesion')}catch(e){}TOKEN=null;YO=null;pantallaLogin()}
 function iniciar(){PAR=otro();$('#raiz').innerHTML='<div class="top"><div class="f"><div><h1>'+(soyMarce()?'Consultas a Teque':'Consultas de Marce')+'</h1><p>Pedidos, material y observaciones</p></div><div class="yo"><span>'+esc(YO.nombre)+'</span><div class="modo" role="group" aria-label="Cómo lo estás viendo"><button data-modo="pc">🖥 Compu</button><button data-modo="cel">📱 Celular</button></div><button id="modoAuto" title="Volver a la vista automática" style="display:none">↺ Auto</button><button id="act">↻ Actualizar</button><button id="salir">Salir</button></div></div></div><div class="wrap'+(soyMarce()?'':' tq')+'" id="app"><div class="cargando">Cargando…</div></div>';
  $('#salir').onclick=salir;$$('[data-modo]').forEach(b=>b.onclick=()=>{ponerModo(b.dataset.modo,true);render()});$('#modoAuto').onclick=()=>{ls.set('modo','');ponerModo(detectar());render();toast('Vista automática según el equipo')};ponerModo(MODO);$('#act').onclick=()=>{vaciarCola();cargar()};cargar();vaciarCola();}
 addEventListener('focus',()=>{if(TOKEN){vaciarCola();cargar(true)}});
@@ -232,7 +286,7 @@ function render(){
 function itemHTML(x){const p=pend(x),e=estTxt(x);return '<div class="item'+(x.id===SEL?' sel':'')+'" data-id="'+x.id+'">'+tiIc(x.tipo)+'<div style="flex:1"><div class="est" style="color:'+e[1]+'">'+e[0]+'</div><h4>'+esc(x.tema)+'</h4><div class="meta">'+chipU(x.urg)+chipC(x.cliente)+
  ((x.notas||[]).length?'<span class="muted">· '+x.notas.length+' obs.'+(p?' · <b style="color:var(--bordo)">'+p+' por hacer</b>':'')+'</span>':'')+'<span class="muted">· '+esc(fecha(x.f).slice(0,5))+'</span></div></div></div>'}
 function engLista(){
- $$('.item[data-id]').forEach(e=>e.onclick=()=>{SEL=+e.dataset.id;ANC=null;HL=null;$$('.item').forEach(z=>z.classList.toggle('sel',z===e));redet();if(MODO==='cel'){ABIERTO=true;ponerModo('cel');scrollTo(0,0)}});
+ $$('.item[data-id]').forEach(e=>e.onclick=()=>{SEL=+e.dataset.id;ANC=null;HL=null;$$('.item').forEach(z=>z.classList.toggle('sel',z===e));RT='inf';const xx=q(SEL);if(xx&&esRev(xx)&&MODO!=='cel'){document.body.classList.add('leer');redet();scrollTo(0,0);return}redet();if(MODO==='cel'){ABIERTO=true;ponerModo('cel');scrollTo(0,0)}});
  $$('.kpi[data-f],.filtros [data-f]').forEach(b=>{b.onclick=()=>{FIL=FIL===b.dataset.f&&b.dataset.f!=='todos'?'todos':b.dataset.f;render()};b.onkeydown=e=>{if(e.key==='Enter')b.click()}})}
 
 /* ---------- nuevo pedido ---------- */
@@ -265,16 +319,18 @@ function engNueva(){
   finally{b.disabled=false;b.textContent='Mandar a '+otro()}}}
 
 /* ---------- detalle ---------- */
-function redet(){const det=$('#det');if(!det)return;const x=q(SEL);if(!x){det.innerHTML='<div class="muted">Elegí un pedido.</div>';return}det.innerHTML=rDet(x);engDet(x);cargarMat(x)}
+function redet(){const det=$('#det');if(!det)return;const x=q(SEL);if(!x){det.innerHTML='<div class="muted">Elegí un pedido.</div>';return}det.innerHTML=rDet(x);engDet(x);if(esRev(x))cargarRev(x);else cargarMat(x)}
 function rDet(x){
  const e=estTxt(x),notas=(x.notas||[]).slice().sort(ordenA);
  let h='<button class="btn b-suave volver" id="volver">← Volver a la lista</button><div class="meta">'+chipT(x.tipo)+chipU(x.urg)+chipC(x.cliente)+'<span class="muted">· '+esc(fecha(x.f))+'</span></div><h2>'+esc(x.tema)+'</h2><div class="est" style="color:'+e[1]+'">'+e[0]+'</div>';
  h+='<div class="pedido"><div class="q">'+NOMBRE[x.de]+' pide</div>'+esc(x.pedido)+'</div>';
- const arch=(x.archivos||[]).concat(x.base?[x.base]:[]);
+ const arch=(x.archivos||[]).concat(x.base?[x.base]:[]).filter(a=>!ocultoChip(a)&&!(esRev(x)&&a===maqDe(x)));
  if(arch.length)h+='<div class="archivos">'+arch.map(a=>'<span class="arch'+(a.de!==x.de?' tq':'')+'" data-arch="'+esc(a.id)+'" title="Abrir">'+(a.de!==x.de?'✓ '+NOMBRE[a.de]+': ':(/\.html?$/i.test(a.nombre)?'🧊 ':'📎 '))+esc(a.nombre)+(seVe(a)?'<span class="ab">Abrir</span>':'<span class="ab">Bajar</span>')+'</span>').join('')+'</div>';
- if(x.tipo!=='consulta')h+='<div class="sec">'+TIPOS[x.tipo].ic+' Material</div><div class="mat" id="mat">'+rMatMarco(x)+'</div>';
- h+='<div class="sec"><span>📝 Observaciones ('+notas.length+')</span>'+(pend(x)?'<span class="chip" style="background:var(--bordo);color:#fff">'+pend(x)+' por hacer</span>':'')+'</div>';
- h+=notas.map(o=>rObs(x,o)).join('')||'<div class="muted">Todavía no hay observaciones.</div>';
+ if(esRev(x))h+=rRev(x);
+ else if(x.tipo!=='consulta')h+='<div class="sec">'+TIPOS[x.tipo].ic+' Material</div><div class="mat" id="mat">'+rMatMarco(x)+'</div>';
+ const cab='<span>📝 '+(esRev(x)?'Todas las observaciones':'Observaciones')+' ('+notas.length+')</span>'+(pend(x)?'<span class="chip" style="background:var(--bordo);color:#fff">'+pend(x)+' por hacer</span>':'');
+ if(esRev(x))h+='<details style="margin-top:14px"><summary class="sec" style="cursor:pointer">'+cab+'</summary>'+(notas.map(o=>rObs(x,o)).join('')||'<div class="muted">Todavía no hay observaciones.</div>')+'</details><div class="sec">🗒 Comentario general</div>';
+ else{h+='<div class="sec">'+cab+'</div>';h+=notas.map(o=>rObs(x,o)).join('')||'<div class="muted">Todavía no hay observaciones.</div>'}
  h+=rObsForm(x);
  h+='<div class="sec">💬 Mensajes</div>'+(x.hilo||[]).map(m=>'<div class="msg m-'+m.de+'"><div class="q">'+NOMBRE[m.de]+' · '+esc(fecha(m.f))+'</div>'+esc(m.t)+'</div>').join('')+
   '<div style="display:flex;gap:8px"><textarea id="mX" placeholder="Mensaje para '+otro()+'…" style="min-height:48px">'+esc(ls.get('m'+x.id)||'')+'</textarea><button class="btn b-blanco" id="mOk">Enviar</button></div>';
@@ -289,7 +345,7 @@ function rDet(x){
  return h+'</div>'}
 function ordenA(a,b){const v=o=>o.an.t==='gen'?-1:(o.an.t==='min'?o.an.s:(o.an.n||o.id));return v(a)-v(b)||a.id-b.id}
 const colA=o=>CLASES[o.cl][1];
-const anIc=a=>({pin:'📍',min:'⏱',pag:'📄',diap:'📊',gen:'🗒'}[a.t]||'🗒');
+const anIc=a=>({pin:'📍',min:'⏱',pag:'📄',diap:'📊',gen:'🗒',blq:'📄','3d':'🧊'}[a.t]||'🗒');
 function rObs(x,o){
  return '<div class="obs'+(o.h?' hecha':'')+'" data-o="'+o.id+'"><div class="lado" style="background:'+colA(o)+'"></div>'+
  (x.de===YO.u?'<input type="checkbox" data-hecha="'+o.id+'"'+(o.h?' checked':'')+' title="Marcar como hecha" aria-label="Hecha">':'')+
@@ -297,9 +353,9 @@ function rObs(x,o){
  '<span class="para">→ para '+esc(o.para)+'</span><span class="muted">'+NOMBRE[o.de]+' · '+esc(fecha(o.f))+(o.h?' · hecha ✓':'')+'</span></div><div class="tx">'+esc(o.tx)+'</div></div></div>'}
 function rObsForm(x){
  const a=ANC||{t:'gen',l:'General'};
- const pista={plano:'Tocá el plano para marcar un punto',video:'Pausá el video y tocá «Anotar en este minuto»',informe:'Tocá una página',presentacion:'Tocá una diapositiva',dibujo:'',calculo:'',consulta:''}[x.tipo];
+ const pista=esRev(x)?'':{plano:'Tocá el plano para marcar un punto',video:'Pausá el video y tocá «Anotar en este minuto»',informe:'Tocá una página',presentacion:'Tocá una diapositiva',dibujo:'',calculo:'',consulta:''}[x.tipo]||'';
  return '<div class="obsform"><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><span class="ancla">'+anIc(a)+' '+esc(a.l)+'</span>'+(ANC?'<button class="btn b-blanco" id="sinAnc" style="min-height:32px;padding:4px 10px">Quitar marca</button>':'')+(pista?'<span class="muted">'+pista+'</span>':'')+'</div>'+
- '<div class="clases">'+Object.keys(CLASES).map(c=>'<button data-cl="'+c+'" class="'+(c===CL?'on':'')+'" style="color:'+CLASES[c][1]+(c===CL?';background:'+CLASES[c][1]:'')+'">'+CLASES[c][0]+'</button>').join('')+'</div>'+
+ '<div class="clases">'+['corregir','sugerencia','duda','ok'].map(c=>'<button data-cl="'+c+'" class="'+(c===CL?'on':'')+'" style="color:'+CLASES[c][1]+(c===CL?';background:'+CLASES[c][1]:'')+'">'+CLASES[c][0]+'</button>').join('')+'</div>'+
  '<div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;flex-wrap:wrap"><span class="muted">Dirigida a</span><input type="text" id="oP" list="paraL" value="'+esc(PAR)+'" style="width:auto;max-width:220px"><datalist id="paraL">'+PARA_DEF.map(p=>'<option value="'+p+'">').join('')+'</datalist></div>'+
  '<textarea id="oX" placeholder="Escribí la observación (o dictala con el micrófono del teclado)…">'+esc(ls.get('o'+x.id)||'')+'</textarea><div class="guardado" id="oG"></div>'+
  '<button class="btn '+(soyMarce()?'b-bordo':'b-pet')+'" id="oOk">＋ Agregar observación</button></div>'}
@@ -314,7 +370,7 @@ function engForm(x){
   x.notas=x.notas||[];x.notas.push(Object.assign({id:Date.now(),de:YO.u,f:'recién',h:false},obs));ls.set('o'+x.id,'');ANC=null;redet();
   await enviar({accion:'obs',id:x.id,obs},'Observación agregada');cargar(true)}}
 function engDet(x){
- engForm(x);const vv=$('#volver');if(vv)vv.onclick=()=>{ABIERTO=false;ponerModo(MODO);render();scrollTo(0,0)};
+ engForm(x);const vv=$('#volver');if(vv)vv.onclick=()=>{ABIERTO=false;document.body.classList.remove('leer');ponerModo(MODO);render();scrollTo(0,0)};
  $$('[data-arch]').forEach(e=>e.onclick=async()=>{const a=(x.archivos||[]).concat(x.base?[x.base]:[]).find(z=>z.id===e.dataset.arch);toast('Abriendo '+a.nombre+'…');try{const c=await archivo(a);if(seVe(a))visor(a,c);else bajar(a,c)}catch(err){toast('No se pudo abrir')}});
  $$('[data-hecha]').forEach(c=>c.onchange=()=>{const o=x.notas.find(n=>n.id===+c.dataset.hecha);o.h=c.checked;c.closest('.obs').classList.toggle('hecha',c.checked);enviar({accion:'hecha',id:x.id,obs:o.id,h:c.checked}).then(()=>cargar(true))});
  $$('[data-ir]').forEach(e=>e.onclick=()=>irA(x,x.notas.find(n=>n.id===+e.dataset.ir)));
@@ -397,6 +453,113 @@ function dibujo(x){
  $('#borrarD').onclick=()=>{const b=$('#borrarD');if(b.dataset.ok){tr=[];marca();pinta();b.textContent='Borrar todo';delete b.dataset.ok}else{b.dataset.ok=1;b.textContent='Tocá de nuevo para borrar'}};
  $('#guardaD').onclick=async()=>{const r=await enviar({accion:'trazos',id:x.id,trazos:tr},'Dibujo guardado ✓');if(r){x.trazos=tr;cambio=false;ls.set('d'+x.id,'');est()}};
  est();pinta()}
+
+/* ---------- revisión interactiva: informe + maqueta 3D ---------- */
+const docDe=x=>(x.archivos||[]).find(a=>/revision\.json$/i.test(a.nombre));
+const maqDe=x=>(x.archivos||[]).find(a=>/\.html?$/i.test(a.nombre));
+const esRev=x=>!!(docDe(x)||maqDe(x));
+const ocultoChip=a=>/revision\.json$/i.test(a.nombre)||/^vista3d-/i.test(a.nombre);
+let RT='inf';const DOCS={};
+function rRev(x){const d=docDe(x),m=maqDe(x);if(!d&&RT==='inf')RT='maq';if(!m&&RT==='maq')RT='inf';
+ return '<div class="rtabs">'+(d?'<button data-rt="inf" class="'+(RT==='inf'?'on':'')+'">📄 Informe</button>':'')+(m?'<button data-rt="maq" class="'+(RT==='maq'?'on':'')+'">🧊 Maqueta 3D</button>':'')+'</div><div class="rpanel" id="rpanel"><div class="cargando">Cargando…</div></div>'}
+function txtPlano(h){const d=document.createElement('div');d.innerHTML=h;return d.innerText.replace(/\s+/g,' ').trim()}
+function diffHTML(a,b){const A=a.split(/(\s+)/),B=b.split(/(\s+)/),n=A.length,m=B.length;
+ if(n*m>400000)return '<del>'+esc(a)+'</del> <ins>'+esc(b)+'</ins>';
+ const L=Array.from({length:n+1},()=>new Uint16Array(m+1));for(let i=n-1;i>=0;i--)for(let j=m-1;j>=0;j--)L[i][j]=A[i]===B[j]?L[i+1][j+1]+1:Math.max(L[i+1][j],L[i][j+1]);
+ let i=0,j=0,o='';while(i<n&&j<m){if(A[i]===B[j]){o+=esc(A[i]);i++;j++}else if(L[i+1][j]>=L[i][j+1]){o+='<del>'+esc(A[i])+'</del>';i++}else{o+='<ins>'+esc(B[j])+'</ins>';j++}}
+ while(i<n)o+='<del>'+esc(A[i++])+'</del>';while(j<m)o+='<ins>'+esc(B[j++])+'</ins>';return o.replace(/<\/del><del>/g,'').replace(/<\/ins><ins>/g,'')}
+async function cargarRev(x){
+ $$('[data-rt]').forEach(b=>b.onclick=()=>{RT=b.dataset.rt;$$('[data-rt]').forEach(z=>z.classList.toggle('on',z===b));cargarRev(x)});
+ const p=$('#rpanel');if(!p)return;
+ if(RT==='maq')return panelMaq(x,p);
+ const a=docDe(x);let D=DOCS[a.id];
+ if(!D){try{const c=await archivo(a);D=DOCS[a.id]=JSON.parse(new TextDecoder().decode(c.bytes))}catch(e){p.innerHTML='<div class="cargando">No se pudo abrir el informe.</div>';return}}
+ if(SEL!==x.id||RT!=='inf')return;
+ p.innerHTML=infHTML(x,D);engInf(x,D);
+}
+function infHTML(x,D){const I=D.img;let h='<div class="inf"><div class="ihead"><img src="'+I.logo_galvasa+'" alt=""><img src="'+I.logo_jea+'" alt=""><div class="lic"><b>Lic. Marcelo Elvira</b><br>Lic. en Higiene y Seguridad · M.P. C.P.I.I. LHS 0656</div></div>';
+ h+='<div class="mini" style="margin:12px 18px 0;background:#FFF8F3;border:1px solid #F3D3C2">👆 Tocá cualquier párrafo para <b>✏️ corregirlo</b> o <b>💬 comentarlo</b>. Lo que marques le llega a '+esc(otro())+'.</div>'+'<h1>'+esc(D.titulo)+'</h1><p class="isub">'+esc(D.sub)+' · '+esc(D.version||'')+'</p><div class="ikpis">'+D.kpis.map(k=>'<div style="border-color:'+k[2]+'"><small>'+esc(k[0])+'</small><b>'+esc(k[1])+'</b></div>').join('')+'</div>';
+ if(D.portada)h+='<div style="margin:0 18px"><figure><img src="'+I[D.portada.img]+'" alt=""></figure><div class="figc">'+D.portada.pie+'</div></div>';
+ D.sec.forEach(s=>{let g='';h+='<div class="isec"><h2><span class="num">'+esc(s.n)+'</span>'+esc(s.t)+'</h2>';
+  const fotos=s.b.every(b=>b.k==='foto');if(fotos)h+='<div class="fotos">';
+  s.b.forEach((b,i)=>{if(b.grupo&&b.grupo!==g){g=b.grupo;h+='<div class="grp">'+esc(g)+'</div>'}h+=blqHTML(x,s,b,i,I)});
+  if(fotos)h+='</div>';h+='</div>'});
+ if(D.firma)h+='<div class="ifirma"><div><img src="'+I[D.firma.img]+'" alt=""><div>'+esc(D.firma.nombre)+'</div></div><div><img src="'+I[D.firma.sello]+'" alt=""></div></div>';
+ return h+'</div>'}
+function etiq(s,b,i){const t=s.t.length>28?s.t.slice(0,26)+'…':s.t;return '§'+s.n+' '+t+(b.lab?' · '+b.lab:b.tit?' · '+(b.num?b.num+'. ':'')+b.tit.slice(0,30):' · '+(i+1))}
+function blqHTML(x,s,b,i,I){
+ const notas=(x.notas||[]).filter(o=>o.an.t==='blq'&&o.an.b===b.id);const ed=b.k!=='foto';
+ let c='';const bx='<div class="bx" data-bx="'+b.id+'">'+b.h+'</div>';
+ if(b.k==='dato')c='<div class="dato"><div class="lab">'+esc(b.lab)+'</div>'+bx+'</div>';
+ else if(b.k==='li')c='<div style="display:flex;gap:8px"><span>•</span>'+bx+'</div>';
+ else if(b.k==='rec')c='<div class="rec"><div class="rn">'+b.num+'</div><div><div class="rt">'+esc(b.tit)+'<span class="chipr" style="background:'+b.col+'">'+esc(b.chip)+'</span></div>'+bx+'</div></div>';
+ else if(b.k==='fig')c='<figure><img src="'+I[b.img]+'" alt="" loading="lazy"></figure><div class="figc">'+bx+'</div>';
+ else if(b.k==='foto')c='<figure><img src="'+I[b.img]+'" alt="" loading="lazy"></figure><div class="figc">'+b.h+'</div>';
+ else if(b.k==='cart')c='<div class="cart"><img src="'+I[b.img]+'" alt="">'+bx+'</div>';
+ else if(b.k==='norma')c='<div><b>'+esc(b.tit)+'</b> — </div>'+bx;
+ else if(b.k==='nota')c='<div class="figc">'+bx+'</div>';
+ else c=bx;
+ const puedeEd=ed&&x.de!==YO.u&&x.estado!=='cerrada';
+ return '<div class="blq'+(notas.length?' tiene':'')+'" data-b="'+b.id+'" data-l="'+esc(etiq(s,b,i))+'">'+c+
+  '<div class="bt">'+(puedeEd?'<button class="e" data-ed="'+b.id+'">✏️ Corregir</button>':'')+'<button class="c" data-co="'+b.id+'">💬 Comentar</button></div>'+
+  '<div class="iobs">'+notas.map(o=>ioHTML(x,o)).join('')+'</div></div>'}
+function ioHTML(x,o){const col=CLASES[o.cl]?CLASES[o.cl][1]:'#7B7175';
+ const cuerpo=o.cl==='edicion'&&o.orig!=null?'<div class="diff">'+diffHTML(o.orig,o.tx)+'</div>':'<div style="white-space:pre-wrap">'+esc(o.tx)+'</div>';
+ return '<div class="io'+(o.h?' hecha':'')+'" style="border-color:'+col+'">'+(x.de===YO.u?'<input type="checkbox" data-hecha="'+o.id+'"'+(o.h?' checked':'')+' aria-label="Hecha">':'')+
+  '<div style="flex:1"><div class="who" style="color:'+col+'">'+(o.cl==='edicion'?'✏️ '+NOMBRE[o.de]+' propone':'💬 '+NOMBRE[o.de]+' · '+(CLASES[o.cl]||['Nota'])[0])+' <span class="muted" style="font-weight:600">→ '+esc(o.para)+' · '+esc(fecha(o.f))+(o.h?' · hecha ✓':'')+'</span>'+
+  (o.de===YO.u&&!o.h?' <button class="btn b-blanco" data-borra="'+o.id+'" style="min-height:26px;padding:1px 8px;font-size:12px">Borrar</button>':'')+'</div>'+cuerpo+'</div></div>'}
+function engInf(x,D){
+ $$('#rpanel .blq').forEach(b=>b.addEventListener('click',e=>{if(e.target.closest('button,input,textarea,[contenteditable=true]'))return;$$('#rpanel .blq.activo').forEach(z=>{if(z!==b)z.classList.remove('activo')});b.classList.add('activo')}));
+ const hallar=id=>{for(const s of D.sec)for(const b of s.b)if(b.id===id)return b};
+ $$('#rpanel [data-hecha]').forEach(c=>c.onchange=()=>{const o=x.notas.find(n=>n.id===+c.dataset.hecha);o.h=c.checked;c.closest('.io').classList.toggle('hecha',c.checked);enviar({accion:'hecha',id:x.id,obs:o.id,h:c.checked})});
+ $$('#rpanel [data-borra]').forEach(b=>b.onclick=async()=>{if(!b.dataset.ok){b.dataset.ok=1;b.textContent='¿Seguro? tocá de nuevo';return}x.notas=x.notas.filter(n=>n.id!==+b.dataset.borra);cargarRev(x);await enviar({accion:'borrarObs',id:x.id,obs:+b.dataset.borra},'Borrada');cargar(true)});
+ $$('#rpanel [data-ed]').forEach(btn=>btn.onclick=()=>{const id=btn.dataset.ed,bl=btn.closest('.blq'),el=bl.querySelector('[data-bx="'+id+'"]'),orig=txtPlano(hallar(id).h);
+  if(bl.classList.contains('editando'))return;bl.classList.add('editando');const k='ed'+x.id+id,prev=ls.get(k);
+  el.textContent=prev!=null?prev:orig;el.contentEditable='true';el.focus();
+  const bar=document.createElement('div');bar.className='mini';bar.innerHTML='<div class="muted" style="margin-bottom:6px">Corregí el texto directamente arriba. Se guarda como propuesta y Marce ve qué cambiaste.</div><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn b-pet" data-g>Guardar corrección</button><button class="btn b-blanco" data-x>Cancelar</button><span class="guardado"></span></div>';
+  bl.querySelector('.bt').after(bar);el.oninput=()=>{ls.set(k,el.innerText);bar.querySelector('.guardado').textContent='Borrador guardado en este equipo'};
+  bar.querySelector('[data-x]').onclick=()=>{ls.set(k,'');cargarRev(x)};
+  bar.querySelector('[data-g]').onclick=async()=>{const nuevo=el.innerText.replace(/\s+/g,' ').trim();if(!nuevo||nuevo===orig){toast('No hay cambios');return}
+   const obs={an:{t:'blq',b:id,l:bl.dataset.l},cl:'edicion',para:'Marce',tx:nuevo,orig};x.notas=x.notas||[];x.notas.push(Object.assign({id:Date.now(),de:YO.u,f:'recién',h:false},obs));ls.set(k,'');cargarRev(x);
+   await enviar({accion:'obs',id:x.id,obs},'Corrección guardada ✓');cargar(true)}});
+ $$('#rpanel [data-co]').forEach(btn=>btn.onclick=()=>{const id=btn.dataset.co,bl=btn.closest('.blq');if(bl.querySelector('.mini'))return;miniComentario(bl,'c'+x.id+id,async(tx,cl,para)=>{const obs={an:{t:'blq',b:id,l:bl.dataset.l},cl,para,tx};x.notas=x.notas||[];x.notas.push(Object.assign({id:Date.now(),de:YO.u,f:'recién',h:false},obs));cargarRev(x);await enviar({accion:'obs',id:x.id,obs},'Comentario guardado ✓');cargar(true)})});
+}
+function miniComentario(dentro,k,alGuardar,antes){let cl='sugerencia';const f=document.createElement('div');f.className='mini';
+ f.innerHTML=(antes||'')+'<div class="clases">'+['corregir','sugerencia','duda','ok'].map(c=>'<button data-c="'+c+'" style="color:'+CLASES[c][1]+'">'+CLASES[c][0]+'</button>').join('')+'</div><div style="display:flex;gap:6px;align-items:center;margin-bottom:6px;flex-wrap:wrap"><span class="muted">Dirigido a</span><input type="text" list="paraL" value="'+esc(otro())+'" style="width:auto;max-width:200px" data-p></div><textarea placeholder="Escribí el comentario (o dictalo con el micrófono)…"></textarea><div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap"><button class="btn b-pet" data-g>Guardar comentario</button><button class="btn b-blanco" data-x>Cancelar</button><span class="guardado"></span></div>';
+ const ta=f.querySelector('textarea');ta.value=ls.get(k)||'';ta.oninput=()=>{ls.set(k,ta.value);f.querySelector('.guardado').textContent='Borrador guardado'};
+ const pinta=()=>f.querySelectorAll('[data-c]').forEach(b=>{const on=b.dataset.c===cl;b.classList.toggle('on',on);b.style.background=on?CLASES[b.dataset.c][1]:'#fff'});pinta();
+ f.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{cl=b.dataset.c;pinta()});
+ f.querySelector('[data-x]').onclick=()=>{ls.set(k,'');f.remove()};
+ f.querySelector('[data-g]').onclick=()=>{const t=ta.value.trim();if(!t){toast('Escribí el comentario');return}ls.set(k,'');alGuardar(t,cl,f.querySelector('[data-p]').value.trim()||otro(),f)};
+ const bt=dentro.querySelector('.bt');if(bt)bt.after(f);else dentro.appendChild(f);ta.focus();return f}
+const MODOS={actual:'Situación',acc:'Accidente',prop:'Propuestas'};
+let MAQURL={};
+async function panelMaq(x,p){const a=maqDe(x);let c;try{c=await archivo(a)}catch(e){p.innerHTML='<div class="cargando">No se pudo abrir la maqueta.</div>';return}
+ if(SEL!==x.id||RT!=='maq')return;
+ if(!MAQURL[a.id])MAQURL[a.id]=URL.createObjectURL(new Blob([c.bytes],{type:'text/html'}));
+ const v3=(x.notas||[]).filter(o=>o.an.t==='3d');
+ p.innerHTML='<div class="maq"><div class="maqbar"><b style="flex:1">🧊 Maqueta del horno · girala, elegí la escena y comentá lo que ves</b><button class="btn b-bordo" id="com3d">💬 Comentar lo que se ve</button></div><iframe id="ifr3d" src="'+MAQURL[a.id]+'" allowfullscreen></iframe><div id="f3d"></div><div id="v3lista"></div></div>';pintarV3(x);
+ $('#com3d').onclick=()=>{const ifr=$('#ifr3d');let est,img;try{const dd=ifr.contentDocument,cv=dd.getElementById('c');const md=(dd.querySelector('[data-mode].on')||{}).dataset||{},vw=(dd.querySelector('[data-view].on')||{});
+   est={mode:md.mode||'acc',view:(vw.dataset&&vw.dataset.view)||'libre',rv:+(dd.getElementById('rng')||{}).value||0};est.l='Maqueta · '+(MODOS[est.mode]||est.mode)+' · '+(vw.textContent||'vista libre');
+   const o=document.createElement('canvas'),w=720;o.width=w;o.height=Math.round(cv.height*w/cv.width);o.getContext('2d').drawImage(cv,0,0,o.width,o.height);img=o.toDataURL('image/jpeg',.72)}catch(e){toast('No se pudo capturar la vista');return}
+  const box=$('#f3d');box.innerHTML='';const f=miniComentario(box,'v3'+x.id,async(tx,cl,para,frm)=>{frm.querySelector('[data-g]').disabled=true;const obs={an:Object.assign({t:'3d'},est),cl,para,tx,img};const r=await enviar({accion:'obs',id:x.id,obs},'Comentario con la vista guardado ✓');if(r){box.innerHTML='';await refrescarSinPintar();if(SEL===x.id)pintarV3(q(x.id))}else frm.querySelector('[data-g]').disabled=false},
+   '<div style="display:flex;gap:10px;align-items:center;margin-bottom:8px"><img src="'+img+'" style="width:160px;border-radius:8px" alt=""><b>'+esc(est.l)+'</b></div>');f.scrollIntoView({behavior:'smooth',block:'nearest'})};
+}
+function pintarV3(x){const L=$('#v3lista');if(!L)return;const v3=(x.notas||[]).filter(o=>o.an.t==='3d');
+ L.innerHTML='<div class="sec" style="margin:12px 10px 0">💬 Comentarios sobre la maqueta ('+v3.length+')</div>'+(v3.map(o=>v3HTML(x,o)).join('')||'<div class="muted" style="padding:0 10px 12px">Todavía no hay comentarios sobre la maqueta.</div>');
+ v3.forEach(async o=>{if(!o.img)return;try{const ci=await archivo({id:o.img,nombre:'v.jpg'});const im=L.querySelector('[data-v3img="'+o.id+'"]');if(im)im.src=ci.url}catch(e){}});
+ L.querySelectorAll('[data-ver3d]').forEach(b=>b.onclick=()=>{const o=x.notas.find(n=>n.id===+b.dataset.ver3d);verVista(o.an);$('#ifr3d').scrollIntoView({behavior:'smooth',block:'center'})});
+ L.querySelectorAll('[data-hecha]').forEach(cb=>cb.onchange=()=>{const o=x.notas.find(n=>n.id===+cb.dataset.hecha);o.h=cb.checked;cb.closest('.v3').classList.toggle('hecha',cb.checked);enviar({accion:'hecha',id:x.id,obs:o.id,h:cb.checked})});
+ L.querySelectorAll('[data-borra]').forEach(b=>b.onclick=async()=>{if(!b.dataset.ok){b.dataset.ok=1;b.textContent='¿Seguro? tocá de nuevo';return}x.notas=x.notas.filter(n=>n.id!==+b.dataset.borra);pintarV3(x);await enviar({accion:'borrarObs',id:x.id,obs:+b.dataset.borra},'Borrado');await refrescarSinPintar()});
+}
+async function refrescarSinPintar(){try{const r=await post({accion:'lista',token:TOKEN});if(r.pedidos){D=r.pedidos.sort((a,b)=>b.id-a.id);ls.set('copia',JSON.stringify(D))}}catch(e){}}
+function v3HTML(x,o){const col=CLASES[o.cl]?CLASES[o.cl][1]:'#7B7175';
+ return '<div class="v3'+(o.h?' hecha':'')+'" style="border-left:5px solid '+col+'"><img data-v3img="'+o.id+'" alt="Vista de la maqueta">'+
+ '<div style="flex:1">'+(x.de===YO.u?'<label style="float:right;display:flex;gap:4px;align-items:center;font-size:13px"><input type="checkbox" data-hecha="'+o.id+'"'+(o.h?' checked':'')+' style="width:22px;height:22px;accent-color:var(--verde)"> hecha</label>':'')+
+ '<div class="who" style="color:'+col+';font-weight:800;font-size:13px">'+NOMBRE[o.de]+' · '+(CLASES[o.cl]||['Nota'])[0]+' <span class="muted">→ '+esc(o.para)+' · '+esc(fecha(o.f))+'</span></div><div style="font-size:13px;color:var(--gris);margin:2px 0">'+esc(o.an.l)+'</div><div style="white-space:pre-wrap;font-size:15px">'+esc(o.tx)+'</div>'+
+ '<div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap"><button class="btn b-blanco" data-ver3d="'+o.id+'" style="min-height:34px;padding:4px 10px">👁 Ver en la maqueta</button>'+(o.de===YO.u&&!o.h?'<button class="btn b-blanco" data-borra="'+o.id+'" style="min-height:34px;padding:4px 10px">Borrar</button>':'')+'</div></div></div>'}
+function verVista(an){try{const dd=$('#ifr3d').contentDocument,b=dd.querySelector('[data-mode="'+an.mode+'"]');if(b)b.click();
+ setTimeout(()=>{const r=dd.getElementById('rng');if(r){r.value=an.rv;r.dispatchEvent(new Event('input',{bubbles:true}))}if(an.view&&an.view!=='libre'&&an.view!=='auto'){const v=dd.querySelector('[data-view="'+an.view+'"]');if(v)v.click()}},120)}catch(e){toast('No se pudo mover la maqueta')}}
 
 /* ---------- arranque ---------- */
 MODO=ls.get('modo')||detectar();
