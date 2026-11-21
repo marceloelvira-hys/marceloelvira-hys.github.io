@@ -166,6 +166,7 @@ const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const mmss=s=>Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');
 const q=id=>D.find(x=>x.id===id);
+const fecha=v=>{v=String(v==null?'':v);if(/^\d{4}-\d\d-\d\dT/.test(v)){const d=new Date(v),z=n=>String(n).padStart(2,'0');return z(d.getDate())+'/'+z(d.getMonth()+1)+'/'+d.getFullYear()+' '+z(d.getHours())+':'+z(d.getMinutes())}return v};
 const ls={get:k=>{try{return localStorage.getItem('tqc-'+k)}catch(e){return null}},set:(k,v)=>{try{v==null||v===''?localStorage.removeItem('tqc-'+k):localStorage.setItem('tqc-'+k,v)}catch(e){}}};
 function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),2200)}
 const otro=()=>YO&&YO.rol==='marce'?'Teque':'Marce';
@@ -229,7 +230,7 @@ function render(){
  else h+='<div class="grid"><div class="card" id="lista">'+(l.length?l.map(itemHTML).join(''):'<div class="det muted">Nada con ese filtro.</div>')+'</div><div class="card det" id="det"></div></div>';
  const y=scrollY;app.innerHTML=h;ponerCola(cola());engNueva();engLista();if(SEL)redet();scrollTo(0,y)}
 function itemHTML(x){const p=pend(x),e=estTxt(x);return '<div class="item'+(x.id===SEL?' sel':'')+'" data-id="'+x.id+'">'+tiIc(x.tipo)+'<div style="flex:1"><div class="est" style="color:'+e[1]+'">'+e[0]+'</div><h4>'+esc(x.tema)+'</h4><div class="meta">'+chipU(x.urg)+chipC(x.cliente)+
- ((x.notas||[]).length?'<span class="muted">· '+x.notas.length+' obs.'+(p?' · <b style="color:var(--bordo)">'+p+' por hacer</b>':'')+'</span>':'')+'<span class="muted">· '+esc(String(x.f).slice(0,5))+'</span></div></div></div>'}
+ ((x.notas||[]).length?'<span class="muted">· '+x.notas.length+' obs.'+(p?' · <b style="color:var(--bordo)">'+p+' por hacer</b>':'')+'</span>':'')+'<span class="muted">· '+esc(fecha(x.f).slice(0,5))+'</span></div></div></div>'}
 function engLista(){
  $$('.item[data-id]').forEach(e=>e.onclick=()=>{SEL=+e.dataset.id;ANC=null;HL=null;$$('.item').forEach(z=>z.classList.toggle('sel',z===e));redet();if(MODO==='cel'){ABIERTO=true;ponerModo('cel');scrollTo(0,0)}});
  $$('.kpi[data-f],.filtros [data-f]').forEach(b=>{b.onclick=()=>{FIL=FIL===b.dataset.f&&b.dataset.f!=='todos'?'todos':b.dataset.f;render()};b.onkeydown=e=>{if(e.key==='Enter')b.click()}})}
@@ -267,7 +268,7 @@ function engNueva(){
 function redet(){const det=$('#det');if(!det)return;const x=q(SEL);if(!x){det.innerHTML='<div class="muted">Elegí un pedido.</div>';return}det.innerHTML=rDet(x);engDet(x);cargarMat(x)}
 function rDet(x){
  const e=estTxt(x),notas=(x.notas||[]).slice().sort(ordenA);
- let h='<button class="btn b-suave volver" id="volver">← Volver a la lista</button><div class="meta">'+chipT(x.tipo)+chipU(x.urg)+chipC(x.cliente)+'<span class="muted">· '+esc(x.f)+'</span></div><h2>'+esc(x.tema)+'</h2><div class="est" style="color:'+e[1]+'">'+e[0]+'</div>';
+ let h='<button class="btn b-suave volver" id="volver">← Volver a la lista</button><div class="meta">'+chipT(x.tipo)+chipU(x.urg)+chipC(x.cliente)+'<span class="muted">· '+esc(fecha(x.f))+'</span></div><h2>'+esc(x.tema)+'</h2><div class="est" style="color:'+e[1]+'">'+e[0]+'</div>';
  h+='<div class="pedido"><div class="q">'+NOMBRE[x.de]+' pide</div>'+esc(x.pedido)+'</div>';
  const arch=(x.archivos||[]).concat(x.base?[x.base]:[]);
  if(arch.length)h+='<div class="archivos">'+arch.map(a=>'<span class="arch'+(a.de!==x.de?' tq':'')+'" data-arch="'+esc(a.id)+'" title="Abrir">'+(a.de!==x.de?'✓ '+NOMBRE[a.de]+': ':(/\.html?$/i.test(a.nombre)?'🧊 ':'📎 '))+esc(a.nombre)+(seVe(a)?'<span class="ab">Abrir</span>':'<span class="ab">Bajar</span>')+'</span>').join('')+'</div>';
@@ -275,14 +276,14 @@ function rDet(x){
  h+='<div class="sec"><span>📝 Observaciones ('+notas.length+')</span>'+(pend(x)?'<span class="chip" style="background:var(--bordo);color:#fff">'+pend(x)+' por hacer</span>':'')+'</div>';
  h+=notas.map(o=>rObs(x,o)).join('')||'<div class="muted">Todavía no hay observaciones.</div>';
  h+=rObsForm(x);
- h+='<div class="sec">💬 Mensajes</div>'+(x.hilo||[]).map(m=>'<div class="msg m-'+m.de+'"><div class="q">'+NOMBRE[m.de]+' · '+esc(m.f)+'</div>'+esc(m.t)+'</div>').join('')+
+ h+='<div class="sec">💬 Mensajes</div>'+(x.hilo||[]).map(m=>'<div class="msg m-'+m.de+'"><div class="q">'+NOMBRE[m.de]+' · '+esc(fecha(m.f))+'</div>'+esc(m.t)+'</div>').join('')+
   '<div style="display:flex;gap:8px"><textarea id="mX" placeholder="Mensaje para '+otro()+'…" style="min-height:48px">'+esc(ls.get('m'+x.id)||'')+'</textarea><button class="btn b-blanco" id="mOk">Enviar</button></div>';
  h+='<div class="cierre">';
  if(x.de!==YO.u&&x.estado!=='cerrada'){
-  h+='<label class="btn b-blanco" style="cursor:pointer;display:flex;align-items:center">⬆ Subir archivo corregido<input type="file" id="subir" hidden></label>';
+  h+='<label class="btn b-blanco" style="cursor:pointer;display:flex;align-items:center">⬆ Subir archivo corregido<input type="file" id="subir" multiple hidden></label>';
   h+=x.estado==='pendiente'?'<button class="btn b-pet" id="devolver">✓ Listo, se lo devuelvo a '+otro()+'</button>':'<span class="muted" style="align-self:center">Ya lo devolviste. Podés seguir agregando observaciones.</span>';
  }else if(x.de===YO.u){
-  if(x.estado!=='cerrada'){h+='<button class="btn b-verde" id="cerrar">✓ Dar por resuelta</button>';if(x.estado==='respondida')h+='<button class="btn b-suave" id="reabrir">Volver a mandarle</button>';h+='<label class="btn b-blanco" style="cursor:pointer;display:flex;align-items:center">📎 Agregar archivo<input type="file" id="subir" hidden></label>'}
+  if(x.estado!=='cerrada'){h+='<button class="btn b-verde" id="cerrar">✓ Dar por resuelta</button>';if(x.estado==='respondida')h+='<button class="btn b-suave" id="reabrir">Volver a mandarle</button>';h+='<label class="btn b-blanco" style="cursor:pointer;display:flex;align-items:center">📎 Agregar archivos<input type="file" id="subir" multiple hidden></label>'}
   else h+='<button class="btn b-suave" id="reabrir">Reabrir</button>';
  }
  return h+'</div>'}
@@ -293,7 +294,7 @@ function rObs(x,o){
  return '<div class="obs'+(o.h?' hecha':'')+'" data-o="'+o.id+'"><div class="lado" style="background:'+colA(o)+'"></div>'+
  (x.de===YO.u?'<input type="checkbox" data-hecha="'+o.id+'"'+(o.h?' checked':'')+' title="Marcar como hecha" aria-label="Hecha">':'')+
  '<div style="flex:1"><div class="meta" style="margin-bottom:4px"><span class="an" data-ir="'+o.id+'">'+anIc(o.an)+' '+esc(o.an.l)+'</span><span class="chip" style="background:'+colA(o)+';color:#fff">'+CLASES[o.cl][0]+'</span>'+
- '<span class="para">→ para '+esc(o.para)+'</span><span class="muted">'+NOMBRE[o.de]+' · '+esc(o.f)+(o.h?' · hecha ✓':'')+'</span></div><div class="tx">'+esc(o.tx)+'</div></div></div>'}
+ '<span class="para">→ para '+esc(o.para)+'</span><span class="muted">'+NOMBRE[o.de]+' · '+esc(fecha(o.f))+(o.h?' · hecha ✓':'')+'</span></div><div class="tx">'+esc(o.tx)+'</div></div></div>'}
 function rObsForm(x){
  const a=ANC||{t:'gen',l:'General'};
  const pista={plano:'Tocá el plano para marcar un punto',video:'Pausá el video y tocá «Anotar en este minuto»',informe:'Tocá una página',presentacion:'Tocá una diapositiva',dibujo:'',calculo:'',consulta:''}[x.tipo];
@@ -322,7 +323,7 @@ function engDet(x){
  const dv=$('#devolver');if(dv)dv.onclick=async()=>{dv.disabled=true;const r=await enviar({accion:'estado',id:x.id,estado:'respondida'},'Listo: le avisamos a '+otro()+' por mail ✓');if(r)cargar();else dv.disabled=false};
  const ce=$('#cerrar');if(ce)ce.onclick=async()=>{await enviar({accion:'estado',id:x.id,estado:'cerrada'},'Resuelta ✓');cargar()};
  const re=$('#reabrir');if(re)re.onclick=async()=>{await enviar({accion:'estado',id:x.id,estado:'pendiente'},'Se lo volvimos a mandar ✓');cargar()};
- const sb=$('#subir');if(sb)sb.onchange=async()=>{const f=sb.files[0];if(!f)return;if(f.size>30*1048576){toast('Muy pesado (máx. ~30 MB)');return}toast('Subiendo '+f.name+'…');const r=await enviar({accion:'subir',id:x.id,archivo:await leer(f)},'Archivo subido ✓');if(r)cargar()};
+ const sb=$('#subir');if(sb)sb.onchange=async()=>{const fs=[...sb.files];if(!fs.length)return;let ok=0;for(const f of fs){if(f.size>30*1048576){toast(f.name+': muy pesado (máx. ~30 MB)');continue}toast('Subiendo '+f.name+'… ('+(ok+1)+' de '+fs.length+')');const r=await enviar({accion:'subir',id:x.id,archivo:await leer(f)});if(r)ok++}toast(ok+' archivo(s) subido(s) ✓');cargar()};
 }
 const seVe=a=>/\.(html?|pdf|jpe?g|png|gif|webp)$/i.test(a.nombre)||/^(text\/html|image\/|application\/pdf)/.test(a.tipo||'');
 function bajar(a,c){const l=document.createElement('a');l.href=c.url;l.download=a.nombre;document.body.appendChild(l);l.click();l.remove()}
@@ -335,20 +336,21 @@ function irA(x,o){if(!o)return;HL=o.id;if(o.an.t==='min'){const v=$('video');if(
  else if(o.an.t==='pag'||o.an.t==='diap'){verPagina(x,o.an.n)}else if(o.an.t==='pin'){pintarMarcas();const p=$('#plano');if(p)p.scrollIntoView({behavior:'smooth',block:'center'})}}
 
 /* ---------- material ---------- */
+function baseDe(x){if(x.base)return x.base;const re={informe:/\.pdf$/i,presentacion:/\.pdf$/i,plano:/\.(jpe?g|png|webp)$/i,video:/\.(mp4|mov|webm|m4v)$/i,dibujo:/\.(jpe?g|png|webp)$/i}[x.tipo];return re?(x.archivos||[]).find(a=>re.test(a.nombre))||null:null}
 function rMatMarco(x){
  if(x.tipo==='calculo')return rCalculo(x);
  if(x.tipo==='dibujo')return '<div class="matbar">'+['#6E1E2E','#1F6F78','#C0632D','#3F7D4E','#2A2326'].map(c=>'<button class="col'+(c===COLOR?' on':'')+'" data-col="'+c+'" style="background:'+c+'" aria-label="Color"></button>').join('')+
   '<button class="btn b-blanco" id="desh" style="min-height:36px;padding:4px 10px">↶ Deshacer</button><button class="btn b-blanco" id="borrarD" style="min-height:36px;padding:4px 10px">Borrar todo</button><button class="btn b-pet" id="guardaD" style="min-height:36px;padding:4px 12px">Guardar dibujo</button><span class="muted" id="dEst"></span></div><div class="lienzo" id="lienzo"><canvas id="cv" width="1200" height="760"></canvas></div>';
- if(!x.base)return '<div class="cargando">No se subió el material base. Los archivos están arriba.</div>';
- return '<div class="cargando">Cargando '+esc(x.base.nombre)+'…</div>'}
+ const b=baseDe(x);if(!b)return '<div class="cargando">Todavía no hay material para marcar'+(x.de===YO.u?': agregalo con «📎 Agregar archivos» abajo.':'.')+'</div>';
+ return '<div class="cargando">Cargando '+esc(b.nombre)+'…</div>'}
 function rCalculo(x){
  return '<div class="resul"><div class="est" style="color:var(--verde);margin-bottom:6px">Resultado</div>'+(x.de!==YO.u?'<textarea id="res" placeholder="Resultado y cómo lo sacaste">'+esc(ls.get('r'+x.id)||x.resultado||'')+'</textarea><div class="guardado" id="rG"></div><button class="btn b-verde" id="resOk">Guardar resultado</button>':(x.resultado?'<div style="font-size:16px;font-weight:700;white-space:pre-wrap">'+esc(x.resultado)+'</div>':'<div class="muted">Todavía no lo cargó.</div>'))+'</div>'}
 async function cargarMat(x){
  const m=$('#mat');if(!m)return;
  if(x.tipo==='calculo'){const rs=$('#res');if(rs){rs.oninput=()=>{ls.set('r'+x.id,rs.value);$('#rG').textContent='Borrador guardado'};$('#resOk').onclick=async()=>{x.resultado=rs.value.trim();ls.set('r'+x.id,'');await enviar({accion:'resultado',id:x.id,t:x.resultado},'Resultado guardado ✓');cargar(true)}}return}
- if(x.tipo==='dibujo'){dibujo(x);if(x.base){try{const c=await archivo(x.base);if(SEL!==x.id)return;const i=new Image();i.src=c.url;$('#lienzo').appendChild(i)}catch(e){}}return}
- if(!x.base)return;
- let c;try{c=await archivo(x.base)}catch(e){if(SEL===x.id)m.innerHTML='<div class="cargando">No se pudo cargar el material.</div>';return}
+ if(x.tipo==='dibujo'){dibujo(x);if(baseDe(x)){try{const c=await archivo(baseDe(x));if(SEL!==x.id)return;const i=new Image();i.src=c.url;$('#lienzo').appendChild(i)}catch(e){}}return}
+ const B=baseDe(x);if(!B)return;
+ let c;try{c=await archivo(B)}catch(e){if(SEL===x.id)m.innerHTML='<div class="cargando">No se pudo cargar el material.</div>';return}
  if(SEL!==x.id||!$('#mat'))return;
  if(x.tipo==='plano'){
   m.innerHTML='<div class="matbar"><span class="muted">Tocá el plano para marcar un punto</span></div><div class="plano" id="plano"><img src="'+c.url+'" alt="Plano"></div>';
@@ -360,15 +362,15 @@ async function cargarMat(x){
  }else if(x.tipo==='informe'||x.tipo==='presentacion'){
   if(!window.pdfjsLib){m.innerHTML='<div class="cargando">No se pudo abrir el visor de PDF. Bajá el archivo de arriba.</div>';return}
   pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-  try{if(!PDFS[x.base.id])PDFS[x.base.id]=await pdfjsLib.getDocument({data:c.bytes.slice()}).promise}catch(e){m.innerHTML='<div class="cargando">El archivo no es un PDF válido.</div>';return}
-  if(SEL!==x.id)return;const pdf=PDFS[x.base.id],pal=x.tipo==='informe'?'Pág.':'Diap.';
+  try{if(!PDFS[B.id])PDFS[B.id]=await pdfjsLib.getDocument({data:c.bytes.slice()}).promise}catch(e){m.innerHTML='<div class="cargando">El archivo no es un PDF válido.</div>';return}
+  if(SEL!==x.id)return;const pdf=PDFS[B.id],pal=x.tipo==='informe'?'Pág.':'Diap.';
   m.innerHTML='<div class="matbar"><span class="muted">'+pdf.numPages+' '+(x.tipo==='informe'?'páginas':'diapositivas')+' · tocá una para verla grande y anotar</span></div><div class="paginas" id="pags">'+Array.from({length:pdf.numPages},(_,i)=>'<div class="pag" data-p="'+(i+1)+'"><canvas></canvas><b>'+pal+' '+(i+1)+'</b></div>').join('')+'</div><div class="grande" id="grande"></div>';
   pintarMarcas();
   $$('.pag').forEach(p=>p.onclick=()=>verPagina(x,+p.dataset.p,true));
   for(let i=1;i<=pdf.numPages;i++){if(SEL!==x.id||!document.body.contains(m))return;const pg=await pdf.getPage(i),vp=pg.getViewport({scale:1}),s=260/vp.width,v2=pg.getViewport({scale:s}),cv=m.querySelector('.pag[data-p="'+i+'"] canvas');if(!cv)return;cv.width=v2.width;cv.height=v2.height;try{await pg.render({canvasContext:cv.getContext('2d'),viewport:v2}).promise}catch(e){return}}
  }}
 async function verPagina(x,n,anotar){
- const pdf=x.base&&PDFS[x.base.id];if(!pdf)return;const pal=x.tipo==='informe'?'Pág.':'Diap.';
+ const B=baseDe(x),pdf=B&&PDFS[B.id];if(!pdf)return;const pal=x.tipo==='informe'?'Pág.':'Diap.';
  $$('.pag').forEach(p=>p.classList.toggle('on',+p.dataset.p===n));
  const g=$('#grande');if(!g)return;g.innerHTML='<canvas></canvas>';const pg=await pdf.getPage(n),vp=pg.getViewport({scale:1}),s=Math.min(2,1400/vp.width),v2=pg.getViewport({scale:s}),cv=g.querySelector('canvas');cv.width=v2.width;cv.height=v2.height;await pg.render({canvasContext:cv.getContext('2d'),viewport:v2}).promise;
  g.scrollIntoView({behavior:'smooth',block:'start'});
