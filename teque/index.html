@@ -508,29 +508,44 @@ function ioHTML(x,o){const col=CLASES[o.cl]?CLASES[o.cl][1]:'#7B7175';
  return '<div class="io'+(o.h?' hecha':'')+'" style="border-color:'+col+'">'+(x.de===YO.u?'<input type="checkbox" data-hecha="'+o.id+'"'+(o.h?' checked':'')+' aria-label="Hecha">':'')+
   '<div style="flex:1"><div class="who" style="color:'+col+'">'+(o.cl==='edicion'?'✏️ '+NOMBRE[o.de]+' propone':'💬 '+NOMBRE[o.de]+' · '+(CLASES[o.cl]||['Nota'])[0])+' <span class="muted" style="font-weight:600">→ '+esc(o.para)+' · '+esc(fecha(o.f))+(o.h?' · hecha ✓':'')+'</span>'+
   (o.de===YO.u&&!o.h?' <button class="btn b-blanco" data-borra="'+o.id+'" style="min-height:26px;padding:1px 8px;font-size:12px">Borrar</button>':'')+'</div>'+cuerpo+'</div></div>'}
+const hhmm=()=>{const d=new Date();return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')};
+function autoGuardador(x,keyId,armar,estado){let t=null,corre=false,otra=false;
+ const run=async()=>{if(corre){otra=true;return}const obs=armar();if(!obs)return;corre=true;estado('Guardando…');const id=ls.get(keyId);if(id)obs.id=+id;
+  try{const r=await post({accion:'obs',id:x.id,obs,token:TOKEN});if(r&&r.ok){if(r.id)ls.set(keyId,String(r.id));estado('✓ Guardado automáticamente '+hhmm())}else if(r&&r.error==='token'){salir()}else estado('No se pudo guardar en línea ('+(r&&r.error)+'): queda en este equipo')}
+  catch(e){estado('Sin conexión: queda guardado en este equipo y se sube después')}corre=false;if(otra){otra=false;await run()}};
+ const iv=setInterval(()=>{if(!document.body.contains(document.querySelector('#rpanel')))clearInterval(iv);else if(t===null)return;},30000);
+ return{tocar:()=>{clearTimeout(t);t=setTimeout(()=>{t=null;run()},2500)},ya:async()=>{clearTimeout(t);t=null;await run()}}}
 function engInf(x,D){
  $$('#rpanel .blq').forEach(b=>b.addEventListener('click',e=>{if(e.target.closest('button,input,textarea,[contenteditable=true]'))return;$$('#rpanel .blq.activo').forEach(z=>{if(z!==b)z.classList.remove('activo')});b.classList.add('activo')}));
  const hallar=id=>{for(const s of D.sec)for(const b of s.b)if(b.id===id)return b};
  $$('#rpanel [data-hecha]').forEach(c=>c.onchange=()=>{const o=x.notas.find(n=>n.id===+c.dataset.hecha);o.h=c.checked;c.closest('.io').classList.toggle('hecha',c.checked);enviar({accion:'hecha',id:x.id,obs:o.id,h:c.checked})});
  $$('#rpanel [data-borra]').forEach(b=>b.onclick=async()=>{if(!b.dataset.ok){b.dataset.ok=1;b.textContent='¿Seguro? tocá de nuevo';return}x.notas=x.notas.filter(n=>n.id!==+b.dataset.borra);cargarRev(x);await enviar({accion:'borrarObs',id:x.id,obs:+b.dataset.borra},'Borrada');cargar(true)});
  $$('#rpanel [data-ed]').forEach(btn=>btn.onclick=()=>{const id=btn.dataset.ed,bl=btn.closest('.blq'),el=bl.querySelector('[data-bx="'+id+'"]'),orig=txtPlano(hallar(id).h);
-  if(bl.classList.contains('editando'))return;bl.classList.add('editando');const k='ed'+x.id+id,prev=ls.get(k);
-  el.textContent=prev!=null?prev:orig;el.contentEditable='true';el.focus();
-  const bar=document.createElement('div');bar.className='mini';bar.innerHTML='<div class="muted" style="margin-bottom:6px">Corregí el texto directamente arriba. Se guarda como propuesta y Marce ve qué cambiaste.</div><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn b-pet" data-g>Guardar corrección</button><button class="btn b-blanco" data-x>Cancelar</button><span class="guardado"></span></div>';
-  bl.querySelector('.bt').after(bar);el.oninput=()=>{ls.set(k,el.innerText);bar.querySelector('.guardado').textContent='Borrador guardado en este equipo'};
-  bar.querySelector('[data-x]').onclick=()=>{ls.set(k,'');cargarRev(x)};
-  bar.querySelector('[data-g]').onclick=async()=>{const nuevo=el.innerText.replace(/\s+/g,' ').trim();if(!nuevo||nuevo===orig){toast('No hay cambios');return}
-   const obs={an:{t:'blq',b:id,l:bl.dataset.l},cl:'edicion',para:'Marce',tx:nuevo,orig};x.notas=x.notas||[];x.notas.push(Object.assign({id:Date.now(),de:YO.u,f:'recién',h:false},obs));ls.set(k,'');cargarRev(x);
-   await enviar({accion:'obs',id:x.id,obs},'Corrección guardada ✓');cargar(true)}});
- $$('#rpanel [data-co]').forEach(btn=>btn.onclick=()=>{const id=btn.dataset.co,bl=btn.closest('.blq');if(bl.querySelector('.mini'))return;miniComentario(bl,'c'+x.id+id,async(tx,cl,para)=>{const obs={an:{t:'blq',b:id,l:bl.dataset.l},cl,para,tx};x.notas=x.notas||[];x.notas.push(Object.assign({id:Date.now(),de:YO.u,f:'recién',h:false},obs));cargarRev(x);await enviar({accion:'obs',id:x.id,obs},'Comentario guardado ✓');cargar(true)})});
+  if(bl.classList.contains('editando'))return;bl.classList.add('editando');const k='ed'+x.id+id,kid='edid'+x.id+id,prev=ls.get(k);
+  const mia=(x.notas||[]).filter(o=>o.an.t==='blq'&&o.an.b===id&&o.cl==='edicion'&&o.de===YO.u&&!o.h).pop();if(mia&&!ls.get(kid))ls.set(kid,String(mia.id));
+  el.textContent=prev!=null?prev:(mia?mia.tx:orig);el.contentEditable='true';el.focus();
+  const bar=document.createElement('div');bar.className='mini';bar.innerHTML='<div class="muted" style="margin-bottom:6px">Corregí el texto directamente arriba. Se guarda solo mientras escribís; Marce ve qué cambiaste.</div><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn b-pet" data-g>Guardar corrección</button><button class="btn b-blanco" data-x>Cancelar</button><span class="guardado"></span></div>';
+  bl.querySelector('.bt').after(bar);const est=t=>{bar.querySelector('.guardado').textContent=t};
+  const ag=autoGuardador(x,kid,()=>{const nuevo=el.innerText.replace(/\s+/g,' ').trim();if(!nuevo||(nuevo===orig&&!ls.get(kid)))return null;return{an:{t:'blq',b:id,l:bl.dataset.l},cl:'edicion',para:'Marce',tx:nuevo,orig}},est);
+  el.oninput=()=>{ls.set(k,el.innerText);est('Escribiendo… se guarda solo');ag.tocar()};
+  bar.querySelector('[data-g]').textContent='✓ Listo';
+  bar.querySelector('[data-x]').textContent=ls.get(kid)?'Cerrar':'Cancelar';
+  bar.querySelector('[data-x]').onclick=async()=>{if(ls.get(kid))await ag.ya();ls.set(k,'');ls.set(kid,'');await refrescarSinPintar();cargarRev(q(x.id))};
+  bar.querySelector('[data-g]').onclick=async()=>{const nuevo=el.innerText.replace(/\s+/g,' ').trim();if((!nuevo||nuevo===orig)&&!ls.get(kid)){toast('No hay cambios');return}
+   await ag.ya();ls.set(k,'');ls.set(kid,'');toast('Corrección guardada ✓');await refrescarSinPintar();cargarRev(q(x.id))}});
+ $$('#rpanel [data-co]').forEach(btn=>btn.onclick=()=>{const id=btn.dataset.co,bl=btn.closest('.blq');if(bl.querySelector('.mini'))return;miniComentario(bl,'c'+x.id+id,async()=>{await refrescarSinPintar();cargarRev(q(x.id))},'',{x,kid:'cid'+x.id+id,armar:(tx,cl,para)=>({an:{t:'blq',b:id,l:bl.dataset.l},cl,para,tx})})});
 }
-function miniComentario(dentro,k,alGuardar,antes){let cl='sugerencia';const f=document.createElement('div');f.className='mini';
+function miniComentario(dentro,k,alGuardar,antes,auto){let cl='sugerencia';const f=document.createElement('div');f.className='mini';
  f.innerHTML=(antes||'')+'<div class="clases">'+['corregir','sugerencia','duda','ok'].map(c=>'<button data-c="'+c+'" style="color:'+CLASES[c][1]+'">'+CLASES[c][0]+'</button>').join('')+'</div><div style="display:flex;gap:6px;align-items:center;margin-bottom:6px;flex-wrap:wrap"><span class="muted">Dirigido a</span><input type="text" list="paraL" value="'+esc(otro())+'" style="width:auto;max-width:200px" data-p></div><textarea placeholder="Escribí el comentario (o dictalo con el micrófono)…"></textarea><div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap"><button class="btn b-pet" data-g>Guardar comentario</button><button class="btn b-blanco" data-x>Cancelar</button><span class="guardado"></span></div>';
- const ta=f.querySelector('textarea');ta.value=ls.get(k)||'';ta.oninput=()=>{ls.set(k,ta.value);f.querySelector('.guardado').textContent='Borrador guardado'};
+ const ta=f.querySelector('textarea');ta.value=ls.get(k)||'';const est=t=>{f.querySelector('.guardado').textContent=t};
+ const ag=auto?autoGuardador(auto.x,auto.kid,()=>{const t=ta.value.trim();if(!t)return null;return auto.armar(t,cl,f.querySelector('[data-p]').value.trim()||otro(),!ls.get(auto.kid))},est):null;
+ ta.oninput=()=>{ls.set(k,ta.value);if(ag){est('Escribiendo… se guarda solo');ag.tocar()}else est('Borrador guardado')};
  const pinta=()=>f.querySelectorAll('[data-c]').forEach(b=>{const on=b.dataset.c===cl;b.classList.toggle('on',on);b.style.background=on?CLASES[b.dataset.c][1]:'#fff'});pinta();
- f.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{cl=b.dataset.c;pinta()});
- f.querySelector('[data-x]').onclick=()=>{ls.set(k,'');f.remove()};
- f.querySelector('[data-g]').onclick=()=>{const t=ta.value.trim();if(!t){toast('Escribí el comentario');return}ls.set(k,'');alGuardar(t,cl,f.querySelector('[data-p]').value.trim()||otro(),f)};
+ f.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{cl=b.dataset.c;pinta();if(ag&&ta.value.trim())ag.tocar()});
+ f.querySelector('[data-x]').onclick=async()=>{if(ag&&ls.get(auto.kid)){await ag.ya();ls.set(k,'');ls.set(auto.kid,'');alGuardar(null,cl,'',f,true);return}ls.set(k,'');f.remove()};
+ f.querySelector('[data-g]').onclick=async()=>{const t=ta.value.trim();if(!t){toast('Escribí el comentario');return}
+  if(ag){f.querySelector('[data-g]').disabled=true;await ag.ya();ls.set(k,'');const ok=!!ls.get(auto.kid);ls.set(auto.kid,'');if(ok){toast('Comentario guardado ✓');alGuardar(t,cl,'',f,true)}else{f.querySelector('[data-g]').disabled=false;toast('No se pudo subir todavía: queda en este equipo')}return}
+  ls.set(k,'');alGuardar(t,cl,f.querySelector('[data-p]').value.trim()||otro(),f)};
  const bt=dentro.querySelector('.bt');if(bt)bt.after(f);else dentro.appendChild(f);ta.focus();return f}
 const MODOS={actual:'Situación',acc:'Accidente',prop:'Propuestas'};
 let MAQURL={};
@@ -542,8 +557,8 @@ async function panelMaq(x,p){const a=maqDe(x);let c;try{c=await archivo(a)}catch
  $('#com3d').onclick=()=>{const ifr=$('#ifr3d');let est,img;try{const dd=ifr.contentDocument,cv=dd.getElementById('c');const md=(dd.querySelector('[data-mode].on')||{}).dataset||{},vw=(dd.querySelector('[data-view].on')||{});
    est={mode:md.mode||'acc',view:(vw.dataset&&vw.dataset.view)||'libre',rv:+(dd.getElementById('rng')||{}).value||0};est.l='Maqueta · '+(MODOS[est.mode]||est.mode)+' · '+(vw.textContent||'vista libre');
    const o=document.createElement('canvas'),w=720;o.width=w;o.height=Math.round(cv.height*w/cv.width);o.getContext('2d').drawImage(cv,0,0,o.width,o.height);img=o.toDataURL('image/jpeg',.72)}catch(e){toast('No se pudo capturar la vista');return}
-  const box=$('#f3d');box.innerHTML='';const f=miniComentario(box,'v3'+x.id,async(tx,cl,para,frm)=>{frm.querySelector('[data-g]').disabled=true;const obs={an:Object.assign({t:'3d'},est),cl,para,tx,img};const r=await enviar({accion:'obs',id:x.id,obs},'Comentario con la vista guardado ✓');if(r){box.innerHTML='';await refrescarSinPintar();if(SEL===x.id)pintarV3(q(x.id))}else frm.querySelector('[data-g]').disabled=false},
-   '<div style="display:flex;gap:10px;align-items:center;margin-bottom:8px"><img src="'+img+'" style="width:160px;border-radius:8px" alt=""><b>'+esc(est.l)+'</b></div>');f.scrollIntoView({behavior:'smooth',block:'nearest'})};
+  const box=$('#f3d');box.innerHTML='';const f=miniComentario(box,'v3'+x.id,async()=>{box.innerHTML='';await refrescarSinPintar();if(SEL===x.id)pintarV3(q(x.id))},
+   '<div style="display:flex;gap:10px;align-items:center;margin-bottom:8px"><img src="'+img+'" style="width:160px;border-radius:8px" alt=""><b>'+esc(est.l)+'</b></div>',{x,kid:'v3id'+x.id+'-'+Date.now(),armar:(tx,cl,para,nuevo)=>Object.assign({an:Object.assign({t:'3d'},est),cl,para,tx},nuevo?{img}:{})});f.scrollIntoView({behavior:'smooth',block:'nearest'})};
 }
 function pintarV3(x){const L=$('#v3lista');if(!L)return;const v3=(x.notas||[]).filter(o=>o.an.t==='3d');
  L.innerHTML='<div class="sec" style="margin:12px 10px 0">💬 Comentarios sobre la maqueta ('+v3.length+')</div>'+(v3.map(o=>v3HTML(x,o)).join('')||'<div class="muted" style="padding:0 10px 12px">Todavía no hay comentarios sobre la maqueta.</div>');
