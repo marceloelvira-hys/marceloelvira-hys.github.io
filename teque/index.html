@@ -139,10 +139,16 @@ body.leer #lista,body.leer .kpis,body.leer .filtros,body.leer #dN{display:none}
 body.leer .grid{grid-template-columns:1fr}
 body.leer .volver{display:inline-flex}
 @media(min-width:1500px){body:not(.cel) .wrap,body:not(.cel) .top .f{max-width:min(1800px,96vw)}}
-/* pantalla ancha (PC, lectura de revision) */
+/* pantalla ancha */
+body.leer:not(.cel) .pedido{max-height:4.4em;overflow:hidden;cursor:pointer;position:relative;margin:6px 0}
+body.leer:not(.cel) .pedido.full{max-height:none}
+.pedido .vt{display:none;font-weight:600;opacity:.7}body.leer:not(.cel) .pedido:not(.full) .vt{display:inline}
+body.leer:not(.cel) .det>h2{font-size:24px;margin:4px 0 0}
+body.leer:not(.cel) .volver{margin-bottom:6px}
+/*  (PC, lectura de revision) */
 body.leer:not(.cel) .wrap,body.leer:not(.cel) .top .f{max-width:min(1900px,98vw);padding-left:10px;padding-right:10px}
 body.leer:not(.cel) .det{padding:10px}
-body.leer:not(.cel) .inf{max-width:none;font-size:18px;line-height:1.6}
+body.leer:not(.cel) .inf{max-width:none;font-size:19.5px;line-height:1.6}
 body.leer:not(.cel) .inf h1{font-size:38px;margin:20px 26px 6px}
 body.leer:not(.cel) .isub{margin:0 26px 16px}
 body.leer:not(.cel) .ikpis{grid-template-columns:repeat(4,minmax(0,1fr));margin:0 26px 16px}
@@ -303,7 +309,7 @@ function render(){
 function itemHTML(x){const p=pend(x),e=estTxt(x);return '<div class="item'+(x.id===SEL?' sel':'')+'" data-id="'+x.id+'">'+tiIc(x.tipo)+'<div style="flex:1"><div class="est" style="color:'+e[1]+'">'+e[0]+'</div><h4>'+esc(x.tema)+'</h4><div class="meta">'+chipU(x.urg)+chipC(x.cliente)+
  ((x.notas||[]).length?'<span class="muted">· '+x.notas.length+' obs.'+(p?' · <b style="color:var(--bordo)">'+p+' por hacer</b>':'')+'</span>':'')+'<span class="muted">· '+esc(fecha(x.f).slice(0,5))+'</span></div></div></div>'}
 function engLista(){
- $$('.item[data-id]').forEach(e=>e.onclick=()=>{SEL=+e.dataset.id;ANC=null;HL=null;$$('.item').forEach(z=>z.classList.toggle('sel',z===e));RT='inf';const xx=q(SEL);if(xx&&esRev(xx)&&MODO!=='cel'){document.body.classList.add('leer');redet();scrollTo(0,0);return}redet();if(MODO==='cel'){ABIERTO=true;ponerModo('cel');scrollTo(0,0)}});
+ $$('.item[data-id]').forEach(e=>e.onclick=()=>{VOLVIO=false;SEL=+e.dataset.id;ANC=null;HL=null;$$('.item').forEach(z=>z.classList.toggle('sel',z===e));RT='inf';const xx=q(SEL);if(xx&&esRev(xx)&&MODO!=='cel'){document.body.classList.add('leer');redet();scrollTo(0,0);return}redet();if(MODO==='cel'){ABIERTO=true;ponerModo('cel');scrollTo(0,0)}});
  $$('.kpi[data-f],.filtros [data-f]').forEach(b=>{b.onclick=()=>{FIL=FIL===b.dataset.f&&b.dataset.f!=='todos'?'todos':b.dataset.f;render()};b.onkeydown=e=>{if(e.key==='Enter')b.click()}})}
 
 /* ---------- nuevo pedido ---------- */
@@ -336,11 +342,12 @@ function engNueva(){
   finally{b.disabled=false;b.textContent='Mandar a '+otro()}}}
 
 /* ---------- detalle ---------- */
-function redet(){const det=$('#det');if(!det)return;const x=q(SEL);if(!x){det.innerHTML='<div class="muted">Elegí un pedido.</div>';return}det.innerHTML=rDet(x);engDet(x);if(esRev(x))cargarRev(x);else cargarMat(x)}
+let VOLVIO=false;
+function redet(){const det=$('#det');if(!det)return;const x=q(SEL);if(!x){det.innerHTML='<div class="muted">Elegí un pedido.</div>';return}if(esRev(x)&&MODO!=='cel'&&!VOLVIO&&!document.body.classList.contains('leer')){document.body.classList.add('leer')}if(esRev(x)&&MODO!=='cel'&&!document.body.classList.contains('leer')){det.innerHTML='<div class="meta">'+chipT(x.tipo)+chipU(x.urg)+chipC(x.cliente)+'</div><h2>'+esc(x.tema)+'</h2><p class="muted">Informe y maqueta 3D para corregir.</p><button class="btn b-bordo" id="abrirRev" style="min-height:54px;font-size:17px">📄 Abrir a pantalla completa</button>';$('#abrirRev').onclick=()=>{VOLVIO=false;RT='inf';document.body.classList.add('leer');redet();scrollTo(0,0)};return}det.innerHTML=rDet(x);engDet(x);if(esRev(x))cargarRev(x);else cargarMat(x)}
 function rDet(x){
  const e=estTxt(x),notas=(x.notas||[]).slice().sort(ordenA);
  let h='<button class="btn b-suave volver" id="volver">← Volver a la lista</button><div class="meta">'+chipT(x.tipo)+chipU(x.urg)+chipC(x.cliente)+'<span class="muted">· '+esc(fecha(x.f))+'</span></div><h2>'+esc(x.tema)+'</h2><div class="est" style="color:'+e[1]+'">'+e[0]+'</div>';
- h+='<div class="pedido"><div class="q">'+NOMBRE[x.de]+' pide</div>'+esc(x.pedido)+'</div>';
+ h+='<div class="pedido" onclick="this.classList.toggle(\'full\')"><div class="q">'+NOMBRE[x.de]+' pide <span class="vt">· tocá para ver todo</span></div>'+esc(x.pedido)+'</div>';
  const arch=(x.archivos||[]).concat(x.base?[x.base]:[]).filter(a=>!ocultoChip(a)&&!(esRev(x)&&a===maqDe(x)));
  if(arch.length)h+='<div class="archivos">'+arch.map(a=>'<span class="arch'+(a.de!==x.de?' tq':'')+'" data-arch="'+esc(a.id)+'" title="Abrir">'+(a.de!==x.de?'✓ '+NOMBRE[a.de]+': ':(/\.html?$/i.test(a.nombre)?'🧊 ':'📎 '))+esc(a.nombre)+(seVe(a)?'<span class="ab">Abrir</span>':'<span class="ab">Bajar</span>')+'</span>').join('')+'</div>';
  if(esRev(x))h+=rRev(x);
@@ -387,7 +394,7 @@ function engForm(x){
   x.notas=x.notas||[];x.notas.push(Object.assign({id:Date.now(),de:YO.u,f:'recién',h:false},obs));ls.set('o'+x.id,'');ANC=null;redet();
   await enviar({accion:'obs',id:x.id,obs},'Observación agregada');cargar(true)}}
 function engDet(x){
- engForm(x);const vv=$('#volver');if(vv)vv.onclick=()=>{ABIERTO=false;document.body.classList.remove('leer');ponerModo(MODO);render();scrollTo(0,0)};
+ engForm(x);const vv=$('#volver');if(vv)vv.onclick=()=>{VOLVIO=true;ABIERTO=false;document.body.classList.remove('leer');ponerModo(MODO);render();scrollTo(0,0)};
  $$('[data-arch]').forEach(e=>e.onclick=async()=>{const a=(x.archivos||[]).concat(x.base?[x.base]:[]).find(z=>z.id===e.dataset.arch);toast('Abriendo '+a.nombre+'…');try{const c=await archivo(a);if(seVe(a))visor(a,c);else bajar(a,c)}catch(err){toast('No se pudo abrir')}});
  $$('[data-hecha]').forEach(c=>c.onchange=()=>{const o=x.notas.find(n=>n.id===+c.dataset.hecha);o.h=c.checked;c.closest('.obs').classList.toggle('hecha',c.checked);enviar({accion:'hecha',id:x.id,obs:o.id,h:c.checked}).then(()=>cargar(true))});
  $$('[data-ir]').forEach(e=>e.onclick=()=>irA(x,x.notas.find(n=>n.id===+e.dataset.ir)));
