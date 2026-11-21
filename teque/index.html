@@ -110,6 +110,11 @@ video{display:block;width:100%;background:#000;max-height:520px}
 .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--tinta);color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;opacity:0;transition:.25s;z-index:60;pointer-events:none;max-width:90vw;text-align:center}.toast.on{opacity:1}
 .cola{background:var(--terra);color:#fff;border-radius:12px;padding:8px 12px;margin-bottom:10px;font-size:14px;display:none}
 .vacio{padding:40px 16px;text-align:center}
+.visor{position:fixed;inset:0;background:rgba(42,35,38,.92);z-index:70;display:flex;flex-direction:column}
+.visor .vb{display:flex;gap:8px;align-items:center;padding:8px 10px;color:#fff;flex-wrap:wrap}
+.visor .vb b{flex:1;font-size:15px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.visor iframe,.visor img{flex:1;width:100%;border:0;background:#fff;object-fit:contain;min-height:0}
+.arch .ab{font-weight:800;color:var(--pet);margin-left:4px}
 .modo{display:flex;background:rgba(255,255,255,.16);border-radius:999px;padding:3px}
 .top .yo .modo button{background:none;padding:6px 10px}.top .yo .modo button.on{background:#fff;color:var(--bordo)}
 .volver{display:none}
@@ -265,7 +270,7 @@ function rDet(x){
  let h='<button class="btn b-suave volver" id="volver">← Volver a la lista</button><div class="meta">'+chipT(x.tipo)+chipU(x.urg)+chipC(x.cliente)+'<span class="muted">· '+esc(x.f)+'</span></div><h2>'+esc(x.tema)+'</h2><div class="est" style="color:'+e[1]+'">'+e[0]+'</div>';
  h+='<div class="pedido"><div class="q">'+NOMBRE[x.de]+' pide</div>'+esc(x.pedido)+'</div>';
  const arch=(x.archivos||[]).concat(x.base?[x.base]:[]);
- if(arch.length)h+='<div class="archivos">'+arch.map(a=>'<span class="arch'+(a.de!==x.de?' tq':'')+'" data-arch="'+esc(a.id)+'" title="Bajar">'+(a.de!==x.de?'✓ '+NOMBRE[a.de]+': ':'📎 ')+esc(a.nombre)+'</span>').join('')+'</div>';
+ if(arch.length)h+='<div class="archivos">'+arch.map(a=>'<span class="arch'+(a.de!==x.de?' tq':'')+'" data-arch="'+esc(a.id)+'" title="Abrir">'+(a.de!==x.de?'✓ '+NOMBRE[a.de]+': ':(/\.html?$/i.test(a.nombre)?'🧊 ':'📎 '))+esc(a.nombre)+(seVe(a)?'<span class="ab">Abrir</span>':'<span class="ab">Bajar</span>')+'</span>').join('')+'</div>';
  if(x.tipo!=='consulta')h+='<div class="sec">'+TIPOS[x.tipo].ic+' Material</div><div class="mat" id="mat">'+rMatMarco(x)+'</div>';
  h+='<div class="sec"><span>📝 Observaciones ('+notas.length+')</span>'+(pend(x)?'<span class="chip" style="background:var(--bordo);color:#fff">'+pend(x)+' por hacer</span>':'')+'</div>';
  h+=notas.map(o=>rObs(x,o)).join('')||'<div class="muted">Todavía no hay observaciones.</div>';
@@ -309,7 +314,7 @@ function engForm(x){
   await enviar({accion:'obs',id:x.id,obs},'Observación agregada');cargar(true)}}
 function engDet(x){
  engForm(x);const vv=$('#volver');if(vv)vv.onclick=()=>{ABIERTO=false;ponerModo(MODO);render();scrollTo(0,0)};
- $$('[data-arch]').forEach(e=>e.onclick=async()=>{const a=(x.archivos||[]).concat(x.base?[x.base]:[]).find(z=>z.id===e.dataset.arch);toast('Bajando '+a.nombre+'…');try{const c=await archivo(a);const l=document.createElement('a');l.href=c.url;l.download=a.nombre;document.body.appendChild(l);l.click();l.remove()}catch(err){toast('No se pudo bajar')}});
+ $$('[data-arch]').forEach(e=>e.onclick=async()=>{const a=(x.archivos||[]).concat(x.base?[x.base]:[]).find(z=>z.id===e.dataset.arch);toast('Abriendo '+a.nombre+'…');try{const c=await archivo(a);if(seVe(a))visor(a,c);else bajar(a,c)}catch(err){toast('No se pudo abrir')}});
  $$('[data-hecha]').forEach(c=>c.onchange=()=>{const o=x.notas.find(n=>n.id===+c.dataset.hecha);o.h=c.checked;c.closest('.obs').classList.toggle('hecha',c.checked);enviar({accion:'hecha',id:x.id,obs:o.id,h:c.checked}).then(()=>cargar(true))});
  $$('[data-ir]').forEach(e=>e.onclick=()=>irA(x,x.notas.find(n=>n.id===+e.dataset.ir)));
  const mX=$('#mX');mX.oninput=()=>ls.set('m'+x.id,mX.value);
@@ -319,6 +324,13 @@ function engDet(x){
  const re=$('#reabrir');if(re)re.onclick=async()=>{await enviar({accion:'estado',id:x.id,estado:'pendiente'},'Se lo volvimos a mandar ✓');cargar()};
  const sb=$('#subir');if(sb)sb.onchange=async()=>{const f=sb.files[0];if(!f)return;if(f.size>30*1048576){toast('Muy pesado (máx. ~30 MB)');return}toast('Subiendo '+f.name+'…');const r=await enviar({accion:'subir',id:x.id,archivo:await leer(f)},'Archivo subido ✓');if(r)cargar()};
 }
+const seVe=a=>/\.(html?|pdf|jpe?g|png|gif|webp)$/i.test(a.nombre)||/^(text\/html|image\/|application\/pdf)/.test(a.tipo||'');
+function bajar(a,c){const l=document.createElement('a');l.href=c.url;l.download=a.nombre;document.body.appendChild(l);l.click();l.remove()}
+function visor(a,c){let url=c.url;if(/\.html?$/i.test(a.nombre)&&!/html/.test(c.blob.type))url=URL.createObjectURL(new Blob([c.bytes],{type:'text/html'}));
+ const v=document.createElement('div');v.className='visor';const img=/\.(jpe?g|png|gif|webp)$/i.test(a.nombre)||/^image\//.test(c.blob.type);
+ v.innerHTML='<div class="vb"><b>'+esc(a.nombre)+'</b><button class="btn b-blanco" id="vBaj">⬇ Bajar</button><button class="btn b-suave" id="vCer">✕ Cerrar</button></div>'+(img?'<img alt="">':'<iframe allowfullscreen></iframe>');
+ document.body.appendChild(v);(img?v.querySelector('img'):v.querySelector('iframe')).src=url;document.body.style.overflow='hidden';
+ v.querySelector('#vBaj').onclick=()=>bajar(a,c);v.querySelector('#vCer').onclick=()=>{v.remove();document.body.style.overflow=''};}
 function irA(x,o){if(!o)return;HL=o.id;if(o.an.t==='min'){const v=$('video');if(v){v.currentTime=o.an.s;v.scrollIntoView({behavior:'smooth',block:'center'})}}
  else if(o.an.t==='pag'||o.an.t==='diap'){verPagina(x,o.an.n)}else if(o.an.t==='pin'){pintarMarcas();const p=$('#plano');if(p)p.scrollIntoView({behavior:'smooth',block:'center'})}}
 
@@ -352,13 +364,13 @@ async function cargarMat(x){
   if(SEL!==x.id)return;const pdf=PDFS[x.base.id],pal=x.tipo==='informe'?'Pág.':'Diap.';
   m.innerHTML='<div class="matbar"><span class="muted">'+pdf.numPages+' '+(x.tipo==='informe'?'páginas':'diapositivas')+' · tocá una para verla grande y anotar</span></div><div class="paginas" id="pags">'+Array.from({length:pdf.numPages},(_,i)=>'<div class="pag" data-p="'+(i+1)+'"><canvas></canvas><b>'+pal+' '+(i+1)+'</b></div>').join('')+'</div><div class="grande" id="grande"></div>';
   pintarMarcas();
-  for(let i=1;i<=pdf.numPages;i++){if(SEL!==x.id)return;const pg=await pdf.getPage(i),vp=pg.getViewport({scale:1}),s=260/vp.width,v2=pg.getViewport({scale:s}),cv=$('.pag[data-p="'+i+'"] canvas');if(!cv)return;cv.width=v2.width;cv.height=v2.height;await pg.render({canvasContext:cv.getContext('2d'),viewport:v2}).promise}
   $$('.pag').forEach(p=>p.onclick=()=>verPagina(x,+p.dataset.p,true));
+  for(let i=1;i<=pdf.numPages;i++){if(SEL!==x.id||!document.body.contains(m))return;const pg=await pdf.getPage(i),vp=pg.getViewport({scale:1}),s=260/vp.width,v2=pg.getViewport({scale:s}),cv=m.querySelector('.pag[data-p="'+i+'"] canvas');if(!cv)return;cv.width=v2.width;cv.height=v2.height;try{await pg.render({canvasContext:cv.getContext('2d'),viewport:v2}).promise}catch(e){return}}
  }}
 async function verPagina(x,n,anotar){
  const pdf=x.base&&PDFS[x.base.id];if(!pdf)return;const pal=x.tipo==='informe'?'Pág.':'Diap.';
  $$('.pag').forEach(p=>p.classList.toggle('on',+p.dataset.p===n));
- const g=$('#grande');g.innerHTML='<canvas></canvas>';const pg=await pdf.getPage(n),vp=pg.getViewport({scale:1}),s=Math.min(2,1400/vp.width),v2=pg.getViewport({scale:s}),cv=g.querySelector('canvas');cv.width=v2.width;cv.height=v2.height;await pg.render({canvasContext:cv.getContext('2d'),viewport:v2}).promise;
+ const g=$('#grande');if(!g)return;g.innerHTML='<canvas></canvas>';const pg=await pdf.getPage(n),vp=pg.getViewport({scale:1}),s=Math.min(2,1400/vp.width),v2=pg.getViewport({scale:s}),cv=g.querySelector('canvas');cv.width=v2.width;cv.height=v2.height;await pg.render({canvasContext:cv.getContext('2d'),viewport:v2}).promise;
  g.scrollIntoView({behavior:'smooth',block:'start'});
  if(anotar)marcar({t:x.tipo==='informe'?'pag':'diap',n,l:pal+' '+n})}
 function pintarMarcas(){
