@@ -106,6 +106,25 @@ footer{margin-top:auto;padding:8px 18px 0}
 .bt.tel{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.22)}
 @media (prefers-reduced-motion:reduce){.sheet{animation:none}.cd{transition:none}}
 
+.map{margin:4px 14px 0;position:relative;border-radius:28px;background:radial-gradient(70% 62% at 50% 48%,#3A1A22,#1A1012 78%);border:1px solid var(--line)}
+.rn,.rhub{position:absolute;border-radius:50%;border:3px solid;background:#1E1416;padding:0;z-index:2;display:block}
+.rhub{border-color:#7A2E3E;box-shadow:0 0 0 9px rgba(122,46,62,.25),0 0 30px rgba(122,46,62,.6)}
+.ph2{position:absolute;inset:0;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#1E1416}.ph2 img{width:100%;height:100%;object-fit:cover;object-position:50% 20%}
+.rn.lock .ph2 img{filter:grayscale(.6) brightness(.45)}.rn.prod{border-style:dashed;opacity:.85}
+.rn.cur{box-shadow:0 0 0 6px color-mix(in srgb,var(--c) 35%,transparent),0 0 24px var(--c)}
+.rn .bdg{top:-7px;right:-8px}.rhub .bdg{top:-4px;left:-4px;right:auto}.bdg.lk{width:28px;height:28px;background:#5E4A50}.bdg.pr{width:28px;height:28px;background:#5E4A50}
+.rl{position:absolute;width:100px;text-align:center;font-size:11px;font-weight:700;line-height:1.15;color:#F3E3E6;z-index:2}.rl em{font-style:normal;color:var(--mut)}.rl.lock,.rl.prod{color:var(--mut)}
+.rhl{position:absolute;width:120px;text-align:center;font-size:10px;font-weight:800;letter-spacing:.12em;color:#F3D9C4;z-index:2}
+@media(prefers-reduced-motion:no-preference){.rn.cur{animation:lat 2.4s ease-in-out infinite}}
+#cc{margin:0 14px}.ccard{display:flex;gap:12px;align-items:center;padding:10px;border-radius:24px;background:var(--card);border:1.5px solid var(--c);text-decoration:none}
+.ccard img{width:66px;height:88px;border-radius:15px;object-fit:cover;flex:none}.ccard>span{display:flex;flex-direction:column;gap:5px;align-items:flex-start}
+.ccard small{font-size:11px;font-weight:700;color:#F3D9C4}.ccard b{font-size:16px;line-height:1.15}
+.leg{margin:0 18px;display:flex;flex-wrap:wrap;gap:12px;font-size:11.5px;color:var(--mut)}.leg span{display:inline-flex;align-items:center;gap:6px}
+.lg{width:11px;height:11px;border-radius:50%;display:inline-block}.lg.ok{background:#3E7C5A}.lg.cur{background:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.25)}.lg.lk{background:#5E4A50}.lg.prod{border:1.5px dashed rgba(255,255,255,.6)}
+.aviso{position:fixed;left:50%;bottom:22px;transform:translate(-50%,30px);opacity:0;max-width:440px;width:calc(100% - 32px);background:#F4ECE9;color:#231417;border-radius:18px;padding:12px 16px;font-size:14px;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,.5);transition:.25s;z-index:30;pointer-events:none}
+.aviso.on{opacity:1;transform:translate(-50%,0)}
+.nextm.locked{opacity:.6;border-style:dashed}
+
 .mhead{position:relative;height:300px;margin:0 0 4px}.mhead img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%}
 .cfade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(30,20,22,0) 35%,rgba(30,20,22,.78) 72%,#1E1416 100%)}
 .mhx{position:absolute;left:18px;right:96px;bottom:8px;display:flex;flex-direction:column;gap:7px;align-items:flex-start}.mhx h1{font-size:25px;line-height:1.05}
@@ -217,8 +236,11 @@ footer{margin-top:auto;padding:8px 18px 0}
 <div class="mhx"><span class="tag" style="background:#7A2E3E">SERIE · EPP</span><h1>Elementos de protección personal</h1>
 <div class="mstats"><span><b>9</b> capítulos</span><span><b id="nv">0</b> vistos</span><span><b>~13</b> min</span></div></div>
 <span class="ring" id="ring" style="--p:0"><span id="ringt">0/6</span></span></div>
-<p class="mlead">Video base + 8 módulos. Lo que ya viste queda tildado en este celular; el que sigue se agranda. Los módulos 6, 7 y 8 se suman a la serie.</p>
+<p class="mlead">Video base + 8 módulos. Empezá por el video base, en el centro: cada video que terminás desbloquea el siguiente. Lo visto queda tildado en este celular. Los módulos 6, 7 y 8 se suman a la serie.</p>
 <div class="map" id="map"></div>
+<div id="cc"></div>
+<div class="leg"><span><i class="lg ok"></i>Visto</span><span><i class="lg cur"></i>Sigue</span><span><i class="lg lk"></i>Bloqueado</span><span><i class="lg prod"></i>En producción</span></div>
+<div class="aviso" id="aviso" role="status"></div>
 <footer><div class="fcard"><img src="img/logo-jea.png" alt="JEA Prevención de Riesgos"><span class="sep"></span><span class="who"><b>Lic. Marcelo Elvira</b><small>Lic. en Higiene y Seguridad<br>M.P. C.P.I.I. LHS 0656</small></span></div></footer>
 </main><main class="view" id="v-epp-base" data-n="0">
 <div class="bar2"><a class="back" href="#epp" aria-label="Volver a la serie de EPP"><svg width="20" height="20" style="color:#fff" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#e-back"/></svg></a><span>Serie de EPP</span><span class="tbstep" data-n="0"></span></div>
@@ -241,7 +263,7 @@ footer{margin-top:auto;padding:8px 18px 0}
 <section class="blk quiz"><h3><i style="background:#6B5B95"></i>Para repasar</h3><p class="qq">¿Quién determina qué elementos de protección requiere cada puesto?</p><div class="opts"><button type="button" class="op" data-ok="0">A · El propio trabajador, según su comodidad</button><button type="button" class="op" data-ok="1">B · El servicio de Higiene y Seguridad</button><button type="button" class="op" data-ok="0">C · El proveedor de los EPP</button></div><p class="fb" hidden>Correcto. Desde ese momento, su uso es obligatorio.</p></section>
 <div class="band syn"><svg width="26" height="26" style="color:#fff" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#e-star"/></svg><div><small>SÍNTESIS</small>Usar los EPP que requiere el puesto · Revisarlos antes de cada uso · Limpiarlos y guardarlos en un lugar limpio y seco · Pedir el recambio si están dañados</div></div>
 <div class="band" style="background:#5C2230"><svg width="26" height="26" style="color:#fff" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#e-q"/></svg><span>Ante cualquier duda, SIEMPRE se debe consultar antes de empezar.</span></div>
-<a class="nextm" href="#epp-m1" style="--c:#D2691E"><span><svg width="20" height="20" style="color:#fff" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#e-casco"/></svg></span><div><small>SIGUE EN LA SERIE · MÓDULO 1 DE 8</small><b>Casco de seguridad</b></div><svg width="18" height="18" style="color:#fff" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#e-next"/></svg></a>
+<a class="nextm" data-n="1" href="#epp-m1" style="--c:#D2691E"><span><svg width="20" height="20" style="color:#fff" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#e-casco"/></svg></span><div><small>SIGUE EN LA SERIE · MÓDULO 1 DE 8</small><b>Casco de seguridad</b></div><svg width="18" height="18" style="color:#fff" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#e-next"/></svg></a>
 <footer><div class="fcard"><img src="img/logo-jea.png" alt="JEA Prevención de Riesgos"><span class="sep"></span><span class="who"><b>Lic. Marcelo Elvira</b><small>Lic. en Higiene y Seguridad<br>M.P. C.P.I.I. LHS 0656</small></span></div></footer>
 </main><main class="view" id="v-epp-m1" data-n="1">
 <div class="bar2"><a class="back" href="#epp" aria-label="Volver a la serie de EPP"><svg width="20" height="20" style="color:#fff" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#e-back"/></svg></a><span>Serie de EPP</span><span class="tbstep" data-n="1"></span></div>
@@ -264,7 +286,7 @@ footer{margin-top:auto;padding:8px 18px 0}
 <section class="blk quiz"><h3><i style="background:#6B5B95"></i>Para repasar</h3><p class="qq">Un compañero quiere pintar su casco con aerosol. ¿Se puede?</p><div class="opts"><button type="button" class="op" data-ok="0">A · Sí, si es pintura al agua</button><button type="button" class="op" data-ok="1">B · No. El casco NUNCA se debe pintar ni alterar</button><button type="button" class="op" data-ok="0">C · Sí, si no tapa la etiqueta</button></div><p class="fb" hidden>Correcto. Cualquier cambio altera la forma en que protege.</p></section>
 <div class="band syn"><svg width="26" height="26" style="color:#fff" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#e-star"/></svg><div><small>SÍNTESIS</small>Usar el casco siempre en la obra · Ajustar el arnés: cómodo, pero firme · Revisarlo antes de cada uso · Reemplazarlo si está dañado o recibió un golpe fuerte</div></div>
 <div class="band" style="background:#5C2230"><svg width="26" height="26" style="color:#fff" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#e-q"/></svg><span>Ante cualquier duda, SIEMPRE se debe consultar antes de empezar.</span></div>
-<a class="nextm" href="#epp-m2" style="--c:#2A7F8A"><span><svg width="20" height="20" style="color:#fff" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#e-ojo"/></svg></span><div><small>SIGUE EN LA SERIE · MÓDULO 2 DE 8</small><b>Protección ocular y facial</b></div><svg width="18" height="18" style="color:#fff" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#e-next"/></svg></a>
+<a class="nextm" data-n="2" href="#epp-m2" style="--c:#2A7F8A"><span><svg width="20" height="20" style="color:#fff" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#e-ojo"/></svg></span><div><small>SIGUE EN LA SERIE · MÓDULO 2 DE 8</small><b>Protección ocular y facial</b></div><svg width="18" height="18" style="color:#fff" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#e-next"/></svg></a>
 <footer><div class="fcard"><img src="img/logo-jea.png" alt="JEA Prevención de Riesgos"><span class="sep"></span><span class="who"><b>Lic. Marcelo Elvira</b><small>Lic. en Higiene y Seguridad<br>M.P. C.P.I.I. LHS 0656</small></span></div></footer>
 </main><main class="view" id="v-epp-m2" data-n="2">
 <div class="bar2"><a class="back" href="#epp" aria-label="Volver a la serie de EPP"><svg width="20" height="20" style="color:#fff" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#e-back"/></svg></a><span>Serie de EPP</span><span class="tbstep" data-n="2"></span></div>
@@ -287,7 +309,7 @@ footer{margin-top:auto;padding:8px 18px 0}
 <section class="blk quiz"><h3><i style="background:#6B5B95"></i>Para repasar</h3><p class="qq">Si hay que hacer cortes con amoladora, ¿qué elemento de protección personal se debe usar?</p><div class="opts"><button type="button" class="op" data-ok="0">A · Anteojos de seguridad solos</button><button type="button" class="op" data-ok="1">B · El protector facial, con la protección ocular colocada debajo</button><button type="button" class="op" data-ok="0">C · El protector facial solo</button></div><p class="fb" hidden>Correcto. Cubre toda la cara, y los ojos quedan protegidos debajo.</p></section>
 <div class="band syn"><svg width="26" height="26" style="color:#fff" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#e-star"/></svg><div><small>SÍNTESIS</small>Elegir la protección según la tarea · Protección frontal y lateral · Protector facial con la protección ocular debajo · Limpiar con agua y jabón y guardar en su estuche</div></div>
 <div class="band" style="background:#5C2230"><svg width="26" height="26" style="color:#fff" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#e-q"/></svg><span>Ante cualquier duda, SIEMPRE se debe consultar antes de empezar.</span></div>
-<a class="nextm" href="#epp-m3" style="--c:#3E7C5A"><span><svg width="20" height="20" style="color:#fff" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#e-mano"/></svg></span><div><small>SIGUE EN LA SERIE · MÓDULO 3 DE 8</small><b>Protección de manos</b></div><svg width="18" height="18" style="color:#fff" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#e-next"/></svg></a>
+<a class="nextm" data-n="3" href="#epp-m3" style="--c:#3E7C5A"><span><svg width="20" height="20" style="color:#fff" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#e-mano"/></svg></span><div><small>SIGUE EN LA SERIE · MÓDULO 3 DE 8</small><b>Protección de manos</b></div><svg width="18" height="18" style="color:#fff" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#e-next"/></svg></a>
 <footer><div class="fcard"><img src="img/logo-jea.png" alt="JEA Prevención de Riesgos"><span class="sep"></span><span class="who"><b>Lic. Marcelo Elvira</b><small>Lic. en Higiene y Seguridad<br>M.P. C.P.I.I. LHS 0656</small></span></div></footer>
 </main><main class="view" id="v-epp-m3" data-n="3">
 <div class="bar2"><a class="back" href="#epp" aria-label="Volver a la serie de EPP"><svg width="20" height="20" style="color:#fff" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#e-back"/></svg></a><span>Serie de EPP</span><span class="tbstep" data-n="3"></span></div>
@@ -310,7 +332,7 @@ footer{margin-top:auto;padding:8px 18px 0}
 <section class="blk quiz"><h3><i style="background:#6B5B95"></i>Para repasar</h3><p class="qq">¿Cuándo NUNCA se deben usar guantes?</p><div class="opts"><button type="button" class="op" data-ok="0">A · Al manipular chapas</button><button type="button" class="op" data-ok="1">B · Al hacer trabajos con herramientas que tengan partes que giran</button><button type="button" class="op" data-ok="0">C · Al usar productos químicos</button></div><p class="fb" hidden>Correcto. El guante se puede enganchar y arrastrar la mano.</p></section>
 <div class="band syn"><svg width="26" height="26" style="color:#fff" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#e-star"/></svg><div><small>SÍNTESIS</small>Elegir el guante según el riesgo · Leer la etiqueta y usar el talle correcto · Revisarlos antes de cada uso · Sin guantes cerca de piezas que giran</div></div>
 <div class="band" style="background:#5C2230"><svg width="26" height="26" style="color:#fff" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#e-q"/></svg><span>Ante cualquier duda, SIEMPRE se debe consultar antes de empezar.</span></div>
-<a class="nextm" href="#epp-m4" style="--c:#A0525F"><span><svg width="20" height="20" style="color:#fff" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#e-pie"/></svg></span><div><small>SIGUE EN LA SERIE · MÓDULO 4 DE 8</small><b>Calzado de seguridad</b></div><svg width="18" height="18" style="color:#fff" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#e-next"/></svg></a>
+<a class="nextm" data-n="4" href="#epp-m4" style="--c:#A0525F"><span><svg width="20" height="20" style="color:#fff" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#e-pie"/></svg></span><div><small>SIGUE EN LA SERIE · MÓDULO 4 DE 8</small><b>Calzado de seguridad</b></div><svg width="18" height="18" style="color:#fff" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#e-next"/></svg></a>
 <footer><div class="fcard"><img src="img/logo-jea.png" alt="JEA Prevención de Riesgos"><span class="sep"></span><span class="who"><b>Lic. Marcelo Elvira</b><small>Lic. en Higiene y Seguridad<br>M.P. C.P.I.I. LHS 0656</small></span></div></footer>
 </main><main class="view" id="v-epp-m4" data-n="4">
 <div class="bar2"><a class="back" href="#epp" aria-label="Volver a la serie de EPP"><svg width="20" height="20" style="color:#fff" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#e-back"/></svg></a><span>Serie de EPP</span><span class="tbstep" data-n="4"></span></div>
@@ -333,7 +355,7 @@ footer{margin-top:auto;padding:8px 18px 0}
 <section class="blk quiz"><h3><i style="background:#6B5B95"></i>Para repasar</h3><p class="qq">¿Dónde se debe usar el calzado sin puntera?</p><div class="opts"><button type="button" class="op" data-ok="0">A · En la obra, si la tarea es corta</button><button type="button" class="op" data-ok="1">B · Sólo donde no hay riesgo de golpes ni aplastamiento</button><button type="button" class="op" data-ok="0">C · En depósitos con estanterías altas</button></div><p class="fb" hidden>Correcto. Por ejemplo, cocinas, limpieza o tareas administrativas.</p></section>
 <div class="band syn"><svg width="26" height="26" style="color:#fff" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#e-star"/></svg><div><small>SÍNTESIS</small>Usar calzado de seguridad siempre en la obra · Elegirlo según la tarea · Talle correcto y cordones atados hasta arriba · Reemplazarlo si está dañado o recibió un golpe fuerte</div></div>
 <div class="band" style="background:#5C2230"><svg width="26" height="26" style="color:#fff" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#e-q"/></svg><span>Ante cualquier duda, SIEMPRE se debe consultar antes de empezar.</span></div>
-<a class="nextm" href="#epp-m5" style="--c:#6B5B95"><span><svg width="20" height="20" style="color:#fff" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#e-ropa"/></svg></span><div><small>SIGUE EN LA SERIE · MÓDULO 5 DE 8</small><b>Ropa de trabajo</b></div><svg width="18" height="18" style="color:#fff" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#e-next"/></svg></a>
+<a class="nextm" data-n="5" href="#epp-m5" style="--c:#6B5B95"><span><svg width="20" height="20" style="color:#fff" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#e-ropa"/></svg></span><div><small>SIGUE EN LA SERIE · MÓDULO 5 DE 8</small><b>Ropa de trabajo</b></div><svg width="18" height="18" style="color:#fff" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#e-next"/></svg></a>
 <footer><div class="fcard"><img src="img/logo-jea.png" alt="JEA Prevención de Riesgos"><span class="sep"></span><span class="who"><b>Lic. Marcelo Elvira</b><small>Lic. en Higiene y Seguridad<br>M.P. C.P.I.I. LHS 0656</small></span></div></footer>
 </main><main class="view" id="v-epp-m5" data-n="5">
 <div class="bar2"><a class="back" href="#epp" aria-label="Volver a la serie de EPP"><svg width="20" height="20" style="color:#fff" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#e-back"/></svg></a><span>Serie de EPP</span><span class="tbstep" data-n="5"></span></div>
@@ -356,7 +378,7 @@ footer{margin-top:auto;padding:8px 18px 0}
 <section class="blk quiz"><h3><i style="background:#6B5B95"></i>Para repasar</h3><p class="qq">Cerca de máquinas que giran, ¿qué NUNCA se debe usar?</p><div class="opts"><button type="button" class="op" data-ok="0">A · Ropa de trabajo con puños ajustados</button><button type="button" class="op" data-ok="1">B · Bufandas, cadenas, pulseras, anillos, el pelo largo suelto y la ropa suelta</button><button type="button" class="op" data-ok="0">C · Calzado de seguridad</button></div><p class="fb" hidden>Correcto. Se pueden enganchar y arrastrar.</p></section>
 <div class="band syn"><svg width="26" height="26" style="color:#fff" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#e-star"/></svg><div><small>SÍNTESIS</small>Usar la ropa de trabajo ajustada y cerrada · Nada suelto cerca de máquinas que giran · Sumar la indumentaria del riesgo especial · Lavarla aparte de la ropa de la casa</div></div>
 <div class="band" style="background:#5C2230"><svg width="26" height="26" style="color:#fff" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#e-q"/></svg><span>Ante cualquier duda, SIEMPRE se debe consultar antes de empezar.</span></div>
-<a class="nextm" href="#epp" style="--c:#C0473F"><span><svg width="20" height="20" style="color:#fff" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#e-resp"/></svg></span><div><small>SIGUE · MÓDULO 6 DE 8 · EN PRODUCCIÓN</small><b>Protección respiratoria</b></div><svg width="18" height="18" style="color:#fff" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#e-next"/></svg></a>
+<a class="nextm" data-n="6" data-prod="1" href="#epp" style="--c:#C0473F"><span><svg width="20" height="20" style="color:#fff" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#e-resp"/></svg></span><div><small>SIGUE · MÓDULO 6 DE 8 · EN PRODUCCIÓN</small><b>Protección respiratoria</b></div><svg width="18" height="18" style="color:#fff" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#e-next"/></svg></a>
 <footer><div class="fcard"><img src="img/logo-jea.png" alt="JEA Prevención de Riesgos"><span class="sep"></span><span class="who"><b>Lic. Marcelo Elvira</b><small>Lic. en Higiene y Seguridad<br>M.P. C.P.I.I. LHS 0656</small></span></div></footer>
 </main>
 <main class="view" id="v-lana">
@@ -414,34 +436,42 @@ function vistos(){try{return JSON.parse(localStorage.getItem(KEY))||[]}catch(e){
 function marcar(n){const v=vistos();if(!v.includes(n)){v.push(n);try{localStorage.setItem(KEY,JSON.stringify(v))}catch(e){}}pintar();}
 function esc(t){return String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function icn(n,s,c){return '<svg width="'+s+'" height="'+s+'" fill="none" stroke="'+c+'" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#e-'+n+'"/></svg>'}
+function estado(){const v=vistos();const disp=SERIE.filter(m=>m.ok);let prev=true;const st={};
+ disp.forEach(m=>{st[m.n]=v.includes(m.n)?'ok':(prev?'cur':'lock');prev=v.includes(m.n)});
+ SERIE.filter(m=>!m.ok).forEach(m=>st[m.n]='prod');
+ // si ya vio algo fuera de orden, el primero no visto queda como «sigue»
+ return {st,v,disp};}
 function pintar(){
- const v=vistos(), disp=SERIE.filter(m=>m.ok), cur=(disp.find(m=>!v.includes(m.n))||{}).n;
- const nv=disp.filter(m=>v.includes(m.n)).length;
+ const {st,v,disp}=estado();const nv=disp.filter(m=>v.includes(m.n)).length;
  document.getElementById('nv').textContent=nv;document.getElementById('ringt').textContent=nv+'/'+disp.length;
  document.getElementById('ring').style.setProperty('--p',Math.round(nv*100/disp.length));
- const map=document.getElementById('map');const W=map.clientWidth||340;let y=0;const P=[];let h='';
- SERIE.forEach((m,i)=>{
-  const st=!m.ok?'prod':(v.includes(m.n)?'ok':(m.n===cur?'cur':'pend'));
-  const sz=st==='cur'?96:(st==='prod'?66:78);const L=i%2===0;const x=L?sz/2+4:W-sz/2-4;
-  P.push([x,y+sz/2,st]);
-  const lab=m.n===0?'Video base':'Módulo '+m.n+' de 8';
-  let sub='',badge='',extra='';
-  if(st==='ok'){sub='<small style="color:#8FD3AE">Visto · '+m.d+'</small>';badge='<i class="bdg ok">'+icn('check',19,'#fff')+'</i>';}
-  else if(st==='cur'){sub='<small style="color:#F3D9C4">SEGUÍS POR ACÁ · '+m.d+'</small>';badge='<i class="bdg pl" style="background:'+m.c+'">'+icn('play',17,'#fff')+'</i>';extra='<span class="gbtn" style="background:'+m.c+'">'+icn('play',14,'#fff')+' Ver ahora</span>';}
-  else if(st==='pend'){sub='<small style="color:'+m.c+';filter:brightness(1.7)">'+lab+' · '+m.d+'</small>';}
-  else{sub='<small>'+lab+'</small>';extra='<span class="soon">'+icn('clock',13,'#F3D9C4')+' En producción</span>';}
-  const inner=m.ok?'<span class="ph"><img src="epp/img/'+(m.n===0?'m0':m.s)+'.jpg" alt="" loading="lazy"></span>':'<span class="ph">'+icn(m.i,30,m.c)+'</span>';
-  const tag=m.ok?'a href="#epp-'+m.s+'"':'div';
-  h+='<'+tag+' class="mn '+(L?'L':'R')+' '+st+'" style="top:'+y+'px;'+(L?'left:0':'right:0')+'"><span class="mc '+st+'" style="width:'+sz+'px;height:'+sz+'px;border-color:'+m.c+';--c:'+m.c+'">'+inner+badge+'</span><span class="mt">'+sub+'<b>'+esc(m.t)+'</b>'+extra+'</span></'+(m.ok?'a':'div')+'>';
-  y+=sz+44;});
- const H=y;let d='M'+P[0][0]+' '+P[0][1],dl='';let lastLit=0;
- for(let i=1;i<P.length;i++){const [x0,y0]=P[i-1],[x1,y1]=P[i];d+=' C'+x0+' '+(y0+60)+' '+x1+' '+(y1-60)+' '+x1+' '+y1;if(P[i][2]==='ok'||P[i][2]==='cur'){if(lastLit===i-1)lastLit=i;}}
- if(P[0][2]==='ok'){dl='M'+P[0][0]+' '+P[0][1];for(let i=1;i<=lastLit;i++){const [x0,y0]=P[i-1],[x1,y1]=P[i];dl+=' C'+x0+' '+(y0+60)+' '+x1+' '+(y1-60)+' '+x1+' '+y1;}}
+ const map=document.getElementById('map');const W=Math.min(map.clientWidth||340,460);const H=W+24;const cx=W/2,cy=W/2+6,R=W*0.37,hub=W*0.28;
+ let lines='',h='';
+ const base=SERIE[0],sb=st[0];
+ const mods=SERIE.slice(1);
+ mods.forEach((m,k)=>{const a=(-90+k*45)*Math.PI/180;const x=cx+R*Math.cos(a),y=cy+R*Math.sin(a);const s=st[m.n];
+  const sz=s==='cur'?W*0.22:W*0.18;
+  const lit=s==='ok';lines+='<line x1="'+cx+'" y1="'+cy+'" x2="'+x.toFixed(1)+'" y2="'+y.toFixed(1)+'" stroke="'+(lit?m.c:(s==='cur'?m.c:'rgba(255,255,255,.2)'))+'" stroke-width="'+(lit?5:(s==='cur'?3:2))+'" '+(lit?'':'stroke-dasharray="'+(s==='cur'?'6 5':'2 7')+'"')+' stroke-linecap="round"/>';
+  const inner=m.ok?'<span class="ph2"><img src="epp/img/'+m.s+'.jpg" alt="" loading="lazy"></span>':'<span class="ph2">'+icn(m.i,sz*0.4,m.c)+'</span>';
+  const bd=s==='ok'?'<i class="bdg ok">'+icn('check',17,'#fff')+'</i>':s==='cur'?'<i class="bdg pl" style="background:'+m.c+'">'+icn('play',15,'#fff')+'</i>':s==='lock'?'<i class="bdg lk">'+icn('lock',14,'#fff')+'</i>':'<i class="bdg pr">'+icn('clock',14,'#fff')+'</i>';
+  const tag=(s==='ok'||s==='cur')?'a href="#epp-'+m.s+'"':'button type="button" data-lock="'+s+'" data-t="'+esc(m.t)+'"';
+  const close=(s==='ok'||s==='cur')?'a':'button';
+  h+='<'+tag+' class="rn '+s+'" style="left:'+(x-sz/2).toFixed(1)+'px;top:'+(y-sz/2).toFixed(1)+'px;width:'+sz.toFixed(1)+'px;height:'+sz.toFixed(1)+'px;border-color:'+m.c+';--c:'+m.c+'" aria-label="'+esc(m.t)+'">'+inner+bd+'</'+close+'>';
+  const ly=y+sz/2+3;h+='<span class="rl '+s+'" style="left:'+(x-50).toFixed(1)+'px;top:'+ly.toFixed(1)+'px"><em>'+m.n+'</em> '+esc(['','Casco','Ocular y facial','Manos','Calzado','Ropa de trabajo','Respiratoria','Auditiva','Altura'][m.n])+'</span>';});
+ const bbd=sb==='ok'?'<i class="bdg ok">'+icn('check',17,'#fff')+'</i>':'<i class="bdg pl" style="background:#7A2E3E">'+icn('play',15,'#fff')+'</i>';
+ h+='<a class="rhub '+sb+'" href="#epp-base" style="left:'+(cx-hub/2)+'px;top:'+(cy-hub/2)+'px;width:'+hub+'px;height:'+hub+'px"><span class="ph2"><img src="epp/img/m0.jpg" alt=""></span>'+bbd+'</a><span class="rhl" style="left:'+(cx-60)+'px;top:'+(cy+hub/2+5)+'px">VIDEO BASE</span>';
  map.style.height=H+'px';
- map.innerHTML='<svg class="road" viewBox="0 0 '+W+' '+H+'" aria-hidden="true"><defs><linearGradient id="gr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7A2E3E"/><stop offset="1" stop-color="#2A7F8A"/></linearGradient></defs><path d="'+d+'" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="4" stroke-dasharray="1 10" stroke-linecap="round"/>'+(dl?'<path d="'+dl+'" fill="none" stroke="url(#gr)" stroke-width="6" stroke-linecap="round"/>':'')+'</svg>'+h;
+ map.innerHTML='<svg class="road" viewBox="0 0 '+W+' '+H+'" aria-hidden="true"><circle cx="'+cx+'" cy="'+cy+'" r="'+R+'" fill="none" stroke="rgba(255,255,255,.07)"/>'+lines+'</svg>'+h;
+ map.querySelectorAll('button[data-lock]').forEach(b=>b.addEventListener('click',()=>aviso(b.dataset.lock==='prod'?'«'+b.dataset.t+'» está en producción: se suma pronto a la serie.':'«'+b.dataset.t+'» se desbloquea al terminar el video anterior.')));
+ const cur=SERIE.find(m=>st[m.n]==='cur');const cc=document.getElementById('cc');
+ cc.innerHTML=cur?'<a class="ccard" href="#epp-'+cur.s+'" style="--c:'+cur.c+'"><img src="epp/img/'+(cur.n===0?'m0':cur.s)+'.jpg" alt=""><span><small>SEGUÍS POR ACÁ · '+(cur.n===0?'Video base':'Módulo '+cur.n+' de 8')+' · '+cur.d+'</small><b>'+esc(cur.t)+'</b><span class="gbtn" style="background:'+cur.c+'">'+icn('play',14,'#fff')+' Ver ahora</span></span></a>':'<div class="ccard done2" style="--c:#3E7C5A"><span><small>SERIE AL DÍA</small><b>Viste los '+disp.length+' videos disponibles</b></span></div>';
  document.querySelectorAll('.tbstep').forEach(t=>{t.innerHTML=SERIE.map(m=>'<i style="background:'+(v.includes(m.n)||m.n===+t.dataset.n?m.c:'')+'"></i>').join('')});
  document.querySelectorAll('.seenl').forEach(t=>{t.innerHTML=v.includes(+t.dataset.n)?icn('check',15,'#8FD3AE')+' Ya lo viste en este celular':''});
+ document.querySelectorAll('.nextm[data-n]').forEach(a=>{const n=+a.dataset.n;const s=st[n];a.classList.toggle('locked',s==='lock');
+  a.querySelector('small').textContent=s==='lock'?'SE DESBLOQUEA AL TERMINAR ESTE VIDEO':(s==='prod'?'SIGUE · EN PRODUCCIÓN':'SIGUE EN LA SERIE · MÓDULO '+n+' DE 8');});
 }
+let tav;function aviso(t){const a=document.getElementById('aviso');a.textContent=t;a.classList.add('on');clearTimeout(tav);tav=setTimeout(()=>a.classList.remove('on'),3500);}
+document.querySelectorAll('.nextm[data-n]').forEach(a=>a.addEventListener('click',e=>{if(a.classList.contains('locked')||a.dataset.prod){e.preventDefault();aviso(a.dataset.prod?'Ese módulo está en producción: se suma pronto a la serie.':'Se desbloquea al terminar este video.');}}));
 document.querySelectorAll('video[data-n]').forEach(vd=>{const n=+vd.dataset.n;
  vd.addEventListener('timeupdate',()=>{if(vd.duration&&vd.currentTime/vd.duration>0.9)marcar(n)});vd.addEventListener('ended',()=>marcar(n));});
 document.querySelectorAll('.quiz').forEach(q=>{q.querySelectorAll('.op').forEach(b=>b.addEventListener('click',()=>{
@@ -455,12 +485,14 @@ rotr.addEventListener('touchstart',()=>{toc=true},{passive:true});
 rotr.addEventListener('scroll',()=>{const i=rotr.scrollLeft>rotr.children[0].offsetWidth/2?1:0;dots.forEach((d,k)=>d.classList.toggle('on',k===i));ri=i;},{passive:true});
 setInterval(()=>{if(!toc&&document.getElementById('v-inicio').classList.contains('on'))ir((ri+1)%2)},6000);
 function ruta(){const h=location.hash.slice(1);const id=h==='lana-de-vidrio'?'v-lana':(h==='epp'?'v-epp':(h.startsWith('epp-')?'v-'+h:'v-inicio'));
- const ok=document.getElementById(id)?id:'v-inicio';
+ let ok=document.getElementById(id)?id:'v-inicio';
+ if(ok.startsWith('v-epp-')){const n=+document.getElementById(ok).dataset.n;const e=estado().st[n];if(e==='lock'){ok='v-epp';setTimeout(()=>aviso('Ese módulo se desbloquea al terminar el video anterior.'),50);}}
  document.querySelectorAll('main.view').forEach(m=>m.classList.toggle('on',m.id===ok));
  document.querySelectorAll('video').forEach(v=>{if(!v.closest('#'+ok))v.pause()});
- if(ok==='v-epp')pintar();window.scrollTo(0,0);}
+ pintar();window.scrollTo(0,0);}
 window.addEventListener('hashchange',ruta);ruta();pintar();
 window.addEventListener('resize',()=>{if(location.hash==='#epp')pintar()});
+document.querySelectorAll('a.cd[href="#epp"]').length;
 
 </script>
 </body></html>
