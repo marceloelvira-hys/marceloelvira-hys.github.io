@@ -1,3 +1,21 @@
 /* GALVASA · lo propio del portal (los estilos comunes están en core/v1/portal.css) */
 .vidb{border-color:var(--brand)!important;color:var(--brand)!important}
 .vidcaja{width:min(1100px,100%)} .vidcaja video{display:block;width:100%;background:#000;aspect-ratio:16/9}
+/* Investigaciones (25/11/2026) */
+.inv-h2{font:700 24px var(--font-h);margin:18px 0 4px}.inv-intro{color:var(--muted);margin:0 0 14px;max-width:760px}
+.inv-lista{display:grid;gap:14px;margin-bottom:24px}
+.inv-card{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:var(--r);padding:16px 18px}
+.inv-top{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:12.5px}
+.inv-fecha{font-weight:700;color:var(--ink)}.inv-est{margin-left:auto;background:var(--curso-soft);color:var(--curso);padding:2px 9px;border-radius:999px;font-weight:600}.inv-est.fin{background:var(--ok-soft);color:var(--ok)}
+.inv-wip{background:#FFF4D6;color:#8A6410;padding:2px 9px;border-radius:999px;font-weight:600}
+.inv-card h3{font:700 21px var(--font-h);margin:6px 0 8px}
+.inv-datos{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:6px 18px;margin:0 0 10px}.inv-datos div{min-width:0}.inv-datos dt{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}.inv-datos dd{margin:0;font-weight:600}
+.inv-res{margin:0 0 12px;color:#39434b;line-height:1.45}
+.inv-acc{display:flex;flex-wrap:wrap;gap:8px}.inv-acc .btn.prim,.inv-barra .btn.prim{background:var(--brand-dk);border-color:var(--brand-dk);color:#fff}
+.inv-barra{position:sticky;top:46px;z-index:15;display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--bg);padding:10px 0;border-bottom:1px solid var(--line);margin-bottom:12px}.inv-barra .sp{flex:1}.inv-barra b{font-weight:600}
+.inv-doc{background:#fff;border:1px solid var(--line);border-radius:var(--r);margin-bottom:24px;min-height:300px}
+.inv-doc iframe{display:block;width:100%;height:80vh;border:0}
+.inv-cargando{padding:40px;text-align:center;color:var(--muted)}
+.inv3d{width:min(1400px,100%);height:min(92vh,100%);display:flex;flex-direction:column}.inv3d .cab{gap:8px}.inv3d .cab h3{flex:1}
+.inv3d-c{flex:1;min-height:0;background:#14191d;position:relative}.inv3d-c iframe{display:block;width:100%;height:100%;border:0}.inv3d-c .inv-cargando{color:#cfd6db}
+@media(max-width:700px){.inv-barra{top:42px}.inv-barra b{width:100%;order:-1}.inv3d{height:100%}}
