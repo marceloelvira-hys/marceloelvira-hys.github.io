@@ -101,6 +101,13 @@ header p{margin:6px 0 0;font-size:14px;opacity:.92;line-height:1.4}
 .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#222;color:#fff;padding:10px 16px;border-radius:10px;font-size:14px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:50}
 .toast.show{opacity:1}
 .reset{margin-top:14px;font-size:13px;color:var(--tx2)}
+.preg{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:16px 0}
+.preg h2{margin:0 0 4px;font-size:17px}.preg>p{margin:0 0 10px;color:var(--tx2);font-size:14px}
+.pq{border-top:1px solid var(--line);padding:12px 0}.pq b{display:block;font-size:15px;margin-bottom:6px}
+.pq .ops{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.pq .ops button{border:1.5px solid var(--line);background:var(--card);color:var(--tx);border-radius:10px;padding:9px 12px;font-size:14px;cursor:pointer}
+.pq .ops button.on{background:var(--verde);border-color:var(--verde);color:#fff}
+.pq input{width:100%;font-size:16px;padding:9px 10px;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--tx)}
 footer{color:var(--tx2);font-size:12px;text-align:center;padding:10px 16px 30px}
 </style>
 </head>
@@ -111,7 +118,7 @@ footer{color:var(--tx2);font-size:12px;text-align:center;padding:10px 16px 30px}
 </header>
 <div class="wrap">
   <div class="intro">
-    Hola cuña, te dejé una <b>propuesta</b> armada con lo que tenemos: salas del jardín en las salas de juegos del 1.er y 2.º piso; primaria en planta baja, en el ala sobre Alberdi y en el ala de Víctor Martínez; <b>6.º y 7.º grado</b> en el bloque central del 1.er piso; <b>1.º y 2.º año</b> de secundaria en el bloque central del 2.º piso; <b>3.º y 4.º año</b> en el 3.er piso y <b>5.º año</b> en el 4.º piso. Lo propuesto se ve punteado: si está bien, tocá <b>✓ Está bien</b>; si no, corregilo.<br><br>En cada planta tocá el número de cada espacio (o buscalo en la lista de abajo del plano) y elegí:
+    Hola cuña, abajo de esto hay unas preguntas del edificio y después las plantas. Te dejé una <b>propuesta</b> armada con lo que tenemos: salas del jardín en las salas de juegos del 1.er y 2.º piso; primaria en planta baja, en el ala sobre Alberdi y en el ala de Víctor Martínez; <b>6.º y 7.º grado</b> en el bloque central del 1.er piso; <b>1.º y 2.º año</b> de secundaria en el bloque central del 2.º piso; <b>3.º y 4.º año</b> en el 3.er piso y <b>5.º año</b> en el 4.º piso. Lo propuesto se ve punteado: si está bien, tocá <b>✓ Está bien</b>; si no, corregilo.<br><br>En cada planta tocá el número de cada espacio (o buscalo en la lista de abajo del plano) y elegí:
     <ol>
       <li><b>Inicial</b>, <b>Primaria</b> o <b>Secundaria</b>, y escribí la sala, el grado o el año con la división (por ejemplo: Sala de 4 A, 3.º B, 2.º año A). Si a la tarde o a la noche se usa para otra cosa (por ejemplo el nivel superior), anotalo también.</li>
       <li><b>Otro</b>, y escribí de qué es (por ejemplo: música, inglés, sala de reuniones).</li>
@@ -132,6 +139,7 @@ footer{color:var(--tx2);font-size:12px;text-align:center;padding:10px 16px 30px}
     <div class="syncrow"><span id="sync" class="sync">Conectando…</span></div>
   </div>
   <div class="robanner" id="robanner" hidden>Con este acceso la página no puede guardar en línea: lo que marques queda sólo en este dispositivo. </div>
+  <div class="preg" id="preg"><h2>Además, unas preguntas del edificio</h2><p>Para el procedimiento de lluvias e inundaciones (El Niño). Si no sabés, marcá «No sé» y lo pregunto en el colegio.</p><div id="pqs"></div></div>
   <div id="planes"></div>
   <div class="send" id="hist"><h2>Historial de cambios</h2><p>Cada cambio que se guarda queda registrado acá, con la fecha y quién lo hizo.</p><div id="histlist"><p class="vacio">Todavía no hay cambios guardados.</p></div></div>
 </div>
@@ -154,7 +162,7 @@ function formSend(id){
     if(a&&a.cat==='o'&&a.otro)v+=': '+a.otro; if(a&&a.cat&&a.det)v+=' ('+a.det+')';
     const body=new URLSearchParams();
     body.append(FORM.cambio,'MARIANISTA · '+nombreDe(id)+' → '+v+'  ['+id+']');
-    body.append(FORM.estado,JSON.stringify({colegio:'Marianista',asig:st.asig,extra:st.extra}));
+    body.append(FORM.estado,JSON.stringify({colegio:'Marianista',asig:st.asig,extra:st.extra,preg:st.preg}));
     setSync('Guardando…','w');
     fetch(FORM.url,{method:'POST',mode:'no-cors',body}).then(()=>setSync('✓ Guardado en línea','ok')).catch(()=>setSync('Sin conexión: queda en este dispositivo','bad'));
   },id.startsWith('__')?0:1200);
@@ -379,6 +387,39 @@ function refresh(soft){
 function toast(t){const e=document.getElementById('toast');e.textContent=t;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),1800);}
 render();
 initDb();
+const PQ=[
+ {id:'bombas',t:'¿Hay bombas de desagüe o un pozo de bombeo en el subsuelo (para sacar agua de lluvia)?',o:['Sí','No','No sé'],ph:'Si hay, ¿dónde están? (opcional)'},
+ {id:'gas',t:'Llaves de gas: en el plano figuran medidores en planta baja junto al túnel (Rivadavia 5656), en las cocheras y en el sector de mantenimiento del 2.º subsuelo. ¿Es así?',o:['Sí, son esos','No, hay diferencias','No sé'],ph:'Si hay diferencias, contame cuáles'},
+ {id:'tablero',t:'¿El tablero eléctrico general está en la sala de tableros del subsuelo (junto al auditorio)?',o:['Sí','No','No sé'],ph:'Si no, ¿dónde está?'},
+ {id:'comunidad',t:'¿La comunidad marianista (los hermanos) sigue viviendo en el 3.er piso?',o:['Sí','No','No sé'],ph:'Comentario (opcional)'}
+];
+if(!st.preg)st.preg={};
+try{const r=JSON.parse(localStorage.getItem(KEY)||'{}');if(r.preg)st.preg=r.preg;}catch(e){}
+const ptm={};
+function pregSend(id){
+  try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){}
+  if(!FORM_ON)return; clearTimeout(ptm[id]);
+  ptm[id]=setTimeout(()=>{const a=st.preg[id]||{};const q=PQ.find(x=>x.id===id);
+    const body=new URLSearchParams();
+    body.append(FORM.cambio,'MARIANISTA · Pregunta · '+q.t.slice(0,60)+' → '+(a.op||'—')+(a.tx?' | '+a.tx:'')+'  [preg-'+id+']');
+    body.append(FORM.estado,JSON.stringify({colegio:'Marianista',asig:st.asig,extra:st.extra,preg:st.preg}));
+    setSync('Guardando…','w');
+    fetch(FORM.url,{method:'POST',mode:'no-cors',body}).then(()=>setSync('✓ Guardado en línea','ok')).catch(()=>setSync('Sin conexión: queda en este dispositivo','bad'));
+  },1000);
+}
+function renderPreg(){
+  const box=document.getElementById('pqs');box.innerHTML='';
+  PQ.forEach(q=>{const a=st.preg[q.id]||{};const d=document.createElement('div');d.className='pq';
+    d.innerHTML='<b></b><div class="ops"></div><input>';
+    d.querySelector('b').textContent=q.t;
+    q.o.forEach(op=>{const b=document.createElement('button');b.type='button';b.textContent=op;if(a.op===op)b.className='on';
+      b.onclick=()=>{const c=st.preg[q.id]||(st.preg[q.id]={});c.op=(c.op===op)?'':op;renderPreg();pregSend(q.id);};d.querySelector('.ops').appendChild(b);});
+    const i=d.querySelector('input');i.placeholder=q.ph;i.value=a.tx||'';
+    i.oninput=()=>{const c=st.preg[q.id]||(st.preg[q.id]={});c.tx=i.value;pregSend(q.id);};
+    box.appendChild(d);});
+}
+renderPreg();
+
 </script>
 </body>
 </html>
