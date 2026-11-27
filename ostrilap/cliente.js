@@ -5,7 +5,7 @@ Object.assign(MOD, {propHorario: "a coordinar, dentro del turno de 8 a 16", quie
   capTitulo: "Programa de capacitación 2026", capProg: ["prog", "Programa 2026 (PDF)"], capCuando: "Mes", capReg: false,
   capIntro: "Programa anual: se puede proponer la fecha y el horario de cada charla. Abajo, las constancias firmadas de las capacitaciones dadas; también se pueden subir desde acá.",
   esgAltas: ["Inmediata", "Alta"], esgAltasTxt: "Inmediata o alta",
-  informes: [["10-26", "Informe 10-26"], ["4-26", "Informe 4-26"], ["1-26", "Informe 1-26"], ["10-25", "Informe 10-25"], ["8-25", "Informe 8-25"]],
+  informes: [["11-26", "Informe 11-26"], ["10-26", "Informe 10-26"], ["4-26", "Informe 4-26"], ["1-26", "Informe 1-26"], ["10-25", "Informe 10-25"], ["8-25", "Informe 8-25"]],
   descargas: [{t: "Autoprotección", c: "var(--brand)", de: ["@sap"]},
     {t: "Estudios", c: "var(--celeste-dk)", de: ["@estudios"]},
     {t: "Capacitación", c: "var(--gold-dk)", de: [["prog"], "@constancias"]},
