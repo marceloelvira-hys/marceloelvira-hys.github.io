@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>OSTRILAP · Higiene y Seguridad</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="../core/v1/portal.css?v=bf7ba5ef">
+<link rel="stylesheet" href="../core/v1/modulos.css?v=cf20367a">
+<style>
+:root{
+  --bg:#F4F1EC; --card:#FFFFFF; --ink:#23262B; --muted:#6A6560; --line:#E2DBD0;
+  --brand:#3A3F47; --brand-dk:#24282E; --brand-soft:#EFEAE3; --accent:#B5562F; --accent-ink:#FFFFFF;
+  --head:#3A3F47; --topbar:#1C1F24; --tema:#3A3F47; --celeste:#9DBBA3;
+  --reinc:#6E1E2E; --reinc-soft:#F5E6E9;
+  --ok:#2F7D4A; --ok-soft:#E5F2E9; --curso:#C8641F; --curso-soft:#FCEBDD; --pend:#5E6670; --pend-soft:#ECEEF1; --listo:#7A4E8C; --listo-soft:#F1E8F4;
+  --font:Inter,system-ui,"Segoe UI",Arial,sans-serif; --font-h:"DM Serif Display",Georgia,serif; --r:6px;
+  --pad-l:max(16px,env(safe-area-inset-left,0px)); --pad-r:max(16px,env(safe-area-inset-right,0px));
+}
+</style>
+<link rel="stylesheet" href="cliente.css?v=c272ce13">
+</head>
+<body>
+<div class="login" id="login" hidden><form class="box" id="loginForm" autocomplete="on">
+  <div class="logos"><span class="g"><span class="osl-marca"><b>OSTRILAP</b><i>Lavadero industrial</i></span></span></div><div class="prof-login"><img src="logo_jea.png" alt="JEA"><span><b>Lic. Marcelo Elvira</b>Lic. en Higiene y Seguridad · M.P. 0656 C.P.I.I.</span></div>
+  <h1>Portal de Higiene y Seguridad</h1>
+  <p>Av. Directorio 5210 y Corvalán 1503, Mataderos · OSTRILAP S.A. Entrá con tu usuario y tu clave: todo lo que cargues queda a tu nombre.</p>
+  <div id="paso1" class="pasos">
+    <input type="text" id="usuario" name="username" placeholder="Usuario" autocomplete="username" autocapitalize="none" required>
+    <input type="password" id="clave" placeholder="Clave" autocomplete="current-password" required>
+  </div>
+  <div id="paso2" class="pasos" hidden>
+    <p id="hola"></p>
+    <input type="password" id="nueva" placeholder="Clave nueva (mínimo 6 caracteres)" autocomplete="new-password" minlength="6">
+    <input type="password" id="nueva2" placeholder="Repetí la clave nueva" autocomplete="new-password" minlength="6">
+  </div>
+  <label class="rec"><input type="checkbox" id="recordar" checked> Recordarme en este equipo</label>
+  <div class="err" id="loginErr" aria-live="polite"></div>
+  <button type="submit" id="loginBtn">Entrar</button>
+</form></div>
+<div class="offline" id="offline" hidden>Vista sin conexión a la planilla: el seguimiento y las órdenes no se guardan.</div>
+<div class="topbar"><div class="wrap"><span><b>Portal de Higiene y Seguridad</b> · OSTRILAP S.A. · Corvalán 1503/19, CABA</span><span id="tbR">Asesoramiento: Lic. Marcelo Elvira · M.P. 0656 C.P.I.I.</span></div></div>
+<header class="head"><div class="wrap">
+  <span class="logo-g"><span class="osl-marca"><b>OSTRILAP</b><i>Lavadero industrial</i></span></span><span class="sep" aria-hidden="true"></span>
+  <div class="titulo"><h1>Higiene y Seguridad</h1><p id="subt"></p></div>
+  <div class="jea"><span><b>Lic. Marcelo Elvira</b>Lic. en Higiene y Seguridad<br><a href="tel:+5491145646462">15-4564-6462</a> · <a href="mailto:marcelo.a.elvira@gmail.com">marcelo.a.elvira@gmail.com</a></span></div>
+</div></header>
+
+<nav class="plantas" id="plantas" aria-label="Herramientas" hidden><div class="wrap" id="plantasW"></div></nav>
+<nav class="solapas" id="solapas"><div class="wrap" id="solapasW"></div></nav>
+<div id="vInforme">
+<div class="wrap">
+  <div id="pubInf"></div>
+  <div class="mesbar" id="mesbar"></div>
+  <div class="resumen"><div class="stats" id="stats"></div>
+    <div class="descargas">
+      <button class="btn" id="bPdf" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 19h16"/></svg>Informe completo (PDF)</button>
+      <button class="btn" id="bFilt" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V3h12v6M6 18H4v-7h16v7h-2M8 14h8v7H8z"/></svg>Bajar lo filtrado</button>
+      <button class="btn" id="bCsv" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4zM4 10h16M10 4v16"/></svg>Planilla (Excel)</button>
+    </div>
+  </div>
+</div>
+
+<div class="filtros"><div class="wrap">
+  <div class="campo"><label for="fSector">Sector</label><select id="fSector"></select></div>
+  <div class="campo"><label for="fTema">Tema</label><select id="fTema"></select></div>
+  <div class="campo"><label>Tipo</label><div class="seg" id="fTipo"><button type="button" data-v="todos" aria-pressed="true">Todos</button><button type="button" data-v="reinc">Reincidencias</button><button type="button" data-v="nuevo">Nuevos</button></div></div>
+  <div class="campo"><label for="fSeg">Seguimiento</label><select id="fSeg"><option value="todos">Todos</option><option value="sin">Sin anotar</option><option>Pendiente</option><option>En curso</option><option>Listo para verificar</option><option>Resuelto</option></select></div>
+  <div class="campo"><label for="fOT">Orden de trabajo</label><select id="fOT"></select></div>
+  <div class="campo"><label for="fOrden">Ordenar</label><select id="fOrden"><option value="tema">Por tema</option><option value="sector">Por sector</option><option value="numero">Por número</option><option value="antig">Más antiguos primero</option></select></div>
+  <div class="campo q"><label for="fQ">Buscar</label><input id="fQ" type="search" placeholder="tablero, matafuego, baranda…"></div>
+  <div class="activos" id="activos"></div>
+</div></div>
+
+<div class="wrap"><div class="cuerpo">
+  <aside class="lateral" id="lateral"></aside>
+  <main><div id="lista"></div><section class="grupo verif" id="verif"></section></main>
+</div></div>
+</div>
+<div id="vExtra" class="wrap" hidden></div>
+<footer><div class="wrap"><span>Elaborado por el Lic. Marcelo Elvira, Lic. en Higiene y Seguridad en el Trabajo (M.P. 0656 C.P.I.I.) · marcelo.a.elvira@gmail.com · 15-4564-6462</span></div></footer>
+
+<div class="selbar" id="selbar" hidden><div class="wrap">
+  <span class="n tab" id="selN"></span><span id="selTxt"></span>
+  <button class="link" type="button" id="selVer">Ver solo la selección</button>
+  <button class="link" type="button" id="selLimpiar">Quitar selección</button>
+  <span style="flex:1"></span>
+  <button class="btn prim" type="button" id="selOT"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5h10M9 12h10M9 19h10M4 5h1M4 12h1M4 19h1"/></svg>Armar orden de trabajo</button>
+</div></div>
+
+<div class="velo" id="velo" hidden></div>
+<div class="toast" id="toast" hidden></div>
+<div id="ot"></div>
+
+<script>window.CFG = {id: "ostrilap", nombre: "OSTRILAP", cifrado: true, sal: "WM8ZfLEBxW+sY0kJdCGi4A==", iter: 310000, api: "https://script.google.com/macros/s/AKfycbyKczWvpYyz4rbqu7ISH-uAcTVuvtepTZxm4m2R68FMIJVgNkFfX3xIXob9x4kKKtAh/exec/ostrilap", data: null};</script>
+<script src="../core/v1/portal.js?v=480d9d66"></script>
+<script src="../core/v1/modulos.js?v=e600fc89"></script>
+<script src="cliente.js?v=f1dd06da"></script>
+<script>iniciar();</script>
+</body>
+</html>

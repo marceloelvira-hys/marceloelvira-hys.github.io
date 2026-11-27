@@ -1,0 +1,78 @@
+/* ---- OSTRILAP: identidad propia (base NUVA). Sin logo propio: marca en texto. Grafito, terracota y verde salvia; sin azul (27/11/2026) ---- */
+
+h1,h2,h3,.titulo h1,.solapas button,.plantas button b,.g-box h3,.x-bh{font-family:"DM Serif Display",Georgia,serif}
+
+/* colores: grafito, terracota y salvia */
+:root{--gold:#B5562F;--gold-dk:#8E3F20;--celeste-dk:#5E8C6A;--crema:#F6F1EA}
+body{background:#F4F1EC}
+.head{background:linear-gradient(100deg,#24282E,#3A3F47 55%,#565C66)!important;border-bottom:3px solid var(--gold)}
+.logo-g{height:58px!important;background:var(--crema);border-radius:8px;padding:6px 12px}
+.logo-g img{height:100%!important}
+.titulo h1{font-family:"DM Serif Display",Georgia,serif;font-weight:400;letter-spacing:.01em;text-transform:none}
+.titulo h1::after{content:"";display:block;width:52px;height:3px;background:var(--gold);margin-top:5px}
+.topbar{background:#1C1F24!important}
+.login{background:radial-gradient(circle at 30% 20%,#565C66,#24282E 70%)!important}
+.login .logos .g{height:74px!important;background:var(--crema);border-radius:10px;padding:8px 14px}
+.login h1{font-family:"DM Serif Display",Georgia,serif;font-weight:400;text-transform:none;font-size:30px}
+.login h1::after{content:"";display:block;width:52px;height:3px;background:var(--gold);margin-top:6px}
+.login button{background:var(--gold)!important;color:#FFFFFF!important}
+.prof-login{background:var(--crema)}
+.solapas{background:#fff;border-bottom:1px solid #E2DBD0}
+.solapas button[aria-pressed=true]{color:#3A3F47!important;box-shadow:inset 0 -3px 0 var(--gold)!important}
+.solapas button i{background:#3A3F47}
+.plantas{background:var(--crema)!important;border-bottom:1px solid #E2DBD0!important}
+.plantas .wrap{justify-content:flex-end}
+.plantas .pl-vid{border-color:var(--celeste-dk)!important}.plantas .pl-vid b{color:#3A3F47!important}
+.ig-bars i{background:#3A3F47}
+.sap-c{border-top-color:#3A3F47!important}.sap-k div{background:#EFEAE3!important}.sap-k b{color:#3A3F47!important}.sap-l{border-left-color:#D9CFC2!important}.sap-l i{border-color:#3A3F47!important}.sap-l .ok i{background:#3A3F47!important}
+.sap-ok.pe{background:#FFF4DC!important;color:#8A5A12!important}
+.x-e.PENDIENTE{background:#FFF4DC;color:#8A5A12;border-radius:999px;padding:2px 9px}
+.x-est{grid-template-columns:2.2fr 1fr .9fr 1fr .9fr 1.1fr}
+.lt-pend{display:grid;grid-template-columns:34px 1fr auto;gap:12px;align-items:center}
+.lt-n{width:26px;height:26px;border-radius:50%;background:#3A3F47;color:#fff;font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center}
+/* matafuegos */
+.lt-mf{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;margin-bottom:12px}
+.lt-mfc{display:flex;gap:12px;background:#fff;border:1px solid #E2DBD0;border-left:5px solid #C0392B;border-radius:8px;padding:12px}
+.lt-mfc.k{border-left-color:#3A3F47}
+.lt-mfi{position:relative;width:38px;flex:none}.lt-mfi svg{width:30px;height:50px;fill:#C0392B;stroke:#C0392B}.lt-mfc.k .lt-mfi svg{fill:#3A3F47;stroke:#3A3F47}
+.lt-mfi b{position:absolute;right:-4px;top:-6px;background:var(--gold);color:#FFFFFF;border-radius:999px;font-size:12px;padding:0 7px}
+/* ante una inspección */
+.lt-sum{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.lt-sum div{background:#fff;border:1px solid #E2DBD0;border-radius:8px;padding:10px 14px;border-top:4px solid #2F7D4A}
+.lt-sum b{display:block;font-size:26px;font-family:"DM Serif Display",Georgia,serif;line-height:1.1}.lt-sum span{font-size:12.5px;color:var(--muted)}
+.lt-sum .lo{border-top-color:#5E6670}.lt-sum .tr{border-top-color:#B7791F}.lt-sum .fa{border-top-color:#C0392B}
+.lt-guia{background:linear-gradient(120deg,#3A3F47,#565C66);color:#fff;border-radius:10px;padding:16px 20px;margin-bottom:8px}
+.lt-guia h3{margin:0 0 6px;font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:21px;color:#fff}
+.lt-guia ol{margin:0 0 12px;padding-left:22px;line-height:1.55}.lt-guia li{margin:3px 0}
+.lt-guia .x-btn.p{background:var(--gold);color:#FFFFFF;border-color:var(--gold);text-decoration:none;display:inline-block}
+.lt-quien{font-family:"Inter",system-ui,sans-serif;font-size:11.5px;font-weight:600;color:var(--muted);text-transform:none;letter-spacing:0;margin-left:8px}
+.lt-ins{display:grid;grid-template-columns:1fr 150px 260px;gap:12px;align-items:center}
+.lt-ups{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;margin-top:6px}
+.x-st.PORTAL{background:#E5F2E9;color:#2F7D4A}.x-st.LOCAL{background:#EEF0F3;color:#555B66}.x-st.TRAMITE{background:#FFF4DC;color:#8A5A12}
+.lt-g-local{border-top:5px solid #3A3F47}.lt-g-serv{border-top:5px solid var(--gold)}.lt-g-pers{border-top:5px solid var(--celeste-dk)}
+/* sin reincidencia ni «nuevo» en este informe (va escrito en la observación) */
+.chip.nuevo,.chip.reinc,.stat.r,.stat.n{display:none!important}
+@media (max-width:900px){.lt-ins{grid-template-columns:1fr}.lt-sum{grid-template-columns:repeat(2,1fr)}.x-est{grid-template-columns:1fr}.logo-g{height:46px!important}}
+@media print{#esg .esg-mem{border-bottom-color:#3A3F47}#esg .esg-mem b,#esg h1,#esg .esg-fe b{color:#3A3F47}#esg .esg-mem span{color:#5E8C6A}#esg .esg-bar{background:#3A3F47}#esg .esg-t thead th{background:#EFEAE3;color:#3A3F47}}
+.campo:has(#fTipo){display:none!important}
+
+.chip.prio-inmediata{background:#FBE3E1;color:#A3271C;border-color:#E7A39C;font-weight:700}
+.rkr .pr.prio-inmediata{background:#FBE3E1;color:#A3271C}
+.chip.prio-alta{background:#FDEBDF;color:#B4541E;border-color:#F0C3A4}.rkr .pr.prio-alta{background:#FDEBDF;color:#B4541E}
+.chip.prio-media{background:#E5F2E9;color:#2F7D4A;border-color:#B7DCC3}.rkr .pr.prio-media{background:#E5F2E9;color:#2F7D4A}
+.logo-g{background:#fff!important}.login .logos .g{background:#fff!important}
+.lt-pisos{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.lt-piso{border:1px solid #E2DBD0;background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;min-width:92px}
+.lt-piso b{font-size:20px;font-family:"DM Serif Display",Georgia,serif;color:#3A3F47;line-height:1.1}.lt-piso span{font-size:12px;color:var(--muted)}
+.lt-piso.on{background:#3A3F47;border-color:#3A3F47}.lt-piso.on b,.lt-piso.on span{color:#fff}
+.lt-mfr{display:grid;grid-template-columns:44px 1.4fr .8fr 1.4fr 1.6fr;gap:10px;align-items:center}
+.lt-maqs{display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:14px}
+.lt-maq{display:flex;gap:14px;background:#fff;border:1px solid #E2DBD0;border-left:5px solid #3A3F47;border-radius:10px;padding:14px}
+.lt-maqi{width:46px;height:46px;flex:none;border-radius:10px;background:#EFEAE3;color:#3A3F47;font-size:26px;display:flex;align-items:center;justify-content:center}
+@media (max-width:900px){.lt-mfr{grid-template-columns:36px 1fr}.lt-maqs{grid-template-columns:1fr}}
+/* marca en texto (OSTRILAP no tiene logo publicado) */
+.osl-marca{display:flex;flex-direction:column;justify-content:center;height:100%;line-height:1;color:#3A3F47;font-family:"DM Serif Display",Georgia,serif}
+.osl-marca b{font-weight:400;font-size:27px;letter-spacing:.06em}
+.osl-marca i{font-style:normal;font-family:Inter,system-ui,sans-serif;font-size:9.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#B5562F;margin-top:3px}
+.login .logos .g .osl-marca b{font-size:34px}
+.otdoc .oth .g .osl-marca b{font-size:22px}
